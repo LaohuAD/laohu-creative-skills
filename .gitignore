@@ -1,0 +1,10 @@
+.DS_Store
+
+# Local runtime and temporary files
+.tmp/
+tmp/
+output/
+
+# Editor and operating-system files
+.vscode/
+.idea/
