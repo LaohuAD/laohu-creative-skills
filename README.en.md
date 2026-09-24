@@ -26,6 +26,7 @@ When you know what you want to do, choose the matching command. When you only kn
 | /laohu | Clarifying a request and choosing a creative direction |
 | /laohu-topic | Topics, themes, series, and creative seeds |
 | /laohu-writing | Writing, revision, spoken scripts, and expression |
+| /laohu-gzh-design | WeChat article layout from Markdown and long-form drafts |
 | /laohu-lyrics | Lyrics and songwriting language |
 | /laohu-title | Titles, names, and entry points |
 | /laohu-cover | Cover concepts and cover prompts |
@@ -63,6 +64,6 @@ The project continues to improve through real creative work. If you find a probl
 
 ## License and Creative Outputs
 
-The repository's Skills, rules, references, templates, and other project materials are licensed under CC BY-NC 4.0. Without separate permission, those repository materials themselves may not be used for commercial distribution, commercial services, or commercial products.
+The repository's Skills, rules, references, templates, and other project materials are licensed under CC BY-NC 4.0. Without separate permission, those repository materials themselves may not be used for commercial distribution, commercial services, or commercial products. The third-party WeChat layout skill under `skills/laohu-gzh-design` remains under its original AGPL-3.0 license; see that directory's license.
 
 Lyrics, articles, titles, images, audio, video, scripts, and other works you create with these skills are generally not made non-commercial merely because you used the repository. Your rights to use or commercialize an output still depend on your own rights, the licenses for models and materials, platform terms, and applicable law.
