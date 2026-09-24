@@ -4,88 +4,65 @@
 
 > Creative skills prepared by Laohu for AI dream makers.
 >
-> The toolkit covers music, covers, video, titles, and other areas of content creation and publishing. Dream makers choose and combine the skills according to their own aesthetic judgment, then complete AI-assisted creation and publishing. Let us draw a dream for this world together.
+> From music and covers to video and titles, the toolkit supports many parts of content creation and publishing. Choose and combine the skills with your own taste, complete your AI-assisted work, and draw a dream for this world.
 
-Laohu Creative Skills is a human-centered AI creation toolkit. It does not decide what a person should do next. Instead, it turns different creative abilities into entries that people can choose, invoke independently, and combine step by step. The person decides the goal, scope, and important trade-offs; AI performs the professional work within that scope.
+Laohu Creative Skills is a human-centered collection of creative capabilities. It turns the work from an initial idea to a finished and organized piece into entries you can choose yourself. You decide what to make, who it is for, and which judgments must remain yours; AI helps move the work forward within that direction.
 
-## What It Solves
+## What You Can Make
 
-Choose the ability you need: develop a topic, write lyrics, design a cover, write a video prompt, organize a work, or find the real problem in an existing piece.
+- Develop a topic, story, or creative direction from a first idea.
+- Write lyrics, articles, scripts, and other forms of text with a stronger structure and voice.
+- Design titles, covers, images, and video prompts so a work is easier to notice and understand.
+- Plan arrangements, organize creative assets, and build materials you can reuse.
+- Study reference works, diagnose problems, and archive completed work.
+- Capture useful experience so the next project starts with more clarity.
 
-If you do not know which entry to use, start with `/laohu`. It helps clarify the task, compare available abilities, and return the choice to you.
+## Choose an Entry
 
-A complete workflow entry and a focused entry can be used separately. For example, `laohu-lyrics` will handle the lyric-writing workflow, while a future `laohu-lyrics-rhyme` can focus only on rhyme problems. The workflow reads professional methods when needed, and focused abilities can also be used on their own.
+When you know what you want to do, choose the matching command. When you only know that you want to create something, start with /laohu. It helps clarify the goal, materials, and next decision, then lets you choose the right direction.
 
-## Current Entries
-
-| Entry | Purpose |
+| Command | Use it for |
 | --- | --- |
-| `laohu` | Top-level routing and task clarification |
-| `laohu-topic` | Topic development |
-| `laohu-writing` | Writing |
-| `laohu-lyrics` | Lyrics |
-| `laohu-title` | Titles |
-| `laohu-cover` | Covers |
-| `laohu-script` | Scripts |
-| `laohu-image` | Images |
-| `laohu-assets` | Visual and creative assets |
-| `laohu-story` | Story ideas |
-| `laohu-video` | Video and video prompts |
-| `laohu-update` | Toolkit updates |
-| `laohu-diagnosis` | Finding problems in a work |
-| `laohu-archive` | Organizing, collecting, and archiving works |
-| `laohu-arrangement` | Music arrangement |
-| `laohu-benchmark` | Benchmark and reference analysis |
-| `laohu-evolution` | Self-evolution and experience capture |
+| /laohu | Clarifying a request and choosing a creative direction |
+| /laohu-topic | Topics, themes, series, and creative seeds |
+| /laohu-writing | Writing, revision, spoken scripts, and expression |
+| /laohu-lyrics | Lyrics and songwriting language |
+| /laohu-title | Titles, names, and entry points |
+| /laohu-cover | Cover concepts and cover prompts |
+| /laohu-script | Scripts, scenes, and narrative progression |
+| /laohu-image | Image concepts and image-generation prompts |
+| /laohu-assets | Visual, audio, and creative assets |
+| /laohu-story | Story ideas, characters, and plot directions |
+| /laohu-video | Video concepts, shots, and video prompts |
+| /laohu-arrangement | Arrangement direction, musical structure, and production notes |
+| /laohu-benchmark | Reference-work research and breakdowns |
+| /laohu-diagnosis | Key problems in a topic, text, or finished work |
+| /laohu-archive | Organizing and archiving completed work |
+| /laohu-update | Reviewing and updating the toolkit |
+| /laohu-evolution | Capturing experience and improving creative methods |
 
-These entries currently contain directory scaffolds only. Their `SKILL.md` files will be built from real creative tasks over time.
+Use an entry on its own or combine several for one project. You can develop a topic before writing lyrics, or work on one rhyme, title, or cover without running a larger workflow. You decide whether to continue, revise, or change direction at every step.
 
-## How It Works
+## Use It with Laohu Creative Studio
 
-```text
-A person's goal and materials
-        ↓
-/laohu or a directly selected entry
-        ↓
-Confirm the task scope, protected decisions, and deliverable
-        ↓
-The entry reads methods, cases, and assets as needed
-        ↓
-Deliver the current result and let the person decide whether to revise, continue, or stop
-```
+Laohu Creative Studio is the interactive workspace that complements these skills. Use it to turn a direction into canvases, music, images, video, and other visible creative results with model-assisted workflows.
 
-The directory can be organized by responsibility, but every entry that must be discovered independently by different Agents remains a registrable top-level Skill. A workflow Skill may coordinate focused abilities. If the host cannot invoke one Skill from another, the current entry reads the same Reference instead; a recommendation is never presented as an execution that did not happen.
+- Use Laohu Creative Skills to decide the direction, content, and key judgments.
+- Use Laohu Creative Studio to generate, test, and visualize.
+- Return to the skills to revise, diagnose, organize, or publish.
 
-## Project Structure
+Project links:
 
-```text
-laohu-creative-skill/
-├── AGENTS.md       Project rules, routing boundaries, and asset protection
-├── README.md       Project introduction and entry guide
-├── LICENSE         CC BY-NC 4.0
-├── skills/         Discoverable, user-invoked Skill entries
-├── works/          Work projects, drafts, confirmed files, and publishing materials
-└── knowledge/      Reusable knowledge, cases, experience, and long-term assets
-```
+- Laohu Creative Skills: https://github.com/LaohuAD/laohu-creative-skill
+- Laohu Creative Studio: https://github.com/LaohuAD/laohu-creative-studio
+- Laohu personal website: https://lao-hu.com/
 
-The `.gitkeep` files under `skills/` only preserve the empty directories in Git. They do not mean the corresponding abilities are complete. `SKILL.md`, `references/`, `templates/`, `scripts/`, and tests will be added as needed.
+## Ongoing Development
 
-## Design Principles
+The project continues to improve through real creative work. If you find a problem or have a suggestion, contact Laohu through the personal website.
 
-- People decide what to do; AI completes what it is authorized to do.
-- When the goal is clear, invoke the corresponding entry directly; use `/laohu` when it is not.
-- Split an independent problem into its own Skill; keep methods such as lighting, rhyme, and shot size as professional References by default.
-- Keep works, personal materials, and knowledge assets separate from toolkit methods; updating the toolkit must not overwrite user assets.
-- Every Skill must state its trigger, inputs, outputs, protected content, and stopping conditions.
+## License and Creative Outputs
 
-## Project Materials and Creative Outputs
+The repository's Skills, rules, references, templates, and other project materials are licensed under CC BY-NC 4.0. Without separate permission, those repository materials themselves may not be used for commercial distribution, commercial services, or commercial products.
 
-This project uses the [CC BY-NC 4.0](LICENSE) license. The restriction applies to the repository's own materials, including Skills, rules, References, cases, templates, scripts, and other content published with the repository. Those materials may not be used for commercial distribution, commercial services, or commercial products without separate permission.
-
-Lyrics, articles, titles, images, audio, video, scripts, and other works created by users with these abilities are not automatically subject to the license's non-commercial restriction merely because the toolkit was used. Creators may use, publish, or commercialize those works according to their own rights and permissions.
-
-Third-party materials, model services, platform content, and external methods used in a work remain subject to their own licenses, terms, and applicable law. This project does not grant those third-party rights, and it does not extend the repository's commercial-use restriction to creative outputs.
-
-## Repository
-
-[GitHub: LaohuAD/laohu-creative-skill](https://github.com/LaohuAD/laohu-creative-skill)
+Lyrics, articles, titles, images, audio, video, scripts, and other works you create with these skills are generally not made non-commercial merely because you used the repository. Your rights to use or commercialize an output still depend on your own rights, the licenses for models and materials, platform terms, and applicable law.
