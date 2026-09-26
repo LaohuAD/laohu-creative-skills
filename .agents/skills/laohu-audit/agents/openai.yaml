@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-audit | 老胡找茬"
-  short_description: "确认作品或规则中的具体目标差距，交付可定位的问题包或复查结果，保留专业判断与表达锋芒。"
-  default_prompt: "使用 $laohu-audit，检查对象中的具体问题，按目标与专业判据交付有证据的问题包。"
+  short_description: "严查作品、规则和流程的目标差距，识别有据缺陷与质量不足。"
+  default_prompt: "使用 $laohu-audit，严格检查目标差距与有依据的质量不足，只交可复核问题。"

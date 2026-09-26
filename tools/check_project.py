@@ -215,9 +215,21 @@ def check_project(root):
                 for raw in markdown_targets(text):
                     raw = raw.strip("<>")
                     target = urlsplit(raw)
-                    if target.scheme or not target.path or "{" in raw:
+                    decoded = unquote(raw)
+                    decoded_path = unquote(target.path)
+                    windows_absolute = (re.match(r"^[A-Za-z]:[\\/]", decoded)
+                                        or decoded.startswith("\\\\"))
+                    posix_absolute = (not target.scheme and not target.netloc
+                                      and decoded_path.startswith("/"))
+                    if target.scheme.lower() == "file" or windows_absolute or posix_absolute:
+                        errors.append(f"absolute local file link: {relative} -> {raw}")
                         continue
-                    linked = (path.parent / unquote(target.path)).resolve()
+                    if target.scheme or target.netloc or not target.path:
+                        continue
+                    if re.search(r"\{[A-Z][A-Z0-9_]*\}", decoded_path):
+                        errors.append(f"unexpanded path placeholder in Markdown link: {relative} -> {raw}")
+                        continue
+                    linked = (path.parent / decoded_path).resolve()
                     if root not in linked.parents and linked != root:
                         errors.append(f"local link leaves project: {relative} -> {raw}")
                     elif not linked.exists():

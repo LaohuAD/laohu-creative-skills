@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-evolution | 老胡能力进化"
-  short_description: "把已选方法完整写成可运行的长期能力，保留信息与力度，接通调用并检查实际产物。"
-  default_prompt: "使用 $laohu-evolution，将完整已选方案落实为长期能力，核对信息保真、任务边界及实际产物。"
+  short_description: "将已选方法及条件关系保真写入运行能力，保留可变形式并核对下游产物。"
+  default_prompt: "使用 $laohu-evolution，将已选方法保真写入运行文件，并检查不同材料下的实际产物。"

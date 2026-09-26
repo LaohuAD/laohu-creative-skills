@@ -28,7 +28,7 @@ class ProjectTests(unittest.TestCase):
 
     def setUp(self):
         (ROOT / "tmp").mkdir(exist_ok=True)
-        temporary = tempfile.TemporaryDirectory(prefix="maintenance-", dir=ROOT / "tmp")
+        temporary = tempfile.TemporaryDirectory(prefix="maintenance fixture-中文 ", dir=ROOT / "tmp")
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
         for name in ("AGENTS.md", "LICENSE", ".gitignore", "README.md", "README.en.md",
@@ -144,12 +144,61 @@ class ProjectTests(unittest.TestCase):
         self.assertTrue(any("nested Skill" in e for e in checker.check_project(self.root)["errors"]))
 
     def test_markdown_links_ignore_code_but_catch_missing_files(self):
-        text = self.readme('`[example](missing.md)`\n```md\n[x](missing.md)\n```\n[real](LICENSE)\n')
+        text = self.readme('`[example](missing.md)`\n```md\n[x](missing.md)\n'
+                           '[placeholder]({SKILL_DIR}/missing.md) [absolute](/Users/example/file.md)\n'
+                           '```\n[real](LICENSE)\n')
         (self.root / "README.md").write_text(text, encoding="utf-8")
         self.assertTrue(checker.check_project(self.root)["ok"])
         with (self.root / "README.md").open("a", encoding="utf-8") as handle:
             handle.write("[broken](missing.md)\n")
         self.assertTrue(any("broken Markdown" in e for e in checker.check_project(self.root)["errors"]))
+
+    def test_unexpanded_path_placeholder_in_markdown_link_fails(self):
+        path = self.entry("laohu-test")
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write("\n[placeholder]({SKILL_DIR}/../../../docs/runtime.md)\n")
+            handle.write("[encoded placeholder](%7BSKILL_DIR%7D/../../../docs/runtime.md)\n")
+            handle.write("`[inline example]({PROJECT_ROOT}/missing.md)`\n")
+        errors = checker.check_project(self.root)["errors"]
+        self.assertEqual(sum("unexpanded path placeholder" in error for error in errors), 2, errors)
+
+    def test_markdown_absolute_local_targets_fail(self):
+        targets = (
+            "/Users/example/file.md",
+            "%2FUsers%2Fexample%2Ffile.md",
+            "C:/Users/example/file.md",
+            r"C:\Users\example\file.md",
+            r"\\server\share\file.md",
+            "file:///Users/example/file.md",
+            "file:///C:/Users/example/file.md",
+        )
+        readme = self.root / "README.md"
+        existing_absolute = (self.root / "LICENSE").resolve()
+        readme.write_text(self.readme(f"[existing absolute](<{existing_absolute}>)\n"), encoding="utf-8")
+        errors = checker.check_project(self.root)["errors"]
+        self.assertTrue(any("absolute local file link" in error for error in errors), errors)
+        for target in targets:
+            with self.subTest(target=target):
+                readme.write_text(self.readme(f"[local]({target})\n"), encoding="utf-8")
+                errors = checker.check_project(self.root)["errors"]
+                self.assertTrue(any("absolute local file link" in error for error in errors),
+                                (target, errors))
+
+    def test_relative_links_resolve_from_source_and_decode_urls_under_unicode_space_root(self):
+        self.assertIn(" ", str(self.root))
+        self.assertTrue(any("\u4e00" <= char <= "\u9fff" for char in str(self.root)))
+        target = self.root / "docs" / "中文 文件.md"
+        target.write_text("# Chinese file\n", encoding="utf-8")
+        path = self.entry("laohu-test")
+        same_skill = path.parent / "references" / "local.md"
+        same_skill.parent.mkdir()
+        same_skill.write_text("# Local reference\n\n[entry](../SKILL.md)\n", encoding="utf-8")
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write("\n[reference](references/local.md)\n")
+            handle.write("[cross-directory](../../../docs/%E4%B8%AD%E6%96%87%20%E6%96%87%E4%BB%B6.md#section)\n")
+            handle.write("[external](https://example.com/{resource}) [anchor](#section)\n")
+        report = checker.check_project(self.root)
+        self.assertTrue(report["ok"], report["errors"])
 
     def test_json_python_and_unknown_readme_command_fail(self):
         (self.root / "bad.json").write_text("{", encoding="utf-8")
