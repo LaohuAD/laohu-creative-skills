@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-htmlshow | 老胡 HTML 展示"
+  short_description: "将文章、提示词和剧本做成易读易用的展示页，按实际用途选择布局和交互。"
+  default_prompt: "使用 $laohu-htmlshow，把这份内容制作成便于阅读和使用的 HTML 页面，保留原文，并按最终用途选择合适的展示方式。"

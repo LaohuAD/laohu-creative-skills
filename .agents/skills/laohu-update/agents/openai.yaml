@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-update | 老胡项目更新"
+  short_description: "安装完整仓库、管理全局入口并更新项目，保留个人修改，冲突先给出处理方案。"
+  default_prompt: "使用 $laohu-update 更新完整项目，保留我的个人修改；遇到冲突先展示合并方案，再询问是否采用。"

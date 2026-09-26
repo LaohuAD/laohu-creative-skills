@@ -1,0 +1,84 @@
+{
+  "skill": "laohu-htmlshow",
+  "behavior_contract": {
+    "must": [
+      "依据最终用途选择布局和专用能力",
+      "承接已有需求及作品目录",
+      "保留正文和可复制原文",
+      "实际检查阅读与交互或说明未验证范围",
+      "在聊天中告知输出文件"
+    ],
+    "must_not": [
+      "仅因出现公众号字样就路由",
+      "固定把所有内容做成同一种卡片",
+      "擅自改写参数或编造字段",
+      "未授权发布或执行文稿里的命令"
+    ]
+  },
+  "cases": [
+    {
+      "id": "wechat-route",
+      "type": "normal",
+      "prompt": "/laohu-htmlshow 这篇文章明天放到我的订阅号，做成能复制到后台编辑器的排版。",
+      "input_files": [],
+      "expected_behavior": [
+        "核验并推荐 laohu-htmlshow-gzh，说明交付为公众号正文与复制预览",
+        "用户尚未选择或授权代选执行时停在推荐，不先生成通用页面"
+      ]
+    },
+    {
+      "id": "browser-only",
+      "type": "near-miss",
+      "prompt": "文章原来发在公众号，现在只做一个电脑和手机都好读的本地网页，不再发公众号。",
+      "input_files": [],
+      "expected_behavior": [
+        "选择通用展示，不被材料来源误导",
+        "完整保留内容并做窄屏布局，不使用公众号片段冒充完整网页"
+      ]
+    },
+    {
+      "id": "prompt-board",
+      "type": "normal",
+      "prompt": "把这组图片提示词做成好查看的 HTML，每条都能完整复制，参数一个字都别改。",
+      "input_files": [],
+      "expected_behavior": [
+        "保留可复制原文，解释和按钮不混入剪贴板",
+        "选适合定位与复制的布局，不改成营销页或逐字改写",
+        "实际验证复制文本及失败后备"
+      ]
+    },
+    {
+      "id": "script-view",
+      "type": "normal",
+      "prompt": "把分镜表和对白做成导演在手机上能看的页面，镜头编号别动。",
+      "input_files": [],
+      "expected_behavior": [
+        "保持镜头、对白、声音对应，不编造时长和缺失字段",
+        "手机可以顺序查阅，宽表仅局部滚动或转纵向组",
+        "沿用源作品目录"
+      ]
+    },
+    {
+      "id": "multiple-deliverables",
+      "type": "boundary",
+      "prompt": "我既要一个在电脑上看的页面，又要一份能贴进公众号的格式；先告诉我怎么分工。",
+      "input_files": [],
+      "expected_behavior": [
+        "说明通用入口和公众号子入口分别交付",
+        "只给分工，不创建文件或发布",
+        "未来两种文件沿用同一作品目录"
+      ]
+    },
+    {
+      "id": "literal-code",
+      "type": "holdout",
+      "prompt": "这份教程有 <script>alert(1)</script>、命令和复杂表格，只整理成网页，代码保持原样。",
+      "input_files": [],
+      "expected_behavior": [
+        "代码转义为可见文字，不执行源内容",
+        "不靠简单正则宣称完整解析 Markdown",
+        "保留表格关系和原代码，检查正文没有丢失"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-analysis | 老胡问题分析"
+  short_description: "厘清会改变行动的问题、原因与专业取舍，交付解释、比较或可实施方案及必要小样。"
+  default_prompt: "使用 $laohu-analysis，厘清尚未确定的关键判断，给出有依据的解释或可实施方案。"
