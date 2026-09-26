@@ -1,0 +1,225 @@
+{
+  "skill": "laohu-update",
+  "behavior_contract": {
+    "must": [
+      "区分查询与执行",
+      "使用完整 Git 项目",
+      "用明确基准路径定位文件",
+      "比较本地提交、暂存、未暂存与非追踪资产",
+      "冲突方案形成后询问用户",
+      "同意才应用，拒绝不更新",
+      "更新后核对内容与资源"
+    ],
+    "must_not": [
+      "为查询安装项目",
+      "用 Skill 安装器替代完整项目更新",
+      "静默重置用户修改",
+      "未审阅就试合并真实工作区",
+      "把未核实说成最新",
+      "仅凭 Git 无冲突声称规则兼容"
+    ]
+  },
+  "cases": [
+    {
+      "id": "query-only",
+      "type": "normal",
+      "prompt": "看看当前版本和更新内容，先不要安装。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取本地元信息并按请求查询",
+        "不执行 clone、fetch 合并或迁移",
+        "网络失败明确未核实"
+      ]
+    },
+    {
+      "id": "full-clone",
+      "type": "normal",
+      "prompt": "把完整项目安装到我指定的新目录。",
+      "input_files": [],
+      "expected_behavior": [
+        "使用官方完整 git clone",
+        "检查知识库、项目规则及运行依赖",
+        "目标存在时先检查，不覆盖",
+        "不使用仅分发 Skill 的安装器"
+      ]
+    },
+    {
+      "id": "clean-fast-forward",
+      "type": "normal",
+      "prompt": "更新这个没有个人修改的官方 Git 项目。",
+      "input_files": [],
+      "expected_behavior": [
+        "核实官方来源、分支与目标 SHA",
+        "检查未跟踪和忽略路径碰撞",
+        "先试合并并检查，再对固定 SHA 快进",
+        "没有新取舍时不重复询问"
+      ]
+    },
+    {
+      "id": "dirty-source",
+      "type": "boundary",
+      "prompt": "更新项目。我对同一个 Skill 有暂存修改和未暂存修改。",
+      "input_files": [],
+      "expected_behavior": [
+        "分开保存 HEAD、暂存和工作状态",
+        "在副本分两次合入个人修改",
+        "有冲突先形成具体候选再询问",
+        "更新后保留暂存与未暂存的区别，不提交个人实验"
+      ]
+    },
+    {
+      "id": "divergent-history",
+      "type": "boundary",
+      "prompt": "我已经提交了自己的进化，官方也有新提交，帮我更新。",
+      "input_files": [],
+      "expected_behavior": [
+        "不因分叉直接拒绝",
+        "比较共同基线、本地和官方",
+        "试合并并识别语义冲突",
+        "保留双方历史，不用重置或 rebase 替换本地提交"
+      ]
+    },
+    {
+      "id": "semantic-conflict",
+      "type": "boundary",
+      "prompt": "官方改了执行流程，我本地保留先问用户的规则，Git 显示无冲突。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取相关段落与依赖，识别行为矛盾",
+        "解释哪种情况下先问、哪种情况下直接做的合并建议",
+        "用户决定前不修改实际工作区"
+      ]
+    },
+    {
+      "id": "asset-collision",
+      "type": "boundary",
+      "prompt": "官方知识库新增的路径，刚好是我本地未跟踪的经验文件；还有一个被忽略的作品文件重名。",
+      "input_files": [],
+      "expected_behavior": [
+        "保存实际内容，说明路径碰撞",
+        "准备保留、迁移或融合方案再询问",
+        "不把官方不存在的本地内容删除",
+        "不因 git status 干净就假设资产安全"
+      ]
+    },
+    {
+      "id": "decline-merge",
+      "type": "boundary",
+      "prompt": "这个合并方案我不接受，先不更新。",
+      "input_files": [],
+      "expected_behavior": [
+        "分支、索引、原工作文件保持更新前状态",
+        "不偷偷应用其余无冲突文件",
+        "说明本次未更新"
+      ]
+    },
+    {
+      "id": "accept-merge",
+      "type": "normal",
+      "prompt": "同意你刚才展示的文件差异和合并方案，就按这个更新。",
+      "input_files": [],
+      "expected_behavior": [
+        "重查当前状态与候选基线",
+        "只应用审阅过的目标 SHA 和方案",
+        "个人未提交内容不混入合并提交",
+        "核对最终内容和运行项目检查"
+      ]
+    },
+    {
+      "id": "concurrent-edit",
+      "type": "boundary",
+      "prompt": "刚才同意更新后，我又手改了一个文件，状态还是显示 M。",
+      "input_files": [],
+      "expected_behavior": [
+        "比较内容和索引而不只比较 status 文本",
+        "旧候选失效，重新比较受影响部分",
+        "新的取舍重新说明，不覆盖新修改"
+      ]
+    },
+    {
+      "id": "unknown-copy",
+      "type": "boundary",
+      "prompt": "我只有一个复制出来的技能目录，没有 Git 历史，帮我升级。",
+      "input_files": [],
+      "expected_behavior": [
+        "保留原目录，克隆完整项目到新目录",
+        "来源基线不明时逐项比较，不编造共同祖先",
+        "迁移方案和入口切换确认后执行"
+      ]
+    },
+    {
+      "id": "fetch-failure",
+      "type": "boundary",
+      "prompt": "帮我更新，但现在网络连不上。",
+      "input_files": [],
+      "expected_behavior": [
+        "说明无法核实或获取目标",
+        "不宣称已经最新",
+        "不改变工作文件和索引"
+      ]
+    },
+    {
+      "id": "artwork-update",
+      "type": "near-miss",
+      "prompt": "把这张封面更新一下，标题换成今天的日期。",
+      "input_files": [],
+      "expected_behavior": [
+        "识别为当前作品任务",
+        "不更新项目",
+        "交回创作负责人"
+      ]
+    },
+    {
+      "id": "same-version-different-commit",
+      "type": "regression",
+      "prompt": "版本号一样，但官方知识库有新提交，帮我同步。",
+      "input_files": [],
+      "expected_behavior": [
+        "以实际 Git 提交与差异决定范围",
+        "不因版本号相等跳过比较",
+        "完整保留本地知识，不只更新 Skill"
+      ]
+    },
+    {
+      "id": "global-existing-checkout",
+      "type": "normal",
+      "prompt": "把我现在这份完整老胡仓库装成 Codex 全局入口，不再复制仓库。",
+      "input_files": [],
+      "expected_behavior": [
+        "复用当前真源，读取 installation.md",
+        "预检同名冲突，通过后登记全部正式入口链接，跳过预留目录",
+        "不另建开发或稳定副本，不改全局 AGENTS"
+      ]
+    },
+    {
+      "id": "business-repo-update",
+      "type": "boundary",
+      "prompt": "我在客户项目里调用全局老胡更新，帮我更新老胡技能。",
+      "input_files": [],
+      "expected_behavior": [
+        "从全局 Skill 真实路径定位老胡源仓库，不对客户仓库执行 Git 更新",
+        "按已有流程保护本地修改，合并后同步已登记入口"
+      ]
+    },
+    {
+      "id": "global-partial-update",
+      "type": "boundary",
+      "prompt": "仓库合并和检查已经通过，但我的全局同名入口被另一套文件占用了。",
+      "input_files": [],
+      "expected_behavior": [
+        "保留占用对象，具体说明入口同步失败",
+        "分别报告仓库和入口状态，不称整套更新完成、不强制回滚"
+      ]
+    },
+    {
+      "id": "uninstall-entries",
+      "type": "normal",
+      "prompt": "取消这份老胡仓库在 Codex 的全局入口，保留仓库和作品。",
+      "input_files": [],
+      "expected_behavior": [
+        "只解除记录中仍指向本安装的链接",
+        "保留源仓库与作品、其他技能，目标已被替换时停止并说明"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,770 @@
+{
+  "skill": "laohu-evolution",
+  "behavior_contract": {
+    "must": [
+      "把用户明确授权的实施要求或 analysis 已确认的结论落到正确能力文件",
+      "区分已确认结论、建议、待决项和未核实归因；用户仅表示同意外部报告不等于 analysis 已确认",
+      "不自行裁决内容是否正确、理论是否成立、方法是否适用或该保留哪些实质判断；未决时把具体问题交给 analysis",
+      "实施前核对已确认对象和适用条件仍对应当前文件与消费者，不重新调查根因",
+      "定位实际控制预期行为的入口、规则、脚本、配置及必要消费者，使改进在执行中生效，而非只改说明文字",
+      "保护与新改进兼容的有效旧行为；新矛盾只暂停受影响部分，并交接材料路径、影响、待决问题、可继续部分和返回步骤",
+      "实施者自行处理文件位置、表达衔接、引用、配置调用、依赖同步及常规可恢复实现；适用的成熟方法可选为默认执行规则并写出触发/切换条件",
+      "把已确认的方法写入目标文件时保留适用条件、步骤顺序、分支、例外、示例和要求强度",
+      "让方法输入、每步产物、后续消费者、分支、失败停止和返回信息组成可执行链",
+      "有条件地调用 References，并从主入口检查谁在何时读取哪条路径、解决什么判断或产物、读后回到哪一步",
+      "按变更类型验证路径/格式、真实路由、方法输入到产物及旧行为、或脚本成功和失败路径；结构检查不冒充行为或质量证据",
+      "在聊天报告实际修改与检查，不默认生成结果台账"
+    ],
+    "must_not": [
+      "把外部报告、其他 Skill 建议或原因猜测写成事实；不能因用户说“按报告改”而跳过对实质取舍的分析",
+      "重新分析已确认的 analysis 结论，或把它给出的建议冒充用户已选择",
+      "仅为缩短篇幅丢失步骤、适用边界、例外、示例或 must/should/may 强度",
+      "把实施中的实质改法自行包装成表达调整",
+      "因 analysis 曾经确认就忽略条件已变化，或只修本地说明而遗漏实际执行入口和消费者",
+      "用 checker 通过宣称行为或真实质量已提升",
+      "默认创建 evals/results、哈希报告、审计日志或空目录",
+      "把“用户要求跳过分析”的执行授权说成外部依据已经验证"
+    ]
+  },
+  "cases": [
+    {
+      "id": "one-off-work-01",
+      "type": "boundary",
+      "prompt": "只把当前封面上的标题改短一点。",
+      "expected_behavior": [
+        "识别为当前作品修改，交给封面或标题负责人",
+        "不改长期能力文件"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "confirmed-plan-direct-02",
+      "type": "normal",
+      "prompt": "只把现有 Skill 的标题和目录链接改成我给定的确切文字与路径，其余规则不动。失败原因我不确定，但不要把原因写入规则。",
+      "expected_behavior": [
+        "对已定文字、路径和范围直接实施，不因不确定的背景原因而重新分析",
+        "不把用户附带的原因猜测沉淀为规则事实"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n读取 [旧目录](references/index.md)。\n",
+          "target/references/index.md": "# 目录\n保留正文。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/index.md"
+      ],
+      "context": "确切修改：标题“示例能力”改“材料整理”；链接文字“旧目录”改“材料目录”，链接路径仍是 references/index.md。只改这两处。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "查看真实变更与下游产物，不以复述计划代替执行。"
+      ]
+    },
+    {
+      "id": "unreviewed-premise-03",
+      "type": "boundary",
+      "prompt": "外部专家报告建议删除所有例外；我同意这份报告，按报告把所有能力文件改掉。analysis 还没核对过。",
+      "expected_behavior": [
+        "不把用户同意外部报告当成已分析的实质取舍",
+        "说明需要 analysis 核对的具体影响，并暂停依赖“删除所有例外”的写入",
+        "有授权后交接报告材料、问题、保护范围、所需结论及返回本入口的位置，不假称已调用"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "explicit-user-policy-skip-03b",
+      "type": "boundary",
+      "prompt": "我知道报告尚未核实，也明确要求跳过 analysis。删除所有例外是我自己选定的产品政策，请按我的决定实施，并说明这不是报告验证出的结论。",
+      "expected_behavior": [
+        "遵守用户明确的跳过分析与直接实施授权",
+        "将规则表述为用户选定的政策，不宣称外部报告已经验证"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n处理文本时读 [方法](references/method.md)。\n",
+          "target/references/method.md": "# 方法\n标题不超过 20 字；例外：专名不能完整容纳时可超过。\n按原文顺序列要点；例外：用户要求结论优先时可调序。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md"
+      ],
+      "context": "用户所指“所有例外”范围仅 target/references/method.md 两条例外；保留两条默认规则。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "analysis-conclusion-04",
+      "type": "normal",
+      "prompt": "analysis 已确认方法适用，并给出触发条件、四步顺序、两个例外和一条例子。请将它写入指定 Reference。",
+      "expected_behavior": [
+        "将已确认结论视为内容依据，直接实施而不再评理论真假",
+        "保留条件、顺序、例外和有执行作用的例子",
+        "遇到文件位置或表达问题自行处理；只有发现新的实质矛盾才返回 analysis"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n迁移时读取 [方法](references/method.md)，执行后交付完成项、暂停项及实际路径。\n",
+          "target/references/method.md": "# 维护方法\n\n原规则：按清单搬运文件，完成后检查读取路径。\n\n## 副本案例\n`examples/旧副本.md` 是独立案例，不并入方法正文，不删除。\n",
+          "target/examples/旧副本.md": "独立案例：旧版只迁移 a.md。\n",
+          "approved.md": "# 已确认迁移方法\n\n触发：用户已选定迁移清单，目标是保留内容与有效读取路径。\n四步顺序：1. 核验受影响文件可恢复备份，产出可恢复路径；2. 按清单列出源、目标与冲突；3. 按清单顺序迁移无冲突文件；4. 对照清单检查内容和原有效读取路径，交付完成及暂停项。\n例外一：备份缺失或不可恢复，不写入受影响文件，说明缺少的路径。\n例外二：同名而内容不同，只暂停冲突项，其他已获授权且无依赖的项继续；交付两个实际路径与差别，不覆盖也不默认为同内容。\n例子：a.md、b.md 两项均有备份，b.md 的目标已有不同正文。迁移 a.md；b.md 原文件及目标均保留，返回冲突供决定；不能声称全部成功。\n版本说明可选，不是完成前提。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md",
+        "target/examples/旧副本.md",
+        "approved.md"
+      ],
+      "context": "已确认内容在 approved.md；写入 target/references/method.md，保持入口读取和独立副本。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "四步顺序、两个例外及完整案例保留；版本说明仍可选。",
+        "用例中 a.md 继续、b.md 暂停，备份缺失分支不写入；未删独立副本。",
+        "评价者将候选中的“只暂停冲突项”故意移除，须能判为信息损失，而非关键词齐全即可通过。"
+      ]
+    },
+    {
+      "id": "recommendation-not-decision-05",
+      "type": "boundary",
+      "prompt": "analysis 列出方案甲和乙，推荐甲但标记为待决定；它们会写入不同规则。请现在继续改文件。",
+      "expected_behavior": [
+        "不把推荐或待决项当作用户选择",
+        "暂停依赖该选择的写入，只询问需要确定的选项"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "method-fidelity-06",
+      "type": "normal",
+      "prompt": "将已确认的维护方法整理进 Reference。原方法规定先检查备份、再按顺序迁移，副本保留为独立案例；步骤三是可选项，超时则停止。",
+      "expected_behavior": [
+        "保留备份前置条件、迁移顺序、副本案例和超时停止条件",
+        "不把可选步骤改成强制，不先摘要再原创一套简化流程",
+        "把输入、成功产物、失败分支、旧副本行为及后续消费者接成可执行链",
+        "Reference 可完整解释方法，主 Skill 只写读取条件和返回执行步骤"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n迁移时读取 [方法](references/method.md)，执行后交付完成项、暂停项及实际路径。\n",
+          "target/references/method.md": "# 维护方法\n\n原规则：按清单搬运文件，完成后检查读取路径。\n\n## 副本案例\n`examples/旧副本.md` 是独立案例，不并入方法正文，不删除。\n",
+          "target/examples/旧副本.md": "独立案例：旧版只迁移 a.md。\n",
+          "approved.md": "输入：迁移清单和可恢复备份。\n1. 先核验备份；缺备份不写入。\n2. 按清单顺序迁移；超时即停止后续迁移，返回已完成项与失败步骤，保留可恢复路径。\n3. 可选记录版本说明；跳过不影响完成。\n完成后交付文件并检查旧读取路径。target/examples/旧副本.md 作为独立案例保留。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md",
+        "target/examples/旧副本.md",
+        "approved.md"
+      ],
+      "context": "将 approved.md 写入 target/references/method.md；步骤三的具体内容是版本说明。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "查看真实变更与下游产物，不以复述计划代替执行。"
+      ]
+    },
+    {
+      "id": "reference-route-07",
+      "type": "normal",
+      "prompt": "修改入口使其在接收已批准的成熟方法时读取规则表达 Reference；其他单文件措辞修正不应强制读取它。",
+      "expected_behavior": [
+        "在调用方说明由谁、何时、通过哪条路径读取，解决什么判断或输出，以及读完返回何步骤",
+        "从入口实际检查正确触发的请求可达、近邻措辞修正不被要求无条件读取"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n修改内容后交付。\n",
+          "target/references/expression.md": "# 表达\n保留已选方法的条件、顺序、例外与强度。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/expression.md"
+      ],
+      "context": "入口 target/SKILL.md；已批准方法迁移才读 references/expression.md，单句措辞修正直接执行。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "查看真实变更与下游产物，不以复述计划代替执行。"
+      ]
+    },
+    {
+      "id": "file-actions-and-code-08",
+      "type": "normal",
+      "prompt": "获批方案要求修复现有字幕脚本；没有新入口。请实际改脚本并验证含空格路径，勿另建重复 Skill。",
+      "expected_behavior": [
+        "修改承担该职责的现有脚本，不把代码问题改写成提示词建议",
+        "验证含空格路径的真实调用和至少一条成功与失败路径，并检查消费者"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n运行 python3 scripts/subtitle.py 输入路径 输出路径；保留原输入。\n",
+          "target/scripts/subtitle.py": "from pathlib import Path\nimport sys\n# BUG: CLI 已分好的参数又按空格拆开，破坏合法文件路径。\nsource = Path(sys.argv[1].split()[0])\ntext = source.read_text(encoding=\"utf-8\")\nPath(sys.argv[2]).write_text(text.replace(\" --> \", \" → \"), encoding=\"utf-8\")\n",
+          "input dir/字幕 示例.srt": "1\n00:00:01,000 --> 00:00:02,000\n你好。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/scripts/subtitle.py",
+        "input dir/字幕 示例.srt"
+      ],
+      "context": "已选修法：保留 CLI 参数原字符串，不自行 split；不存在输入时非零退出且不创建输出；执行命令时引用含空格路径。输出到 output dir/字幕.txt。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "实际脚本执行后输出时间箭头改变、正文保留，源文件不变。",
+        "缺少输入非零退出且无输出；使用真实含空格路径，不只展示命令。"
+      ]
+    },
+    {
+      "id": "new-contradiction-09",
+      "type": "boundary",
+      "prompt": "实施已确认规则时，目标 Reference 显示它会与另一条明确要求相反的规则冲突。",
+      "expected_behavior": [
+        "暂停冲突涉及的写入并定位实际文件差异，只继续不依赖该问题的已确认工作",
+        "将材料路径、行为影响、需要决定的问题、可继续部分和返回步骤交给 analysis，不自行判断哪条内容优先"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。",
+      "context": "两处有效要求作用于同一发布动作：甲要求“证据不足时停止发布全部内容”，乙要求“仅暂停依赖未确认数字的段落，其他发布不受影响”。未指定谁优先。仅识别需要返回的具体判断与可继续部分，不修改正式文件。"
+    },
+    {
+      "id": "chat-report-no-ledger-10",
+      "type": "boundary",
+      "prompt": "完成一次已有能力文件的修改，运行结构检查，然后在聊天告诉我结果。",
+      "expected_behavior": [
+        "报告实际文件变化和检查结果，区分结构检查与未验证的行为或质量",
+        "不默认创建 evals/results、哈希报告或审计日志"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n读取 [方法](references/method.md)。\n",
+          "target/references/method.md": "# 方法\n交付时列出文件名称。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md"
+      ],
+      "context": "已定修改：在交付要求加入“同时给出文件实际路径”。运行检查只覆盖真实存在的工具；合成目标至少核对引用与 frontmatter。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "actual-consumer-not-doc-only-11",
+      "type": "normal",
+      "prompt": "analysis 已确认入口遇到缺少目标字段时应停止并返回错误。Reference 文字已有这条规则，但入口和脚本仍会继续处理。请完成改进，并保留其他有效处理路径。",
+      "expected_behavior": [
+        "检查真实入口、脚本及所有相关消费者，而非只重复改 Reference 说明",
+        "把停止与错误返回落实到实际控制行为的位置，并同步调用方需要的内容",
+        "保留与新停止条件兼容的其他有效路径，并用代表输入检查新旧行为"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n运行 scripts/run.py，读取 JSON 输入并创建报告。\n",
+          "target/references/input.md": "# 输入\n缺少 target 或为空时返回错误且不创建报告。\n",
+          "target/scripts/run.py": "import json, sys\nfrom pathlib import Path\ndata=json.loads(Path(sys.argv[1]).read_text())\nPath(sys.argv[2]).write_text(data.get(\"target\", \"default\"))\n",
+          "valid.json": "{\"target\":\"目标甲\"}",
+          "missing.json": "{}",
+          "empty.json": "{\"target\":\"\"}"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/input.md",
+        "target/scripts/run.py",
+        "valid.json",
+        "missing.json",
+        "empty.json"
+      ],
+      "context": "目标字段名 target，报告路径是命令第二参数。脚本缺目标时非零退出且不写报告；有效输入仍输出原目标字符串。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "查看真实变更与下游产物，不以复述计划代替执行。"
+      ]
+    },
+    {
+      "id": "stale-approved-conditions-12",
+      "type": "boundary",
+      "prompt": "analysis 上月确认按旧入口读取该规则；入口本周已经迁移到另一个配置。请直接照旧结论完成同步。",
+      "expected_behavior": [
+        "检查已确认对象和条件是否仍对应当前消费者，不把旧结论盲目照搬，也不重新调查根因",
+        "若只涉及实施路径则自行定位当前配置并继续；若变化导致实质规则或适用范围未定，只暂停受影响部分并返回 analysis",
+        "交接当前路径、差异、影响、所需决定及可继续工作和返回步骤"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n配置为 config.json，按配置读取方法。\n",
+          "target/config.json": "{\"method\":\"references/current.md\"}\n",
+          "target/references/current.md": "# 当前方法\n对外输出前检查目标路径。\n",
+          "target/references/old.md": "# 旧方法\n仅作历史说明，不再被入口读取。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/config.json",
+        "target/references/current.md",
+        "target/references/old.md"
+      ],
+      "context": "已定实质方法是“目标路径未知时只暂停写入，继续核对输入”；上月指定 references/old.md，本周 config.json 已切 current.md。把该方法落实当前消费者，不改历史说明，不需重判方法。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "method-implementation-chain-13",
+      "type": "normal",
+      "prompt": "analysis 已确认一套两步规则：输入清单后先核对可恢复备份，缺失则停止且不写入；再依序迁移，成功输出迁移文件，超时停止并返回失败步骤；版本备注是可选项。请把它落入正确能力文件，并保留当前可用的副本案例。",
+      "expected_behavior": [
+        "主 Skill 写清触发、读取路径和关键停止/返回，Reference 保留输入、两步顺序、成功产物、缺失与超时分支及可选强度",
+        "定位实际执行者与消费者，确认新链路生效并保留副本案例",
+        "不增加已确认方法以外的专业条件，不把可选步骤写成必须"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n迁移时读取 [方法](references/method.md)，执行后交付完成项、暂停项及实际路径。\n",
+          "target/references/method.md": "# 维护方法\n\n原规则：按清单搬运文件，完成后检查读取路径。\n\n## 副本案例\n`examples/旧副本.md` 是独立案例，不并入方法正文，不删除。\n",
+          "target/examples/旧副本.md": "独立案例：旧版只迁移 a.md。\n",
+          "approved.md": "输入：迁移清单和可恢复备份。\n1. 先核验备份；缺备份不写入。\n2. 按清单顺序迁移；超时即停止后续迁移，返回已完成项与失败步骤，保留可恢复路径。\n3. 可选记录版本说明；跳过不影响完成。\n完成后交付文件并检查旧读取路径。target/examples/旧副本.md 作为独立案例保留。\n"
+        }
+      },
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md",
+        "target/examples/旧副本.md",
+        "approved.md"
+      ],
+      "context": "两步主链为核验备份、顺序迁移；版本说明可选；目标 target/references/method.md。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "查看真实变更与下游产物，不以复述计划代替执行。"
+      ]
+    },
+    {
+      "id": "validation-matches-change-14",
+      "type": "normal",
+      "prompt": "本次同时调整了一个 Reference 路径、一个 Skill 触发条件和一个执行脚本。请说明如何验证，不要把静态检查说成全部通过。",
+      "expected_behavior": [
+        "检查路径的真实调用闭环，路由的正确请求与近邻反例及实际发现行为",
+        "实际执行脚本成功与失败路径，并根据结果修正偏差后复跑",
+        "分别报告结构证据、样本行为证据和未知的真实质量"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "approved-voice-implementation-15a",
+      "type": "normal",
+      "prompt": "已确认要把“贴吧老哥式毒舌、挑剔不客气、挖苦责问”落实到 laohu-audit：抓承诺与结果的反差、空话没有动作时可直说“这就是空话”，不加礼貌铺垫或安慰；事实定位准确，不猜原因动机、不攻击作者；用户要求别的语气时仍可切换。请直接检查并修改实际生效的 Skill/Reference/UI 和必要评测，让普通找茬任务不依赖本次聊天也能执行这套风格。给出能表现该风格的完整正例，保留问题确认/不修复边界，并按目标效果与保护项分别验收。",
+      "input_files": [
+        "laohu-audit/SKILL.md",
+        "laohu-audit/references/expression.md",
+        "laohu-audit/agents/openai.yaml",
+        "material.md"
+      ],
+      "expected_behavior": [
+        "读取实际 laohu-audit Skill 与按需引用的表达 Reference，并使主入口明确触发、读取和返回；完成方法写入最终文件而非仅留在聊天",
+        "把已确认语气、正向写法与强度落到实际表达规则和完整正例；不改成礼貌铺垫或平淡反问，正例本身能听出目标风格",
+        "保留问题须先确认、只找茬不自动修复、用户可要求其他语气，以及不编事实/根因或攻击作者的边界",
+        "使用普通任务输入和最终交付文件检查，不依赖制作聊天；分别核对目标风格效果与事实/权限保护。效果失败应修实现，不以质量未知掩盖"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "laohu-audit/SKILL.md": "---\nname: laohu-audit\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n核对用户目标与实际材料，只报告已确认问题；不自动修复。表达时读取 [表达](references/expression.md)。\n",
+          "laohu-audit/references/expression.md": "# 表达\n先礼貌鼓励，再概括问题，尽量温和。\n",
+          "laohu-audit/agents/openai.yaml": "interface:\n  display_name: \"laohu-audit | 找茬助手\"\n  short_description: \"核对实际作品与目标，礼貌温和地解释差距并列出已确认问题。\"\n  default_prompt: \"使用 $laohu-audit，检查这份作品。\"\n",
+          "material.md": "目标：给出可直接执行的资料整理步骤。\n实际稿：要专业地整理资料，系统地提高质量，持续优化。\n"
+        }
+      },
+      "context": "“实际 laohu-audit”指本隔离目录提供的合成入口，正式项目只读。依据完整请求改写后，用 material.md 实际报告问题。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "approved-voice-implementation-15b",
+      "type": "normal",
+      "prompt": "已确认要把“贴吧老哥式毒舌、挑剔不客气、挖苦责问”落实到 laohu-audit：抓承诺与结果的反差、空话没有动作时可直说“这就是空话”，问题开头须用有依据的讽刺评价再追问；不加礼貌铺垫或安慰；事实定位准确，不猜原因动机、不攻击作者；用户要求别的语气时仍可切换。请直接检查并修改实际生效的 Skill/Reference/UI 和必要评测，让普通找茬任务不依赖本次聊天也能执行这套风格。给出能表现该风格的完整正例，保留问题确认/不修复边界，并按目标效果与保护项分别验收。",
+      "input_files": [
+        "laohu-audit/SKILL.md",
+        "laohu-audit/references/expression.md",
+        "laohu-audit/agents/openai.yaml",
+        "material.md"
+      ],
+      "expected_behavior": [
+        "读取实际 laohu-audit Skill 与按需引用的表达 Reference，并使主入口明确触发、读取和返回；完成方法写入最终文件而非只留在聊天",
+        "把已确认语气、正向写法与强度落实到规则和完整正例；问题开头实际讽刺已确认矛盾再追问，不能变成礼貌铺垫或平淡问句",
+        "保留先确认问题、只找茬不自动修复、用户可要求其他语气，以及不编事实/根因或攻击作者的边界",
+        "未来运行只靠普通任务输入与最终交付文件，不靠制作聊天；分别检查目标风格效果与事实/权限保护，效果失败应修实现而非以质量未知掩盖"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "laohu-audit/SKILL.md": "---\nname: laohu-audit\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n核对用户目标与实际材料，只报告已确认问题；不自动修复。表达时读取 [表达](references/expression.md)。\n",
+          "laohu-audit/references/expression.md": "# 表达\n先礼貌鼓励，再概括问题，尽量温和。\n",
+          "laohu-audit/agents/openai.yaml": "interface:\n  display_name: \"laohu-audit | 找茬助手\"\n  short_description: \"核对实际作品与目标，礼貌温和地解释差距并列出已确认问题。\"\n  default_prompt: \"使用 $laohu-audit，检查这份作品。\"\n",
+          "material.md": "目标：给出可直接执行的资料整理步骤。\n实际稿：要专业地整理资料，系统地提高质量，持续优化。\n"
+        }
+      },
+      "context": "“实际 laohu-audit”指本隔离目录提供的合成入口，正式项目只读。依据完整请求改写后，用 material.md 实际报告问题。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "rule-writing-actionable-16",
+      "type": "normal",
+      "prompt": "已确认要改进以下规则，目标是让执行者能实际照着处理，并保留“准确、有用的旧表达无需为了改写而重写”这项要求。请落实到负责的 Skill/Reference，并给出一段可直接使用的规则：\n\n“持续提升规则的准确性、专业性和可执行性，避免模糊内容。”",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md"
+      ],
+      "expected_behavior": [
+        "将抽象质量词转成与任务对应的检查对象、可执行动作及缺信息时的处理方式，不只做同义词替换",
+        "保留已有表达准确且能指导行为时不为改写而改写",
+        "不凭空新增未经确认的领域标准或数值门槛"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n维护规则时读 [方法](references/method.md)。\n",
+          "target/references/method.md": "# 方法\n持续提升规则的准确性、专业性和可执行性，避免模糊内容。\n准确、有用的旧表达无需为了改写而重写。\n"
+        }
+      },
+      "context": "已选操作：每条规则定位触发、对象、动作及结果，缺项从已确认方案补全，方案本身缺关键方法才返回；完整有用的旧句保留。写入 target/references/method.md。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "rule-writing-keep-functional-explanation-17",
+      "type": "normal",
+      "prompt": "已确认用户有时会把“重复”误当成“多余”。请检查下面的规则说明，按实际功能删改并把规则落到正确文件：\n\n“删掉一段后，如果观众无法理解前一个关键节点的具体含义，这段属于必要论证，不应仅因字面上像偏题而删掉。这个判断只用于检查观众理解是否断裂，不代表所有解释段都必须保留。”",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md"
+      ],
+      "expected_behavior": [
+        "保留区分必要论证和重复解释的判断条件，以及该条件的适用边界",
+        "若需压缩，改为更清晰的判定动作而非仅以字数或语法通顺判断",
+        "不把“所有解释段都必须保留”加入或暗示为规则"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n检查解说稿时读 [方法](references/method.md)。\n",
+          "target/references/method.md": "# 方法\n解释段看起来重复就删除。\n"
+        }
+      },
+      "context": "用请求提供的完整判断替换错误删除规则，保留解释的适用边界。样稿：先说设备进入节流，再解释节流是降速减少发热，随后说任务耗时变长。检查解释段的实际承接作用。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "rule-writing-ground-terminology-18",
+      "type": "normal",
+      "prompt": "已确认新的质量规则应使用“功能分析”一词，但方案没有定义它在本任务中的意思。把以下草案写进评测 Skill，并完成正确交接：\n\n“对所有问题进行功能分析，给出最优处理。”\n\n不要重新判断专业方法是否成立。",
+      "input_files": [],
+      "expected_behavior": [
+        "检查已确认材料是否给出了该术语对应的对象、观察/操作、结果如何改变处理和适用边界",
+        "缺少会改变执行结果的定义时暂停该处写入并交 analysis 确认，不自行发明术语定义或所谓最优标准",
+        "仍可继续不依赖该待决定义的文件定位或其他已确认工作"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "rule-writing-deduplicate-with-branches-19",
+      "type": "boundary",
+      "prompt": "已确认减少 Skill 中重复维护的同一完整规则，但现有三处写法是：主流程写“证据不足则停止并说明缺口”；输出说明写“没有证据时缩小结论”；验收门写“不得把猜测写为事实”。当前没有说明这些语句的具体触发条件，也没有确认它们可以互相替代。请整理到正确文件，并保留已确定内容。",
+      "input_files": [],
+      "expected_behavior": [
+        "注意三处描述的动作可能不同，不能仅凭主题相近就假定含义或触发条件相同",
+        "若未提供的信息会决定停止、缩小结论及禁止事实化之间的条件关系，应保留不依赖该决定的定位与兼容性整理，把具体待决关系交 analysis",
+        "不把“停止”改成“缩小结论”，不删掉任何明确有效的边界，也不把相同规则在不相关消费者中无条件强并"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。",
+      "context": "两处有效要求作用于同一发布动作：甲要求“证据不足时停止发布全部内容”，乙要求“仅暂停依赖未确认数字的段落，其他发布不受影响”。未指定谁优先。仅识别需要返回的具体判断与可继续部分，不修改正式文件。"
+    },
+    {
+      "id": "routine-standard-not-blocker-20",
+      "type": "normal",
+      "prompt": "已确认要更新索引 Skill，让它按项目名找材料并保留原路径。方案没有规定排序细节；请完成更新并给出默认排序做法。",
+      "input_files": [
+        "target/SKILL.md",
+        "materials/甲项目/需求.md",
+        "materials/甲项目/数据.txt",
+        "materials/乙项目/需求.md"
+      ],
+      "expected_behavior": [
+        "常规排序细节由实施者按目标选定为可恢复的默认规则，适用条件和排序方法写清，不因缺少用户提供的完整标准就返回 analysis。",
+        "不声称所选规则是统计验证的最优方案；明确真实检索效果仍可后续验证。"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n列出材料文件。\n",
+          "materials/甲项目/需求.md": "需求甲。\n",
+          "materials/甲项目/数据.txt": "数据甲。\n",
+          "materials/乙项目/需求.md": "需求乙。\n"
+        }
+      },
+      "context": "材料位于 materials；用户请求查甲项目。修改 target/SKILL.md 的查找规则并给实际索引，不移动文件；排序可由负责人选定。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "undefined-professional-method-still-blocks-21",
+      "type": "boundary",
+      "prompt": "已确认要用“证据评分”决定哪些报道能支持因果结论，但材料没有定义评分维度、权重或如何影响结论。请把规则写入专业审核 Skill。",
+      "input_files": [],
+      "expected_behavior": [
+        "识别评分方法的关键定义缺失会改变专业结论，不自行发明维度或权重；暂停这条规则并交 analysis。",
+        "继续完成不依赖评分方法的文件定位和其他已确定改动。"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "plan-only-no-execution-or-success-22",
+      "type": "boundary",
+      "prompt": "请检查一个技能为何没有被发现，现有材料只有“它没出现”。只给我本地检查方案，不要改文件，不要运行检查。",
+      "input_files": [],
+      "expected_behavior": [
+        "交付有次序、可检查的本地调查方案；不因原因未知而停在追问，也不声称已经调查或修复。",
+        "尊重用户明确限定的只给方案，不读写文件或运行检查，不把计划本身说成授权或成功结果。"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "project-ui-spec-route-23",
+      "type": "normal",
+      "prompt": "现有能力的范围已确认调整，现需同步 Codex 展示。请根据项目规则给出需要维护的字段、格式要求及读取位置，并保留已有 policy 和 dependencies。",
+      "expected_behavior": [
+        "从 evolution 第 3 步读取 change-workflow.md 的界面规范，不向顶层寻找已迁出的字段细则",
+        "准确保留名称前缀、中文名称、25～64 字符、实际技能名提示词和字符串引用要求",
+        "保留无关配置，不因需确认业务操作而禁用隐式调用"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "project-method-spec-route-24",
+      "type": "normal",
+      "prompt": "已确认把“来源不可取得时，说明无法核验并暂停事实断言，但继续处理已确认材料”写入现有能力。请给出规则片段及维护步骤，研究来源不需要展示给未来执行者。",
+      "expected_behavior": [
+        "按条件读取 rule-expression.md，使用四层检查核对目标、流程、材料及边界，不强迫采用四层标题",
+        "保留暂停事实断言与继续已确认部分的不同动作，不扩大为整项任务停工",
+        "运行文件承接可执行规则与适用条件，不依赖未来联网回读制作资料"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "project-multi-file-maintenance-25",
+      "type": "boundary",
+      "prompt": "已确认同一项能力变更涉及主 Skill、Reference 与调用脚本，工作区都有未提交内容。请给出实施顺序和验收，说明某个文件验证失败时如何处理。",
+      "expected_behavior": [
+        "读取 change-workflow.md，先核对整个变更集合与唯一真源，保存当前实际内容后按依赖顺序修改",
+        "读取 docs/maintenance.md 的适用检查要求，脚本修改执行结构检查与离线回归，不复制命令规范到顶层",
+        "关键失败时不报告完成，不回滚用户已有修改，只恢复本轮自己的变更并报告范围"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "selected-candidate-trial",
+      "type": "normal",
+      "prompt": "已授权可恢复试用。方案已选：会议记录先列实际决定，再列责任人明确的待办，未决议题单列；不把建议写成决定。暂无本团队效果数据。请在试验目录落实候选并试跑，保留事实边界。",
+      "input_files": [
+        "meeting.txt"
+      ],
+      "expected_behavior": [
+        "选定候选可实施试用，不把未知效果当成方法未选",
+        "生成实际规则和试跑结果，未验证质量如实说明"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "meeting.txt": "陈：决定周五发布。李：我周四完成校验。陈：也许增加英文版。李：英文版下次再议。\n"
+        }
+      },
+      "context": "在 target/SKILL.md 建候选会议整理能力，按已选方法实际处理 meeting.txt，输出到 result.md；人名与决定来源保留。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "fidelity-priority",
+      "type": "normal",
+      "prompt": "将已选方法接入：先核对事实；事实齐全时直接指出问题，不加安慰铺垫；事实不全时只问会改变判断的缺项。保留这三条原句与强度，只有项目引用路径要适配。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md"
+      ],
+      "expected_behavior": [
+        "保留原句、选择优先级和分支，不改成综合考虑或适当调整",
+        "修改接口与实际消费者，不重新发明专业方法"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n遇到检查请求时读 [方法](references/method.md)。\n",
+          "target/references/method.md": "# 检查方法\n综合考虑后给适当建议。\n"
+        }
+      },
+      "context": "原句完整提供于请求；替换 target/references/method.md 中泛化句，入口读取保持可用。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "asset-carrier",
+      "type": "normal",
+      "prompt": "已选方案要给网页主题能力接入一份真实 CSS 模板，运行时复制到成品；请选择落点并接入，不能只在 Skill 写“使用统一风格”。",
+      "input_files": [
+        "target/SKILL.md",
+        "source-style.css",
+        "article.txt"
+      ],
+      "expected_behavior": [
+        "使用实际可复制资产并说明消费者，不用抽象规则替代模板",
+        "不创建只有名称的空资产目录"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 按已有材料完成指定处理。\n---\n# 示例能力\n\n把已有正文制作 HTML。\n",
+          "source-style.css": "body { color: #222; background: #faf8f2; line-height: 1.7; }\nh1 { color: #ad4d18; }\n",
+          "article.txt": "标题：整理工作台\n正文：把今天要用的资料放到手边。\n"
+        }
+      },
+      "context": "已选 CSS 模板就是 source-style.css；复制到 target/assets 并接入运行复制步骤。用 article.txt 生成实际 HTML 和引用的 CSS，复制后内容应相等。 材料为合成测试，所有修改只在当前隔离目录。",
+      "acceptance": [
+        "核对实际文件变更、预期行为和保护项；仅回答计划不得计为完成。"
+      ]
+    },
+    {
+      "id": "method-vs-implementation-failure",
+      "type": "normal",
+      "prompt": "试跑已确认候选规则实际加载且完整执行，但结果仍遗漏用户要求的事实保留。不是路径故障。处理这次失败并报告范围。",
+      "input_files": [],
+      "expected_behavior": [
+        "明确目标失败，不用质量未知遮掩",
+        "返回具体方法或条件问题给 analysis，不重复只查引用",
+        "保护已有有效部分，不全仓回滚"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "snapshot-required-baseline",
+      "type": "boundary",
+      "prompt": "准备比较旧新版，但有人刚改了当前文件。旧版实际内容已在可恢复快照中。怎样运行比较？",
+      "input_files": [],
+      "expected_behavior": [
+        "旧版从固定快照读取，不将当前文件称为旧版",
+        "保持输入和评价可比，说明环境差异"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "本条检查请求理解、职责或方案说明；缺少实际目标文件时不得计为写回成功。需主张实施能力时另用提供完整 fixture 的写入案例。"
+    },
+    {
+      "id": "improve-then-use",
+      "type": "integration",
+      "prompt": "改进一个现有创作 Skill 的局部方法，随后用交付文件处理同材料比较和一个关键条件不同的新任务。原有效约束必须保留。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/title.md",
+        "material.md",
+        "different.md"
+      ],
+      "expected_behavior": [
+        "真实下游局部作品可读，不只检查文件",
+        "方法保真与实际效果分别判断",
+        "没有历史失败证据不能编造改前不足，旧新都通过仅说明保持"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n收到正文与标题，读取 [方法](references/title.md)，只交付新标题和原正文。\n",
+          "target/references/title.md": "# 标题方法\n标题沿用原文信息，不添加数字，不改正文。\n",
+          "material.md": "原题：这款键盘适合所有人。\n正文：我用了两周，比旧机械键盘安静，但空格键仍然吵。\n",
+          "different.md": "原题：这款键盘适合所有人。\n正文：我还没用过，只看了厂商介绍，无法评价噪声。\n"
+        }
+      },
+      "context": "已选方法：有本人实际体验时，用体验中的具体优点与限制形成标题；没有实测时，标题明确为资料观察或待验证，不虚构体验。正文不改。落实 target 后分别处理 material.md 和 different.md。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "两份完整局部产物可读；前者保留优点与限制，后者不出现虚构实测。",
+        "另一个未参与方法设计的执行者只读交付文件和普通输入再试用；不向其提供评价预期。"
+      ]
+    },
+    {
+      "id": "evolution-density-preserve-modal",
+      "type": "regression",
+      "prompt": "把已选规则写入现有Reference：必须先核对原始记录；没有原始记录时只暂停受影响数字；可保留不进正文的编辑备注；禁止用转载次数选真值。要求简洁但不能损失信息。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/method.md"
+      ],
+      "expected_behavior": [
+        "完整保留取证顺序、局部暂停、可继续范围、备注许可与发布边界及禁止项；不以核实信息概括，不把可选升级必需。"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n检查数字时读 [方法](references/method.md)。\n",
+          "target/references/method.md": "# 数字核实\n核实材料后写报告。\n"
+        }
+      },
+      "context": "目标 target/references/method.md；已选方法全在请求中，不补造评分门槛。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "查看真实变更与下游产物，不以复述计划代替执行。"
+      ]
+    },
+    {
+      "id": "evolution-boundary-four-surfaces",
+      "type": "regression",
+      "prompt": "已定方案要求能力只改已有正文的标题；description却写从零写文章，主文要求正文，Reference把正文缺失当作可自由编造。请按已定范围修复并验证。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/title.md",
+        "target/agents/openai.yaml"
+      ],
+      "expected_behavior": [
+        "同步描述与真实运行边界，修复未知分支与必要界面配置，测试有正文及无正文的不同处理；不私自扩大为正文创作，也不只修改description。"
+      ],
+      "execution_mode": "write",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: target\ndescription: 从零写完整文章和标题。\n---\n# 示例能力\n\n接收已有正文后按 [标题方法](references/title.md) 修改标题；正文不能改。\n",
+          "target/references/title.md": "# 标题方法\n先找正文主要结论，写成准确标题。没有正文时可自由编造一篇。\n",
+          "target/agents/openai.yaml": "interface:\n  display_name: \"target | 标题助手\"\n  short_description: \"从零创作完整文章和标题，协助用户展开内容与表达。\"\n  default_prompt: \"使用 $target，从零写一篇文章。\"\npolicy:\n  allow_implicit_invocation: true\n"
+        }
+      },
+      "context": "只改已有正文标题；无正文时索取正文，不代写。验证输入一：正文“我试了三天，导出成功两次、失败一次”，旧标题“永不失败”；输入二只有“帮我改标题”，无正文。 所有写入只在测试隔离目录；材料为合成案例。",
+      "acceptance": [
+        "描述、正文、Reference、UI 都承接标题修改；无正文只索取正文。",
+        "已有正文产出不夸大标题且正文原字保留；policy 原值保留。"
+      ]
+    }
+  ],
+  "execution_protocol": {
+    "setup": "使用项目同盘隔离目录；fixture_setup.files 的键是该目录内的相对路径，值为完整 UTF-8 文件内容。逐案例重新建立，不修改正式项目。需要项目工具时复制当前工具与依赖到隔离根，保留其项目结构。",
+    "delivery": "执行者只接收 prompt、context、input_files 及已物化文件，不接收 expected_behavior、acceptance 或其他评分预期。",
+    "evidence": "execution_mode=write 的案例必须产生实际修改及消费者产物；路由/说明案例不能替代这些证据。文件与输入预检只证明材料可定位，不自动证明方法完整或效果通过。"
+  }
+}

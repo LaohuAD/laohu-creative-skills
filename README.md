@@ -17,7 +17,58 @@
 - 对标拆解优秀作品，诊断现有作品的问题，并把完成的成果收录归档。
 - 在创作过程中沉淀经验，让下一次创作更快进入状态。
 
+## 安装：项目内使用或全局使用
+
+需要 Git、Python 3.9+，以及能读取本地 Skill 的 Agent。两种方式都保留一份完整仓库，不区分开发、安装或稳定副本。
+
+| 方式 | 适合什么情况 | 好处与限制 |
+| --- | --- | --- |
+| 项目内使用 | 在这个仓库中体验、创作或修改技能 | 使用范围清楚；其他项目不一定能自动发现这些入口 |
+| 全局使用 | 在多个项目中调用老胡能力 | 所选 Agent 的本机任务可共用技能；链接指向同一仓库，修改会直接生效，仓库位置须保持可访问 |
+
+**先取得完整仓库。** 在你选择的父目录运行；已有完整仓库就直接使用，不再克隆：
+
+```bash
+git clone https://github.com/LaohuAD/laohu-creative-skills.git
+cd laohu-creative-skills
+python3 tools/check_project.py
+```
+
+项目内使用时，在仓库中打开 Agent。Codex 可发现 `.agents/skills/`；宿主没有显示命令时，可以让它读取 `.agents/skills/laohu/SKILL.md` 开始，不必因此安装到全局。
+
+**需要全局使用时，在这份仓库中运行：**
+
+```bash
+python3 tools/install.py install --host codex
+python3 tools/install.py install --host codex --write
+```
+
+第一条预览，第二条创建链接。Claude Code 本机使用把 `codex` 改为 `claude`，只安装你选择的宿主。工具注册全部已具备定义的入口，跳过预留目录；同名入口指向别处时停止并说明冲突，不覆盖。Codex 的目标是 `~/.agents/skills`，Claude Code 的目标是 `~/.claude/skills`；它们只是入口，内容仍在当前仓库。之后按宿主方式重载或新建会话，核对可用入口。本机安装不自动同步到云端或其他电脑；其他宿主与系统的链接权限需实际核验。
+
+也可以直接告诉 Agent：
+
+> 请阅读这个仓库的 README，帮我在当前项目内使用老胡技能。
+
+或：
+
+> 请阅读这个仓库的 README，把当前完整仓库注册为 Codex 的全局技能入口，不另建仓库副本。
+
+README 说明可选方式；Agent 不应仅因读到安装说明就执行全局安装。
+
+**作品保存：** 在老胡项目内，默认保存到 `works/` 并告知实际路径；在项目外且尚未确定位置时，Agent 会给出具体路径建议，请你确认后再保存。你已指定位置或同一作品已有目录，就直接沿用。外部目录不自动继承本仓库的 Git 忽略规则。
+
+**更新、检查与卸载：** 两种方式都使用 `/laohu-update` 更新完整仓库，保留本地修改；全局模式还同步受管理入口。`python3 tools/install.py status` 查看链接状态。取消 Codex 全局入口时，先运行 `python3 tools/install.py uninstall --host codex` 预览，再加 `--write`；保留仓库和作品。不要移动或删除正在被链接的仓库；需要搬迁时先卸载入口，再搬迁并重新注册。详细操作见 [安装与入口管理](.agents/skills/laohu-update/references/installation.md)。
+
 ## 从哪里开始
+
+直接输入 `/laohu`，或选择一种方式开始：
+
+- `/laohu 新手入门`：了解怎么用，拿到第一个请求示例。
+- `/laohu 能力目录`：查看当前可用的技能及用途。
+- `/laohu 帮我选`：带上目标或材料，获得推荐、理由和可直接发送的提示词。
+- `/laohu 更新帮助`：通过 Git 获取完整项目的新版本；本地自进化与官方更新冲突时，由你决定如何合并。
+
+入口每次读取当前技能信息；新增能力进入同一套技能目录后，下次推荐便会纳入考虑。你决定是否开始执行。
 
 如果你已经知道要做什么，直接选择对应入口即可。如果你只知道“我想做点什么”，还没有决定先从哪一步开始，就使用 /laohu。它会先帮你看清目标、材料和当前选择，再把合适的入口交给你决定。
 
@@ -26,21 +77,25 @@
 | /laohu | 了解需求、比较入口、安排创作方向 |
 | /laohu-topic | 发展选题、母题、系列和创作种子 |
 | /laohu-writing | 写作、改稿、口播与文字表达 |
-| /laohu-gzh-design | Markdown 与长文的公众号排版 |
+| /laohu-htmlshow | 将文章、提示词、剧本等做成便于阅读和使用的 HTML 展示页 |
+| /laohu-htmlshow-gzh | Markdown 与长文的公众号排版 |
 | /laohu-lyrics | 歌词创作与歌曲文字表达 |
 | /laohu-title | 标题、命名和传播入口 |
 | /laohu-cover | 封面方向、画面概念与封面提示 |
 | /laohu-script | 剧本、分镜和内容推进 |
 | /laohu-image | 图片创意与图像生成提示 |
 | /laohu-assets | 视觉、声音和创作资产整理 |
-| /laohu-story | 故事脑洞、人物关系和情节方向 |
+| /laohu-story | 从没有灵感或零散片段出发，探索音乐、文字、画面等作品的创作方向 |
 | /laohu-video | 视频创意、镜头设计和视频提示词 |
 | /laohu-arrangement | 编曲方向、音乐结构和制作沟通 |
 | /laohu-benchmark | 对标作品观察、拆解和借鉴 |
-| /laohu-diagnosis | 找出选题、文本或作品中的关键问题 |
-| /laohu-archive | 整理、收录和归档已经完成的作品 |
+| /laohu-audit | 按目标与材料审查作品、提示词、Skill 和流程，确认具体问题并指出证据与目标差距 |
+| /laohu-analysis | 解释问题原因，或把已确认目标转成可实施方案 |
+| /laohu-archive | 创建与复用作品目录，持续收录同一作品的各类内容 |
 | /laohu-update | 检查和更新造梦技能的使用内容 |
 | /laohu-evolution | 沉淀经验，改进技能和长期创作方法 |
+
+目录会随着能力完成逐步开放。只有对应目录中已经存在有效 `SKILL.md` 的入口才可被 Agent 直接调用；其他目录是预留位置，完成后再启用。
 
 每个入口都可以单独使用，也可以在同一个作品中按需要组合。你可以先做选题，再写歌词；也可以只处理一个韵脚、一个标题或一张封面。每一步都由你决定是否继续、修改或换一个方向。
 
@@ -54,16 +109,18 @@
 
 项目地址：
 
-- 老胡造梦技能：https://github.com/LaohuAD/laohu-creative-skill
+- 老胡造梦技能：https://github.com/LaohuAD/laohu-creative-skills
 - 老胡画梦枋：https://github.com/LaohuAD/laohu-creative-studio
 - 老胡个人网站：https://lao-hu.com/
 
 ## 持续更新
 
+版本变化见 [更新记录](CHANGELOG.md)；输入 `/laohu 更新帮助` 了解更新方式，明确需要升级时使用 `/laohu-update`。维护者可运行 `python3 tools/check_project.py --test`，具体发布步骤见 [项目维护指南](docs/maintenance.md)。
+
 这个项目会随着真实创作持续完善。如果你在使用过程中遇到问题，或有新的创作需求和建议，欢迎通过老胡个人网站联系老胡。
 
 ## 项目许可与创作作品
 
-本仓库的 Skill、规则、参考资料、模板和其他项目材料采用 CC BY-NC 4.0 许可，未经另外授权不得将这些仓库材料本身用于商业分发、商业服务或商业产品。`skills/laohu-gzh-design` 目录收录的第三方公众号排版能力保留原项目的 AGPL-3.0 许可，具体以该目录中的许可证为准。
+本仓库的 Skill、规则、参考资料、模板和其他项目材料采用 CC BY-NC 4.0 许可，未经另外授权不得将这些仓库材料本身用于商业分发、商业服务或商业产品。`.agents/skills/laohu-htmlshow-gzh` 目录收录的第三方公众号排版能力保留原项目的 AGPL-3.0 许可，具体以该目录中的许可证为准。
 
 你使用本技能创作出的歌词、文章、标题、图片、音频、视频、剧本和其他作品，通常不因使用本仓库而自动受到非商业限制。作品能否使用或商业化，还要以你拥有的权利、所用模型与素材的许可、平台条款及适用法律为准。

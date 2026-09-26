@@ -1,10 +1,42 @@
 .DS_Store
 
+# User-generated works stay local unless explicitly selected for publication.
+works/**
+!works/.gitkeep
+
 # Local runtime and temporary files
 .tmp/
 tmp/
 output/
+.cache/
+*.log
+
+# Local environments and secrets
+.env
+.env.*
+!.env.example
+
+# Language and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+coverage/
+dist/
+build/
 
 # Editor and operating-system files
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# Machine-local global Skill registrations
+.laohu-install.json
+.laohu-install.lock
+.laohu-install-*.tmp
+
+# Maintainer-only publishing workflow; never distribute
+.agents/skills/laohu-publish/

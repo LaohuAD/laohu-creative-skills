@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu | 老胡造梦技能"
+  short_description: "了解项目用法与安装方式，查看现有能力，根据目标推荐单项技能或必要的组合。"
+  default_prompt: "使用 $laohu，根据我当前的目标和材料推荐单项技能或必要的技能组合，说明理由和分工，先不要执行。"

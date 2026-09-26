@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-story | 灵感与创作方向"
+  short_description: "引导我提供起点，主动拆解材料并推荐有依据的角度，通过我的选择与试作修订发展灵感。"
+  default_prompt: "使用 $laohu-story，从我提供的线索开始，主动分析并给出可比较的创作方向；还没有线索时先引导我提供，不替我编选题。"

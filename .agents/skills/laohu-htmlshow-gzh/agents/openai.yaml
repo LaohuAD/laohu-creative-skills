@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-htmlshow-gzh | 老胡公众号排版"
+  short_description: "公众号文章排版与单篇风格调整，提供复制预览；复用主题设计交接长期维护。"
+  default_prompt: "使用 $laohu-htmlshow-gzh，把这篇文章排成可用于微信公众号的 HTML，保留正文并提供预览。"

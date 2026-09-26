@@ -8,6 +8,34 @@
 
 老胡造夢技能是一套以人為中心的創作能力集合。它把從靈感、選題到作品呈現與整理的不同工作，變成可以主動選擇的入口。你決定想做什麼、為誰而做，以及哪些地方必須保留自己的判斷；AI 在明確方向裡協助你推進創作。
 
+## 安裝：專案內使用或全域使用
+
+需要 Git、Python 3.9+，以及能讀取本機 Skill 的 Agent。只保留一份完整儲存庫，全域入口連結到同一處，不另分開發版或穩定版副本。
+
+```bash
+git clone https://github.com/LaohuAD/laohu-creative-skills.git
+cd laohu-creative-skills
+python3 tools/check_project.py
+```
+
+已有完整儲存庫就直接使用。專案內使用時，在該目錄開啟 Agent；未顯示命令時，可請它讀取 `.agents/skills/laohu/SKILL.md`。這種方式的使用範圍清楚，但其他專案不一定能發現入口。
+
+需要跨專案使用時，先預覽，再註冊：
+
+```bash
+python3 tools/install.py install --host codex
+python3 tools/install.py install --host codex --write
+```
+
+Claude Code 本機使用將 `codex` 改為 `claude`，只安裝選定的宿主。工具註冊所有正式入口、略過預留目錄；同名入口指向別處時停止，不覆寫。Codex 目標為 `~/.agents/skills`，Claude Code 為 `~/.claude/skills`。重載宿主後檢查發現結果；共用同一份來源，修改直接生效，來源位置必須持續可存取。本機安裝不自動同步至雲端或其他電腦，其他宿主與連結權限須另行驗證。
+
+也可告訴 Agent：「請讀取 README，把目前完整儲存庫註冊為 Codex 的全域技能入口，不另建副本。」只讀取說明不代表已授權安裝。
+
+在老胡專案內，預設儲存至 `works/` 並通知實際路徑；專案外尚未決定位置時，先提出具體建議，確認後才儲存。已指定位置或同一作品已有目錄就直接沿用。外部目錄不自動繼承本儲存庫的 Git 忽略規則。
+
+兩種方式都透過 `/laohu-update` 更新，保護本機修改並同步受管理入口。以 `python3 tools/install.py status` 查看狀態。解除入口先執行 `python3 tools/install.py uninstall --host codex` 預覽，再加 `--write`；保留儲存庫與作品。搬移儲存庫前先解除，搬移後重新註冊。[詳細操作](.agents/skills/laohu-update/references/installation.md)
+
+
 ## 你可以用它做什麼
 
 - 從一個念頭發展出值得繼續的選題、故事或創作方向。
@@ -19,6 +47,15 @@
 
 ## 從哪裡開始
 
+直接輸入 `/laohu`，或選擇一種方式開始；也可以用繁體中文表達相同需求：
+
+- `/laohu 新手入门`：了解怎麼用，取得第一個請求範例。
+- `/laohu 能力目录`：查看目前可用的技能與用途。
+- `/laohu 帮我选`：提供目標或素材，取得推薦、理由與可直接傳送的提示詞。
+- `/laohu 更新帮助`：透過 Git 取得完整專案的新版本；本地自我進化與官方更新衝突時，由你決定如何合併。
+
+入口每次讀取目前的技能資訊；新增能力進入同一套技能目錄後，下次推薦就會納入考慮。你決定是否開始執行。
+
 如果你已經知道要做什麼，直接選擇對應入口即可。如果只知道「我想做點什麼」，還沒決定從哪一步開始，就使用 /laohu。它會先協助你看清目標、素材與目前選擇，再把合適的入口交給你決定。
 
 | 指令 | 適合處理的任務 |
@@ -26,21 +63,25 @@
 | /laohu | 了解需求、比較入口、安排創作方向 |
 | /laohu-topic | 發展選題、母題、系列與創作種子 |
 | /laohu-writing | 寫作、改稿、口播與文字表達 |
-| /laohu-gzh-design | Markdown 與長文的微信公眾號排版 |
+| /laohu-htmlshow | 將文章、提示詞、劇本等製作成便於閱讀與使用的 HTML 展示頁 |
+| /laohu-htmlshow-gzh | Markdown 與長文的微信公眾號排版 |
 | /laohu-lyrics | 歌詞創作與歌曲文字表達 |
 | /laohu-title | 標題、命名與傳播入口 |
 | /laohu-cover | 封面方向、畫面概念與封面提示 |
 | /laohu-script | 劇本、分鏡與內容推進 |
 | /laohu-image | 圖片創意與圖像生成提示 |
 | /laohu-assets | 視覺、聲音與創作資產整理 |
-| /laohu-story | 故事腦洞、人物關係與情節方向 |
+| /laohu-story | 從沒有靈感或零散片段出發，探索音樂、文字、畫面等作品的創作方向 |
 | /laohu-video | 影片創意、鏡頭設計與影片提示詞 |
 | /laohu-arrangement | 編曲方向、音樂結構與製作溝通 |
 | /laohu-benchmark | 對標作品觀察、拆解與借鑑 |
-| /laohu-diagnosis | 找出選題、文本或作品中的關鍵問題 |
-| /laohu-archive | 整理、收錄與歸檔已完成的作品 |
+| /laohu-audit | 依目標與材料確認作品、提示詞、Skill 和流程的具體問題，指出證據與目標差距 |
+| /laohu-analysis | 解釋問題原因，或將已確認目標轉成可執行方案 |
+| /laohu-archive | 建立與沿用作品目錄，持續收錄同一作品的各類內容 |
 | /laohu-update | 檢查與更新造夢技能的使用內容 |
 | /laohu-evolution | 沉澱經驗，改進技能與長期創作方法 |
+
+入口會隨著能力完成逐步開放。只有對應目錄中已存在有效 `SKILL.md` 的入口，才能由 Agent 直接呼叫；其他目錄是預留位置，完成後再啟用。
 
 每個入口都可以單獨使用，也可以在同一個作品中按需要組合。你可以先做選題，再寫歌詞；也可以只處理一個韻腳、一個標題或一張封面。每一步都由你決定是否繼續、修改或換一個方向。
 
@@ -54,16 +95,18 @@
 
 專案地址：
 
-- 老胡造夢技能：https://github.com/LaohuAD/laohu-creative-skill
+- 老胡造夢技能：https://github.com/LaohuAD/laohu-creative-skills
 - 老胡畫夢枋：https://github.com/LaohuAD/laohu-creative-studio
 - 老胡個人網站：https://lao-hu.com/
 
 ## 持續更新
 
+版本變化見[更新記錄](CHANGELOG.md)；輸入 `/laohu 更新幫助` 了解更新方式，確定要升級時使用 `/laohu-update`。維護者可執行 `python3 tools/check_project.py --test`，發布步驟見[專案維護指南](docs/maintenance.md)。
+
 這個專案會隨著真實創作持續完善。如果在使用過程中遇到問題，或有新的創作需求與建議，歡迎透過老胡個人網站聯絡老胡。
 
 ## 專案授權與創作作品
 
-本儲存庫的 Skill、規則、參考資料、模板與其他專案材料採用 CC BY-NC 4.0 授權，未經另外授權不得將這些儲存庫材料本身用於商業分發、商業服務或商業產品。`skills/laohu-gzh-design` 目錄收錄的第三方微信公眾號排版能力保留原專案的 AGPL-3.0 授權，詳情以該目錄中的授權文件為準。
+本儲存庫的 Skill、規則、參考資料、模板與其他專案材料採用 CC BY-NC 4.0 授權，未經另外授權不得將這些儲存庫材料本身用於商業分發、商業服務或商業產品。`.agents/skills/laohu-htmlshow-gzh` 目錄收錄的第三方微信公眾號排版能力保留原專案的 AGPL-3.0 授權，詳情以該目錄中的授權文件為準。
 
 你使用本技能創作出的歌詞、文章、標題、圖片、音訊、影片、劇本和其他作品，通常不會因為使用本儲存庫而自動受到非商業限制。作品能否使用或商業化，仍要以你擁有的權利、所使用模型與素材的授權、平台條款及適用法律為準。

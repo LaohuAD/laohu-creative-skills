@@ -8,6 +8,34 @@
 
 老胡造夢技能은 사람을 중심에 둔 창작 능력 모음입니다. 영감에서 완성된 작품과 정리까지의 과정을 직접 선택할 수 있는 입구로 정리합니다. 무엇을 만들지, 누구를 위한 것인지, 어떤 판단을 지킬지는 사람이 정하고 AI는 그 방향 안에서 작업을 진행합니다.
 
+## 프로젝트 안에서 또는 전역으로 사용하기
+
+Git, Python 3.9 이상, 로컬 Skill을 읽을 수 있는 Agent가 필요합니다. 완전한 저장소 하나를 유지하고 전역 입구를 같은 위치에 연결합니다. 개발용·안정판 복사본을 따로 만들지 않습니다.
+
+```bash
+git clone https://github.com/LaohuAD/laohu-creative-skills.git
+cd laohu-creative-skills
+python3 tools/check_project.py
+```
+
+이미 완전한 저장소가 있으면 그대로 사용합니다. 프로젝트 안에서만 쓰려면 이 폴더를 Agent로 엽니다. 명령이 표시되지 않으면 `.agents/skills/laohu/SKILL.md`를 읽도록 요청할 수 있습니다.
+
+다른 프로젝트에서도 쓰려면 등록을 미리 확인한 뒤 적용합니다.
+
+```bash
+python3 tools/install.py install --host codex
+python3 tools/install.py install --host codex --write
+```
+
+로컬 Claude Code는 `codex`를 `claude`로 바꿉니다. 선택한 호스트에 정의된 입구 전체를 등록하고 예약 폴더는 건너뜁니다. Codex는 `~/.agents/skills`, Claude Code는 `~/.claude/skills`를 사용하며 다른 동명 입구를 덮어쓰지 않습니다. 호스트를 다시 로드해 확인하세요. 같은 원본을 공유하므로 수정이 바로 반영되며 원본 위치가 계속 접근 가능해야 합니다. 클라우드나 다른 PC에는 자동 설치되지 않으며, 다른 호스트와 링크 권한은 별도 확인이 필요합니다.
+
+Agent에게 “README를 읽고 현재 저장소를 Codex 전역 입구로 등록해 줘”라고 요청할 수 있습니다. README를 읽는 것만으로 설치가 허용되지는 않습니다.
+
+老胡 프로젝트 안에서는 기본적으로 `works/`에 저장하고 실제 경로를 알립니다. 외부에서 위치가 정해지지 않았다면 구체적인 경로를 제안하고 확인을 기다립니다. 이미 지정한 위치나 같은 작품의 디렉터리는 계속 사용합니다. 외부 폴더에는 이 저장소의 Git 제외 규칙이 자동 적용되지 않습니다.
+
+두 방식 모두 `/laohu-update`로 업데이트하며 로컬 변경과 등록된 입구를 관리합니다. 상태 확인은 `python3 tools/install.py status`입니다. 해제는 `python3 tools/install.py uninstall --host codex`로 미리 확인한 뒤 `--write`를 추가합니다. 저장소와 작품은 남습니다. 저장소 이동 전에 해제하고 이동 후 다시 등록하세요. [상세 절차(중국어)](.agents/skills/laohu-update/references/installation.md)
+
+
 ## 할 수 있는 일
 
 - 하나의 생각에서 주제, 이야기, 기획 방향을 발전시키기.
@@ -19,6 +47,15 @@
 
 ## 입구 선택하기
 
+`/laohu`를 입력하거나 아래 모드를 선택하세요. 같은 요청을 한국어로 설명해도 됩니다.
+
+- `/laohu 新手入门`: 기본 사용법과 첫 요청 예시를 확인합니다.
+- `/laohu 能力目录`: 현재 사용할 수 있는 Skill과 용도를 확인합니다.
+- `/laohu 帮我选`: 목표나 자료를 바탕으로 추천, 이유, 바로 보낼 요청문을 받습니다.
+- `/laohu 更新帮助`: Git으로 프로젝트 전체를 업데이트합니다. 직접 개선한 내용이 공식 변경 사항과 충돌하면 병합 제안을 확인하고 업데이트 여부를 결정합니다.
+
+입구는 매번 현재 Skill 정보를 읽습니다. 같은 모음에 새 능력을 추가하면 다음 검색부터 후보에 포함됩니다. 실행 여부는 사용자가 결정합니다.
+
 무엇을 할지 알고 있다면 해당 명령을 바로 사용하세요. 어떤 입구부터 시작할지 모르겠다면 /laohu를 사용하세요. 목표, 자료, 다음 선택을 정리한 뒤 알맞은 방향을 고를 수 있게 도와줍니다.
 
 | 명령 | 용도 |
@@ -26,21 +63,25 @@
 | /laohu | 요청 정리와 창작 방향 선택 |
 | /laohu-topic | 주제, 기획, 시리즈, 창작 씨앗 |
 | /laohu-writing | 글쓰기, 수정, 말하기 원고 |
-| /laohu-gzh-design | Markdown과 긴 글의 WeChat 레이아웃 |
+| /laohu-htmlshow | 글, 프롬프트, 대본을 읽고 활용하기 편한 HTML로 구성 |
+| /laohu-htmlshow-gzh | Markdown과 긴 글의 WeChat 레이아웃 |
 | /laohu-lyrics | 가사와 작사 |
 | /laohu-title | 제목, 이름, 첫 문장 |
 | /laohu-cover | 커버 콘셉트와 프롬프트 |
 | /laohu-script | 대본, 장면, 전개 |
 | /laohu-image | 이미지 아이디어와 생성 프롬프트 |
 | /laohu-assets | 시각·음향·창작 자산 |
-| /laohu-story | 이야기, 인물, 플롯 아이디어 |
+| /laohu-story | 영감이 없거나 단편적인 생각만 있을 때 음악·글·이미지 등 다양한 창작 방향 탐색 |
 | /laohu-video | 영상, 쇼트, 영상 프롬프트 |
 | /laohu-arrangement | 편곡, 음악 구조, 제작 메모 |
 | /laohu-benchmark | 참고 작품 조사와 분석 |
-| /laohu-diagnosis | 주제, 글, 작품의 핵심 문제 |
-| /laohu-archive | 작품 정리와 보관 |
+| /laohu-audit | 목표와 자료를 대조해 작품·프롬프트·Skill·작업 흐름의 구체적인 문제와 근거를 확인 |
+| /laohu-analysis | 문제의 원인을 설명하거나 확정된 목표를 실행 가능한 계획으로 구체화 |
+| /laohu-archive | 작품 폴더를 만들거나 재사용하여 관련 제작 파일을 함께 보관 |
 | /laohu-update | 도구 상자 확인과 업데이트 |
 | /laohu-evolution | 경험 기록과 창작 방법 개선 |
+
+입구는 능력이 완성되는 순서에 따라 열립니다. 해당 디렉터리에 유효한 `SKILL.md`가 있을 때만 Agent가 직접 호출할 수 있으며, 나머지 디렉터리는 향후 Skill을 위한 예약 위치입니다. 구현이 끝나면 활성화됩니다.
 
 입구 하나만 사용해도 되고, 한 작품 안에서 여러 입구를 이어서 사용해도 됩니다. 주제를 정한 뒤 가사를 쓰거나, 운율·제목·커버만 따로 다룰 수 있습니다. 계속할지, 고칠지, 방향을 바꿀지는 매 단계 사용자가 결정합니다.
 
@@ -54,16 +95,18 @@
 
 Project links:
 
-- https://github.com/LaohuAD/laohu-creative-skill
+- https://github.com/LaohuAD/laohu-creative-skills
 - https://github.com/LaohuAD/laohu-creative-studio
 - https://lao-hu.com/
 
 ## 계속되는 업데이트
 
+버전 변경은 [변경 기록](CHANGELOG.md)에서 확인하세요. 업데이트 방법은 `/laohu`에 물어보고, 실제 업그레이드는 `/laohu-update`를 사용하세요. 유지보수자는 `python3 tools/check_project.py --test`로 점검할 수 있습니다. 배포 절차는 [유지보수 안내](docs/maintenance.md)를 참고하세요.
+
 이 프로젝트는 실제 창작을 통해 계속 개선됩니다. 사용 중 문제나 제안이 있다면 Laohu 개인 웹사이트로 연락해 주세요.
 
 ## 라이선스와 창작 결과물
 
-저장소의 Skill, 규칙, 참고 자료, 템플릿 등 프로젝트 자료는 CC BY-NC 4.0 라이선스로 제공됩니다. 별도 허가 없이 이 저장소 자료 자체를 상업적 배포, 상업적 서비스, 상업적 제품에 사용할 수 없습니다. `skills/laohu-gzh-design`에 포함된 제3자 WeChat 레이아웃 Skill은 원 프로젝트의 AGPL-3.0 라이선스를 유지하며, 자세한 내용은 해당 디렉터리의 라이선스를 따릅니다.
+저장소의 Skill, 규칙, 참고 자료, 템플릿 등 프로젝트 자료는 CC BY-NC 4.0 라이선스로 제공됩니다. 별도 허가 없이 이 저장소 자료 자체를 상업적 배포, 상업적 서비스, 상업적 제품에 사용할 수 없습니다. `.agents/skills/laohu-htmlshow-gzh`에 포함된 제3자 WeChat 레이아웃 Skill은 원 프로젝트의 AGPL-3.0 라이선스를 유지하며, 자세한 내용은 해당 디렉터리의 라이선스를 따릅니다.
 
 이 능력으로 만든 가사, 글, 제목, 이미지, 오디오, 영상, 대본 및 기타 작품은 저장소를 사용했다는 이유만으로 자동으로 비상업 제한을 받지 않습니다. 사용과 상업화 가능 여부는 창작자의 권리, 모델과 자료의 라이선스, 플랫폼 약관, 관련 법률에 따릅니다.

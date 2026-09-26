@@ -1,0 +1,178 @@
+{
+  "skill": "laohu-archive",
+  "behavior_contract": {
+    "must": [
+      "承接上游已确认目标与作品名称",
+      "采用本项目默认 works 归档时只用固定分类，音乐合并歌词和编曲；外部用户指定路径不强套分类",
+      "同一作品跨能力持续复用目录",
+      "区分作品名称、文件名称和封面文字",
+      "缺名称交回负责人",
+      "目录创建完成立即返回创作流程",
+      "目录创建或复用后在聊天中明确告知用户实际路径和状态",
+      "归属不明时列出实际候选，有依据则给建议，等待用户决定",
+      "项目外位置未定先给具体建议并确认，已指定或同作品已确认目录不重问"
+    ],
+    "must_not": [
+      "重新做通用需求访谈",
+      "按媒体扩展名拆散同一作品",
+      "覆盖或静默混入同名作品",
+      "自动新建分类或空模板",
+      "把归档改成发布或规则进化"
+    ]
+  },
+  "cases": [
+    {
+      "id": "named-music",
+      "type": "normal",
+      "prompt": "已确认要写一首怀念朋友的歌，作品叫《晚风来信》。先建目录，再交回歌词流程。",
+      "input_files": [],
+      "expected_behavior": [
+        "创建 works/music/晚风来信，不重复分析创作意图",
+        "返回绝对路径和负责人，不创建空稿或媒体子目录",
+        "不要求用户再点一次归档入口",
+        "聊天中明确说明已创建的目录与实际路径，再返回创作负责人"
+      ],
+      "context": {
+        "workspace": "当前任务在老胡完整仓库内；已有相对 works 路径相对此仓库。"
+      }
+    },
+    {
+      "id": "same-song-new-media",
+      "type": "normal",
+      "prompt": "这是《晚风来信》的封面制作阶段，歌词和编曲已在 works/music/晚风来信/，请继续。",
+      "input_files": [],
+      "expected_behavior": [
+        "核实已确认目录归属，复用原路径",
+        "不创建 works/cover 下的第二份作品",
+        "封面文字与作品目录名称独立",
+        "聊天中说明继续使用原目录，不把复用说成新建"
+      ],
+      "context": {
+        "workspace": "当前任务在老胡完整仓库内；已有相对 works 路径相对此仓库。"
+      }
+    },
+    {
+      "id": "missing-name",
+      "type": "boundary",
+      "prompt": "方向已定，还没想好这首歌叫什么。先别随便起名。",
+      "input_files": [],
+      "expected_behavior": [
+        "返回待命名状态，把已有方向交回原负责人",
+        "不建未命名或擅自起名目录",
+        "不从归档入口循环调用标题和灵感能力"
+      ],
+      "context": {
+        "workspace": "当前任务在老胡完整仓库内；已有相对 works 路径相对此仓库。"
+      }
+    },
+    {
+      "id": "occupied-name",
+      "type": "boundary",
+      "prompt": "创建一个新的独立封面项目，叫 Poster；works/cover/Poster 已经有另一件作品。",
+      "input_files": [],
+      "expected_behavior": [
+        "不因为同名就复用或覆盖",
+        "说明名称冲突，等明确新的名称",
+        "不自动加日期或序号"
+      ],
+      "context": {
+        "workspace": "当前任务在老胡完整仓库内；已有相对 works 路径相对此仓库。"
+      }
+    },
+    {
+      "id": "discussion-only",
+      "type": "near-miss",
+      "prompt": "先聊聊这首歌可能是什么感觉，别建文件。",
+      "input_files": [],
+      "expected_behavior": [
+        "继续讨论，不创建作品目录或文件",
+        "不把能力已加载等同于落盘授权"
+      ],
+      "context": {
+        "workspace": "当前任务在老胡完整仓库内；已有相对 works 路径相对此仓库。"
+      }
+    },
+    {
+      "id": "independent-cover",
+      "type": "holdout",
+      "prompt": "这次是一张独立展览海报，项目名是《城市回声》，画面上的字之后再定。请先建立作品目录。",
+      "input_files": [],
+      "expected_behavior": [
+        "采用已确认项目名创建 cover 类目录",
+        "不把封面文字未定当作目录命名未完成",
+        "只创建必要目录并返回原负责人",
+        "聊天中明确说明已创建的目录与实际路径，再返回创作负责人"
+      ],
+      "context": {
+        "workspace": "当前任务在老胡完整仓库内；已有相对 works 路径相对此仓库。"
+      }
+    },
+    {
+      "id": "ambiguous-existing-work",
+      "type": "boundary",
+      "prompt": "把这个封面收好，名称还是城市回声。works/music/城市回声/ 和 works/cover/城市回声/ 都有东西，我没说它属于哪一个。",
+      "input_files": [],
+      "expected_behavior": [
+        "检查候选及上下文，列出实际路径和区别，不因封面媒介直接选 cover",
+        "有依据才推荐归属，并询问属于哪个作品",
+        "确认前返回待确认归属，不使用 --reuse、不复制或移动文件"
+      ],
+      "context": {
+        "workspace": "当前任务在老胡完整仓库内；已有相对 works 路径相对此仓库。"
+      }
+    },
+    {
+      "id": "ownership-correction",
+      "type": "holdout",
+      "prompt": "不是歌曲的配套封面，是独立海报。放到已有的 works/cover/城市回声/，这个目录就是它的。",
+      "input_files": [],
+      "conversation_context": [
+        {
+          "role": "assistant",
+          "content": "建议归入作品 works/music/城市回声/，与歌词一起管理；是否属于这首歌？"
+        }
+      ],
+      "expected_behavior": [
+        "接受明确纠正，核验并复用用户确认的 cover 目录",
+        "后续交接使用新决定，不沿用先前建议的 music 路径",
+        "不因方案变化再次询问同一选择；聊天中说明继续使用的实际位置"
+      ],
+      "context": {
+        "workspace": "当前任务在老胡完整仓库内；已有相对 works 路径相对此仓库。"
+      }
+    },
+    {
+      "id": "external-location-undecided",
+      "type": "boundary",
+      "prompt": "正在另一份客户项目里，活动文案叫秋日市集，请保存。",
+      "input_files": [],
+      "expected_behavior": [
+        "说明项目外位置未确定，给实际路径建议并询问",
+        "确认前不创建目录，不根据全局 Skill 的源位置默认写入老胡 works"
+      ]
+    },
+    {
+      "id": "external-exact-location",
+      "type": "normal",
+      "prompt": "这篇文章叫书店开门，保存到我指定的业务项目交付目录，完整作品路径已给出。",
+      "context": {
+        "work_dir": "用户明确提供的绝对目录；不存在老胡 AGENTS 或技能目录。"
+      },
+      "input_files": [],
+      "expected_behavior": [
+        "核对精确路径后使用 --work-dir 与 --location-confirmed，不追加 works、分类或作品名",
+        "沿用位置并告知，不重问；同名已有内容仍核对归属"
+      ]
+    },
+    {
+      "id": "external-same-named-rules",
+      "type": "boundary",
+      "prompt": "这是客户仓库，里面也有 AGENTS.md 和 works。帮我保存新海报，名称叫开放日，位置没定。",
+      "input_files": [],
+      "expected_behavior": [
+        "不因同名文件把客户仓库当老胡仓库",
+        "参考客户规则和真实目录建议位置，未确认前不落盘"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "music": {"label": "音乐", "standalone_result": "歌曲、歌词或编曲作品", "usual_skills": ["laohu-lyrics", "laohu-arrangement"]},
+  "writing": {"label": "文章", "standalone_result": "文章、口播文稿及其排版产物", "usual_skills": ["laohu-writing", "laohu-htmlshow-gzh"]},
+  "script": {"label": "剧本", "standalone_result": "独立剧本或分镜项目", "usual_skills": ["laohu-script"]},
+  "cover": {"label": "封面", "standalone_result": "不附属于已有作品的独立封面项目", "usual_skills": ["laohu-cover"]},
+  "image": {"label": "图片", "standalone_result": "独立图片或图像系列", "usual_skills": ["laohu-image"]},
+  "video": {"label": "视频", "standalone_result": "独立视频或视频提示词项目", "usual_skills": ["laohu-video"]},
+  "story": {"label": "灵感与故事", "standalone_result": "独立灵感集合、故事、世界观或脑洞方案集合；附属于具体作品时沿用其目录", "usual_skills": ["laohu-story"]},
+  "assets": {"label": "资产", "standalone_result": "独立角色、场景、声音等创作资产包", "usual_skills": ["laohu-assets"]},
+  "topic": {"label": "选题", "standalone_result": "独立选题或系列策划集合", "usual_skills": ["laohu-topic"]},
+  "title": {"label": "标题", "standalone_result": "独立命名或标题方案集合", "usual_skills": ["laohu-title"]},
+  "benchmark": {"label": "对标拆解", "standalone_result": "独立对标作品分析", "usual_skills": ["laohu-benchmark"]}
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-archive | 老胡作品收录"
+  short_description: "为已命名作品管理保存位置，项目内默认归档，项目外确认路径，同一作品持续复用。"
+  default_prompt: "使用 $laohu-archive，沿用已确认的作品名称和归属，建立或复用作品目录，并将路径交回当前创作流程。"

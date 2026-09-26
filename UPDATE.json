@@ -1,0 +1,5 @@
+{
+  "version": "1.0.0",
+  "notice": "统一技能入口，支持全局使用与跨项目归档，完善诊断、展示和更新流程；旧目录与公众号指令需迁移。",
+  "details_url": "https://github.com/LaohuAD/laohu-creative-skills/blob/main/CHANGELOG.md"
+}
