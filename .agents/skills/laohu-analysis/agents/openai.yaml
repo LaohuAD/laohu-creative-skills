@@ -1,4 +1,4 @@
 interface:
-  display_name: "laohu-analysis | 老胡问题分析"
-  short_description: "把宽泛表现拆为可核查的判据与原因，比较处理路径并交付有依据的方案。"
-  default_prompt: "使用 $laohu-analysis，把这项反馈拆成可检查的表现、判据、原因和下一步处理。"
+  display_name: "laohu-analysis | 老胡问题分析与方案设计"
+  short_description: "调查原因、比较处理路径，或设计可由执行者接手的完整能力方案。"
+  default_prompt: "使用 $laohu-analysis，根据材料查明关键原因、比较处理路径或设计完整能力方案。"
