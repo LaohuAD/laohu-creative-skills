@@ -122,6 +122,31 @@ class InstallationTests(unittest.TestCase):
         spec.loader.exec_module(discovery)
         self.assertNotIn('laohu-private-test', [x['name'] for x in discovery.discover(self.root / '.agents/skills')['skills']])
 
+    def test_deployed_third_level_is_not_discovered_or_installed_independently(self):
+        self.add_skill('laohu-assets')
+        child = self.root / '.agents/skills/laohu-assets/skills/laohu-assets-character'
+        child.mkdir(parents=True)
+        (child / 'SKILL.md').write_text(
+            '---\nname: laohu-assets-character\ndescription: A deployed character configuration\n---\n# Character\n')
+        result = api.manage(self.root, 'install', self.dest, True)
+        self.assertIn('laohu-assets', result['skills'])
+        self.assertNotIn('laohu-assets-character', result['skills'])
+        self.assertTrue((self.dest / 'laohu-assets').is_symlink())
+        self.assertFalse((self.dest / 'laohu-assets-character').exists())
+        self.assertTrue((self.dest / 'laohu-assets/skills/laohu-assets-character/SKILL.md').is_file())
+
+    def test_explicit_scaffold_is_not_installed_as_a_public_entry(self):
+        parent = self.root / '.agents/skills/laohu-assets'
+        parent.mkdir(parents=True)
+        (parent / 'SKILL.md').write_text('# Assets（框架待填充）\n\n## Inputs\n')
+        child = parent / 'skills/laohu-assets-character'
+        child.mkdir(parents=True)
+        (child / 'SKILL.md').write_text('# Character（框架待填充）\n\n## Identity\n')
+        result = api.manage(self.root, 'install', self.dest, True)
+        self.assertNotIn('laohu-assets', result['skills'])
+        self.assertNotIn('laohu-assets-character', result['skills'])
+        self.assertFalse((self.dest / 'laohu-assets').exists())
+
     def test_cli_preview_writes_no_bytecode_or_state(self):
         result = subprocess.run([sys.executable, str(ROOT / 'tools/install.py'), 'install',
                                  '--root', str(self.root), '--skills-dir', str(self.dest)], capture_output=True)

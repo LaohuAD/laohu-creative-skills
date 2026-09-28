@@ -26,22 +26,26 @@ def source_skills(root):
     spec = importlib.util.spec_from_file_location('install_discovery', root / '.agents/skills/laohu/scripts/list-skills.py')
     api = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(api)
-    result = {}
-    for directory in sorted((root / '.agents/skills').iterdir()):
+    skills_root = root / '.agents/skills'
+    for directory in sorted(skills_root.iterdir()):
         if directory.is_symlink():
             raise ValueError('Source Skill cannot be a symlink: ' + str(directory))
         if not directory.is_dir():
             continue
         if (directory / ".local-only").is_file():
             continue
-        skill = directory / 'SKILL.md'
-        if not skill.is_file():
+        if directory.name != 'laohu' and not api.NAME.fullmatch(directory.name):
             if any(p.name not in {'.gitkeep', '.DS_Store'} for p in directory.iterdir()):
-                raise ValueError('Nonempty Skill directory without SKILL.md: ' + str(directory))
-            continue
-        if api.read_metadata(skill)['name'] != directory.name:
-            raise ValueError('Skill name mismatch: ' + str(directory))
-        result[directory.name] = str(directory)
+                raise ValueError('Unexpected non-Skill directory in source collection: ' + str(directory))
+    catalog = api.discover(skills_root)
+    if catalog['unavailable']:
+        details = '; '.join(f"{item['directory']}: {item['reason']}" for item in catalog['unavailable'])
+        raise ValueError('Invalid public Skill entries: ' + details)
+    result = {item['name']: str(Path(item['path']).parent) for item in catalog['skills']}
+    main_skill = skills_root / 'laohu' / 'SKILL.md'
+    if not main_skill.is_file() or api.read_metadata(main_skill)['name'] != 'laohu':
+        raise ValueError('Missing or invalid main entry: ' + str(main_skill))
+    result['laohu'] = str(main_skill.parent)
     if not {'laohu', 'laohu-update'} <= result.keys():
         raise ValueError('Missing main/update entry')
     return result
