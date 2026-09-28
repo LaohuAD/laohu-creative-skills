@@ -38,6 +38,7 @@ class DiscoveryTests(unittest.TestCase):
         item = self.catalog()["skills"][0]
         self.assertEqual(item["level"], 4)
         self.assertIsNone(item["parent"])
+        self.assertEqual(item["deployment"], "public")
         self.put("laohu-test-part-detail", "Updated capability")
         self.assertEqual(self.catalog()["skills"][0]["description"], "Updated capability")
         path.parent.rename(self.root / "laohu-test-renamed")
@@ -47,12 +48,18 @@ class DiscoveryTests(unittest.TestCase):
         (self.root / "laohu-test-renamed" / "SKILL.md").unlink()
         self.assertEqual(self.catalog()["skills"], [])
 
-    def test_parent_is_optional_and_nearest_existing(self):
-        for name in ("laohu-lyrics", "laohu-lyrics-rhyme", "laohu-lyrics-rhyme-check"):
+    def test_public_deployment_is_independent_of_name_hierarchy(self):
+        for name in ("laohu-htmlshow", "laohu-htmlshow-gzh", "laohu-htmlshow-gzh-layout"):
             self.put(name)
         items = {item["name"]: item for item in self.catalog()["skills"]}
-        self.assertEqual(items["laohu-lyrics-rhyme-check"]["parent"], "laohu-lyrics-rhyme")
-        self.assertEqual(items["laohu-lyrics-rhyme"]["parent"], "laohu-lyrics")
+        self.assertEqual(items["laohu-htmlshow"]["level"], 2)
+        self.assertEqual(items["laohu-htmlshow-gzh"]["level"], 3)
+        self.assertEqual(items["laohu-htmlshow-gzh-layout"]["level"], 4)
+        self.assertIsNone(items["laohu-htmlshow"]["parent"])
+        self.assertEqual(items["laohu-htmlshow-gzh"]["parent"], "laohu-htmlshow")
+        self.assertEqual(items["laohu-htmlshow-gzh-layout"]["parent"], "laohu-htmlshow-gzh")
+        self.assertTrue(all(item["deployment"] == "public" for item in items.values()))
+        self.assertTrue(all(Path(item["path"]).parent.parent == self.root for item in items.values()))
 
     def test_exclude_root_other_names_and_nested_resources(self):
         self.put("laohu")
@@ -63,7 +70,42 @@ class DiscoveryTests(unittest.TestCase):
         (nested / "SKILL.md").write_text("not an entry", encoding="utf-8")
         (self.root / "laohu-empty").mkdir()
         self.assertEqual([item["name"] for item in self.catalog()["skills"]], ["laohu-test"])
-        self.assertEqual(self.catalog()["unavailable"][0]["directory"], "laohu-empty")
+        self.assertEqual(self.catalog()["reserved"], ["laohu-empty"])
+        self.assertEqual(self.catalog()["unavailable"], [])
+
+    def test_only_explicit_headings_only_documents_are_scaffolds(self):
+        parent = self.root / "laohu-assets"
+        parent.mkdir()
+        skill = parent / "SKILL.md"
+        skill.write_text("# 资产创作（框架待填充）\n\n## 输入\n\n### 输出\n", encoding="utf-8")
+        self.assertTrue(discovery.is_skill_scaffold(skill))
+        result = self.catalog()
+        self.assertEqual(result["skills"], [])
+        self.assertEqual([item["directory"] for item in result["scaffolds"]], ["laohu-assets"])
+
+        for content in (
+            "# 资产创作\n\n## 输入\n",
+            "# 资产创作（框架待填充）\n\n仍有正文\n",
+            "# 资产创作（框架待填充）\n\n    # 缩进代码块\n",
+            "# 资产创作（框架待填充）\n\n# 第二个一级标题\n",
+        ):
+            with self.subTest(content=content):
+                skill.write_text(content, encoding="utf-8")
+                self.assertFalse(discovery.is_skill_scaffold(skill))
+                self.assertEqual(self.catalog()["scaffolds"], [])
+                self.assertEqual(len(self.catalog()["unavailable"]), 1)
+
+    def test_valid_deployed_child_is_not_a_public_catalog_entry(self):
+        self.put("laohu-assets")
+        child = self.root / "laohu-assets" / "skills" / "laohu-person"
+        (child / "SKILL.md").parent.mkdir(parents=True)
+        (child / "SKILL.md").write_text(
+            "---\nname: laohu-person\ndescription: A deployed configuration\n---\n# Person\n",
+            encoding="utf-8")
+        items = self.catalog()["skills"]
+        self.assertEqual([item["name"] for item in items], ["laohu-assets"])
+        self.assertEqual(items[0]["level"], 2)
+        self.assertEqual(items[0]["deployment"], "public")
 
     def test_bad_metadata_is_reported_without_hiding_valid_skills(self):
         self.put("laohu-good")

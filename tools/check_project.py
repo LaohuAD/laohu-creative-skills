@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline project checks. Empty reserved Skill directories are informational."""
+"""Offline project checks. Reserved entries and explicit scaffolds are informational."""
 
 import argparse
 import importlib.util
@@ -131,10 +131,30 @@ def evaluation_material_errors(data):
     return errors
 
 
+def child_file_errors(directory):
+    """A deployed third-level Skill directory may contain only its SKILL.md."""
+    allowed = directory / "SKILL.md"
+    errors = []
+    for path in directory.rglob("*"):
+        if path.is_symlink():
+            errors.append(f"third-level Skill contains a symlink: {path.relative_to(directory)}")
+        elif path.is_dir():
+            errors.append(f"third-level Skill contains a nested directory: {path.relative_to(directory)}")
+        elif path != allowed:
+            errors.append(f"third-level Skill contains an extra file: {path.relative_to(directory)}")
+    if not allowed.is_file():
+        errors.append("third-level Skill is missing SKILL.md")
+    return errors
+
+
 def check_project(root):
     root = root.resolve()
     errors, notes = [], []
-    active, reserved = [], []
+    active, reserved, scaffolds = [], [], []
+    valid_child_skill_files = set()
+    scaffold_parent_dirs = set()
+    scaffold_names = set()
+    nested_names = set()
     required = ("AGENTS.md", "docs/runtime.md", "LICENSE", ".gitignore", "VERSION", "UPDATE.json", "CHANGELOG.md",
                 "README.md", "README.en.md", "README.ja.md", "README.ko.md", "README.zh-TW.md",
                 str(PACKAGE), str(SKILLS / "laohu/SKILL.md"), str(SKILLS / "laohu-update/SKILL.md"))
@@ -162,6 +182,15 @@ def check_project(root):
                     errors.append(f"nonempty or incorrectly named Skill directory without SKILL.md: {directory.name}")
                 continue
             try:
+                if discovery.is_skill_scaffold(path):
+                    if directory.name == "laohu":
+                        raise ValueError("main entry cannot be a scaffold")
+                    if not discovery.NAME.fullmatch(directory.name):
+                        raise ValueError("scaffold directory name is invalid")
+                    scaffolds.append(path.relative_to(root).as_posix())
+                    scaffold_parent_dirs.add(directory)
+                    scaffold_names.add(directory.name)
+                    continue
                 data = discovery.read_metadata(path)
                 if data["name"] != directory.name:
                     raise ValueError("directory/name mismatch")
@@ -171,6 +200,55 @@ def check_project(root):
                 check_interface(directory / "agents/openai.yaml", data["name"], discovery.read_scalar)
             except (OSError, ValueError) as error:
                 errors.append(f"{path.relative_to(root)}: {error}")
+        # A third-level Skill is deployed by its parent and is never a public
+        # sibling entry. Its physical location, parent identity, and boundary
+        # are validated here instead of inferring hierarchy from name segments.
+        for parent in sorted((root / SKILLS).iterdir()):
+            if not parent.is_dir() or parent.is_symlink() or parent.name.startswith("."):
+                continue
+            if (parent / ".local-only").is_file():
+                continue
+            parent_skill = parent / "SKILL.md"
+            if not parent_skill.is_file():
+                continue
+            parent_is_scaffold = parent in scaffold_parent_dirs
+            parent_is_formal = parent.name in active and parent.name != "laohu"
+            deploy_dir = parent / "skills"
+            if not deploy_dir.exists():
+                continue
+            if not deploy_dir.is_dir() or deploy_dir.is_symlink():
+                errors.append(f"third-level deployment path must be a directory: {deploy_dir.relative_to(root)}")
+                continue
+            for child in sorted(deploy_dir.iterdir()):
+                if child.is_symlink() or not child.is_dir():
+                    errors.append(f"invalid third-level deployment entry: {child.relative_to(root)}")
+                    continue
+                if not discovery.NAME.fullmatch(child.name):
+                    errors.append(f"invalid third-level Skill directory name: {child.relative_to(root)}")
+                child_skill = child / "SKILL.md"
+                valid_child_skill_files.add(child_skill.resolve())
+                for message in child_file_errors(child):
+                    errors.append(f"{child.relative_to(root)}: {message}")
+                if not child_skill.is_file():
+                    continue
+                try:
+                    if discovery.is_skill_scaffold(child_skill):
+                        scaffolds.append(child_skill.relative_to(root).as_posix())
+                        if not parent_is_scaffold and not parent_is_formal:
+                            errors.append(f"third-level scaffold has no valid parent entry: {child_skill.relative_to(root)}")
+                        continue
+                    if parent_is_scaffold:
+                        raise ValueError("formal third-level Skill cannot be deployed by a scaffold parent")
+                    if not parent_is_formal:
+                        raise ValueError("third-level Skill parent is not a valid public entry")
+                    data = discovery.read_metadata(child_skill)
+                    if data["name"] != child.name:
+                        raise ValueError("third-level directory name and frontmatter name differ")
+                    if data["name"] in active or any(data["name"] == name for name in nested_names):
+                        raise ValueError("duplicate Skill name across public and deployed entries")
+                    nested_names.add(data["name"])
+                except (OSError, ValueError) as error:
+                    errors.append(f"{child_skill.relative_to(root)}: {error}")
         found = {item["name"] for item in discovery.discover(root / SKILLS)["skills"]}
         if found != set(active) - {"laohu"}:
             errors.append("discovery output differs from valid project entries")
@@ -196,8 +274,9 @@ def check_project(root):
             errors.append(f"source contains symlink: {relative}")
             continue
         if path.name == "SKILL.md" and path.parent.parent != root / SKILLS:
-            if not any(part in {"evals", "assets"} for part in relative.parts):
-                errors.append(f"nested Skill cannot be discovered: {relative}")
+            if (path.resolve() not in valid_child_skill_files
+                    and not any(part in {"evals", "assets"} for part in relative.parts)):
+                errors.append(f"nested Skill is outside a valid parent deployment: {relative}")
         if path.suffix not in {".md", ".json", ".py"}:
             continue
         try:
@@ -237,7 +316,7 @@ def check_project(root):
                 if path.parent == root and path.name.startswith("README"):
                     commands = re.findall(r"^\|\s*/(laohu(?:-[a-z0-9]+)*)\s*\|", text, re.M)
                     for command in commands:
-                        if command not in active and command not in reserved:
+                        if command not in active and command not in reserved and command not in scaffold_names:
                             errors.append(f"README command has no project entry: {relative} -> {command}")
                     if re.search(r"github\.com/LaohuAD/laohu-creative-skill(?:[^s\w-]|$)", text):
                         errors.append(f"outdated repository URL: {relative}")
@@ -253,9 +332,10 @@ def check_project(root):
         if missing_entries:
             errors.append(f"README capability table omits formal entries: {readme_name} -> "
                           + ", ".join("/" + name for name in missing_entries))
-    notes.append(f"{len(active)} defined entries; {len(reserved)} reserved directories (not errors)")
-    notes.append("Checks cover metadata, UI fields, formal-entry README tables, declared executable eval materials, duplicate eval inputs, flat discovery, links, syntax and release consistency; not full YAML, semantic routing or creative quality.")
-    return {"ok": not errors, "errors": errors, "notes": notes, "active": active, "reserved": reserved}
+    notes.append(f"{len(active)} public entries; {len(reserved)} reserved directories; {len(scaffolds)} explicit scaffolds (not active entries)")
+    notes.append("Checks cover metadata, UI fields, formal-entry README tables, declared executable eval materials, duplicate eval inputs, root-level public discovery, deployed third-level boundaries, links, syntax and release consistency; not full YAML, semantic routing or creative quality.")
+    return {"ok": not errors, "errors": errors, "notes": notes, "active": active,
+            "reserved": reserved, "scaffolds": scaffolds}
 
 
 def main():
