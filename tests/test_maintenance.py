@@ -36,6 +36,11 @@ class ProjectTests(unittest.TestCase):
             (self.root / name).write_text(self.readme(), encoding="utf-8")
         (self.root / "docs").mkdir()
         (self.root / "docs/runtime.md").write_text("# Runtime fixture\n")
+        (self.root / "docs/skill-display-order.json").write_text(json.dumps({"items": [{
+            "command": "/laohu", "label": "Root", "children": [
+                {"command": "/laohu-update", "label": "Update"},
+            ],
+        }]}), encoding="utf-8")
         for script in ("list-skills.py", "check-update.py"):
             target = self.root / checker.SKILLS / "laohu/scripts" / script
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -343,6 +348,38 @@ class ProjectTests(unittest.TestCase):
         report = checker.check_project(self.root)
         self.assertTrue(report["ok"], report["errors"])
         self.assertEqual(report["reserved"], ["laohu-future"])
+
+    def test_readme_capability_table_follows_display_order(self):
+        (self.root / "README.md").write_text(
+            "# Fixture\n\n| Command | Purpose |\n| --- | --- |\n"
+            "| /laohu-update | Update |\n| /laohu | Main entry |\n", encoding="utf-8")
+        errors = checker.check_project(self.root)["errors"]
+        self.assertTrue(any("README capability table order differs" in error for error in errors), errors)
+
+    def test_display_order_cannot_reference_reserved_entries(self):
+        (self.root / checker.SKILLS / "laohu-future").mkdir()
+        manifest_path = self.root / "docs/skill-display-order.json"
+        data = json.loads(manifest_path.read_text(encoding="utf-8"))
+        data["items"][0]["children"].append({"command": "/laohu-future", "label": "Future"})
+        manifest_path.write_text(json.dumps(data), encoding="utf-8")
+        errors = checker.check_project(self.root)["errors"]
+        self.assertTrue(any("display order references non-formal entries" in error for error in errors), errors)
+
+    def test_display_order_parent_must_match_discovered_parent(self):
+        self.entry("laohu-htmlshow-gzh")
+        private_parent = self.root / checker.SKILLS / "laohu-htmlshow"
+        private_parent.mkdir()
+        (private_parent / ".local-only").write_text("private", encoding="utf-8")
+        manifest_path = self.root / "docs/skill-display-order.json"
+        data = json.loads(manifest_path.read_text(encoding="utf-8"))
+        data["items"][0]["children"].append({
+            "command": "/laohu-htmlshow", "label": "HTML", "children": [
+                {"command": "/laohu-htmlshow-gzh", "label": "WeChat"},
+            ],
+        })
+        manifest_path.write_text(json.dumps(data), encoding="utf-8")
+        errors = checker.check_project(self.root)["errors"]
+        self.assertTrue(any("display order parent differs from discovery" in error for error in errors), errors)
 
     def test_duplicate_eval_input_rejects_only_same_prompt_context_and_files(self):
         path = self.root / checker.SKILLS / "laohu/evals/evals.json"

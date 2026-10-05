@@ -31,6 +31,8 @@ python3 tools/install.py install --host codex --write
 
 Agent에게 “README를 읽고 현재 저장소를 Codex 전역 입구로 등록해 줘”라고 요청할 수 있습니다. README를 읽는 것만으로 설치가 허용되지는 않습니다.
 
+Agent 전용 안내: [열기 또는 다운로드](https://raw.githubusercontent.com/LaohuAD/laohu-creative-skills/main/docs/agent-guide.txt). “먼저 Laohu Creative Skills Agent 안내를 읽고 그 내용에 따라 도와줘”라고 요청할 수도 있습니다.
+
 老胡 프로젝트 안에서는 기본적으로 `works/`에 저장하고 실제 경로를 알립니다. 외부에서 위치가 정해지지 않았다면 구체적인 경로를 제안하고 확인을 기다립니다. 이미 지정한 위치나 같은 작품의 디렉터리는 계속 사용합니다. 외부 폴더에는 이 저장소의 Git 제외 규칙이 자동 적용되지 않습니다.
 
 두 방식 모두 `/laohu-update`로 업데이트하며 로컬 변경과 등록된 입구를 관리합니다. 상태 확인은 `python3 tools/install.py status`입니다. 해제는 `python3 tools/install.py uninstall --host codex`로 미리 확인한 뒤 `--write`를 추가합니다. 저장소와 작품은 남습니다. 저장소 이동 전에 해제하고 이동 후 다시 등록하세요. [상세 절차(중국어)](.agents/skills/laohu-update/references/installation.md)
@@ -61,21 +63,21 @@ Agent에게 “README를 읽고 현재 저장소를 Codex 전역 입구로 등�
 | 명령 | 용도 |
 | --- | --- |
 | /laohu | 요청 정리와 창작 방향 선택 |
-| /laohu-writing | 글쓰기, 수정, 말하기 원고 |
-| /laohu-htmlshow | 글, 프롬프트, 대본을 읽고 활용하기 편한 HTML로 구성 |
-| /laohu-htmlshow-gzh | WeChat 편집 전용 기능, `/laohu-htmlshow`가 해당 작업에서 읽음 |
-| /laohu-title | 제목, 이름, 첫 문장 |
-| /laohu-cover | 커버 콘셉트와 프롬프트 |
-| /laohu-image | 이미지 아이디어와 생성 프롬프트 |
-| /laohu-assets | 시각·음향·창작 자산 |
-| /laohu-story | 영감이 없거나 단편적인 생각만 있을 때 음악·글·이미지 등 다양한 창작 방향 탐색 |
 | /laohu-audit | 목표와 자료를 대조해 작품·프롬프트·Skill·작업 흐름의 구체적인 문제와 근거를 확인 |
 | /laohu-analysis | 문제의 원인을 설명하거나 확정된 목표를 실행 가능한 계획으로 구체화 |
+| /laohu-evolution | 경험 기록과 창작 방법 개선 |
+| /laohu-story | 영감이 없거나 단편적인 생각만 있을 때 음악·글·이미지 등 다양한 창작 방향 탐색 |
+| /laohu-writing | 글쓰기, 수정, 말하기 원고 |
+| /laohu-cover | 커버 콘셉트와 프롬프트 |
+| /laohu-image | 이미지 아이디어와 생성 프롬프트 |
+| /laohu-title | 제목, 이름, 첫 문장 |
+| /laohu-htmlshow | 글, 프롬프트, 대본을 읽고 활용하기 편한 HTML로 구성 |
+| /laohu-htmlshow-gzh | WeChat 편집 전용 기능, `/laohu-htmlshow`가 해당 작업에서 읽음 |
+| /laohu-assets | 시각·음향·창작 자산 |
 | /laohu-archive | 작품 폴더를 만들거나 재사용하여 관련 제작 파일을 함께 보관 |
 | /laohu-update | 도구 상자 확인과 업데이트 |
-| /laohu-evolution | 경험 기록과 창작 방법 개선 |
 
-이 표는 현재 정식 정의가 있는 공개 입구만 나열합니다. 목록에 없는 이름이나 예약 디렉터리는 실행 가능한 기능이 아니므로 시작 전에 `/laohu` 능력 목록에서 확인하세요. 프로젝트 안에서는 `.agents/skills/`에 직접 배치된 입구를 사용할 수 있습니다. 전역 등록은 1·2단계 정식 입구만 포함합니다. 3단계 기능은 소속된 2단계 입구가 필요할 때 읽고 별도로 등록하지 않습니다. WeChat 편집 작업에서는 `/laohu-htmlshow`가 필요할 때 `laohu-htmlshow-gzh`를 읽습니다.
+이 표는 현재 정식 정의가 있는 공개 입구를 표시 순서대로 나열합니다. 이 순서는 둘러보기용이며 추천 우선순위나 고정 작업 절차를 뜻하지 않습니다. 새 공개 입구는 실제 Skill 검색에서 발견되며, 표에 없는 이름은 `/laohu` 능력 목록에서 정의를 확인하세요. 예약 디렉터리는 정식 기능이 아닙니다. 프로젝트 안에서는 `.agents/skills/`에 직접 배치된 입구를 사용할 수 있습니다. 전역 등록은 1·2단계 정식 입구만 포함합니다. 3단계 기능은 소속된 2단계 입구가 필요할 때 읽고 별도로 등록하지 않습니다. WeChat 편집 작업에서는 `/laohu-htmlshow`가 필요할 때 `laohu-htmlshow-gzh`를 읽습니다.
 
 정식 입구는 하나만 사용하거나 한 작품 안에서 여러 개를 조합할 수 있습니다. `/laohu-writing`으로 글을 정리한 뒤 `/laohu-title`로 제목을 다듬을 수 있습니다. 제목이나 커버만 따로 다뤄도 됩니다. 계속할지, 고칠지, 방향을 바꿀지는 매 단계 사용자가 결정합니다.
 

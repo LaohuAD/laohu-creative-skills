@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 NAME = re.compile(r"laohu(?:-[a-z0-9]+)*")
+COMMAND = re.compile(r"/(laohu(?:-[a-z0-9]+)*)")
 FIELD = re.compile(r"^(name|description):(?:\s+(.*))?$")
 SCAFFOLD_SUFFIX = "（框架待填充）"
 HEADING = re.compile(r"^#{1,6} +\S.*$")
@@ -143,7 +144,116 @@ def is_skill_scaffold(path):
     return True
 
 
-def discover(root):
+def read_display_order(path):
+    """Read the public display tree without making it an entry registry."""
+    document = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(document, dict) or not isinstance(document.get("items"), list):
+        raise ValueError("display order requires an items array")
+    if len(document["items"]) != 1:
+        raise ValueError("display order must contain exactly one /laohu root")
+    seen = set()
+
+    def validate(item, parent=None):
+        if not isinstance(item, dict):
+            raise ValueError("display order entries must be objects")
+        command = item.get("command")
+        if not isinstance(command, str) or not COMMAND.fullmatch(command):
+            raise ValueError("display order command must be a /laohu entry")
+        if command in seen:
+            raise ValueError("duplicate display order command: " + command)
+        seen.add(command)
+        name = command[1:]
+        parent_name = parent[1:] if parent else None
+        if parent_name and not name.startswith(parent_name + "-"):
+            raise ValueError(f"display order child {command} is outside parent {parent}")
+        if not isinstance(item.get("label"), str) or not item["label"].strip():
+            raise ValueError("display order entries require a label")
+        children = item.get("children", [])
+        if not isinstance(children, list):
+            raise ValueError("display order children must be an array")
+        for child in children:
+            validate(child, command)
+
+    root = document["items"][0]
+    validate(root)
+    if root.get("command") != "/laohu":
+        raise ValueError("display order root must be /laohu")
+    return document
+
+
+def display_order_names(document):
+    """Return commands in tree order, including the /laohu root."""
+    names = []
+
+    def visit(item):
+        names.append(item["command"][1:])
+        for child in item.get("children", []):
+            visit(child)
+
+    for item in document["items"]:
+        visit(item)
+    return names
+
+
+def display_order_parents(document):
+    """Return each listed command's intended parent from the display tree."""
+    parents = {}
+
+    def visit(item, parent=None):
+        name = item["command"][1:]
+        parents[name] = parent
+        for child in item.get("children", []):
+            visit(child, name)
+
+    for item in document["items"]:
+        name = item["command"][1:]
+        parents[name] = None
+        for child in item.get("children", []):
+            visit(child)
+    return parents
+
+
+def apply_display_order(skills, document):
+    """Order discovered entries by the display tree, then append unknowns.
+
+    This changes presentation only. Discovery still comes from the live Skill
+    directories, and entries omitted from the tree remain visible at the end.
+    """
+    by_name = {skill["name"]: skill for skill in skills}
+    children = {}
+    for skill in skills:
+        children.setdefault(skill["parent"], []).append(skill["name"])
+
+    def configured_children(item):
+        return [child["command"][1:] for child in item.get("children", [])]
+
+    result, emitted = [], set()
+
+    def emit(name, order_item=None):
+        if name in emitted or name not in by_name:
+            return
+        emitted.add(name)
+        result.append(by_name[name])
+        actual_children = children.get(name, [])
+        requested = configured_children(order_item) if order_item else []
+        ordered_children = [child for child in requested if child in actual_children]
+        ordered_children.extend(sorted(child for child in actual_children if child not in ordered_children))
+        child_items = {child["command"][1:]: child for child in order_item.get("children", [])} if order_item else {}
+        for child in ordered_children:
+            emit(child, child_items.get(child))
+
+    root_item = document["items"][0]
+    actual_roots = children.get(None, [])
+    requested_roots = configured_children(root_item)
+    ordered_roots = [name for name in requested_roots if name in actual_roots]
+    ordered_roots.extend(sorted(name for name in actual_roots if name not in ordered_roots))
+    root_items = {child["command"][1:]: child for child in root_item.get("children", [])}
+    for name in ordered_roots:
+        emit(name, root_items.get(name))
+    return result
+
+
+def discover(root, order_file=None):
     """Return direct public Skills; naming hierarchy never implies deployment.
 
     Each result's ``level`` and ``parent`` describe name segments and the
@@ -153,6 +263,14 @@ def discover(root):
     root = root.expanduser().resolve()
     if not root.is_dir():
         raise ValueError("Skill collection directory does not exist")
+    if order_file is None:
+        if root.parent.name == ".agents":
+            candidate = root.parent.parent / "docs" / "skill-display-order.json"
+            if candidate.is_file():
+                order_file = candidate
+    display_order = None
+    if order_file is not None:
+        display_order = read_display_order(order_file)
     skills, unavailable, reserved, scaffolds = [], [], [], []
     for directory in sorted(root.iterdir()):
         if not directory.name.startswith("laohu-"):
@@ -194,8 +312,10 @@ def discover(root):
         skill["level"] = len(parts)
         skill["parent"] = next(
             ("-".join(parts[:i]) for i in range(len(parts) - 1, 1, -1)
-             if "-".join(parts[:i]) in names), None
+            if "-".join(parts[:i]) in names), None
         )
+    if display_order is not None:
+        skills = apply_display_order(skills, display_order)
     return {"root": str(root), "skills": skills, "unavailable": unavailable,
             "reserved": reserved, "scaffolds": scaffolds}
 

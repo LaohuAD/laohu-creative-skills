@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "command": "/laohu",
+      "label": "顶层入口",
+      "children": [
+        { "command": "/laohu-audit", "label": "找出具体问题" },
+        { "command": "/laohu-analysis", "label": "分析与方案" },
+        { "command": "/laohu-evolution", "label": "长期能力进化" },
+        { "command": "/laohu-story", "label": "故事脑洞" },
+        { "command": "/laohu-writing", "label": "写作与表达" },
+        { "command": "/laohu-cover", "label": "封面与信息图" },
+        { "command": "/laohu-image", "label": "构思图片画面" },
+        { "command": "/laohu-title", "label": "标题与传播入口" },
+        {
+          "command": "/laohu-htmlshow",
+          "label": "HTML 展示",
+          "children": [
+            { "command": "/laohu-htmlshow-gzh", "label": "公众号排版" }
+          ]
+        },
+        { "command": "/laohu-assets", "label": "筛选可复用资产" },
+        { "command": "/laohu-archive", "label": "作品收录" },
+        { "command": "/laohu-update", "label": "安装与更新" }
+      ]
+    }
+  ]
+}

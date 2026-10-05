@@ -48,6 +48,31 @@ class DiscoveryTests(unittest.TestCase):
         (self.root / "laohu-test-renamed" / "SKILL.md").unlink()
         self.assertEqual(self.catalog()["skills"], [])
 
+    def test_live_add_update_rename_remove_with_display_manifest(self):
+        self.put("laohu-anchor")
+        order_file = self.root / "display-order.json"
+        order_file.write_text(json.dumps({"items": [{
+            "command": "/laohu", "label": "Root", "children": [
+                {"command": "/laohu-anchor", "label": "Anchor"},
+            ],
+        }]}), encoding="utf-8")
+
+        def names():
+            return [item["name"] for item in discovery.discover(self.root, order_file=order_file)["skills"]]
+
+        self.assertEqual(names(), ["laohu-anchor"])
+        self.put("laohu-new-capability")
+        self.assertEqual(names(), ["laohu-anchor", "laohu-new-capability"])
+        self.put("laohu-new-capability", "Updated capability description")
+        result = discovery.discover(self.root, order_file=order_file)
+        self.assertEqual(result["skills"][1]["description"], "Updated capability description")
+        (self.root / "laohu-new-capability").rename(self.root / "laohu-renamed")
+        self.assertEqual(names(), ["laohu-anchor"])
+        self.put("laohu-renamed")
+        self.assertEqual(names(), ["laohu-anchor", "laohu-renamed"])
+        (self.root / "laohu-renamed" / "SKILL.md").unlink()
+        self.assertEqual(names(), ["laohu-anchor"])
+
     def test_public_deployment_is_independent_of_name_hierarchy(self):
         for name in ("laohu-htmlshow", "laohu-htmlshow-gzh", "laohu-htmlshow-gzh-layout"):
             self.put(name)
@@ -61,10 +86,64 @@ class DiscoveryTests(unittest.TestCase):
         self.assertTrue(all(item["deployment"] == "public" for item in items.values()))
         self.assertTrue(all(Path(item["path"]).parent.parent == self.root for item in items.values()))
 
+    def test_manifest_orders_known_entries_and_appends_unknowns_under_their_parent(self):
+        names = (
+            "laohu-audit", "laohu-htmlshow", "laohu-htmlshow-gzh",
+            "laohu-htmlshow-preview", "laohu-htmlshow-gzh-copy",
+            "laohu-update", "laohu-extra",
+        )
+        for name in names:
+            self.put(name)
+        order_file = self.root / "display-order.json"
+        order_file.write_text(json.dumps({"items": [{
+            "command": "/laohu", "label": "Root", "children": [
+                {"command": "/laohu-audit", "label": "Audit"},
+                {"command": "/laohu-htmlshow", "label": "HTML", "children": [
+                    {"command": "/laohu-htmlshow-gzh", "label": "WeChat"},
+                ]},
+                {"command": "/laohu-update", "label": "Update"},
+            ],
+        }]}), encoding="utf-8")
+        result = discovery.discover(self.root, order_file=order_file)
+        self.assertEqual([item["name"] for item in result["skills"]], [
+            "laohu-audit", "laohu-htmlshow", "laohu-htmlshow-gzh",
+            "laohu-htmlshow-gzh-copy", "laohu-htmlshow-preview",
+            "laohu-update", "laohu-extra",
+        ])
+        self.assertEqual(result["skills"][2]["parent"], "laohu-htmlshow")
+        self.assertEqual(result["skills"][3]["parent"], "laohu-htmlshow-gzh")
+
+    def test_display_order_rejects_duplicate_commands(self):
+        order_file = self.root / "display-order.json"
+        order_file.write_text(json.dumps({"items": [{
+            "command": "/laohu", "label": "Root", "children": [
+                {"command": "/laohu-audit", "label": "Audit"},
+                {"command": "/laohu-audit", "label": "Duplicate"},
+            ],
+        }]}), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "duplicate display order command"):
+            discovery.read_display_order(order_file)
+
+    def test_display_order_child_must_follow_its_skill_parent(self):
+        order_file = self.root / "display-order.json"
+        order_file.write_text(json.dumps({"items": [{
+            "command": "/laohu", "label": "Root", "children": [
+                {"command": "/laohu-assets", "label": "Assets", "children": [
+                    {"command": "/laohu-htmlshow-gzh", "label": "Misplaced child"},
+                ]},
+            ],
+        }]}), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "outside parent"):
+            discovery.read_display_order(order_file)
+
     def test_exclude_root_other_names_and_nested_resources(self):
         self.put("laohu")
         self.put("dbs-test")
         self.put("laohu-test")
+        private = self.root / "laohu-private"
+        private.mkdir()
+        (private / ".local-only").write_text("private", encoding="utf-8")
+        self.put("laohu-private")
         nested = self.root / "laohu-test" / "references" / "laohu-hidden"
         nested.mkdir(parents=True)
         (nested / "SKILL.md").write_text("not an entry", encoding="utf-8")
