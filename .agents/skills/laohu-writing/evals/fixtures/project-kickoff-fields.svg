@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" role="img" aria-labelledby="title description">
+  <title id="title">项目启动检查表字段示意</title>
+  <desc id="description">虚构示意表，展示任务、负责人、截止时间和验收标准字段，不代表真实项目或效率数据。</desc>
+  <rect width="960" height="440" rx="20" fill="#f5f7fb"/>
+  <rect x="24" y="24" width="912" height="392" rx="14" fill="#ffffff" stroke="#d7deea" stroke-width="2"/>
+  <text x="56" y="76" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#182230">项目启动检查表</text>
+  <text x="56" y="108" font-family="Arial, sans-serif" font-size="16" fill="#667085">字段示意 · 非真实项目记录或效果数据</text>
+  <rect x="48" y="140" width="864" height="52" rx="8" fill="#eaf0f8"/>
+  <text x="68" y="174" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#344054">任务</text>
+  <text x="374" y="174" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#344054">负责人</text>
+  <text x="566" y="174" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#344054">截止时间</text>
+  <text x="728" y="174" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#344054">验收标准</text>
+  <line x1="48" y1="192" x2="912" y2="192" stroke="#e4e7ec"/>
+  <text x="68" y="232" font-family="Arial, sans-serif" font-size="16" fill="#182230">确认交付范围</text>
+  <text x="374" y="232" font-family="Arial, sans-serif" font-size="16" fill="#b54708">待确认</text>
+  <text x="566" y="232" font-family="Arial, sans-serif" font-size="16" fill="#182230">9月10日</text>
+  <text x="728" y="232" font-family="Arial, sans-serif" font-size="16" fill="#b54708">未填写</text>
+  <line x1="48" y1="256" x2="912" y2="256" stroke="#e4e7ec"/>
+  <text x="68" y="296" font-family="Arial, sans-serif" font-size="16" fill="#182230">完成首轮方案</text>
+  <text x="374" y="296" font-family="Arial, sans-serif" font-size="16" fill="#182230">项目成员</text>
+  <text x="566" y="296" font-family="Arial, sans-serif" font-size="16" fill="#182230">9月12日</text>
+  <text x="728" y="296" font-family="Arial, sans-serif" font-size="16" fill="#182230">评审通过</text>
+  <rect x="48" y="334" width="864" height="1" fill="#e4e7ec"/>
+  <text x="56" y="380" font-family="Arial, sans-serif" font-size="14" fill="#667085">示意素材仅用于说明字段如何暴露待确认项；不能证明项目效率或结果变化。</text>
+</svg>

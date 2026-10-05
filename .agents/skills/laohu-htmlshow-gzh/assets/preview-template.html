@@ -36,9 +36,14 @@
     clearTimeout(t._timer);
     t._timer=setTimeout(function(){t.classList.remove('show');},2800);
   }
-  function gzhCopy(){
+  async function gzhCopy(){
     var el=document.getElementById('gzh-content');
     var btn=document.getElementById('gzhCopyBtn');
+    function announceCopied(){
+      gzhShowToast('✅ 内容已写入剪贴板；粘贴到公众号后请检查图片与样式是否完整');
+      var old=btn.textContent;btn.textContent='✅ 已复制';
+      setTimeout(function(){btn.textContent=old;},2200);
+    }
     function selectBody(){
       var sel=window.getSelection();
       if(!el || !sel) return null;
@@ -49,13 +54,38 @@
       sel.addRange(range);
       return sel;
     }
+
+    // ClipboardItem 必须由用户点击触发；预览外壳不进入 text/html 正文。
+    try{
+      if(el && navigator.clipboard && navigator.clipboard.write &&
+         typeof ClipboardItem!=='undefined' && typeof Blob!=='undefined'){
+        var item=new ClipboardItem({
+          'text/html':new Blob([el.innerHTML],{type:'text/html'}),
+          'text/plain':new Blob([el.innerText||el.textContent||''],{type:'text/plain'})
+        });
+        await navigator.clipboard.write([item]);
+        announceCopied();
+        return;
+      }
+    }catch(e){/* 权限或浏览器限制时继续尝试选区复制。 */}
+
     var sel=null,ok=false;
-    try{sel=selectBody();if(sel) ok=document.execCommand('copy');}catch(e){ok=false;}
+    var copyHandler=function(event){
+      try{
+        if(!event.clipboardData || !event.clipboardData.setData) return;
+        event.clipboardData.setData('text/html',el.innerHTML);
+        event.clipboardData.setData('text/plain',el.innerText||el.textContent||'');
+        event.preventDefault();
+      }catch(e){/* 事件剪贴板不支持时仍保留浏览器选区复制。 */}
+    };
+    try{
+      document.addEventListener('copy',copyHandler,{once:true});
+      sel=selectBody();if(sel) ok=document.execCommand('copy');
+    }catch(e){ok=false;}
+    finally{document.removeEventListener('copy',copyHandler);}
     if(ok){
       sel.removeAllRanges();
-      gzhShowToast('✅ 已复制！去公众号编辑器按 Ctrl/⌘+V 粘贴即可');
-      var old=btn.textContent;btn.textContent='✅ 已复制';
-      setTimeout(function(){btn.textContent=old;},2200);
+      announceCopied();
     }else{
       try{sel=selectBody();}catch(e){sel=null;}
       gzhShowToast(sel ? '自动复制未完成，正文已选中。请直接按 Ctrl/⌘+C，再到公众号编辑器粘贴。'

@@ -191,6 +191,8 @@ def check_project(root):
                     scaffold_parent_dirs.add(directory)
                     scaffold_names.add(directory.name)
                     continue
+                if discovery.has_scaffold_marker(path):
+                    raise ValueError("invalid Skill scaffold")
                 data = discovery.read_metadata(path)
                 if data["name"] != directory.name:
                     raise ValueError("directory/name mismatch")
@@ -237,6 +239,8 @@ def check_project(root):
                         if not parent_is_scaffold and not parent_is_formal:
                             errors.append(f"third-level scaffold has no valid parent entry: {child_skill.relative_to(root)}")
                         continue
+                    if discovery.has_scaffold_marker(child_skill):
+                        raise ValueError("invalid Skill scaffold")
                     if parent_is_scaffold:
                         raise ValueError("formal third-level Skill cannot be deployed by a scaffold parent")
                     if not parent_is_formal:

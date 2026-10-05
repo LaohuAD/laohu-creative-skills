@@ -147,6 +147,28 @@ class InstallationTests(unittest.TestCase):
         self.assertNotIn('laohu-assets-character', result['skills'])
         self.assertFalse((self.dest / 'laohu-assets').exists())
 
+    def test_global_registration_excludes_third_level_and_sync_removes_legacy_link(self):
+        self.add_skill('laohu-htmlshow')
+        self.add_skill('laohu-htmlshow-gzh')
+        result = api.manage(self.root, 'install', self.dest, True)
+        self.assertIn('laohu-htmlshow', result['skills'])
+        self.assertNotIn('laohu-htmlshow-gzh', result['skills'])
+        child = self.root / '.agents/skills/laohu-htmlshow-gzh'
+        legacy = self.dest / 'laohu-htmlshow-gzh'
+        self.assertFalse(legacy.exists())
+        legacy.symlink_to(child, target_is_directory=True)
+        state = json.loads((self.root / api.STATE).read_text())
+        state['destinations'][str(self.dest)]['laohu-htmlshow-gzh'] = str(child)
+        (self.root / api.STATE).write_text(json.dumps(state))
+        preview = api.manage(self.root, 'sync')
+        self.assertIn(('unlink', str(legacy), str(child)), preview['operations'])
+        self.assertTrue(legacy.is_symlink())
+        api.manage(self.root, 'sync', write=True)
+        self.assertFalse(legacy.is_symlink())
+        self.assertTrue((child / 'SKILL.md').is_file())
+        self.assertTrue((self.dest / 'laohu-htmlshow').is_symlink())
+        self.assertFalse(api.manage(self.root, 'sync', write=True)['changed'])
+
     def test_cli_preview_writes_no_bytecode_or_state(self):
         result = subprocess.run([sys.executable, str(ROOT / 'tools/install.py'), 'install',
                                  '--root', str(self.root), '--skills-dir', str(self.dest)], capture_output=True)

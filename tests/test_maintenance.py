@@ -159,6 +159,33 @@ class ProjectTests(unittest.TestCase):
         discovery = checker.load_module(self.root / checker.SKILLS / "laohu/scripts/list-skills.py", "test_discovery")
         self.assertNotIn("laohu-assets", [item["name"] for item in discovery.discover(self.root / checker.SKILLS)["skills"]])
 
+    def test_identity_metadata_scaffold_is_reserved_and_invalid_marked_drafts_fail(self):
+        path = self.scaffold(self.root / checker.SKILLS / "laohu-title" / "SKILL.md", "标题框架")
+        path.write_text(
+            "---\nname: laohu-title\ndescription: A draft identity only\n---\n"
+            "# 标题框架（框架待填充）\n\n## 职责\n",
+            encoding="utf-8")
+        report = checker.check_project(self.root)
+        self.assertTrue(report["ok"], report["errors"])
+        self.assertNotIn("laohu-title", report["active"])
+        self.assertIn(path.relative_to(self.root).as_posix(), report["scaffolds"])
+        discovery = checker.load_module(self.root / checker.SKILLS / "laohu/scripts/list-skills.py", "metadata_draft_discovery")
+        self.assertNotIn("laohu-title", [item["name"] for item in discovery.discover(self.root / checker.SKILLS)["skills"]])
+
+        for content in (
+            "---\nname: laohu-title\ndescription: Draft\nversion: 1\n---\n# 标题框架（框架待填充）\n\n## 职责\n",
+            "---\nname: laohu-other\ndescription: Draft\n---\n# 标题框架（框架待填充）\n\n## 职责\n",
+            "---\nname: laohu-title\ndescription: Draft\n---\n# 标题框架（框架待填充）\n\n执行正文\n",
+            "---\nname: laohu-title\ndescription: Draft\n---\n前置正文\n\n# 标题框架（框架待填充）\n\n## 职责\n",
+            "---\nname: laohu-title\ndescription: Draft\n---\n<!-- 前置注释 -->\n\n# 标题框架（框架待填充）\n\n## 职责\n",
+        ):
+            with self.subTest(content=content):
+                path.write_text(content, encoding="utf-8")
+                report = checker.check_project(self.root)
+                self.assertFalse(report["ok"])
+                self.assertNotIn("laohu-title", report["active"])
+                self.assertTrue(any("invalid Skill scaffold" in error for error in report["errors"]))
+
     def test_scaffold_name_and_parent_identity_are_enforced(self):
         self.scaffold(self.root / checker.SKILLS / "invalid-name" / "SKILL.md")
         report = checker.check_project(self.root)

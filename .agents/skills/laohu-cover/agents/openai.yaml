@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-cover | 老胡封面与图文创作"
+  short_description: "按任务独立组合版式、字体、角色色与图文关系，并交付设计说明和完整提示词。"
+  default_prompt: "使用 $laohu-cover，根据用途与材料独立选择版式、中文/Latin 字体、角色色和图文关系，检查兼容后交付说明与完整提示词。"
