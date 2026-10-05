@@ -20,7 +20,7 @@ python3 tools/check_project.py
 
 Reuse an existing full checkout instead of cloning again. For project-only use, open the repository in your Agent; if no command appears, ask it to read `.agents/skills/laohu/SKILL.md`. This keeps usage scoped to the project.
 
-For reuse across projects, preview and register all defined entries (reserved folders are skipped):
+For reuse across projects, preview and register directly deployed first- and second-level entries only. Reserved folders are skipped; third-level capabilities are read on demand by their owning second-level entry and are not registered separately. For WeChat formatting, `/laohu-htmlshow` reads `laohu-htmlshow-gzh` when the task requires it:
 
 ```bash
 python3 tools/install.py install --host codex
@@ -61,29 +61,23 @@ When you know what you want to do, choose the matching command. When you only kn
 | Command | Use it for |
 | --- | --- |
 | /laohu | Clarifying a request and choosing a creative direction |
-| /laohu-topic | Topics, themes, series, and creative seeds |
 | /laohu-writing | Writing, revision, spoken scripts, and expression |
 | /laohu-htmlshow | Readable HTML views for articles, prompts, scripts, and structured content |
-| /laohu-htmlshow-gzh | WeChat article layout from Markdown and long-form drafts |
-| /laohu-lyrics | Lyrics and songwriting language |
+| /laohu-htmlshow-gzh | WeChat article formatting, loaded by `/laohu-htmlshow` for WeChat tasks |
 | /laohu-title | Titles, names, and entry points |
 | /laohu-cover | Cover concepts and cover prompts |
-| /laohu-script | Scripts, scenes, and narrative progression |
 | /laohu-image | Image concepts and image-generation prompts |
 | /laohu-assets | Visual, audio, and creative assets |
 | /laohu-story | Finding and developing creative starting points for music, writing, images, and other media |
-| /laohu-video | Video concepts, shots, and video prompts |
-| /laohu-arrangement | Arrangement direction, musical structure, and production notes |
-| /laohu-benchmark | Reference-work research and breakdowns |
 | /laohu-audit | Confirm concrete issues in works, prompts, Skills, and workflows against their goals and evidence |
 | /laohu-analysis | Explain causes or turn confirmed goals into actionable plans |
 | /laohu-archive | Creating and reusing work folders to keep each project’s files together |
 | /laohu-update | Reviewing and updating the toolkit |
 | /laohu-evolution | Capturing experience and improving creative methods |
 
-Entries are opened as their capabilities are completed. An entry is directly callable only when its directory contains a valid `SKILL.md`; the other directories are reserved for future skills and are enabled after implementation.
+This table lists currently defined public entries. Unlisted names and reserved folders are not callable; check the `/laohu` capability directory first. Project workspaces can discover the directly deployed entries in `.agents/skills/`. Global registration includes first- and second-level entries only; third-level capabilities are read on demand by their owning second-level entry and are not registered separately. For a WeChat task, `/laohu-htmlshow` loads `laohu-htmlshow-gzh` when needed.
 
-Use an entry on its own or combine several for one project. You can develop a topic before writing lyrics, or work on one rhyme, title, or cover without running a larger workflow. You decide whether to continue, revise, or change direction at every step.
+Use a defined entry on its own or combine several for one project. You can draft an article with `/laohu-writing` and refine its title with `/laohu-title`, or work on one title or cover with `/laohu-cover`. You decide whether to continue, revise, or change direction at every step.
 
 ## Use It with Laohu Creative Studio
 

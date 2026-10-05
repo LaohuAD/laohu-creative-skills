@@ -43,7 +43,7 @@ python3 tools/install.py install --host codex
 python3 tools/install.py install --host codex --write
 ```
 
-第一条预览，第二条创建链接。Claude Code 本机使用把 `codex` 改为 `claude`，只安装你选择的宿主。工具注册全部已具备定义的入口，跳过预留目录；同名入口指向别处时停止并说明冲突，不覆盖。Codex 的目标是 `~/.agents/skills`，Claude Code 的目标是 `~/.claude/skills`；它们只是入口，内容仍在当前仓库。之后按宿主方式重载或新建会话，核对可用入口。本机安装不自动同步到云端或其他电脑；其他宿主与系统的链接权限需实际核验。
+第一条预览，第二条创建链接。Claude Code 本机使用把 `codex` 改为 `claude`，只安装你选择的宿主。工具只注册直接部署的一级、二级正式入口，跳过预留目录；三级能力由所属二级入口按需读取，不单独注册。同名入口指向别处时停止并说明冲突，不覆盖。公众号排版由 `/laohu-htmlshow` 在明确的公众号任务中按需读取 `laohu-htmlshow-gzh`。Codex 的目标是 `~/.agents/skills`，Claude Code 的目标是 `~/.claude/skills`；它们只是入口，内容仍在当前仓库。之后按宿主方式重载或新建会话，核对可用入口。本机安装不自动同步到云端或其他电脑；其他宿主与系统的链接权限需实际核验。
 
 也可以直接告诉 Agent：
 
@@ -75,29 +75,23 @@ README 说明可选方式；Agent 不应仅因读到安装说明就执行全局�
 | 指令 | 适合处理的任务 |
 | --- | --- |
 | /laohu | 了解需求、比较入口、安排创作方向 |
-| /laohu-topic | 发展选题、母题、系列和创作种子 |
 | /laohu-writing | 写作、改稿、口播与文字表达 |
 | /laohu-htmlshow | 将文章、提示词、剧本等做成便于阅读和使用的 HTML 展示页 |
-| /laohu-htmlshow-gzh | Markdown 与长文的公众号排版 |
-| /laohu-lyrics | 歌词创作与歌曲文字表达 |
+| /laohu-htmlshow-gzh | 公众号排版专项，由 `/laohu-htmlshow` 按需读取 |
 | /laohu-title | 标题、命名和传播入口 |
 | /laohu-cover | 封面方向、画面概念与封面提示 |
-| /laohu-script | 剧本、分镜和内容推进 |
 | /laohu-image | 图片创意与图像生成提示 |
 | /laohu-assets | 视觉、声音和创作资产整理 |
 | /laohu-story | 从没有灵感或零散片段出发，探索音乐、文字、画面等作品的创作方向 |
-| /laohu-video | 视频创意、镜头设计和视频提示词 |
-| /laohu-arrangement | 编曲方向、音乐结构和制作沟通 |
-| /laohu-benchmark | 对标作品观察、拆解和借鉴 |
 | /laohu-audit | 按目标与材料审查作品、提示词、Skill 和流程，确认具体问题并指出证据与目标差距 |
 | /laohu-analysis | 解释问题原因，或把已确认目标转成可实施方案 |
 | /laohu-archive | 创建与复用作品目录，持续收录同一作品的各类内容 |
 | /laohu-update | 检查和更新造梦技能的使用内容 |
 | /laohu-evolution | 沉淀经验，改进技能和长期创作方法 |
 
-目录会随着能力完成逐步开放。只有对应目录中已经存在有效 `SKILL.md` 的入口才可被 Agent 直接调用；其他目录是预留位置，完成后再启用。
+本表列出当前已有正式定义的公开入口；未列出的名称或预留目录不代表可以执行，开始前用 `/laohu 能力目录` 核对。项目内可直接使用表中已部署的入口。全局注册仅包含一级、二级正式入口；三级能力由所属二级入口按需读取，不单独注册。公众号排版由 `/laohu-htmlshow` 在明确公众号任务中按需读取 `laohu-htmlshow-gzh`。
 
-每个入口都可以单独使用，也可以在同一个作品中按需要组合。你可以先做选题，再写歌词；也可以只处理一个韵脚、一个标题或一张封面。每一步都由你决定是否继续、修改或换一个方向。
+每个正式入口都可以按需要单独使用或组合。你可以用 `/laohu-writing` 整理文章，再用 `/laohu-title` 推敲标题；也可以只处理一个标题或一张封面。每一步都由你决定是否继续、修改或换一个方向。
 
 ## 和老胡画梦枋一起使用
 

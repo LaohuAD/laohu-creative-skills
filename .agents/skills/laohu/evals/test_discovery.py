@@ -95,6 +95,36 @@ class DiscoveryTests(unittest.TestCase):
                 self.assertEqual(self.catalog()["scaffolds"], [])
                 self.assertEqual(len(self.catalog()["unavailable"]), 1)
 
+    def test_identity_metadata_scaffold_is_reserved_and_malformed_drafts_rejected(self):
+        path = self.root / "laohu-metadata-draft" / "SKILL.md"
+        path.parent.mkdir()
+        valid = ("---\nname: laohu-metadata-draft\ndescription: A draft identity only\n---\n"
+                 "# 标题框架（框架待填充）\n\n## 职责\n")
+        path.write_text(valid, encoding="utf-8")
+        self.assertTrue(discovery.is_skill_scaffold(path))
+        result = self.catalog()
+        self.assertEqual(result["skills"], [])
+        self.assertEqual([item["directory"] for item in result["scaffolds"]], ["laohu-metadata-draft"])
+        self.assertEqual(result["unavailable"], [])
+
+        invalid = (
+            valid.replace("description: A draft identity only", "description: A draft identity only\nversion: 1"),
+            valid.replace("name: laohu-metadata-draft", "name: laohu-other"),
+            valid.replace("description: A draft identity only", "description: A draft identity only\nname: laohu-metadata-draft"),
+            valid.replace("## 职责", "正文不能出现在框架草案中\n\n## 职责"),
+            valid.replace("# 标题框架（框架待填充）", "前置正文\n\n# 标题框架（框架待填充）"),
+            valid.replace("# 标题框架（框架待填充）", "<!-- 前置注释 -->\n\n# 标题框架（框架待填充）"),
+        )
+        for content in invalid:
+            with self.subTest(content=content):
+                path.write_text(content, encoding="utf-8")
+                self.assertFalse(discovery.is_skill_scaffold(path))
+                result = self.catalog()
+                self.assertEqual(result["skills"], [])
+                self.assertEqual(result["scaffolds"], [])
+                self.assertEqual(len(result["unavailable"]), 1)
+                self.assertIn("invalid Skill scaffold", result["unavailable"][0]["reason"])
+
     def test_valid_deployed_child_is_not_a_public_catalog_entry(self):
         self.put("laohu-assets")
         child = self.root / "laohu-assets" / "skills" / "laohu-person"

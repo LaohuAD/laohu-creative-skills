@@ -1,6 +1,7 @@
 """Regression tests for deterministic WeChat HTML helpers."""
 
 import hashlib
+import base64
 import json
 import re
 import shutil
@@ -161,26 +162,213 @@ class GzhToolsTests(unittest.TestCase):
         harness = r"""
 const vm=require('vm'), assert=require('assert');
 const script=JSON.parse(process.argv[1]);
-for(const mode of ['success','false','throw','no-selection']) {
-  const body={text:'article'}, button={textContent:'copy',blur(){}};
+async function run(){for(const mode of ['success','false','throw','no-selection']) {
+  const body={innerHTML:'<section>article</section>',innerText:'article',textContent:'article'};
+  const button={textContent:'copy',blur(){}};
   const selection={ranges:[],removeAllRanges(){this.ranges=[]},addRange(r){this.ranges.push(r)}};
+  let copyHandler=null, copied={};
   let toast='';
   const context={setTimeout(){},clearTimeout(){},window:{getSelection(){return mode==='no-selection'?null:selection}},
     document:{getElementById(id){return id==='gzh-content'?body:button},
       createRange(){return {selectNodeContents(el){this.target=el}}},
-      execCommand(){if(mode==='throw')throw Error('denied'); return mode==='success'}}};
+      addEventListener(type,handler){if(type==='copy')copyHandler=handler},
+      removeEventListener(type,handler){if(type==='copy'&&copyHandler===handler)copyHandler=null},
+      execCommand(){if(mode==='throw')throw Error('denied');
+        if(mode==='success'&&copyHandler)copyHandler({clipboardData:{setData(k,v){copied[k]=v}},preventDefault(){}});
+        return mode==='success'}}};
   vm.createContext(context); vm.runInContext(script,context);
-  context.gzhShowToast=(message)=>{toast=message};context.gzhCopy();
-  if(mode==='success'){assert.equal(selection.ranges.length,0);assert(toast.includes('已复制'));}
+  context.gzhShowToast=(message)=>{toast=message};await context.gzhCopy();
+  assert.equal(copyHandler,null,'temporary copy listener must always be removed');
+  if(mode==='success'){assert.equal(selection.ranges.length,0);assert(toast.includes('已写入剪贴板'));
+    assert.deepEqual(copied,{'text/html':body.innerHTML,'text/plain':body.innerText});}
   else if(mode==='no-selection'){assert(toast.includes('干净正文'));assert(!toast.includes('正文已选中'));}
   else {assert.equal(selection.ranges.length,1);assert.equal(selection.ranges[0].target,body);
     assert(toast.includes('正文已选中'));assert(!toast.includes('+A'));assert(!toast.includes('已复制'));}
-}
-console.log('four copy branches passed');
+}console.log('selection and copy-event branches passed');}
+run().catch(e=>{console.error(e);process.exitCode=1});
 """
         result = subprocess.run([shutil.which("node"), "-e", harness, json.dumps(script)], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("four copy branches passed", result.stdout)
+        self.assertIn("selection and copy-event branches passed", result.stdout)
+
+    @unittest.skipUnless(shutil.which("node"), "Node required for preview JavaScript execution")
+    def test_clipboard_item_contains_actual_article_html_and_plain_text(self):
+        template = (SCRIPT_DIR.parent / "assets/preview-template.html").read_text()
+        script = re.search(r"<script>(.*?)</script>", template, re.S)[1]
+        harness = r"""
+const vm=require('vm'), assert=require('assert');
+const script=JSON.parse(process.argv[1]);
+const html='<section><img src="data:image/png;base64,QUJD" alt="图"><p>说明</p></section>';
+const plain='图\n说明'; const body={innerHTML:html,innerText:plain,textContent:plain};
+const button={textContent:'copy',blur(){}}; let written=null,toast='',execCalls=0;
+class FakeBlob{constructor(parts,options){this.value=parts.join('');this.type=options.type}async text(){return this.value}}
+class FakeClipboardItem{constructor(items){this.items=items;this.types=Object.keys(items)}}
+const context={Blob:FakeBlob,ClipboardItem:FakeClipboardItem,navigator:{clipboard:{async write(items){written=items[0]}}},
+  setTimeout(){},clearTimeout(){},window:{getSelection(){throw Error('rich path should not select')}},
+  document:{getElementById(id){return id==='gzh-content'?body:button},createRange(){throw Error('not used')},
+    addEventListener(){},removeEventListener(){},execCommand(){execCalls++;return false}}};
+vm.createContext(context);vm.runInContext(script,context);context.gzhShowToast=m=>toast=m;
+context.gzhCopy().then(async()=>{
+ assert(written);assert.deepEqual(written.types,['text/html','text/plain']);
+ assert.equal(written.items['text/html'].type,'text/html');
+ assert.equal(await written.items['text/html'].text(),html);
+ assert.equal(written.items['text/plain'].type,'text/plain');
+ assert.equal(await written.items['text/plain'].text(),plain);
+ assert.equal(execCalls,0);assert(toast.includes('已写入剪贴板'));
+ console.log('ClipboardItem carried the actual article payload');
+}).catch(e=>{console.error(e);process.exitCode=1});
+"""
+        result = subprocess.run([shutil.which("node"), "-e", harness, json.dumps(script)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("actual article payload", result.stdout)
+
+    @unittest.skipUnless(shutil.which("node"), "Node required for preview JavaScript execution")
+    def test_rejected_clipboard_item_falls_back_to_copy_event_payload(self):
+        template = (SCRIPT_DIR.parent / "assets/preview-template.html").read_text()
+        script = re.search(r"<script>(.*?)</script>", template, re.S)[1]
+        harness = r"""
+const vm=require('vm'), assert=require('assert');
+const script=JSON.parse(process.argv[1]);
+const body={innerHTML:'<section><p>正文</p></section>',innerText:'正文',textContent:'正文'};
+const button={textContent:'copy',blur(){}};const selection={ranges:[],removeAllRanges(){this.ranges=[]},addRange(r){this.ranges.push(r)}};
+let listener=null,types={},prevented=false,toast='';
+class FakeBlob{constructor(parts,options){this.value=parts.join('');this.type=options.type}}
+class FakeClipboardItem{constructor(items){this.items=items}}
+const context={Blob:FakeBlob,ClipboardItem:FakeClipboardItem,navigator:{clipboard:{write(){return Promise.reject(Error('denied'))}}},
+  setTimeout(){},clearTimeout(){},window:{getSelection(){return selection}},
+  document:{getElementById(id){return id==='gzh-content'?body:button},createRange(){return {selectNodeContents(el){this.target=el}}},
+    addEventListener(type,handler){if(type==='copy')listener=handler},
+    removeEventListener(type,handler){if(type==='copy'&&listener===handler)listener=null},
+    execCommand(){listener({clipboardData:{setData(k,v){types[k]=v}},preventDefault(){prevented=true}});return true}}};
+vm.createContext(context);vm.runInContext(script,context);context.gzhShowToast=m=>toast=m;
+context.gzhCopy().then(()=>{
+ assert.deepEqual(types,{'text/html':body.innerHTML,'text/plain':body.innerText});
+ assert(prevented);assert.equal(listener,null);assert.equal(selection.ranges.length,0);
+ assert(toast.includes('已写入剪贴板'));
+ console.log('rejected API fell back to one-shot copy-event payload');
+}).catch(e=>{console.error(e);process.exitCode=1});
+"""
+        result = subprocess.run([shutil.which("node"), "-e", harness, json.dumps(script)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("one-shot copy-event payload", result.stdout)
+
+    def test_portable_output_embeds_exact_local_bytes_and_preserves_other_sources(self):
+        class Images(HTMLParser):
+            def __init__(self):
+                super().__init__(convert_charrefs=True)
+                self.items = []
+            def handle_starttag(self, tag, attrs):
+                if tag == "img":
+                    self.items.append(dict(attrs))
+
+        assets = self.root / "assets"
+        assets.mkdir()
+        png = b"\x89PNG\r\n\x1a\nsource-png-bytes"
+        gif = b"GIF89a\x02\x00\x02\x00source-gif-bytes"
+        png_path = assets / "first image.png"
+        gif_path = assets / "second image.gif"
+        png_path.write_bytes(png)
+        gif_path.write_bytes(gif)
+        preexisting = "data:image/png;base64," + base64.b64encode(b"already-data").decode()
+        source = self.root / "article.html"
+        source_html = (
+            '<section><span leaf=""><img src="assets/first%20image.png" alt="第一张" '
+            'style="max-width:100%;height:auto;"></span><p><span leaf="">第一图注</span></p>'
+            f'<span leaf=""><img src="{gif_path.as_uri()}" alt="第二张"></span>'
+            '<span leaf=""><img src="https://example.test/remote.png" alt="远程"></span>'
+            f'<span leaf=""><img src="{preexisting}" alt="已内嵌"></span></section>'
+        )
+        source.write_text(source_html)
+        original_bytes = source.read_bytes()
+        elsewhere = self.root / "elsewhere"
+        elsewhere.mkdir()
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / "wrap_preview.py"), str(source), "--portable"],
+            cwd=elsewhere, capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        body_path = self.root / "article_便携.html"
+        preview_path = self.root / "article_预览.html"
+        self.assertTrue(body_path.is_file())
+        self.assertTrue(preview_path.is_file())
+        self.assertEqual(source.read_bytes(), original_bytes, "portable mode must preserve the source")
+        parser = Images()
+        portable = body_path.read_text()
+        parser.feed(portable)
+        self.assertEqual(len(parser.items), 4)
+        expected_png = "data:image/png;base64," + base64.b64encode(png).decode()
+        expected_gif = "data:image/gif;base64," + base64.b64encode(gif).decode()
+        self.assertEqual(parser.items[0]["src"], expected_png)
+        self.assertEqual(base64.b64decode(parser.items[0]["src"].split(",", 1)[1]), png)
+        self.assertEqual(parser.items[1]["src"], expected_gif)
+        self.assertEqual(base64.b64decode(parser.items[1]["src"].split(",", 1)[1]), gif)
+        self.assertEqual(parser.items[2]["src"], "https://example.test/remote.png")
+        self.assertEqual(parser.items[3]["src"], preexisting)
+        self.assertEqual(parser.items[0]["alt"], "第一张")
+        self.assertEqual(parser.items[0]["style"], "max-width:100%;height:auto;")
+        self.assertIn("第一图注", portable)
+        self.assertEqual(validator.validate(portable)[0], [])
+        preview = preview_path.read_text()
+        self.assertIn(expected_png, preview)
+        self.assertNotIn("assets/first%20image.png", preview)
+
+        legacy_source = self.root / "legacy.html"
+        legacy_source.write_text('<section><span leaf=""><img src="assets/first%20image.png" alt="图"></span></section>')
+        legacy_before = legacy_source.read_bytes()
+        legacy_preview = self.root / "legacy-custom-preview.html"
+        legacy_result = subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / "wrap_preview.py"), str(legacy_source), str(legacy_preview)],
+            capture_output=True, text=True,
+        )
+        self.assertEqual(legacy_result.returncode, 0, legacy_result.stderr)
+        self.assertEqual(legacy_source.read_bytes(), legacy_before)
+        self.assertIn(expected_png, legacy_preview.read_text())
+        self.assertFalse((self.root / "legacy_便携.html").exists())
+
+    def test_portable_failures_and_explicit_source_overwrite_guard(self):
+        image = b"\x89PNG\r\n\x1a\nvalid-image"
+        for filename, data, message in (
+            ("missing.png", None, "不存在或不可读"),
+            ("mismatch.jpg", image, "扩展名与实际 MIME 不一致"),
+        ):
+            with self.subTest(filename=filename):
+                if data is not None:
+                    (self.root / filename).write_bytes(data)
+                source = self.root / (filename + ".html")
+                source.write_text(f'<section><span leaf=""><img src="{filename}" alt="图"></span></section>')
+                before = source.read_bytes()
+                result = subprocess.run(
+                    [sys.executable, str(SCRIPT_DIR / "wrap_preview.py"), str(source), "--portable"],
+                    capture_output=True, text=True,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assertEqual(source.read_bytes(), before)
+                self.assertFalse(Path(str(source.with_suffix("")) + "_便携.html").exists())
+                self.assertFalse(Path(str(source.with_suffix("")) + "_预览.html").exists())
+
+        source = self.root / "guard.html"
+        source.write_text('<section><img src="valid.png" alt="图"></section>')
+        (self.root / "valid.png").write_bytes(image)
+        before = source.read_bytes()
+        alias = self.root / "guard-alias.html"
+        alias.symlink_to(source)
+        for output in (source, alias):
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT_DIR / "wrap_preview.py"), str(source), "--portable",
+                 "--body-output", str(output)], capture_output=True, text=True,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("不能覆盖源正文", result.stderr)
+            self.assertEqual(source.read_bytes(), before)
+        self.assertFalse((self.root / "guard_预览.html").exists())
+
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / "wrap_preview.py"), str(source), "--portable", "--in-place"],
+            capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("data:image/png;base64,", source.read_text())
 
     def test_docx_images_are_content_addressed_reused_and_never_overwritten(self):
         body = '<w:p><w:r><w:drawing><a:blip r:embed="rId1"/></w:drawing></w:r></w:p>'

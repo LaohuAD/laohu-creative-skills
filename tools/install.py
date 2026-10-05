@@ -41,7 +41,8 @@ def source_skills(root):
     if catalog['unavailable']:
         details = '; '.join(f"{item['directory']}: {item['reason']}" for item in catalog['unavailable'])
         raise ValueError('Invalid public Skill entries: ' + details)
-    result = {item['name']: str(Path(item['path']).parent) for item in catalog['skills']}
+    result = {item['name']: str(Path(item['path']).parent)
+              for item in catalog['skills'] if item['level'] <= 2}
     main_skill = skills_root / 'laohu' / 'SKILL.md'
     if not main_skill.is_file() or api.read_metadata(main_skill)['name'] != 'laohu':
         raise ValueError('Missing or invalid main entry: ' + str(main_skill))

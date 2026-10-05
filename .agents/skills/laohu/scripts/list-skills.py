@@ -74,18 +74,46 @@ def read_metadata(path):
     return fields
 
 
-def is_skill_scaffold(path):
-    """Recognize only an explicit headings-only scaffold document.
+def _scaffold_body(lines):
+    """Return the body after optional frontmatter, or None if no closing marker."""
+    if not lines or lines[0] != "---":
+        return lines
+    try:
+        end = lines.index("---", 1)
+    except ValueError:
+        return None
+    return lines[end + 1:]
 
-    A scaffold has one leading H1 whose title ends in the project marker; every
-    other nonblank line is an ATX heading. This deliberately does not waive
-    metadata requirements for arbitrary frontmatter-free Skill files.
+
+def has_scaffold_marker(path):
+    """Identify marked drafts even when malformed, so discovery cannot expose them."""
+    try:
+        lines = Path(path).read_text(encoding="utf-8-sig").splitlines()
+    except (OSError, UnicodeError):
+        return False
+    body = _scaffold_body(lines)
+    if body is None:
+        return False
+    return any(line.startswith("# ")
+               and line.endswith(SCAFFOLD_SUFFIX)
+               and line[2:-len(SCAFFOLD_SUFFIX)].strip()
+               for line in body)
+
+
+def is_skill_scaffold(path):
+    """Recognize a headings-only draft with optional name/description metadata.
+
+    The metadata only identifies the draft; callers keep it out of executable
+    Skill discovery. Any marked but malformed draft is rejected separately.
     """
     try:
         lines = Path(path).read_text(encoding="utf-8-sig").splitlines()
     except (OSError, UnicodeError):
         return False
-    meaningful = [line for line in lines if line.strip()]
+    body = _scaffold_body(lines)
+    if body is None:
+        return False
+    meaningful = [line for line in body if line.strip()]
     if (not meaningful or not meaningful[0].startswith("# ")
             or not meaningful[0].endswith(SCAFFOLD_SUFFIX)
             or not meaningful[0][2:-len(SCAFFOLD_SUFFIX)].strip()):
@@ -94,6 +122,24 @@ def is_skill_scaffold(path):
         return False
     if any(re.match(r"^#\s", line) for line in meaningful[1:]):
         return False
+    if lines and lines[0] == "---":
+        try:
+            fields = read_metadata(Path(path))
+            end = lines.index("---", 1)
+        except (OSError, ValueError):
+            return False
+        keys = []
+        for line in lines[1:end]:
+            if not line.strip() or line.lstrip().startswith("#") or line[:1].isspace():
+                continue
+            match = re.match(r"^([A-Za-z][A-Za-z0-9_-]*):", line)
+            if not match:
+                return False
+            keys.append(match[1])
+        if sorted(keys) != ["description", "name"]:
+            return False
+        if fields["name"] != Path(path).parent.name:
+            return False
     return True
 
 
@@ -129,6 +175,8 @@ def discover(root):
             if is_skill_scaffold(path):
                 scaffolds.append({"directory": directory.name, "path": str(path.resolve())})
                 continue
+            if has_scaffold_marker(path):
+                raise ValueError("invalid Skill scaffold")
             fields = read_metadata(path)
             if fields["name"] != directory.name:
                 raise ValueError("directory name and frontmatter name differ")

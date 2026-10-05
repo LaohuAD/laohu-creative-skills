@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
-  "notice": "新增资产与图片创作入口，并明确作品保存授权边界。",
+  "version": "1.4.0",
+  "notice": "新增写作、标题与封面入口，完善公众号预览和现有能力。",
   "details_url": "https://github.com/LaohuAD/laohu-creative-skills/blob/main/CHANGELOG.md"
 }
