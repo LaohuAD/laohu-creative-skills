@@ -53,6 +53,8 @@ python3 tools/install.py install --host codex --write
 
 > 请阅读这个仓库的 README，把当前完整仓库注册为 Codex 的全局技能入口，不另建仓库副本。
 
+Agent 专用指引：[打开或下载](https://raw.githubusercontent.com/LaohuAD/laohu-creative-skills/main/docs/agent-guide.txt)。你也可以对 Agent 说：“请先阅读老胡造梦技能的 Agent 专用指引，并按其中说明协助我。”
+
 README 说明可选方式；Agent 不应仅因读到安装说明就执行全局安装。
 
 **作品保存：** 在老胡项目内，默认保存到 `works/` 并告知实际路径；在项目外且尚未确定位置时，Agent 会给出具体路径建议，请你确认后再保存。你已指定位置或同一作品已有目录，就直接沿用。外部目录不自动继承本仓库的 Git 忽略规则。
@@ -75,21 +77,21 @@ README 说明可选方式；Agent 不应仅因读到安装说明就执行全局�
 | 指令 | 适合处理的任务 |
 | --- | --- |
 | /laohu | 了解需求、比较入口、安排创作方向 |
-| /laohu-writing | 写作、改稿、口播与文字表达 |
-| /laohu-htmlshow | 将文章、提示词、剧本等做成便于阅读和使用的 HTML 展示页 |
-| /laohu-htmlshow-gzh | 公众号排版专项，由 `/laohu-htmlshow` 按需读取 |
-| /laohu-title | 标题、命名和传播入口 |
-| /laohu-cover | 封面方向、画面概念与封面提示 |
-| /laohu-image | 图片创意与图像生成提示 |
-| /laohu-assets | 视觉、声音和创作资产整理 |
-| /laohu-story | 从没有灵感或零散片段出发，探索音乐、文字、画面等作品的创作方向 |
 | /laohu-audit | 按目标与材料审查作品、提示词、Skill 和流程，确认具体问题并指出证据与目标差距 |
 | /laohu-analysis | 解释问题原因，或把已确认目标转成可实施方案 |
+| /laohu-evolution | 沉淀经验，改进技能和长期创作方法 |
+| /laohu-story | 从没有灵感或零散片段出发，探索音乐、文字、画面等作品的创作方向 |
+| /laohu-writing | 写作、改稿、口播与文字表达 |
+| /laohu-cover | 封面方向、画面概念与封面提示 |
+| /laohu-image | 图片创意与图像生成提示 |
+| /laohu-title | 标题、命名和传播入口 |
+| /laohu-htmlshow | 将文章、提示词、剧本等做成便于阅读和使用的 HTML 展示页 |
+| /laohu-htmlshow-gzh | 公众号排版专项，由 `/laohu-htmlshow` 按需读取 |
+| /laohu-assets | 视觉、声音和创作资产整理 |
 | /laohu-archive | 创建与复用作品目录，持续收录同一作品的各类内容 |
 | /laohu-update | 检查和更新造梦技能的使用内容 |
-| /laohu-evolution | 沉淀经验，改进技能和长期创作方法 |
 
-本表列出当前已有正式定义的公开入口；未列出的名称或预留目录不代表可以执行，开始前用 `/laohu 能力目录` 核对。项目内可直接使用表中已部署的入口。全局注册仅包含一级、二级正式入口；三级能力由所属二级入口按需读取，不单独注册。公众号排版由 `/laohu-htmlshow` 在明确公众号任务中按需读取 `laohu-htmlshow-gzh`。
+本表列出当前已有正式定义的公开入口，顺序只便于浏览，不代表推荐优先级或固定执行流程。新增公开入口会由目录扫描发现；未列出的名称请先用 `/laohu 能力目录` 核对实际定义，预留目录不是正式能力。项目内可直接使用表中已部署的入口。全局注册仅包含一级、二级正式入口；三级能力由所属二级入口按需读取，不单独注册。公众号排版由 `/laohu-htmlshow` 在明确公众号任务中按需读取 `laohu-htmlshow-gzh`。
 
 每个正式入口都可以按需要单独使用或组合。你可以用 `/laohu-writing` 整理文章，再用 `/laohu-title` 推敲标题；也可以只处理一个标题或一张封面。每一步都由你决定是否继续、修改或换一个方向。
 

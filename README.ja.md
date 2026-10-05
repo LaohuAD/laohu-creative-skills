@@ -31,6 +31,8 @@ python3 tools/install.py install --host codex --write
 
 Agent に「README を読み、現在のリポジトリを Codex のグローバル入口として登録して」と依頼できます。README を読むだけではインストールの許可になりません。
 
+Agent 専用ガイド：[開く／ダウンロード](https://raw.githubusercontent.com/LaohuAD/laohu-creative-skills/main/docs/agent-guide.txt)。「老胡造夢技能の Agent 専用ガイドを先に読み、その説明に沿って手伝ってください」と依頼することもできます。
+
 老胡プロジェクト内では `works/` に保存し、実際の場所を通知します。外部で保存先が未定なら具体的な候補を示して確認を待ちます。指定済みの場所や同じ作品のディレクトリは継続使用します。外部フォルダーに本リポジトリの Git 除外は自動適用されません。
 
 どちらも `/laohu-update` で更新し、ローカル変更を保護しながら登録済み入口を同期します。状態確認は `python3 tools/install.py status`。解除は `python3 tools/install.py uninstall --host codex` で確認後、`--write` を追加します。作品とリポジトリは残ります。移動前に解除し、移動後に再登録してください。[操作詳細（中国語）](.agents/skills/laohu-update/references/installation.md)
@@ -61,21 +63,21 @@ Agent に「README を読み、現在のリポジトリを Codex のグローバ
 | コマンド | 用途 |
 | --- | --- |
 | /laohu | 依頼の整理と創作方向の選択 |
-| /laohu-writing | 文章、推敲、口語原稿 |
-| /laohu-htmlshow | 文章、プロンプト、脚本などを読みやすく使いやすい HTML に変換 |
-| /laohu-htmlshow-gzh | WeChat向け組版。WeChatタスクで `/laohu-htmlshow` が必要に応じて読み込む機能 |
-| /laohu-title | タイトル、命名、入口の言葉 |
-| /laohu-cover | カバーのコンセプトとプロンプト |
-| /laohu-image | 画像の発想と生成プロンプト |
-| /laohu-assets | ビジュアル、音声、制作アセット |
-| /laohu-story | 発想がない状態や断片から、音楽・文章・映像などの創作の方向を探る |
 | /laohu-audit | 目的と資料に照らして作品・プロンプト・Skill・工程の具体的な問題を確認し、根拠を示す |
 | /laohu-analysis | 問題の原因を説明し、確定した目標を実行可能な計画にする |
+| /laohu-evolution | 経験の記録と創作方法の改善 |
+| /laohu-story | 発想がない状態や断片から、音楽・文章・映像などの創作の方向を探る |
+| /laohu-writing | 文章、推敲、口語原稿 |
+| /laohu-cover | カバーのコンセプトとプロンプト |
+| /laohu-image | 画像の発想と生成プロンプト |
+| /laohu-title | タイトル、命名、入口の言葉 |
+| /laohu-htmlshow | 文章、プロンプト、脚本などを読みやすく使いやすい HTML に変換 |
+| /laohu-htmlshow-gzh | WeChat向け組版。WeChatタスクで `/laohu-htmlshow` が必要に応じて読み込む機能 |
+| /laohu-assets | ビジュアル、音声、制作アセット |
 | /laohu-archive | 作品フォルダーを作成・再利用し、関連する制作物をまとめて保存 |
 | /laohu-update | ツールボックスの確認と更新 |
-| /laohu-evolution | 経験の記録と創作方法の改善 |
 
-この表には、現在正式に定義されている公開入口のみを掲載しています。記載のない名前や予約ディレクトリは呼び出せません。開始前に `/laohu` の能力一覧で確認してください。プロジェクト内では `.agents/skills/` に直接配置された入口を利用できます。グローバル登録は一・二階層の正式入口のみです。三階層の機能は所属する二階層の入口が必要に応じて読み込み、個別登録しません。WeChatタスクでは `/laohu-htmlshow` が必要に応じて `laohu-htmlshow-gzh` を読み込みます。
+この表には現在正式に定義されている公開入口を表示順で掲載しています。順序は閲覧のためのもので、推奨優先度や固定の作業手順を示しません。新しい公開入口は実際の Skill の走査で見つかります。表に未掲載の名前は `/laohu` の能力一覧で定義を確認してください。予約ディレクトリは正式な機能ではありません。プロジェクト内では `.agents/skills/` に直接配置された入口を利用できます。グローバル登録は一・二階層の正式入口のみです。三階層の機能は所属する二階層の入口が必要に応じて読み込み、個別登録しません。WeChatタスクでは `/laohu-htmlshow` が必要に応じて `laohu-htmlshow-gzh` を読み込みます。
 
 正式な入口は単独でも、ひとつの作品の中で組み合わせても使えます。`/laohu-writing` で文章を整え、`/laohu-title` でタイトルを推敲できます。タイトルやカバーだけを扱うこともできます。続けるか、直すか、方向を変えるかは毎回あなたが決めます。
 

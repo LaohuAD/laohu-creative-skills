@@ -155,14 +155,18 @@ def check_project(root):
     scaffold_parent_dirs = set()
     scaffold_names = set()
     nested_names = set()
+    display_order_names = []
     required = ("AGENTS.md", "docs/runtime.md", "LICENSE", ".gitignore", "VERSION", "UPDATE.json", "CHANGELOG.md",
                 "README.md", "README.en.md", "README.ja.md", "README.ko.md", "README.zh-TW.md",
+                "docs/skill-display-order.json",
                 str(PACKAGE), str(SKILLS / "laohu/SKILL.md"), str(SKILLS / "laohu-update/SKILL.md"))
     for relative in required:
         if not (root / relative).is_file():
             errors.append(f"missing required file: {relative}")
     try:
         discovery = load_module(root / SKILLS / "laohu/scripts/list-skills.py", "laohu_discovery")
+        display_order = discovery.read_display_order(root / "docs/skill-display-order.json")
+        display_order_names = discovery.display_order_names(display_order)
         for directory in sorted((root / SKILLS).iterdir()):
             if directory.name.startswith("."):
                 continue
@@ -253,9 +257,22 @@ def check_project(root):
                     nested_names.add(data["name"])
                 except (OSError, ValueError) as error:
                     errors.append(f"{child_skill.relative_to(root)}: {error}")
-        found = {item["name"] for item in discovery.discover(root / SKILLS)["skills"]}
+        catalog_items = discovery.discover(root / SKILLS)["skills"]
+        found = {item["name"] for item in catalog_items}
         if found != set(active) - {"laohu"}:
             errors.append("discovery output differs from valid project entries")
+        unregistered = set(display_order_names) - set(active)
+        if unregistered:
+            errors.append("display order references non-formal entries: "
+                          + ", ".join("/" + name for name in sorted(unregistered)))
+        discovered_by_name = {item["name"]: item for item in catalog_items}
+        for name, expected_parent in discovery.display_order_parents(display_order).items():
+            if name == "laohu" or name not in discovered_by_name:
+                continue
+            actual_parent = discovered_by_name[name]["parent"]
+            if actual_parent != expected_parent:
+                expected_label = "/" + expected_parent if expected_parent else "top level"
+                errors.append(f"display order parent differs from discovery: /{name} -> {expected_label}")
     except (OSError, ValueError, ImportError, SyntaxError) as error:
         errors.append(f"discovery check failed: {error}")
     try:
@@ -330,14 +347,19 @@ def check_project(root):
         readme = root / readme_name
         if not readme.is_file():
             continue
-        commands = set(re.findall(r"^\|\s*/(laohu(?:-[a-z0-9]+)*)\s*\|",
-                                  readme.read_text(encoding="utf-8"), re.M))
+        readme_commands = re.findall(r"^\|\s*/(laohu(?:-[a-z0-9]+)*)\s*\|",
+                                     readme.read_text(encoding="utf-8"), re.M)
+        commands = set(readme_commands)
         missing_entries = sorted(set(active) - commands)
         if missing_entries:
             errors.append(f"README capability table omits formal entries: {readme_name} -> "
                           + ", ".join("/" + name for name in missing_entries))
+        expected_order = [name for name in display_order_names if name in commands]
+        listed_order = [name for name in readme_commands if name in set(display_order_names)]
+        if listed_order != expected_order:
+            errors.append(f"README capability table order differs from display order: {readme_name}")
     notes.append(f"{len(active)} public entries; {len(reserved)} reserved directories; {len(scaffolds)} explicit scaffolds (not active entries)")
-    notes.append("Checks cover metadata, UI fields, formal-entry README tables, declared executable eval materials, duplicate eval inputs, root-level public discovery, deployed third-level boundaries, links, syntax and release consistency; not full YAML, semantic routing or creative quality.")
+    notes.append("Checks cover metadata, UI fields, display-order tree and README ordering, formal-entry README coverage, declared eval materials, root-level discovery, deployed third-level boundaries, links, syntax and release consistency; not full YAML, semantic routing or creative quality.")
     return {"ok": not errors, "errors": errors, "notes": notes, "active": active,
             "reserved": reserved, "scaffolds": scaffolds}
 

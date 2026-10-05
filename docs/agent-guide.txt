@@ -1,0 +1,218 @@
+老胡造梦技能：Agent 使用指南
+
+这是一份面向能够读取网页或文本 URL 的 Agent 的官方能力说明。用户提供本文件后，你可以用普通问答解释能力、帮用户选择入口、说明需要哪些材料，并给出可直接使用的请求方式。
+
+阅读本文件只说明你了解了这些能力，不代表本机已经安装了技能、当前宿主已经发现它们，或你已经实际调用了某个 Skill。用户希望你执行任务时，按当前环境实际可用的正式定义、工具条件和用户授权行动；无法读取对应定义或没有相应工具时，要说明限制，不要声称已经调用或完成。
+
+官方项目与教程
+
+完整项目仓库：
+https://github.com/LaohuAD/laohu-creative-skills
+
+正式介绍与使用教程：
+https://lao-hu.com/learn/laohu-creative-skills/
+
+各项能力的公开定义见下方对应的 GitHub 链接。当前共有 14 个正式公开定义：一个总入口、12 个二级入口，以及一个由父级按需读取的公众号排版专项。全局安装直接登记总入口和 12 个二级入口；公众号专项不单独登记，由 laohu-htmlshow 在明确的公众号排版任务中读取。laohu-assets 下的五个专项配置也由 laohu-assets 按明确任务需要读取，不是独立的公开或全局入口。
+
+能力目录
+
+1. 总入口：laohu
+
+适合：你还不确定该用哪项能力、需要组合多项能力、想了解技能目录或询问安装更新方法。
+请提供：当前目标、已有材料或卡点，以及已经确定的用途和限制；不确定的部分可以直接说明。
+交付：解释推荐哪项或哪组能力、为什么适合，并给出可以直接发送的任务请求。用户只想看目录时，列出当前实际定义的能力。
+边界：负责选择和说明，不代替专业能力完成作品，也不会因能力缺失自动创建、安装或更新技能。用户已明确选择匹配入口时，直接进入该入口，不必重新推荐。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu/SKILL.md
+
+2. 严格审查：laohu-audit
+
+适合：检查作品、提示词、脚本、Skill 或项目，确认具体缺陷或有依据的质量差距。
+请提供：要审查的实际材料或可访问文件、预期用途、接收者、已确认要求和必须保留的部分。若材料很长，说明最相关的范围。
+交付：可以复查的问题包，定位实际材料，说明观察到什么、违反了哪项目标或判据、造成什么差距；质量判断须有适用依据。
+边界：确认哪里不符合目标，不负责解释反复发生的原因或修复材料。没有证据的问题不会写成结论。要查原因或比较方案，使用 laohu-analysis。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-audit/SKILL.md
+
+3. 分析与方案：laohu-analysis
+
+适合：表现宽泛、原因未明、需要比较做法，或长期能力设计中有会改变下一步的重要判断。
+请提供：实际材料、已经确认的问题或目标、相关记录和来源、限制条件，以及你要决定什么。可说明哪些事实已核实，哪些只是猜测。
+交付：有依据的解释、未知项、方案比较，或一份能交给实施者的完整方案；必要时会说明适用条件、依赖、保护项、负责人和验收办法。
+边界：分析交付解释或方案，不替代专业入口完成作品、不直接实施生产修复，也不把规则写回长期能力。审查差距用 laohu-audit；方法已经选定并要求写回时用 laohu-evolution。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-analysis/SKILL.md
+
+4. 长期能力改进：laohu-evolution
+
+适合：改进 Skill、规则或其他长期创作能力，而且用户已经确定改进方法并要求写回。
+请提供：希望改善的行为、已选定的方法与取舍、当前文件或仓库、必须保留的有效行为，以及授权修改范围。
+交付：更新实际会被 Agent 读取或运行的规则、引用与调用关系，并按授权范围检查改动。
+边界：不替用户裁决尚未选定的专业方法，也不代改当前作品。若关键方法或目标仍未定，先用 laohu-analysis；普通文章或图片成品交给对应创作能力。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-evolution/SKILL.md
+
+5. 故事与创意构思：laohu-story
+
+适合：从灵感、材料或已有点子发展创作方向，适用于文字、音乐、图像、视频等媒介的构想阶段。
+请提供：已有点子或素材、希望表达的内容、媒介、已确定的事实和限制。若想让 Agent 主动找灵感，可以明确说允许从指定的虚构起点探索。
+交付：不同的创意解释与角度、取舍理由，以及说明作品创作什么、为什么值得、如何展开的总体构想。
+边界：负责构思和作品雏形，不替代完整文章、最终图片、成品生成或其他专业制作。要把口述或资料整理成完整分享文章，使用 laohu-writing；要做具体图片设计，使用 laohu-image 或 laohu-cover。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-story/SKILL.md
+
+6. 材料型文章写作：laohu-writing
+
+适合：把口述、ASR 转写、初稿、见闻、研究或知识材料整理改写为分享文章。
+请提供：原始材料或文件、文章用途和读者、事实与经历的来源、要保留的观点、语气或原句，以及明确不能改动的部分。可以直接贴材料，不必先整理成表格。
+交付：有主线和递进结构的 Markdown 文章，整理核心判断、证据、解释和读者需要的步骤；会保留材料支持的事实、观点归属与作者声音。
+边界：不会编造作者亲历、来源或未确认立场；默认不是虚构文学创作。它负责成文，不负责从模糊点子发展总体创意（laohu-story），也不负责只改标题或设计封面。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-writing/SKILL.md
+
+7. 文字信息封面与图文版面：laohu-cover
+
+适合：设计自媒体封面、海报、知识讲解图、信息图等需要读者阅读指定文字或信息的图片。
+请提供：标题、主题或原始知识材料；读者是谁、要看懂什么或采取什么行动；平台、比例、锁定文字、品牌素材和禁项（已知时提供）。
+交付：信息取舍和层级、图文关系、版面与排印方向、画面效果说明和可复制的图片提示词。
+边界：交付设计和提示词，不直接生成、编辑或保存图片；图像模型是否能准确绘制复杂中文、长正文、数字或图表不能保证。只需纯画面构思时用 laohu-image；只需标题文字时用 laohu-title。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-cover/SKILL.md
+
+8. 图片画面设计：laohu-image
+
+适合：确定一张图片表现什么、主体关系、构图、风格、光线、色彩和观看方式。
+请提供：主题或对象、画面用途、已有图像或参考（如有）、已确定的视觉方向、希望观者看到的关系，以及不能出现的内容。
+交付：一段预期画面效果说明和一段可直接使用的图片提示词。
+边界：设计画面与提示词，不生成、编辑或保存图片。若观者需要通过准确排版的文字获取信息，使用 laohu-cover；若要筛选剧本中可复用的人物、道具或场景资产，使用 laohu-assets。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-image/SKILL.md
+
+9. 标题文字：laohu-title
+
+适合：独立创作标题、诊断原标题、改良已有标题，或为封面与平台发布准备标题文字。
+请提供：相关材料、目标读者、平台和字段、已锁定的作品名或原句，以及要创作、诊断还是改良。仅有原标题也可先做句面诊断；核验事实、正文适配或平台字段时才需要相应材料。
+交付：符合指定范围的标题候选、各自吸引读者的角度和取舍理由；会区分封面标题与平台发布标题。
+边界：只处理标题文字，不制作封面视觉、不代写正文、不发布内容，也不保证点击、曝光、排名或传播效果。要确定版面与图文结构用 laohu-cover。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-title/SKILL.md
+
+10. 阅读与使用型 HTML：laohu-htmlshow
+
+适合：把已有 Markdown、文本、提示词、剧本或结构化内容做成便于阅读、对照和使用的浏览器展示页。
+请提供：已有内容或文件、谁来阅读、阅读或操作目的，以及需要强调的层级和交互（已知时提供）。
+交付：按最终用途组织信息、布局和交互的 HTML 展示页。
+边界：这是把已有内容变成展示载体，不代替专业创作，也不自动发布网页。若最终目标是粘贴到微信公众号编辑器，应由本入口按需读取公众号专项 laohu-htmlshow-gzh。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-htmlshow/SKILL.md
+
+11. 公众号排版专项：laohu-htmlshow-gzh
+
+适合：把已有文章整理成可粘贴到微信公众号编辑器的 HTML 正文；也可在用户明确要求建设可复用主题时设计主题并交接长期写回。
+请提供：完成的文章或文稿、希望的主题或风格偏好、必要的图片与格式要求。若只想浏览器阅读，使用 laohu-htmlshow 的普通展示页。
+交付：公众号正文 HTML、复制预览和格式检查；静态检查、浏览器复制、微信公众号实际显示是不同的验证范围。
+边界：它不登录公众号、不提交或发布文章；未经公众号编辑器实测，不承诺所有样式都能保留。它是三级专项，不单独参加全局入口登记，由 laohu-htmlshow 在明确的公众号格式任务中读取。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-htmlshow-gzh/SKILL.md
+
+12. 剧本可复用资产：laohu-assets
+
+适合：从剧本中筛选、辨认和设计后续需要稳定复现的人物、道具、场景、服装、状态与界面资产。
+请提供：剧本或相关片段、覆盖范围、已有角色或资产说明、连续性信息，以及要生成资产规格还是也需要图片提示词。
+交付：可复用对象的筛选与身份区分、正式资产设计和变化关系；只有在用户需要时才交付图片提示词。人物、服装、道具、场景、状态五个专项由本入口按明确任务需要读取。
+边界：它处理资产本身及其持续性，具体单张图片的构图、光色与画面表现由 laohu-image 承接。五个专项是内部按需配置，不是独立的公开或全局入口。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-assets/SKILL.md
+
+13. 作品收录与目录：laohu-archive
+
+适合：用户明确要求新建作品目录、保存文件、继续归档或收录已有作品时。
+请提供：作品名称和类别、已有目录（如有）、本次要保存的材料、希望使用的位置。项目外使用而位置未定时，先让 Agent 提出具体路径并等你确认。
+交付：创建或复用的作品目录及实际路径；同一作品后续沿用已确认位置。
+边界：创作、命名或讨论本身不等于保存授权；该能力负责目录和归属，不替代写作、设计等专业创作，也不会把所有草稿自动收进去。项目内默认使用仓库 works/；项目外不从技能安装位置猜作品目录。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-archive/SKILL.md
+
+14. 完整项目安装与更新：laohu-update
+
+适合：首次获取完整仓库、安装或维护全局入口、检查版本、更新完整项目、修复入口或卸载。
+请提供：目标宿主（例如 Codex 或 Claude Code）、已有仓库位置或新安装位置、想做预览还是实际写入，以及本地修改和作品需要保留的要求。
+交付：按授权检查、安装或更新的实际状态；更新会比较并合并完整项目，保护本地修改，有冲突时先给可审阅方案。全局操作后分别核对链接状态和宿主是否发现入口。
+边界：完整项目更新用 laohu-update；把已选长期方法写回 Skill 或规则用 laohu-evolution；当前作品编辑交给对应专业入口。运行 /laohu-update 更新完整 Git 项目，不用只复制某个 Skill 代替项目更新。
+公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-update/SKILL.md
+
+怎样向 Agent 提需求
+
+可以直接提供目标和已有材料，不必先学会 Skill 名称。把方括号内容替换为自己的信息；没有的内容可以省略或说明尚未确定。
+
+通用请求：
+“我的目标是【希望得到的结果】。我能提供【材料、文件或链接】，用途是【读者或使用场景】。已经确定或必须保留的是【事实、观点、文字、风格或限制】。请先判断适合的能力；如果我已经指定能力，请直接按这个范围处理。需要保存、修改项目文件或发布到外部时，只按我明确授权的范围行动。”
+
+能力选择：
+“/laohu 帮我选择入口。目标是【目标】，现有材料是【我提供的材料】，使用场景是【场景】。请说明推荐理由，并给我可以直接发送的任务请求。”
+
+写作：
+“/laohu-writing 请根据我提供的【口述、ASR、初稿或资料】，面向【读者和用途】整理成文章；保留【已确定观点、事实、经历归属或原句】。”
+
+审查：
+“/laohu-audit 请按【用途和目标】审查我提供的【作品或文件】，只报告能定位并有依据的问题。”
+
+标题或封面：
+“请基于我提供的【文章或材料】，为【平台和读者】处理【标题文字 / 承载文字信息的封面】；保留【锁定文字、事实和限制】。”
+
+公众号排版：
+“请把我提供的【已完成文章】排成可粘贴到微信公众号编辑器的正文 HTML，并提供复制预览和格式检查。”
+
+这些模板用于说明请求结构，不是作品内容样例，也不构成安装、写入、保存或外部发布的授权。
+
+项目内使用与全局安装
+
+需要：Git、Python 3.9 或更新版本，以及能读取本地 Skill 的 Agent。项目检查不需要第三方 Python 依赖。先取得完整仓库；在你选择的父目录执行：
+
+git clone https://github.com/LaohuAD/laohu-creative-skills.git
+cd laohu-creative-skills
+python3 tools/check_project.py
+
+项目内使用：在完整仓库中打开 Agent。Codex 可发现 .agents/skills/；其他宿主若没有显示入口，可以让 Agent 读取仓库中的 .agents/skills/laohu/SKILL.md 开始。项目内使用不需要全局安装。
+
+全局使用：在完整仓库根目录运行 install.py。以下命令以 Codex 为例，第一条预览，只有用户明确要求实际安装且预览无冲突后，才执行带 --write 的命令：
+
+python3 tools/install.py install --host codex
+python3 tools/install.py install --host codex --write
+
+Claude Code 本机使用时，把宿主选项改为 claude，同样先预览：
+
+python3 tools/install.py install --host claude
+python3 tools/install.py install --host claude --write
+
+当前工具全局直接登记一级和二级正式入口，共 13 个；三级及更深层级不单独创建全局入口，所属二级入口按任务需要读取。工具会把所选正式入口链接到对应宿主的用户级技能目录；链接指向这份完整仓库，因此仓库必须留在 Agent 可访问的位置。安装不会自动同步到云端或其他设备。不能把“链接已建”说成“宿主已发现”；按宿主方式刷新或新建会话后再确认发现状态。
+
+只读查看已登记状态：
+
+python3 tools/install.py status
+
+同步已登记入口时先预览，再在用户授权写入后应用：
+
+python3 tools/install.py sync
+python3 tools/install.py sync --write
+
+sync 只维护已经登记的目标，不会替新宿主安装，也不负责更新仓库内容。
+
+卸载全局入口时先预览，再按用户授权写入：
+
+python3 tools/install.py uninstall --host codex
+python3 tools/install.py uninstall --host codex --write
+
+卸载只移除仍与登记记录相符、且仍指向这份安装的技能链接；仓库、作品和其他技能会保留。不要在链接仍使用时移动或删除仓库，先卸载再搬迁和重新登记。发生同名冲突时停止说明，不覆盖、不删除冲突对象。
+
+如需支持其他宿主，先确认其真实技能目录和目录链接能力，再把实际目录传给 --skills-dir；不要猜路径或承诺未经核验的平台、权限和云端环境。
+
+完整项目更新
+
+用户要求取得官方更新、检查更新、升级或修复入口时，使用 /laohu-update。它管理完整 Git 仓库，包括技能、项目规则、工具和知识，不等于只复制技能文件，也不等于全局 sync。更新前核对官方仓库、本地状态与用户修改；出现规则或文件冲突时，先呈现具体差异和合并建议，等待用户决定后再处理。仅询问版本、更新内容或用法时只查询，不写入。用户明确授权更新后，沿更新 Skill 的流程执行并报告实际结果。
+
+作品保存与外部操作
+
+在老胡项目内，经用户明确要求保存或收录时，作品默认归入仓库 works/；同一作品沿用已确认的目录。项目外且位置未确定时，先向用户建议一条具体路径并等待确认，再保存。调用某项创作能力、确定标题或完成聊天中的内容，不会自动授权创建文件或归档。
+
+外部发布、公开分享、账户提交、付费生成、不可恢复删除和跨项目长期写入分别需要相应的明确授权。读到本文件、README 或某条命令，不等于用户已经授权这些动作。
+
+共同运行规则与版本信息
+
+跨能力任务状态、意图理解、授权、路径和保存约定，以项目 runtime.md 为准：
+https://github.com/LaohuAD/laohu-creative-skills/blob/main/docs/runtime.md
+
+当前仓库准备版本以 VERSION 为准：
+https://github.com/LaohuAD/laohu-creative-skills/blob/main/VERSION
+
+本指南 TXT 的公开地址：
+https://lao-hu.com/tutorial-assets/laohu-creative-skills/agent-guide.txt
+GitHub 原始文件：
+https://raw.githubusercontent.com/LaohuAD/laohu-creative-skills/main/docs/agent-guide.txt

@@ -31,6 +31,8 @@ Use `claude` instead of `codex` for local Claude Code. Choose only your intended
 
 You can ask: “Read this README and register this existing repository globally for Codex.” Reading this README alone does not authorize installation.
 
+Agent guide: [open or download](https://raw.githubusercontent.com/LaohuAD/laohu-creative-skills/main/docs/agent-guide.txt). You can also ask: “Read the Laohu Creative Skills Agent guide first, then help me according to its instructions.”
+
 Inside the Laohu project, works default to `works/`, with the actual path reported. Outside it, the Agent suggests a specific location and waits for your choice before the first save, unless you already specified it. The same work keeps its confirmed directory. External folders do not inherit this repository's Git ignores.
 
 Use `/laohu-update` in either mode; it preserves local edits and synchronizes managed global entries. Run `python3 tools/install.py status` to inspect registration. To uninstall entries, preview `python3 tools/install.py uninstall --host codex`, then add `--write`; repository and works remain. Unregister before moving the repository, then register again. See [installation details (Chinese)](.agents/skills/laohu-update/references/installation.md).
@@ -61,21 +63,21 @@ When you know what you want to do, choose the matching command. When you only kn
 | Command | Use it for |
 | --- | --- |
 | /laohu | Clarifying a request and choosing a creative direction |
-| /laohu-writing | Writing, revision, spoken scripts, and expression |
-| /laohu-htmlshow | Readable HTML views for articles, prompts, scripts, and structured content |
-| /laohu-htmlshow-gzh | WeChat article formatting, loaded by `/laohu-htmlshow` for WeChat tasks |
-| /laohu-title | Titles, names, and entry points |
-| /laohu-cover | Cover concepts and cover prompts |
-| /laohu-image | Image concepts and image-generation prompts |
-| /laohu-assets | Visual, audio, and creative assets |
-| /laohu-story | Finding and developing creative starting points for music, writing, images, and other media |
 | /laohu-audit | Confirm concrete issues in works, prompts, Skills, and workflows against their goals and evidence |
 | /laohu-analysis | Explain causes or turn confirmed goals into actionable plans |
+| /laohu-evolution | Capturing experience and improving creative methods |
+| /laohu-story | Finding and developing creative starting points for music, writing, images, and other media |
+| /laohu-writing | Writing, revision, spoken scripts, and expression |
+| /laohu-cover | Cover concepts and cover prompts |
+| /laohu-image | Image concepts and image-generation prompts |
+| /laohu-title | Titles, names, and entry points |
+| /laohu-htmlshow | Readable HTML views for articles, prompts, scripts, and structured content |
+| /laohu-htmlshow-gzh | WeChat article formatting, loaded by `/laohu-htmlshow` for WeChat tasks |
+| /laohu-assets | Visual, audio, and creative assets |
 | /laohu-archive | Creating and reusing work folders to keep each project’s files together |
 | /laohu-update | Reviewing and updating the toolkit |
-| /laohu-evolution | Capturing experience and improving creative methods |
 
-This table lists currently defined public entries. Unlisted names and reserved folders are not callable; check the `/laohu` capability directory first. Project workspaces can discover the directly deployed entries in `.agents/skills/`. Global registration includes first- and second-level entries only; third-level capabilities are read on demand by their owning second-level entry and are not registered separately. For a WeChat task, `/laohu-htmlshow` loads `laohu-htmlshow-gzh` when needed.
+This table lists currently defined public entries in display order; the order is for browsing and does not set recommendation priority or a fixed workflow. The live scan can discover a newly added public entry before its table entry is updated; use the `/laohu` capability directory to check its current definition. Reserved folders are not formal capabilities. Project workspaces can discover the directly deployed entries in `.agents/skills/`. Global registration includes first- and second-level entries only; third-level capabilities are read on demand by their owning second-level entry and are not registered separately. For a WeChat task, `/laohu-htmlshow` loads `laohu-htmlshow-gzh` when needed.
 
 Use a defined entry on its own or combine several for one project. You can draft an article with `/laohu-writing` and refine its title with `/laohu-title`, or work on one title or cover with `/laohu-cover`. You decide whether to continue, revise, or change direction at every step.
 
