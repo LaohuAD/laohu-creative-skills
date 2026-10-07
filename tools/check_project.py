@@ -252,6 +252,12 @@ def check_project(root):
                     data = discovery.read_metadata(child_skill)
                     if data["name"] != child.name:
                         raise ValueError("third-level directory name and frontmatter name differ")
+                    expected_prefix = parent.name + "-"
+                    expected_segments = len(parent.name.split("-")) + 1
+                    actual_segments = len(data["name"].split("-"))
+                    if (not data["name"].startswith(expected_prefix)
+                            or actual_segments != expected_segments):
+                        raise ValueError("third-level Skill name must extend its parent name by exactly one segment")
                     if data["name"] in active or any(data["name"] == name for name in nested_names):
                         raise ValueError("duplicate Skill name across public and deployed entries")
                     nested_names.add(data["name"])

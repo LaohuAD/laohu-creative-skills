@@ -164,23 +164,23 @@
 
 ## 组件 3 目录 toc-scroll（横向滚动目录）
 
-2 个及以上章节时生成。第一个卡片绿色高亮，最后一个固定为"写在最后"（PART ///）。
+有至少 2 个可列入目录的原文章节时生成。只为主入口实际选中的原文章节生成卡片，第一张绿色高亮，卡片数与真实目录条目数一致；`{{N}}` 填实际卡片数，标题使用 `{{N}} Sections`，不固定追加 `Conclusion`。只有原文确有结语/总结章节，且该章作为真实末章被选入目录时，才可使用主题的 `///` 编号变体，并沿用原文标题和编号规则；不得虚构“写在最后”或其他目录项。章节不足 3 项时不补凑。
 
 ```html
 <section style="margin:0 20px 32px;">
   <section style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
     <p style="font-size:10px;color:#9CA3AF;margin:0;text-transform:uppercase;letter-spacing:2px;font-weight:600;">
-      <span leaf="">📦 {{N}} Parts + Conclusion</span>
+      <span leaf="">📦 {{N}} Sections</span>
     </p>
     <p style="font-size:10px;color:#9CA3AF;margin:0;">
       <span leaf="">👉 滑动</span>
     </p>
   </section>
-  <section style="overflow-x:scroll;-webkit-overflow-scrolling:touch;white-space:nowrap;padding-bottom:8px;">
+  <section data-ignore-width="" style="overflow-x:scroll;-webkit-overflow-scrolling:touch;white-space:nowrap;padding-bottom:8px;">
     <!-- 第一个（当前高亮，绿色背景） -->
-    <section style="display:inline-block;white-space:normal;vertical-align:top;width:110px;background:linear-gradient(135deg,#059669,#10B981);border-radius:12px;padding:12px;margin-right:8px;">
+    <section style="display:inline-block;white-space:normal;vertical-align:top;width:110px;background:#059669;border-radius:12px;padding:12px;margin-right:8px;">
       <p style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:1px;margin:0 0 5px;">
-        <span leaf="">PART 01</span>
+        <span leaf="">PART {{原章节编号}}</span>
       </p>
       <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 3px;">
         <span leaf="">{{章节名}}</span>
@@ -192,7 +192,7 @@
     <!-- 后续章节（白色背景），按需重复 -->
     <section style="display:inline-block;white-space:normal;vertical-align:top;width:110px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px;margin-right:8px;box-shadow:0 2px 6px rgba(0,0,0,0.04);">
       <p style="font-size:9px;font-weight:700;color:#9CA3AF;letter-spacing:1px;margin:0 0 5px;">
-        <span leaf="">PART 02</span>
+        <span leaf="">PART {{原章节编号}}</span>
       </p>
       <p style="font-size:13px;font-weight:800;color:#111827;margin:0 0 3px;">
         <span leaf="">{{章节名}}</span>
@@ -201,27 +201,18 @@
         <span leaf="">{{副标题}}</span>
       </p>
     </section>
-    <!-- 最后一个（写在最后） -->
-    <section style="display:inline-block;white-space:normal;vertical-align:top;width:110px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,0.04);">
-      <p style="font-size:9px;font-weight:700;color:#9CA3AF;letter-spacing:1px;margin:0 0 5px;">
-        <span leaf="">PART ///</span>
-      </p>
-      <p style="font-size:13px;font-weight:800;color:#111827;margin:0 0 3px;">
-        <span leaf="">写在最后</span>
-      </p>
-      <p style="font-size:10px;color:#9CA3AF;margin:0;">
-        <span leaf="">{{副标题}}</span>
-      </p>
-    </section>
+    <!-- 后续真实目录项按需重复白色卡片；逐项沿用原文编号和标题，不添加虚构结语卡片。 -->
   </section>
 </section>
 ```
+
+卡片示例只说明视觉样式，不代表固定目录结构。填充时逐项复制实际选中的目录项；真实末章只有在原文确为结语/总结且被选入目录时，才可用 `///` 样式编号，并保留该章原标题。其余末章使用原编号与真实标题。
 
 ---
 
 ## 组件 4 章节标题 chapter-title
 
-第一个章节用 `margin-top:16px`，后续章节用 `margin-top:48px`。最后一章编号用 `///`，PART 改为 `LAST`。
+第一个章节用 `margin-top:16px`，后续章节用 `margin-top:48px`。仅当原文实际末章属于结语/总结时，才将编号改为 `///`、标签改为 `LAST`；其他章节（包括非结语/总结的末章）沿用原编号和 `PART`。章节标题必须对应原文，不因模板添加“写在最后”。
 
 ```html
 <section style="margin-top:48px;margin-bottom:32px;padding:0 20px;">
@@ -847,7 +838,7 @@
 
   <!-- 6. 第二章…第N章（组件4，margin-top:48px） -->
 
-  <!-- 7. 结语章（组件4 变体：编号 ///，PART 改 LAST，章名"写在最后"） -->
+  <!-- 7. 仅装配原文实际存在的后续章节；若真实末章为结语/总结，组件4才用 /// + LAST 变体并保留原题；不新增结语章 -->
 
   <!-- 8. 可选署名/互动区（组件13a；仅原文有对应内容或用户明确要求时加入） -->
 
@@ -899,7 +890,7 @@
 |---|---|---|
 | `# 标题` | 封面组件2可沿用原题 | 原题原样保留；仅用户明确授权时改写或另拟封面文案 |
 | 文章开头 `> 引言` | 组件 9b oneliner-card 或并入封面副标题 | 原句照用；缺少引言时省略卡片，不从正文另提金句 |
-| `## 章节标题` | 组件 4 chapter-title | PART 01/02/03…，末章 /// + LAST |
+| `## 章节标题` | 组件 4 chapter-title | 沿用原编号 + PART；仅原文实际末章为结语/总结时用 /// + LAST，并保留原题 |
 | `### 子标题` | 组件 9c subtitle-highlight | 黄色下划线小节标题 |
 | 普通段落 | 组件 5 paragraph | 保留原文标记；确有排版需要时按主入口规则新增，允许 0 处 |
 | `**加粗文字**` | 组件 6a 绿色加粗 | 核心概念/品牌名 |

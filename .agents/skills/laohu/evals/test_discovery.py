@@ -34,12 +34,12 @@ class DiscoveryTests(unittest.TestCase):
 
     def test_add_update_rename_remove_without_registry(self):
         self.assertEqual(self.catalog()["skills"], [])
-        path = self.put("laohu-test-part-detail")
+        path = self.put("laohu-test-part")
         item = self.catalog()["skills"][0]
-        self.assertEqual(item["level"], 4)
+        self.assertEqual(item["level"], 3)
         self.assertIsNone(item["parent"])
         self.assertEqual(item["deployment"], "public")
-        self.put("laohu-test-part-detail", "Updated capability")
+        self.put("laohu-test-part", "Updated capability")
         self.assertEqual(self.catalog()["skills"][0]["description"], "Updated capability")
         path.parent.rename(self.root / "laohu-test-renamed")
         self.assertEqual(self.catalog()["skills"], [])
@@ -74,22 +74,32 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(names(), ["laohu-anchor"])
 
     def test_public_deployment_is_independent_of_name_hierarchy(self):
-        for name in ("laohu-htmlshow", "laohu-htmlshow-gzh", "laohu-htmlshow-gzh-layout"):
+        for name in ("laohu-htmlshow", "laohu-htmlshow-gzh", "laohu-htmlshow-layout"):
             self.put(name)
         items = {item["name"]: item for item in self.catalog()["skills"]}
         self.assertEqual(items["laohu-htmlshow"]["level"], 2)
         self.assertEqual(items["laohu-htmlshow-gzh"]["level"], 3)
-        self.assertEqual(items["laohu-htmlshow-gzh-layout"]["level"], 4)
+        self.assertEqual(items["laohu-htmlshow-layout"]["level"], 3)
         self.assertIsNone(items["laohu-htmlshow"]["parent"])
         self.assertEqual(items["laohu-htmlshow-gzh"]["parent"], "laohu-htmlshow")
-        self.assertEqual(items["laohu-htmlshow-gzh-layout"]["parent"], "laohu-htmlshow-gzh")
+        self.assertEqual(items["laohu-htmlshow-layout"]["parent"], "laohu-htmlshow")
         self.assertTrue(all(item["deployment"] == "public" for item in items.values()))
         self.assertTrue(all(Path(item["path"]).parent.parent == self.root for item in items.values()))
+
+    def test_formal_skill_names_cannot_exceed_three_segments(self):
+        self.put("laohu-example-third")
+        invalid = self.put("laohu-example-too-many")
+        result = self.catalog()
+        self.assertEqual([item["name"] for item in result["skills"]], ["laohu-example-third"])
+        self.assertEqual(len(result["unavailable"]), 1)
+        self.assertIn("at most three hyphen-separated segments", result["unavailable"][0]["reason"])
+        with self.assertRaisesRegex(ValueError, "at most three hyphen-separated segments"):
+            discovery.read_metadata(invalid)
 
     def test_manifest_orders_known_entries_and_appends_unknowns_under_their_parent(self):
         names = (
             "laohu-audit", "laohu-htmlshow", "laohu-htmlshow-gzh",
-            "laohu-htmlshow-preview", "laohu-htmlshow-gzh-copy",
+            "laohu-htmlshow-preview", "laohu-htmlshow-copy",
             "laohu-update", "laohu-extra",
         )
         for name in names:
@@ -107,11 +117,11 @@ class DiscoveryTests(unittest.TestCase):
         result = discovery.discover(self.root, order_file=order_file)
         self.assertEqual([item["name"] for item in result["skills"]], [
             "laohu-audit", "laohu-htmlshow", "laohu-htmlshow-gzh",
-            "laohu-htmlshow-gzh-copy", "laohu-htmlshow-preview",
+            "laohu-htmlshow-copy", "laohu-htmlshow-preview",
             "laohu-update", "laohu-extra",
         ])
         self.assertEqual(result["skills"][2]["parent"], "laohu-htmlshow")
-        self.assertEqual(result["skills"][3]["parent"], "laohu-htmlshow-gzh")
+        self.assertEqual(result["skills"][3]["parent"], "laohu-htmlshow")
 
     def test_display_order_rejects_duplicate_commands(self):
         order_file = self.root / "display-order.json"
@@ -122,6 +132,16 @@ class DiscoveryTests(unittest.TestCase):
             ],
         }]}), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "duplicate display order command"):
+            discovery.read_display_order(order_file)
+
+    def test_display_order_rejects_four_segment_skill_names(self):
+        order_file = self.root / "display-order.json"
+        order_file.write_text(json.dumps({"items": [{
+            "command": "/laohu", "label": "Root", "children": [
+                {"command": "/laohu-example-too-many", "label": "Too deep"},
+            ],
+        }]}), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "display order command must be"):
             discovery.read_display_order(order_file)
 
     def test_display_order_child_must_follow_its_skill_parent(self):
@@ -162,11 +182,16 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(result["skills"], [])
         self.assertEqual([item["directory"] for item in result["scaffolds"]], ["laohu-assets"])
 
+        skill.write_text("# 人设与解决核心（框架待填充）\n\n## 判断\n"
+                         "# 沟通\n\n## 分析需求\n", encoding="utf-8")
+        self.assertTrue(discovery.is_skill_scaffold(skill))
+        self.assertEqual(self.catalog()["skills"], [])
+        self.assertEqual(len(self.catalog()["scaffolds"]), 1)
+
         for content in (
             "# 资产创作\n\n## 输入\n",
             "# 资产创作（框架待填充）\n\n仍有正文\n",
             "# 资产创作（框架待填充）\n\n    # 缩进代码块\n",
-            "# 资产创作（框架待填充）\n\n# 第二个一级标题\n",
         ):
             with self.subTest(content=content):
                 skill.write_text(content, encoding="utf-8")
@@ -206,10 +231,10 @@ class DiscoveryTests(unittest.TestCase):
 
     def test_valid_deployed_child_is_not_a_public_catalog_entry(self):
         self.put("laohu-assets")
-        child = self.root / "laohu-assets" / "skills" / "laohu-person"
+        child = self.root / "laohu-assets" / "skills" / "laohu-assets-person"
         (child / "SKILL.md").parent.mkdir(parents=True)
         (child / "SKILL.md").write_text(
-            "---\nname: laohu-person\ndescription: A deployed configuration\n---\n# Person\n",
+            "---\nname: laohu-assets-person\ndescription: A deployed configuration\n---\n# Person\n",
             encoding="utf-8")
         items = self.catalog()["skills"]
         self.assertEqual([item["name"] for item in items], ["laohu-assets"])

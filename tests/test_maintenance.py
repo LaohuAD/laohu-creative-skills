@@ -191,6 +191,27 @@ class ProjectTests(unittest.TestCase):
                 self.assertNotIn("laohu-title", report["active"])
                 self.assertTrue(any("invalid Skill scaffold" in error for error in report["errors"]))
 
+    def test_scaffold_can_start_with_peer_responsibility_headings(self):
+        path = self.root / checker.SKILLS / "laohu-lyrics" / "SKILL.md"
+        path.parent.mkdir(parents=True)
+        path.write_text(
+            "---\nname: laohu-lyrics\ndescription: Draft identity\n---\n"
+            "# 人设与解决核心（框架待填充）\n\n## 专业判断\n"
+            "# 沟通\n\n## 需求分析\n# 确定内容\n\n## 第一步\n",
+            encoding="utf-8")
+        report = checker.check_project(self.root)
+        self.assertTrue(report["ok"], report["errors"])
+        self.assertIn(path.relative_to(self.root).as_posix(), report["scaffolds"])
+        discovery = checker.load_module(
+            self.root / checker.SKILLS / "laohu/scripts/list-skills.py", "peer_heading_discovery")
+        self.assertNotIn("laohu-lyrics", [item["name"] for item in
+                         discovery.discover(self.root / checker.SKILLS)["skills"]])
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write("执行正文\n")
+        report = checker.check_project(self.root)
+        self.assertFalse(report["ok"])
+        self.assertNotIn("laohu-lyrics", report["active"])
+
     def test_scaffold_name_and_parent_identity_are_enforced(self):
         self.scaffold(self.root / checker.SKILLS / "invalid-name" / "SKILL.md")
         report = checker.check_project(self.root)
@@ -221,33 +242,33 @@ class ProjectTests(unittest.TestCase):
 
     def test_formal_third_level_is_valid_but_not_public_or_ui_bearing(self):
         parent = self.entry("laohu-assets")
-        child = parent.parent / "skills" / "laohu-character" / "SKILL.md"
+        child = parent.parent / "skills" / "laohu-assets-character" / "SKILL.md"
         child.parent.mkdir(parents=True)
-        child.write_text("---\nname: laohu-character\ndescription: Character configuration\n---\n# Character\n",
+        child.write_text("---\nname: laohu-assets-character\ndescription: Character configuration\n---\n# Character\n",
                          encoding="utf-8")
         report = checker.check_project(self.root)
         self.assertTrue(report["ok"], report["errors"])
-        self.assertNotIn("laohu-character", report["active"])
+        self.assertNotIn("laohu-assets-character", report["active"])
         discovery = checker.load_module(self.root / checker.SKILLS / "laohu/scripts/list-skills.py", "test_deployed_discovery")
-        self.assertNotIn("laohu-character", [item["name"] for item in discovery.discover(self.root / checker.SKILLS)["skills"]])
+        self.assertNotIn("laohu-assets-character", [item["name"] for item in discovery.discover(self.root / checker.SKILLS)["skills"]])
 
     def test_formal_parent_may_hold_a_child_scaffold(self):
         parent = self.entry("laohu-assets")
-        child = self.scaffold(parent.parent / "skills" / "laohu-character" / "SKILL.md", "人物资产")
+        child = self.scaffold(parent.parent / "skills" / "laohu-assets-character" / "SKILL.md", "人物资产")
         report = checker.check_project(self.root)
         self.assertTrue(report["ok"], report["errors"])
         self.assertIn(child.relative_to(self.root).as_posix(), report["scaffolds"])
 
     def test_third_level_requires_matching_metadata_and_single_file_boundary(self):
         parent = self.entry("laohu-assets")
-        child = parent.parent / "skills" / "laohu-character"
+        child = parent.parent / "skills" / "laohu-assets-character"
         skill = child / "SKILL.md"
         skill.parent.mkdir(parents=True)
         skill.write_text("---\nname: laohu-other\ndescription: Character configuration\n---\n# Character\n",
                          encoding="utf-8")
         self.assertTrue(any("directory name and frontmatter name differ" in error
                             for error in checker.check_project(self.root)["errors"]))
-        skill.write_text("---\nname: laohu-character\ndescription: Character configuration\n---\n# Character\n",
+        skill.write_text("---\nname: laohu-assets-character\ndescription: Character configuration\n---\n# Character\n",
                          encoding="utf-8")
         extra = child / "references" / "method.md"
         extra.parent.mkdir()
@@ -257,18 +278,44 @@ class ProjectTests(unittest.TestCase):
 
     def test_only_one_deployment_level_is_allowed(self):
         parent = self.entry("laohu-assets")
-        child = parent.parent / "skills" / "laohu-character"
+        child = parent.parent / "skills" / "laohu-assets-character"
         skill = child / "SKILL.md"
         skill.parent.mkdir(parents=True)
-        skill.write_text("---\nname: laohu-character\ndescription: Character configuration\n---\n# Character\n",
+        skill.write_text("---\nname: laohu-assets-character\ndescription: Character configuration\n---\n# Character\n",
                          encoding="utf-8")
-        grandchild = child / "skills" / "laohu-character-detail" / "SKILL.md"
+        grandchild = child / "skills" / "laohu-assets-character-detail" / "SKILL.md"
         grandchild.parent.mkdir(parents=True)
-        grandchild.write_text("---\nname: laohu-character-detail\ndescription: Too deep\n---\n# Detail\n",
+        grandchild.write_text("---\nname: laohu-assets-character-detail\ndescription: Too deep\n---\n# Detail\n",
                               encoding="utf-8")
         errors = checker.check_project(self.root)["errors"]
         self.assertTrue(any("third-level Skill contains a nested directory" in error for error in errors), errors)
         self.assertTrue(any("outside a valid parent deployment" in error for error in errors), errors)
+
+    def test_internal_child_name_extends_its_parent_by_one_segment(self):
+        parent = self.entry("laohu-assets")
+        child = parent.parent / "skills" / "laohu-character" / "SKILL.md"
+        child.parent.mkdir(parents=True)
+        child.write_text("---\nname: laohu-character\ndescription: Character configuration\n---\n# Character\n",
+                         encoding="utf-8")
+        errors = checker.check_project(self.root)["errors"]
+        self.assertTrue(any("must extend its parent name by exactly one segment" in error
+                            for error in errors), errors)
+
+    def test_four_segment_formal_names_fail_for_public_and_internal_skills(self):
+        parent = self.entry("laohu-assets")
+        nested = parent.parent / "skills" / "laohu-assets-character-scene" / "SKILL.md"
+        nested.parent.mkdir(parents=True)
+        nested.write_text(
+            "---\nname: laohu-assets-character-scene\ndescription: Too many segments\n---\n# Scene\n",
+            encoding="utf-8")
+        errors = checker.check_project(self.root)["errors"]
+        self.assertTrue(any("at most three hyphen-separated segments" in error for error in errors), errors)
+
+        import shutil
+        shutil.rmtree(nested.parent)
+        self.entry("laohu-example-too-many")
+        errors = checker.check_project(self.root)["errors"]
+        self.assertTrue(any("at most three hyphen-separated segments" in error for error in errors), errors)
 
     def test_markdown_links_ignore_code_but_catch_missing_files(self):
         text = self.readme('`[example](missing.md)`\n```md\n[x](missing.md)\n'

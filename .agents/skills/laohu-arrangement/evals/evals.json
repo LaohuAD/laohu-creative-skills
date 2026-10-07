@@ -1,0 +1,347 @@
+{
+  "skill": "laohu-arrangement",
+  "problem_contract": {
+    "goal": "从用户提供的歌词、旋律、音频或简报出发，形成有明确音乐决定的编曲蓝图，并按真实接收用途交付方案、平台输入、乐谱、MIDI 或音频。",
+    "non_goals": [
+      "仅凭文字方案或格式解析宣称音乐作品、生成遵从或声音质量已经通过。",
+      "把某一种古典曲式、和声终止、固定小节变化率或满编/减法流程强加给所有风格。",
+      "把尚未提供的歌词、旋律、演奏事实、平台字段或不存在的专项配置补成已确认内容。"
+    ]
+  },
+  "behavior_contract": {
+    "must": [
+      "先辨明材料、用途、锁定项、开放变量和交付颗粒度；以用户已确认的作品身份为保护条件，只创作或改动本次任务所需部分。",
+      "需要明确谱曲时写出实际音符；人声先处理句法、语义重音、可唱性和关键词清晰度，普通话字调不逐字机械映射音高，未经授权不改锁定歌词。",
+      "识别输入属于功能调性、调式中心、非功能循环、固定低音或未知；V-I 只用于目标确有强属主收束的场景，持续 loop 可用稳定音型、踏板和局部音色/节奏变化组织时间。",
+      "将能量变化落实到有主次的可听维度，如音区、起音/细分密度、和声节奏、低频重量、音色亮度、宽度或纵深；声部冲突先从编配关系修正，再交混音处理。",
+      "按实际问题读取对应 Reference；方法采用其适用条件，明确输入、操作、产物与回到主流程的位置，不把来源观点扩成无条件规则。",
+      "生成、谱面、MIDI 与音频分清接口字段、符号数据、事件文件和声音文件；交付实际 `.mid` 或音频前确认文件确实生成并可读。",
+      "根据各格式标准和目标软件检查歌词对齐、时值、移调、轨道同步、音源映射和循环边界；无法承载的控制说明具体损失。",
+      "结构检查、平台接受、生成遵从、试听表现和接收者质量分别报告；没有对应证据时标为未验证。"
+    ],
+    "must_not": [
+      "把字调逐字复制成音高轮廓，或用汉字数量等同音符数量来决定歌词对齐。",
+      "把 2+2+4、八小节句、V-I、每八小节变化、每次副歌加层或至少一次减法设为普遍配额。",
+      "声称提示词能精确保留未提供/接口不支持的旋律，或把平台未核实的逐句控制、硬上限和 API 字段说成已证实能力。",
+      "把和弦方案称作音符谱，把事件表或脚本称作已生成 MIDI，把 MusicXML/ABC/MIDI 称作音频。",
+      "把 CC11 当成所有音源通用奏法切换，或不核目标音源就承诺 program、keyswitch、控制器具有相同解释。",
+      "仅因材料提及某作者、风格或乐器就触发专项配置；创建、暗示或调用当前不存在的三级 Skill。",
+      "把文件可解析或可导入直接推成演奏成立、试听通过或作品质量通过。"
+    ]
+  },
+  "execution_protocol": [
+    "执行者只接收 prompt 与 input_files，不接收 expected_behavior；评审者依据可观察产物检查，不按口头自评给通过。",
+    "未运行案例标记 NOT_RUN。静态格式、文件存在、平台接受、播放/试听和用户结果分别记录证据；没有真实音频或接收者反馈时，声音/质量结果记 UNKNOWN。",
+    "评测输入中的占位描述用于检查边界行为，不是创作范例或音乐质量证据。"
+  ],
+  "cases": [
+    {
+      "id": "lyric-driven-ai-vocal-package",
+      "type": "boundary",
+      "prompt": "请把我这次已提供的完整歌词编成一份目标音乐生成平台的人声输入包。歌词文本和平台当前接口资料没有随这条评测输入提供；不要自己补写歌词。先告诉我还缺什么，以及在材料到齐后会怎样区分标准歌词和项目控制语法。",
+      "input_files": [],
+      "expected_behavior": [
+        "指出歌词文本与目标平台/模式资料实际缺失，不虚构最终歌词或假称已核平台版本；只索取继续编译必需的信息。",
+        "说明完整人声包需要演唱风格、Style Prompt、最终已编译歌词和本次相关的平台条件；标准结构歌词与独立演唱控制谱、项目嵌入语法是分支选择，不宣称平台官方支持未核语法。",
+        "歌词获准锁定时保留字符、标点、次序和默认换行；不从视觉换行机械推断演唱乐句。"
+      ],
+      "context": "验证 AI 人声分支与输入缺失时的停止点、字段边界和歌词保护，不提供歌词创作样本。"
+    },
+    {
+      "id": "protect-existing-melody",
+      "type": "boundary",
+      "prompt": "已有旋律是锁定项。请为它做 AI 改编并确保旋律一音不变。当前没有附上导唱、谱面或可用参考音频，也没有指定平台。",
+      "input_files": [],
+      "expected_behavior": [
+        "指出缺少旋律材料和目标接口，不能声称已辨认或能精确保留旋律。",
+        "说明文字描述只能表达意图；需有目标接口真实支持的参考材料及生成后逐句核对，否则给出保旋律替代交付或询问必要输入。",
+        "不借机重写锁定旋律、扩成完整制作或把模型生成结果预先当成保真。"
+      ],
+      "context": "验证现有旋律保护和平台能力边界；没有真实旋律输入，保留效果只能是未验证。"
+    },
+    {
+      "id": "multitrack-midi-delivery",
+      "type": "normal",
+      "prompt": "为一段四小节、4/4、96 BPM、A 小调的器乐循环创作并交付多轨 MIDI，包含底鼓、贝司、和弦铺底和主旋律；具体音符可由你创作。请使用 Type 1 SMF，目标是常见 DAW，说明采用的 PPQ 和音源映射。",
+      "input_files": [],
+      "expected_behavior": [
+        "先补足或明确必要的创作决定，再让各轨使用同一拍轴，区分底鼓、贝司、铺底与主旋律角色并保持四小节长度。",
+        "若环境能生成文件，交付实际可读取的 `.mid`，说明 SMF Type 1、PPQ、轨道/通道、tempo/meter 与 program/bank 映射；若不能生成，直说限制并把事件表标为规格，不能冒称 MIDI 文件已交付。",
+        "音符起止配对、同刻事件顺序、loop 边界和目标音源映射应可核验；不把映射正确推成实际音色试听通过。"
+      ],
+      "context": "合成的从零编曲任务，用于检查多轨事件文件交付边界与同步，不是音乐风格质量基准。"
+    },
+    {
+      "id": "score-transposition-contract",
+      "type": "boundary",
+      "prompt": "我需要一份总谱和降 B 调单簧管、F 调圆号分谱，并同时交付可在 DAW 播放的 MIDI。当前没有附上源谱、实际音符、目标记谱软件或音源；请先说明转换关系和继续工作所需输入，不要创作替代音符。",
+      "input_files": [],
+      "expected_behavior": [
+        "区分总谱实音、移调分谱记谱音和 MIDI 实音；音乐XML移调关系表述为 written pitch 加 transpose 等于 sounding pitch，并核乐器移调/八度。",
+        "指出缺少源音符和目标软件/音源，不能产出真实分谱或声称互相对应；明确询问源谱或音符事件与目标接收条件。",
+        "说明谱面解析或 MIDI parser 通过不等于目标合奏音高正确，仍需在目标软件核对。"
+      ],
+      "context": "验证移调方向与交付依赖边界，不提供创作样本或默认音符。"
+    },
+    {
+      "id": "instrumental-loop-stability",
+      "type": "normal",
+      "prompt": "为一段器乐电子 loop 设计段落蓝图。核心节拍、低音型和静态调式中心都要保持可辨；通过少量声部进退与音色运动维持注意，不要加入人声，也不要为了制造副歌硬做属主终止。",
+      "input_files": [],
+      "expected_behavior": [
+        "按器乐主题、律动、音色与 loop 边界安排结构，不生成歌词/演唱字段。",
+        "保留核心拍轴、低音身份、调式中心和循环接缝；把主要发展限定为有职务的密度、音区、音色或层次变化，不强制每段变满或定时填充。",
+        "非功能 loop 不硬套 V-I；明确循环长度/起止和尾音处理需要的条件，实际无缝效果仍须连续试听。"
+      ],
+      "context": "检查稳定型器乐循环是否被误套流行歌曲/古典终止模板。"
+    },
+    {
+      "id": "local-revision-protects-locked-parts",
+      "type": "boundary",
+      "prompt": "只处理副歌伴奏太挤的问题。主唱旋律、歌词、速度和已确认段落结构都是锁定项。当前没有提供音频、轨道或声部表；先给出不扩大范围的诊断步骤和最小修改选项。",
+      "input_files": [],
+      "expected_behavior": [
+        "把任务限定为副歌伴奏密度，不改旋律、歌词、速度或结构。",
+        "说明缺少可诊断的音频/轨道材料，不猜具体冲突声部；给出获取证据后先按音区、拍点、起音密度、时值和空间检查，再优先尝试删层、错开、改写或换音区。",
+        "需要比较候选时说明预期可听差异，并保留相邻段落承接检查；不把混音当作首要或唯一解法。"
+      ],
+      "context": "验证局部修订范围和证据不足时的专业停止点，不提供虚构轨道素材。"
+    },
+    {
+      "id": "material-mention-does-not-trigger-specialist",
+      "type": "normal",
+      "prompt": "请按我已有的旋律设计一个可执行的伴奏方案。简报里提到一张巴松与弦乐合奏的参考唱片，也提到某位编曲作者；我只是描述听感来源，没有要求采用该作者的专项方法。",
+      "input_files": [],
+      "expected_behavior": [
+        "把材料中的乐器和作者提及当作听感线索，不视为用户明确请求专项 Skill 或配置。",
+        "用本二级 Skill 完成必要的旋律身份、声部角色、音区和伴奏动作判断；若旋律实际未随输入提供，则只询问需要的旋律材料，不虚构。",
+        "因用户未明确选择专项而维持通用路径，不读取任何风格子级；是否核查参考唱片按实际音乐问题决定，核查也不自动触发专项路由。"
+      ],
+      "context": "验证参考提及与显式专项请求的路由边界。"
+    },
+    {
+      "id": "specialty-boom-bap-explicit-route",
+      "type": "normal",
+      "prompt": "给一段四小节说唱伴奏方案，我明确要 boom-bap，当前没有鼓型或采样，允许你从零设计。先交可编配的节奏骨架和段落变化思路。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-boombap；无参照时以 4/4 第2/4拍 backbeat 起步，kick支撑/回应说唱重音，而不是将每个音节都落kick。",
+        "明确采样并非必需；说明口袋、素材职责、低频和段落变化怎样进入宿主蓝图。"
+      ],
+      "context": "验证明确 boom-bap 请求触发及核心鼓组取舍。"
+    },
+    {
+      "id": "specialty-trap-explicit-route",
+      "type": "normal",
+      "prompt": "请按 trap 为一段说唱设计节奏与低音，暂时没有参考和既有旋律，允许先提出原创骨架。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-trap；无锁定参照时给出4/4半拍、第3拍snare/clap和基础hat细分，roll只落在句法节点。",
+        "说明808音高依和弦根音/低音线、尾音在下一和声/鼓点前收束，只有音源支持且有目标时才滑音。"
+      ],
+      "context": "验证 trap 正向默认是否能改变节奏和低音写法。"
+    },
+    {
+      "id": "specialty-house-explicit-route",
+      "type": "normal",
+      "prompt": "明确按 house 编曲做一个可循环的器乐段，先给节奏组和循环发展蓝图。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-house；无更窄分支时用4/4每拍kick、2/4 backbeat、反拍八分高频、kick间隙切分bass及短反拍和弦/单钩子。",
+        "通过循环层次进退与接缝设计发展；不把四踩单独当作 house 与 techno 的区分证据。"
+      ],
+      "context": "验证 house 的循环节奏组关系。"
+    },
+    {
+      "id": "specialty-techno-explicit-route",
+      "type": "normal",
+      "prompt": "明确按 minimal techno 做一段器乐编曲，目标是长时间稳定脉冲中逐渐改变音色与空间，不需要传统副歌。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-techno；固定4/4 kick并用1–2小节稀疏事件循环，逐段只选音色/频谱、密度或空间中的一个主变量渐变。",
+        "不默认drop、歌曲式副歌或属主终止；说明循环边界与渐变材料，四踩本身不作为风格判据。"
+      ],
+      "context": "验证明确 minimal techno 路线，而非泛用电子歌结构。"
+    },
+    {
+      "id": "specialty-funk-explicit-route",
+      "type": "normal",
+      "prompt": "按 funk 写一段乐队节奏组方案，当前没有可用参考，允许原创鼓、贝司和和弦节奏。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-funk；默认十六分网格、snare 2/4、bass riff带动kick/ghost错位，并以短吉他/clav切分回应，和声先维持vamp。",
+        "根据全节奏组关系核groove，不把单独鼓型、铜管数量或十六分密度当硬性定义。"
+      ],
+      "context": "验证 funk 的相互依赖节奏编写。"
+    },
+    {
+      "id": "specialty-reggae-default-one-drop",
+      "type": "normal",
+      "prompt": "明确按 reggae 为一段歌曲设计鼓、贝司、反拍和弦与主唱留白；没有指定 Rockers/Steppers 或参考录音。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-reggae；未指定子路线时采用 One Drop：4/4第3拍鼓组主击与bass落点/留白，吉他或键盘在拍间短skank。",
+        "把鼓/bass/skank关系写成可执行动作，并标明这是本地默认；若用户明确指定或录音关系支持，可改 Rockers/Steppers。"
+      ],
+      "context": "验证 reggae 子路线输入改变鼓贝司分工。"
+    },
+    {
+      "id": "specialty-neo-soul-explicit-route",
+      "type": "normal",
+      "prompt": "请按 neo-soul 编写一段主唱伴奏，允许你创作和弦及groove，但不要写歌词。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-neosoul；采用弹性偏后拍的节奏组关系和键盘/吉他空隙切分，不能只说“先看参考”。",
+        "默认从七/九和弦色彩、共同音和近距半音/全音内声连接开始；11/13仅在旋律与音区允许时加。"
+      ],
+      "context": "验证 neo-soul pocket 与和声voicing的实际改变。"
+    },
+    {
+      "id": "specialty-city-pop-with-specific-reference",
+      "type": "normal",
+      "prompt": "请按 city-pop 为我现有旋律写节奏组，没有锁定参考曲；请给可以直接开始编配的默认路线。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-citypop；无锁定参考时给出本地晚70至80年代日本funk/disco-informed乐队路线：kick 1/3、snare 2/4、八分帽、切分bass、短清音吉他与电钢/合成器有限扩展和弦。",
+        "副歌弦/铜管只作可选扩宽，不把该工作路线称为全体City Pop定义；不臆造未提供的旋律音符。"
+      ],
+      "context": "验证 city-pop 明确请求与具体参考的条件化路由。"
+    },
+    {
+      "id": "specialty-hard-rock-explicit-route",
+      "type": "normal",
+      "prompt": "明确要吉他 riff 驱动的 hard rock/硬摇滚乐队编曲。请为我提供的 riff 规划贝司、鼓和主唱进入方式。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-hardrock；贝司加倍riff低音核心，鼓/吉他在主要起音合奏，riff休止处决定维持pulse或齐停。",
+        "早期把主唱cadence放进草图核对交接和鼓组动态；不假定用户未提供的riff音符。"
+      ],
+      "context": "验证吉他riff驱动硬摇滚的主题身份与乐队合奏取舍。"
+    },
+    {
+      "id": "specialty-bossa-nova-explicit-route",
+      "type": "normal",
+      "prompt": "请按 bossa nova 编一段4/4器乐伴奏，使用二拍组织但保持可数四拍，不要做成摇摆或摇滚 backbeat。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-bossanova；明确数1&2&3&4&、以1/3作二分宏拍，八分为straight；低音根音/五度落拍，上声部拍间切分和弦。",
+        "保留轻打击、旋律弱拍起句或跨小节延留的空间，不自动加入swing，也不泛化为所有巴西/拉丁节奏。"
+      ],
+      "context": "验证 bossa nova 的低音—切分和弦分工。"
+    },
+    {
+      "id": "specialty-salsa-son-clave-explicit-route",
+      "type": "normal",
+      "prompt": "请按 son-based salsa、2–3 clave 写一段乐队编曲结构，明确包括montuno与bass tumbao。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-salsa；按两小节2–3 clave组织montuno/guajeo，bass在前一小节第4拍预奏根音并持续越过边线、占住下一小节第1拍（QN offset 至少越过新小节起点一个拍位），给2&的五度/和弦音回应留空；若交ABC/MusicXML须将跨线延音分段tie。",
+        "把主唱句后转合唱/应答的时点编入结构，不任意逐小节翻转 clave 方向。"
+      ],
+      "context": "验证 salsa 周期与低音、钢琴、合唱的对齐。"
+    },
+    {
+      "id": "specialty-pop-ballad-explicit-route",
+      "type": "normal",
+      "prompt": "请按当代 pop-ballad 为已有主唱旋律做钢琴主导编曲，副歌要扩张但不要只靠整体加响。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-popballad；钢琴低音/和声托住主唱，主歌留出关键词和长音空间。",
+        "副歌仅依据真实转折选择音区、织体、低音/鼓或和声的一项主要增量，不自动升调、加满配器或制造power-ballad高潮。"
+      ],
+      "context": "验证钢琴主导流行抒情的声部层级与递进选择。"
+    },
+    {
+      "id": "specialty-dance-pop-explicit-route",
+      "type": "normal",
+      "prompt": "按 dance-pop 编曲一首主唱 hook 歌曲，可原创补全未提供的伴奏。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-dancepop；采用4/4四踩kick和2/4 clap的默认舞池脉冲，让歌唱hook在副歌前景。",
+        "Verse优先给主唱留白；pre-chorus只有需要时才抬升；Chorus展示hook；post-chorus只在强化参与时加入。"
+      ],
+      "context": "验证 dance-pop 的hook、节奏和典型段落职务。"
+    },
+    {
+      "id": "specialty-china-wind-modern-pop-route",
+      "type": "normal",
+      "prompt": "请按现代中国风流行编曲一段旋律。当前没有指定地域或曲种传统，但可以采用五声性现代流行配色；请让传统音色只做歌句间应答。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-chinawind；把未提供地域/曲种时的方案准确标为五声性现代流行配色，不宣称某地正宗语汇。",
+        "选择一种传统乐器用自身可奏法作单旋律应答；让现代鼓贝司维持脉冲并给主唱让位，检查和弦三音与所选音列是否冲突。"
+      ],
+      "context": "验证中国风融合边界与传统乐器奏法。"
+    },
+    {
+      "id": "specialty-screen-underscore-no-picture-yet",
+      "type": "normal",
+      "prompt": "请为一段关于人物在告别前犹豫的影视场景写 underscore 音乐草案。目前没有视频和时码，先根据这个叙事目标处理情绪与音乐进出，不要声称已同步。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-underscore；依据场景叙事草案决定音乐职务、可能进入/退出及留白，不要求视频才能先创作。",
+        "只暂停依赖镜头版本、时间码/帧率、对白和音效的精确同步，不能杜撰 hit point 或宣布同步通过。"
+      ],
+      "context": "验证 screen cue 缺图时保留音乐创作、暂停同步层。"
+    },
+    {
+      "id": "specialty-screen-theme-explicit-route",
+      "type": "normal",
+      "prompt": "请为一部关于深空探测队收到未知讯号的连续剧写片头主题蓝图。暂时没有锁定片头画面，请先给可记忆的音乐身份和后续可变形的主题核心。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-arrangement-screentheme；将音乐身份连到作品叙事命题，选择一项明确识别核并标可变形的和声/音区/节奏/配器轴。",
+        "无画面时可先形成主题方案；不声称标题时码同步，也不混同为单场戏underscore。"
+      ],
+      "context": "验证 screen-theme 与 scene cue 的用途区分和主题辨认决定。"
+    },
+    {
+      "id": "specialty-cross-dimension-screen-trap",
+      "type": "normal",
+      "prompt": "我明确要一段 trap 风格的影视追逐场景 underscore，目前只有“追逐中逐渐发现追捕者是同伴”的剧情描述，没有视频或时码。请给可写进蓝图的音乐决定，不要停掉整个创作。",
+      "input_files": [],
+      "expected_behavior": [
+        "分别读取 screen-underscore 与 trap 子级：场景配置决定悬念/反转的入出与留白，trap配置决定本段鼓组、低音与人声/主题空间；不设“最多两个”路由限制。",
+        "先给无时码的叙事音乐蓝图，只把画面同步、对白/音效精确避让留待取得实际素材后核。",
+        "将两项决策合并回同一 cue/段落蓝图，不让一个子级覆盖另一个维度。"
+      ],
+      "context": "验证跨风格与视听用途的组合路由及缺素材时局部延后。"
+    },
+    {
+      "id": "specialty-chinawind-intent-without-label",
+      "type": "normal",
+      "prompt": "请为一首人声主导的中文流行歌做编曲：琵琶承担能被记住的主题回应，电子节奏维持现代脉冲，主唱始终在前景。请给可直接使用的生成 Style Prompt 和分段演唱控制谱。歌词和旋律还没提供，先按可用材料给方案。",
+      "input_files": [],
+      "expected_behavior": [
+        "依据用户明确的琵琶主题角色、现代流行融合和声音中心选择 laohu-arrangement-chinawind，即使用户没有说出‘中国风’标签；不把单纯提到乐器材料当成同等授权。",
+        "给出具体琵琶奏法/声部职责与电子节奏、主唱之间的段落关系，并将 Style Prompt 与可用材料支持的分段控制谱整理为可复制交付；没有歌词或旋律时不伪造歌词、逐词控制或既成音符。",
+        "按真实接口把可执行的平台字段与项目演唱控制谱分开标注；不得把项目格式说成平台保证支持的语法。"
+      ],
+      "context": "待运行的普通请求案例；检查声音意图路由与无歌词时的可交付边界，不构成行为通过证据。"
+    },
+    {
+      "id": "specialty-neosoul-implied-sound-intent",
+      "type": "normal",
+      "prompt": "我想要一首松弛但有细部牵引的当代 R&B/soul 歌：鼓的后拍稍微靠后，贝司和底鼓有呼应而不总重叠，电钢和声保留扩展色彩音，内声部用近距离半音连接；主唱自然、句尾留空间。请据此编曲，不要只把‘松弛’当成方案。",
+      "input_files": [],
+      "expected_behavior": [
+        "从后拍 pocket、贝司/底鼓互锁、扩展和弦色彩与内声部连接等组合声音目标识别并加载 laohu-arrangement-neosoul，不能因用户未说风格名而漏路由。",
+        "产出可检查的 groove/pocket 决定及 voicing/内声部移动方案，并说明其如何给主唱句尾留空间；不能只复述情绪形容词或退回通用编曲建议。",
+        "路由依据应是明确的音乐关系；单独一句‘做得松弛一点’不足以触发 Neo-soul 专项。"
+      ],
+      "context": "待运行的普通请求案例；检查隐含风格意图及路由证据边界，不构成行为通过证据。"
+    },
+    {
+      "id": "funk-shared-events-midi-and-notation",
+      "type": "normal",
+      "prompt": "请创作一段四小节、4/4、100 BPM、E 小调的 Funk 乐段，并实际交付 MIDI、ABC 2.1 和 MusicXML 4.0 文件。音符和各声部可以由你创作；三种格式要来自同一份事件底稿，说明目标音源映射。",
+      "input_files": [],
+      "expected_behavior": [
+        "加载 laohu-arrangement-funk，并把风格决定落实到可核验的节奏组互锁和声部角色；创作后以同一绝对拍轴事件底稿编译三种格式。",
+        "MIDI 与 ABC/MusicXML 的音符 onset/offset 对应同一底稿；如 MIDI 演奏 gate 与谱面音值不同，明确用独立 midi_gate_qn 表达，不借 gate 改变谱面时值。",
+        "若环境支持交付，提供真实可读的 .mid、ABC 2.1 与 MusicXML 4.0 文件并说明格式/音源映射；事件表、伪码或格式片段不能冒称已生成文件。结构解析通过不等于实际音色与演奏质量通过。"
+      ],
+      "context": "待运行的普通请求案例；检查专项音乐操作与多格式事件一致性，不预置旋律或 groove 答案，也不构成行为通过证据。"
+    }
+  ]
+}

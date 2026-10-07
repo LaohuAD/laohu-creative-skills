@@ -79,6 +79,17 @@
         "不靠简单正则宣称完整解析 Markdown",
         "保留表格关系和原代码，检查正文没有丢失"
       ]
+    },
+    {
+      "id": "connected-workbench-package-routes-to-gzh",
+      "type": "behavior",
+      "prompt": "写作任务已经确认：这是已关联的工作台公众号文章，用户明确要按ASR创作文章、封面和插图并完成发布成品，但没有单独写出‘HTML/排版’。按完整成品请求继续，不要求用户再说一次；本轮不要发布。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取并执行 laohu-htmlshow-gzh 专业流程，沿用当前文章和既有授权，不额外创建浏览器展示页。",
+        "按 GZH 工作台专项规则保存一个实际生成的主题版本，并检查来源指纹和静态 HTML 安全规则。",
+        "不将连接本身、Markdown-only 或局部修改误路由为排版；不发布。"
+      ]
     }
   ]
 }

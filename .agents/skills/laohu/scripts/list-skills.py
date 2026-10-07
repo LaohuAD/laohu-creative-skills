@@ -8,8 +8,8 @@ import sys
 from pathlib import Path
 
 
-NAME = re.compile(r"laohu(?:-[a-z0-9]+)*")
-COMMAND = re.compile(r"/(laohu(?:-[a-z0-9]+)*)")
+NAME = re.compile(r"laohu(?:-[a-z0-9]+){0,2}")
+COMMAND = re.compile(r"/(laohu(?:-[a-z0-9]+){0,2})")
 FIELD = re.compile(r"^(name|description):(?:\s+(.*))?$")
 SCAFFOLD_SUFFIX = "（框架待填充）"
 HEADING = re.compile(r"^#{1,6} +\S.*$")
@@ -69,7 +69,7 @@ def read_metadata(path):
     if not all(isinstance(fields.get(key), str) and fields[key].strip() for key in ("name", "description")):
         raise ValueError("name and description are required text fields")
     if not NAME.fullmatch(fields["name"]) or len(fields["name"]) >= 64:
-        raise ValueError("name must be laohu-* and shorter than 64 characters")
+        raise ValueError("name must have at most three hyphen-separated segments and be shorter than 64 characters")
     if not 1 <= len(fields["description"]) <= 1024:
         raise ValueError("description must contain 1-1024 characters")
     return fields
@@ -120,8 +120,6 @@ def is_skill_scaffold(path):
             or not meaningful[0][2:-len(SCAFFOLD_SUFFIX)].strip()):
         return False
     if any(not HEADING.fullmatch(line) for line in meaningful):
-        return False
-    if any(re.match(r"^#\s", line) for line in meaningful[1:]):
         return False
     if lines and lines[0] == "---":
         try:

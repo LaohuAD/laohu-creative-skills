@@ -21,7 +21,11 @@
         },
         { "command": "/laohu-assets", "label": "筛选可复用资产" },
         { "command": "/laohu-archive", "label": "作品收录" },
-        { "command": "/laohu-update", "label": "安装与更新" }
+        { "command": "/laohu-update", "label": "安装与更新" },
+        { "command": "/laohu-video", "label": "视频分镜与提示词" },
+        { "command": "/laohu-script", "label": "剧本创作" },
+        { "command": "/laohu-lyrics", "label": "歌词创作" },
+        { "command": "/laohu-arrangement", "label": "音乐编曲" }
       ]
     }
   ]

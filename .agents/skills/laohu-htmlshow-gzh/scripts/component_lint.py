@@ -17,7 +17,7 @@ import re
 import sys
 
 from pathlib import Path
-from validate_gzh_html import validate
+from validate_gzh_html import analyze
 
 
 def component_sources(root):
@@ -57,10 +57,12 @@ def lint_file(path):
 
     for m in re.finditer(r"```html\s*\n(.*?)```", text, re.S):
         html = m.group(1)
-        errors, _ = validate(html, article=False)
+        errors, warnings, _ = analyze(html, article=False)
         line = text.count("\n", 0, m.start()) + 1
         for error in errors:
             add("ERROR", f"行 {line}：{error}")
+        for warning in warnings:
+            add("WARN", f"行 {line}：{warning}")
         # 四周虚线框：正文强调勿用；居中块视为"占位/素材"组件，豁免
         if FOURSIDE_DASHED.search(html) and not CENTERED.search(html):
             add("WARN", "四周虚线框 border:…dashed（正文强调请用左竖条；"
