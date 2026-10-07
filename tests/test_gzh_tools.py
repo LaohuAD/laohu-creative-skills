@@ -133,6 +133,90 @@ class GzhToolsTests(unittest.TestCase):
         errors = [message for level, message in component_lint.lint_file(source)[1] if level == "ERROR"]
         self.assertTrue(any("必备章节" in message for message in errors))
 
+    def test_structure_rules_distinguish_text_gradient_from_pure_background(self):
+        html = ('<section><section style="background:linear-gradient(#fff,#eee)">'
+                '<span leaf="">说明文字</span></section>'
+                '<section style="background:linear-gradient(#111,#222)"></section></section>')
+        errors, warnings, _ = validator.analyze(html)
+        self.assertEqual(errors, [])
+        gradient = [warning for warning in warnings if warning.startswith("darkmode-no-gradient")]
+        self.assertEqual(len(gradient), 1)
+        self.assertIn("节点 #2", gradient[0])
+
+        ignored = ('<section><section data-ignore-dm="text-bg-gradient" '
+                   'style="background:linear-gradient(#fff,#eee)"><span leaf="">说明</span>'
+                   '</section></section>')
+        self.assertFalse(any(w.startswith("darkmode-no-gradient") for w in validator.analyze(ignored)[1]))
+
+    def test_width_candidates_respect_image_clamp_percentages_decorations_and_subtree_exception(self):
+        html = ('<section>'
+                '<span leaf=""><img src="a.png" alt="自适应图" style="max-width:100%;height:auto"></span>'
+                '<section style="width:50%"><span leaf="">比例容器</span></section>'
+                '<span style="width:12px;height:12px"><span leaf=""><br></span></span>'
+                '<section data-ignore-width style="width:720px"><span leaf="">特意保留的固定布局</span></section>'
+                '<span leaf=""><img src="b.png" alt="固定宽度图片" width="640"></span>'
+                '<section style="width:640px"><span leaf="">固定宽度正文</span></section>'
+                '</section>')
+        errors, warnings, _ = validator.analyze(html)
+        self.assertEqual(errors, [])
+        widths = [warning for warning in warnings if warning.startswith("width 候选")]
+        self.assertEqual(len(widths), 2, warnings)
+        self.assertTrue(any("<img>" in warning and "max-width" in warning for warning in widths))
+        self.assertTrue(any("640px" in warning and "<section>" in warning for warning in widths))
+        self.assertFalse(any("比例容器" in warning or "12px" in warning or "特意保留" in warning for warning in widths))
+
+    def test_repeated_same_style_single_child_chain_threshold_is_ten(self):
+        for depth, expected in ((10, False), (11, True)):
+            html = "<section>" * depth + '<span leaf="">内容</span>' + "</section>" * depth
+            errors, warnings, _ = validator.analyze(html)
+            with self.subTest(depth=depth):
+                self.assertFalse(warnings)
+                self.assertEqual(any("nest-depth" in error for error in errors), expected, errors)
+                if expected:
+                    self.assertTrue(any("节点 #1–#11" in error for error in errors), errors)
+
+    def test_nodeleaf_is_checked_but_plain_section_is_allowed(self):
+        ordinary = '<section><span leaf="">普通正文。</span></section>'
+        marked = '<section nodeleaf><span leaf="">普通正文。</span></section>'
+        self.assertFalse(any("section-nodeleaf" in warning for warning in validator.analyze(ordinary)[1]))
+        warnings = validator.analyze(marked)[1]
+        self.assertEqual(len([warning for warning in warnings if warning.startswith("section-nodeleaf")]), 1)
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / "validate_gzh_html.py"), "--stdin", "--accept-warning",
+             "section-nodeleaf@1=保留普通结构且当前来源无可核验白名单"],
+            input=marked, capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_invisible_zero_opacity_text_does_not_trigger_visible_gradient_candidate(self):
+        html = ('<section><section style="opacity:0;background:linear-gradient(#fff,#eee)">'
+                '<span leaf="">不可见</span></section></section>')
+        warnings = validator.analyze(html)[1]
+        self.assertFalse(any("darkmode-no-gradient" in warning for warning in warnings), warnings)
+
+    def test_structure_warning_must_be_repaired_or_accepted_by_exact_node(self):
+        html = ('<section><section style="background:linear-gradient(#fff,#eee)">'
+                '<span leaf="">文案</span></section></section>')
+        script = SCRIPT_DIR / "validate_gzh_html.py"
+        rejected = subprocess.run([sys.executable, str(script), "--stdin"], input=html,
+                                  capture_output=True, text=True)
+        self.assertEqual(rejected.returncode, 1)
+        self.assertIn("darkmode-no-gradient", rejected.stdout)
+        self.assertIn("节点 #2", rejected.stdout)
+        accepted = subprocess.run(
+            [sys.executable, str(script), "--stdin", "--accept-warning",
+             "darkmode-no-gradient@2=此节点是确认保留的局部设计"],
+            input=html, capture_output=True, text=True,
+        )
+        self.assertEqual(accepted.returncode, 0, accepted.stdout + accepted.stderr)
+        self.assertIn("内置静态规则检查通过", accepted.stdout)
+        self.assertIn("局部设计", accepted.stdout)
+
+    def test_span_leaf_rejects_nested_block_structure(self):
+        html = '<section><span leaf=""><span><p>块级内容。</p></span></span></section>'
+        errors, _, _ = validator.analyze(html)
+        self.assertTrue(any("span-leaf-block" in error for error in errors), errors)
+
     def test_code_components_preserve_exact_source_text(self):
         class Text(HTMLParser):
             def __init__(self):
@@ -464,6 +548,10 @@ context.gzhCopy().then(()=>{
         self.assertTrue(any("visible text" in error for error in errors))
         errors, _ = validator.validate('<section><p><span leaf="">嵌套顺序</p></span></section>')
         self.assertTrue(any("嵌套顺序错误" in error for error in errors))
+        code = '<section><pre><code><span leaf="">print("中文, 注释")</span></code></pre></section>'
+        self.assertEqual(validator.validate(code)[0], [])
+        prose = '<section><pre><span leaf="">正文, 内容</span></pre></section>'
+        self.assertTrue(any("半角标点" in error for error in validator.validate(prose)[0]))
 
     def test_validator_rejects_preview_shell_but_ignores_hidden_and_code_text(self):
         errors, _ = validator.validate('<html><body><section><p><span leaf="">内容。</span></p></section></body></html>')
@@ -478,7 +566,8 @@ context.gzhCopy().then(()=>{
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0)
         self.assertIn("静态规则检查通过", result.stdout)
-        self.assertIn("未验证微信公众号编辑器实际粘贴效果", result.stdout)
+        self.assertIn("内置静态规则", result.stdout)
+        self.assertNotIn("实际粘贴效果", result.stdout)
 
 
 if __name__ == "__main__":
