@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
-  "notice": "新增四项创作入口；已登记用户更新仓库后预览并同步新增入口，最后核对 status 无待执行项。",
+  "version": "1.5.1",
+  "notice": "完善成文、歌词与剧本方法，校准审查和公众号主题选择",
   "details_url": "https://github.com/LaohuAD/laohu-creative-skills/blob/main/CHANGELOG.md"
 }
