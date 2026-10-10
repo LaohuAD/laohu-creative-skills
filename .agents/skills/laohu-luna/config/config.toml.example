@@ -1,0 +1,13 @@
+# The Commander model is the model running this current session.
+# This capability does not set or change the current session model.
+
+# Luna Worker's model, reasoning effort, and developer instructions are
+# maintained in ../agents/luna-worker.toml. The preferred native route uses
+# the laohu_luna_worker role when the current host has actually loaded it.
+# The native generic-Agent route for a host without the role passes model/effort and
+# copies instructions into its task message; that is not developer-level role
+# configuration. The CLI reads the same model and effort. Verify actual runs
+# from host records; a deployed file alone does not prove host availability.
+
+# Do not add a scalar [agents] default_subagent_model table based on an
+# upstream example. Codex hosts can use different AgentRoleToml schemas.

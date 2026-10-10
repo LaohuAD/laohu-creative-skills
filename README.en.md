@@ -80,6 +80,8 @@ When you know what you want to do, choose the matching command. When you only kn
 | /laohu-script | Develops story ideas into scripts, from structure and scenes to character action, dialogue, audiovisual expression, and review |
 | /laohu-lyrics | Write or revise lyrics from ideas, stories, existing lyrics, or melodies; shape sections, voice, language, sound, and review |
 | /laohu-arrangement | Arrange music from lyrics, melody, audio, or a brief; shape form, harmony, groove, instrumentation, texture, timbre, and vocals; deliver a production plan, AI-generation input, or notation |
+| /laohu-luna | Keep the current session model as Commander, delegate every bounded task to Luna Worker, and review the result |
+| /laohu-novel | Create, continue, adapt, and revise novels; turn story concepts or chapter briefs into prose |
 
 This table lists currently defined public entries in display order; the order is for browsing and does not set recommendation priority or a fixed workflow. The live scan can discover a newly added public entry before its table entry is updated; use the `/laohu` capability directory to check its current definition. Reserved folders are not formal capabilities. Project workspaces can discover the directly deployed entries in `.agents/skills/`. Global registration includes first- and second-level entries only; third-level capabilities are read on demand by their owning second-level entry and are not registered separately. For a WeChat task, `/laohu-htmlshow` loads `laohu-htmlshow-gzh` when needed.
 

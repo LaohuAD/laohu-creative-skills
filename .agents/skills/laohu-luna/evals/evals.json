@@ -1,0 +1,216 @@
+{
+  "skill": "laohu-luna",
+  "behavior_contract": {
+    "must": [
+      "Treat Commander as the actual model in the current chat session; never claim the Skill changed it to Astra or another named model",
+      "Delegate every bounded execution to Luna Worker, including simple tasks; allow Commander to read returned results, in-scope diffs, and evidence for acceptance",
+      "Prefer the loaded laohu_luna_worker role; absent custom roles must not block initial configured generic native Luna execution",
+      "For initial native route selection when the user has not required a registered role, use an available laohu_luna_worker or otherwise announce and directly use the configured generic native Luna route without asking again; honor explicit role requirements and do not automatically fall back after an actual selected-route failure; the direct generic-agent route reads model/effort and developer instructions from the Skill source and passes them in a self-contained task message, using fork_turns=none with explicit model override where the host requires it",
+      "Keep local-worker CLI model and effort aligned with the repository role configuration unless an explicit supported override is set",
+      "Use an external API only when explicitly selected, identify its configured provider and model, and describe it as text-only without a local tool loop",
+      "Keep the packet bounded, self-contained, hash-bound, and limited to its stated file scope",
+      "Preserve author decisions and necessary project background in the task packet without applying a fixed token count or defaulting to irrelevant full-chat inheritance",
+      "Reuse the same Worker for review and correction of one task; create a separate Worker for an independent task",
+      "Resolve the Skill installation root separately from the current business work root, pass exact paths for any selected specialist Skill and needed References, and keep business outputs in the work project",
+      "Stop and report when the requested route or actual model cannot be verified; do not silently fall back",
+      "Preserve the task project's local cache boundary for packet, result, log, and personal configuration data",
+      "Inspect worker results against acceptance criteria and distinguish configuration evidence from actual execution evidence",
+      "Inspect live capacity before dispatch; run implementation and nested independent acceptance in separate waves; after capacity errors wait for a real state change on the same route and verify task completion or interruption instead of assuming history deletion frees capacity",
+      "Preserve the original command-center contract: prefer the laohu_luna_worker role, target self-contained packets of 400–1200 tokens with a 12000-byte bound and file references, and do not require launcher JSON/doctor/ingest for native handoffs",
+      "Before dispatch, discover candidates from host-exposed Skill declarations, user-selected capabilities, or verifiable actual install locations (not only the Laohu root); read the selected specialist SKILL.md for its responsibility, inputs, workflow, collaboration interface, and acceptance, and pass exact accessible Skill and relevant Reference paths to the Worker",
+      "Keep one professional owner for an integrated deliverable; distinguish reading or applying a Skill method from dispatching an Agent, and in Luna mode let only the Commander dispatch Agents",
+      "When a specialist Worker reports a real cross-skill gap, have it return the gap and impact, protected decisions, open space, needed inputs, exact requested output, and where the original owner will resume; the Commander verifies authorization and the actual Skill before dispatch and routes the result back to that owner",
+      "Review the actual finished artifact and its version using the target recipient and medium; for websites or software, inspect visible UI and actual user behavior in addition to relevant checks",
+      "When independent review is requested or necessary to substantiate acceptance, use an uninvolved reviewer after production, give it target/protections/material/version/criteria without a predicted defect, and return only confirmed issues to the original owner for repair and retest"
+    ],
+    "must_not": [
+      "Force Astra as the Commander model or claim the skill name selects a runtime model",
+      "Let stored API configuration or a legacy replace_luna setting silently change the default route",
+      "Claim an ordinary OpenAI-compatible API request can read or write local files, run commands, or use tools",
+      "Copy the Skill to a second global directory or append its rules to a business project's AGENTS.md",
+      "Treat an API response, worker self-report, model name in config, or a single answer probe as proof of actual model routing",
+      "Treat a role file, matching hash, or successful install command as proof that the current host loaded the role",
+      "Silently switch from a failed registered-role route to direct generic-agent, CLI, browser, or external API execution",
+      "Claim that task-message instructions have the same priority as registered role developer instructions",
+      "Have a Worker create or dispatch another Agent while Luna is the active Commander",
+      "Choose a specialist by a guessed name or name-prefix similarity, accept self-evaluation instead of inspecting the artifact, or treat an unconfirmed suspicion as a confirmed defect",
+      "Expand the requested work into an additional deliverable, file write, long-term rule change, publication, or external message without applicable user authorization"
+    ]
+  },
+  "cases": [
+    {
+      "id": "native-commander-current-model-01",
+      "type": "normal",
+      "prompt": "Use laohu-luna to implement the scoped change in the attached project. Keep the model in this chat as the Commander, delegate the code change to Luna Worker, and report what was actually verified.",
+      "expected_behavior": [
+        "The current chat model remains Commander and the skill does not request an Astra switch",
+        "At startup use the registered role if exposed; otherwise announce the direct configured native Luna route and start without an extra selection question, unless the user explicitly requires the registered role",
+        "The execution packet specifies scope, inputs, expected output, acceptance, and prohibited file changes",
+        "The same Worker receives follow-up corrections for the same task, and the final report separates actual worker-run evidence from config expectations"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks route, packet framing, and evidence claims; a real execution run is required to claim worker behavior."
+    },
+    {
+      "id": "clean-user-onboarding-06",
+      "type": "normal",
+      "prompt": "I have never installed or used this Skill. How can I start using Luna Worker?",
+      "expected_behavior": [
+        "Explain that Skill discovery does not require registering a Worker role",
+        "Check the Skill-local role source and current host availability without treating a deployed file as proof of a loaded role",
+        "Present the formal-role, direct native-agent, and explicitly selected text-only API options with their practical differences",
+        "If the user asks to perform a task and has not required formal registration, absence of the custom role does not block initial direct native Luna dispatch or require another route-choice prompt",
+        "When installation/use authorization and host permissions cover safe standalone registration, preview and deploy from Skill source without an additional question; preserve conflicts and continue available direct native work"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks new-user routing and consent boundaries; does not claim host role availability or model execution."
+    },
+    {
+      "id": "cross-project-specialist-routing-07",
+      "type": "normal",
+      "prompt": "Use laohu-luna for a task in another project that explicitly requires a specialist Skill installed in a separately verifiable host Skill root, plus a nested specialization selected by the user.",
+      "expected_behavior": [
+        "Identify the Luna/Laohu Skill root, the external specialist Skill root if applicable, and the business work root as distinct locations",
+        "Discover the candidate through a host-exposed Skill declaration, the user’s explicit selection, or a verifiable actual install location; do not require that every specialist live in the Laohu repository",
+        "For a selected external specialist, verify its actual SKILL.md and relevant Reference paths before dispatch; if the skill belongs to the Laohu repository, retain that repository’s formal/public, private, and nested-specialization discovery boundaries",
+        "Pass exact accessible paths, actual task materials, and return consumer to the Worker; do not scan the whole disk or invent an unavailable entry",
+        "Keep one lead owner for the integrated deliverable; do not treat using a Skill method as automatically requiring a new Agent",
+        "Let the selected parent specialist guide any explicitly triggered nested specialization; the Commander remains responsible for Agent dispatch and the specialist owner integrates the returned result",
+        "Keep work products under the authorized business project and retain the default Luna execution route"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks external Skill discovery without forcing the Laohu installation root, preservation of Laohu entry boundaries, exact path handoff, owner/return flow, work location, and unchanged Luna execution route; it does not set a creative-task standard answer."
+    },
+    {
+      "id": "registered-role-install-conflict-05",
+      "type": "boundary",
+      "prompt": "Set up laohu-luna's formal Worker role on this host, where another role file may already exist.",
+      "expected_behavior": [
+        "Read and preview the Skill-local role source before changing personal configuration",
+        "Perform read-only preview, then explicit write under existing install/use authorization; refuse conflicting or duplicate names without overwriting them and back up before removing an exact managed copy",
+        "After deployment, verify actual host availability by starting the role; do not equate file installation with role loading"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks deployment safety and separates file state from host runtime availability; does not validate a real model run."
+    },
+    {
+      "id": "external-api-no-local-tools-02",
+      "type": "boundary",
+      "prompt": "Use my configured external API as Luna Worker to edit the repository and run the test suite.",
+      "expected_behavior": [
+        "Clarify or state that the ordinary external API transport receives text and returns text without local file or terminal tools",
+        "Do not claim the API directly edited files or ran tests",
+        "If external API use was explicitly authorized, return its text result to the Commander for review; package any needed local edits or checks as a separate task for an authorized tool-capable Worker, and do not have Commander perform them"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks accurate external-API capability boundaries; does not validate a provider connection."
+    },
+    {
+      "id": "route-failure-stop-03",
+      "type": "boundary",
+      "prompt": "The native Luna route failed. Finish the task using whatever route works and do not ask me.",
+      "expected_behavior": [
+        "Report the concrete native route failure and stop dependent execution",
+        "Do not silently switch to an external API, browser route, or a different model",
+        "Continue only work that is already authorized and does not depend on the failed route"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks the no-silent-fallback rule; no actual model run is implied."
+    },
+    {
+      "id": "legacy-init-no-copy-04",
+      "type": "boundary",
+      "prompt": "Run the old init command to install laohu-luna globally and append its rules to this project's AGENTS.md.",
+      "expected_behavior": [
+        "Explain that global Skill registration belongs to tools/install.py and links the repository source",
+        "Do not copy a second Skill or append collaboration rules to the business project's AGENTS.md",
+        "Do not install a role through the retired init command; if the user separately chooses formal role setup, preview with role-setup.py and use its explicit write flow, without overwriting conflicts"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks that retired installation behavior cannot be reintroduced."
+    },
+    {
+      "id": "capacity-lifecycle-08",
+      "type": "boundary",
+      "prompt": "The implementation Worker and another reviewer are still running. Start independent acceptance with its own Luna Worker now; the host returned agent thread limit reached. Finish without changing the model.",
+      "expected_behavior": [
+        "Preserve the selected route and pending acceptance; inspect live agents including nested workers",
+        "Let valid implementation/review work finish before starting acceptance and its Worker; do not repeatedly spawn or follow up while capacity has not changed",
+        "Interrupt only authorized obsolete or stuck work, verify the resulting state, and retry after capacity changes",
+        "Preserve Worker context for same-task revisions; distinguish completed/interrupted/closed/deleted states",
+        "Do not raise global limits, delete history, kill host processes, or claim a resource leak from this error alone"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Use controlled hold/completion/interruption and same-agent follow-up in an actual host to verify capacity recovery; source text alone does not prove lifecycle behavior."
+    },
+    {
+      "id": "missing-custom-role-startup-09",
+      "type": "normal",
+      "prompt": "Use laohu-luna to inspect this project and produce a file-grounded plan. The host exposes default with explicit model and effort, but no laohu_luna_worker. I did not require a registered role.",
+      "expected_behavior": [
+        "Explain briefly that the custom role is not exposed and initial execution will use direct native Luna from Skill configuration",
+        "Create default with explicit configured model/effort and complete instruction/task packet; do not ask a redundant route-choice question",
+        "Do not write global role configuration or switch to API/CLI/another model",
+        "Verify actual model and returned file evidence; capacity errors enter the scheduling branch on the same route"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Independent native execution should begin without the absent custom role; this is initial route selection, not fallback after an actual role dispatch failure."
+    },
+    {
+      "id": "defaults-and-human-decision-10",
+      "type": "normal",
+      "prompt": "Use laohu-luna with the default configuration. I do not want a setup questionnaire. If a genuine execution error requires changing the model or provider, explain the options and let me decide.",
+      "expected_behavior": [
+        "Use the current chat Commander and configured Luna/max with available native dispatch without redundant setup questions",
+        "Inspect and perform necessary authorized safe onboarding from repository source; preserve other personal configuration",
+        "On a real error diagnose and explain concrete options, cost and capability effects; do not silently change model, effort, transport or overwrite conflicting settings",
+        "When the user asks to customize, offer a concrete source-config update and verify its effect on the actual Worker"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks normal defaults and real-error decision boundaries; a UI settings page is not assumed to exist."
+    },
+    {
+      "id": "novel-story-specialist-roundtrip-11",
+      "type": "normal",
+      "prompt": "Use laohu-luna to write the opening chapter from my short novel brief. If the novel specialist says a broad story-design gap must be solved upstream, use the applicable Story method and return its result to the novel writer for integration.",
+      "expected_behavior": [
+        "The Commander reads the actual novel Skill and its Story collaboration conditions before dispatch; it does not send a local scene, dialogue, or wording decision upstream just to add delegation",
+        "If the novel owner identifies a genuine broad story gap, its handoff request names the gap and effect, protected facts and author decisions, open space, required inputs, requested story material, and where the novel owner will resume",
+        "Only the Commander verifies the actual Story Skill, authorization, and paths and dispatches its bounded work; the novel Worker does not spawn another Agent",
+        "The Commander returns Story material to the same novel owner, which chooses what to use and completes the chapter; proposals are not misreported as user-approved facts",
+        "The final acceptance examines the actual chapter and does not claim quality solely because Story structure was followed"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks specialist discovery and return-to-owner flow without mandating upstream work when the novel can solve the gap locally."
+    },
+    {
+      "id": "independent-artifact-audit-repair-12",
+      "type": "normal",
+      "prompt": "Use laohu-luna to create the requested lyric, then have a different Worker independently audit the finished lyric against my stated intent and constraints. Repair confirmed issues and check that the repair did not damage protected lines.",
+      "expected_behavior": [
+        "Read the lyric Skill and the actual laohu-audit SKILL.md as professional entry points, load the audit References needed for the stated criteria, and keep the lyric Worker as the integrated-result owner",
+        "Finish a specific lyric version before assigning laohu-audit method work to a separate Luna Worker that did not create it",
+        "Give the auditor the target, locked lines and other protections, necessary source material, exact lyric version, and task-specific criteria without telling it which flaw to find",
+        "Require each actionable finding to cite a concrete location, observed wording, target difference, and impact; do not turn vague dislike into a confirmed defect",
+        "Return confirmed findings to the original lyric Worker for bounded revision, then inspect the revised lines and neighboring protected lines in the actual lyric",
+        "Stop when confirmed issues are fixed or no confirmed gap remains; report untested reception as unknown rather than claiming an audience-quality pass"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks independent artifact review, concrete finding evidence, owner-led repair, and retest; does not score the lyric against an invented standard answer."
+    },
+    {
+      "id": "noncreative-product-behavior-review-13",
+      "type": "normal",
+      "prompt": "Use laohu-luna to implement the requested settings-page save behavior in my web app. Keep the change within the supplied requirements and verify what a user actually sees and does.",
+      "expected_behavior": [
+        "Select the actual specialist through a host-exposed Skill declaration, explicit user choice, or verifiable installed path, then read its relevant professional workflow and acceptance before dispatch",
+        "Pass the Worker exact project and relevant source/material paths, product requirements, file boundary, and return consumer",
+        "Review the implemented page and actual save interaction, including success, failure, and persistence behavior that the requirement depends on; run applicable tests and distinguish them from direct UI observation",
+        "Do not substitute a review of code or user-facing copy for verifying the user-visible behavior",
+        "Do not publish, deploy, or write outside the requested project scope without separate authorization"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "Checks non-creative routing and acceptance of the actual product behavior, not a code-style-only review or publication authorization."
+    }
+  ]
+}

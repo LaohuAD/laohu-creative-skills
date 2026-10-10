@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-novel | 小说创作"
+  short_description: "创作、续写或修订小说，默认按卷章 Markdown 层级交付正文。"
+  default_prompt: "使用 $laohu-novel，按我的目标创作、续写、改编或修订小说；承接已有构想和锁定项，在开放范围内补足必要事件与叙述实现，并交付正文；完整正文默认按卷章 Markdown 层级组织，我明确要求外部专业格式时按该格式另行交付。只有我明确要求工作台导入或导出时才读当前项目 OpenAPI 并调用已暴露接口；设定资料与续接资料保持各自边界，不自动保存或生成。"

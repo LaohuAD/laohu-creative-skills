@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
-  "notice": "新增真实作品研究方法，完善成文规则，统一可复制文本交付；既有入口、安装方式和文件接口保持不变。",
+  "version": "1.7.0",
+  "notice": "新增协作执行与小说创作入口，完善剧本交付和专业衔接规则。",
   "details_url": "https://github.com/LaohuAD/laohu-creative-skills/blob/main/CHANGELOG.md"
 }
