@@ -741,6 +741,44 @@
         "保留结尾不和解；不擅自加入病情结果、人物关系修复或场面卡没有支持的关键事实。",
         "场景可以保持停滞和观察；不为套 John August 路径强加价值反转、冲突升级或删场结论。"
       ]
+    },
+    {
+      "id": "script-body-markdown-series-and-local-scope",
+      "type": "behavior",
+      "prompt": "这是纯技术格式检查，不创作或润色任何故事。完整剧本的项目元数据名为 {{PROJECT_NAME}}，正文包含一集标题 {{EPISODE_TITLE}}、一场标题 {{SCENE_TITLE}}，该场有两个已经确认的正文片段 {{SEGMENT_A}}、{{SEGMENT_B}}。另有局部片段 {{LOCAL_SCENE_BODY}}，本轮只知道它属于一个场，不知道全剧或集标题。请给出普通 Markdown 正文结构占位模板。",
+      "input_files": [],
+      "expected_behavior": [
+        "完整剧本使用标准 ATX 标题：集标题以“# ”起始、场标题以“## ”起始；标题文本自由，可包含既有编号，不强制以“第X集/场”起首。项目名是元数据，不成为正文 H1。",
+        "只有同一场中已经确认的段界用独立一行“---”表示；无段界不添加，场/集之间及装饰排版不使用该分隔符。",
+        "局部片段沿用明确已知的集/场层级；未提供的全剧标题、集标题或场标题不得补造。",
+        "转换只调整层级，不改写占位正文、不增加人物/制作说明或生成提示词；不得按视频时长自动重切剧本。",
+        "普通完整剧本和分集正文默认采用该 Markdown 层级；用户明确要求打印、投稿等外部专业格式时另按该格式交付，但软件 body_markdown 只包含正文。",
+        "目录中的 # 与 ## 不代替正文小标题；若剧本正文确有小标题从 ### 起，任何已确认的场内片段边界仍须用 ---，不能用 H3 取代。"
+      ]
+    },
+    {
+      "id": "workbench-script-import-live-openapi-gate",
+      "type": "behavior",
+      "prompt": "我明确要求把当前剧本导入工作台。当前项目 OpenAPI 摘录列有脚本 view 和 commands，但没有 GET /api/studio/scripts/{id}/markdown，也没有 import_markdown；现有正文 revision 为 {{CURRENT_REVISION}}。请完成本次交接。",
+      "input_files": [],
+      "conversation_context": "OpenAPI 摘录为本案例提供的唯一接口证据；未列出的路由或操作视为未确认。",
+      "expected_behavior": [
+        "不调用摘录中未列出的 markdown 导出或导入操作，不报告导入成功；可交付符合正文格式的 Markdown 并明确尚未写入。",
+        "仅在当前 OpenAPI 明确列出导入操作后，才按实际 schema 传入 body_markdown、replace、request_id 与当前 expected_revision；不猜测请求 envelope 或字段。",
+        "replace 仅在用户明确要求替换时启用；revision 冲突时先重读再处理，不以旧正文覆盖；导入不启动生成。"
+      ]
+    },
+    {
+      "id": "script-body-markdown-standalone-short-film-container",
+      "type": "behavior",
+      "prompt": "这是纯格式检查，不创作故事。当前作品是独立短片，没有集标题；软件项目名 {{PROJECT_NAME}} 只是元数据，没有提供剧本正文目录名。已有第一场场头 {{S01_SCENE_HEADING}}，请给出普通完整 Markdown 剧本正文的结构模板。",
+      "input_files": [],
+      "expected_behavior": [
+        "独立短片不伪造成一集或新增 E 编号；完整正文需要中性的一级容器时使用“# 正文”，不得将软件项目名当作品标题。",
+        "场头用二级标题并保留真实 S01 编号及场头内容，例如“## S01 {场标题}”；不改成 E01-S01。",
+        "只有场内存在已确认分段才在该边界用独立一行“---”；不把它当场间装饰线。",
+        "标准 Markdown 仅组织剧本正文；完整剧本的标题、预估时长、一句话故事、背景、人物表等前置信息如需交付，单独位于 body_markdown 之外。"
+      ]
     }
   ]
 }

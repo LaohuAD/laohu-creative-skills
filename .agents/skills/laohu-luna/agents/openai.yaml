@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-luna | 指挥官与 Luna Worker 协作"
+  short_description: "读取实际专业能力，统筹 Luna 执行并按成品与证据验收。"
+  default_prompt: "使用 $laohu-luna，由当前会话模型担任指挥官，读取任务所需专业 Skill，统筹 Luna Worker 完成工作，并按实际成品与证据验收。"
