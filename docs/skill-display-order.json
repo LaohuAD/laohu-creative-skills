@@ -27,7 +27,9 @@
         { "command": "/laohu-lyrics", "label": "歌词创作" },
         { "command": "/laohu-arrangement", "label": "音乐编曲" },
         { "command": "/laohu-luna", "label": "协作执行与模型分工" },
-        { "command": "/laohu-novel", "label": "小说创作" }
+        { "command": "/laohu-novel", "label": "小说创作" },
+        { "command": "/laohu-topic", "label": "选题策划" },
+        { "command": "/laohu-motion", "label": "动画制作" }
       ]
     }
   ]

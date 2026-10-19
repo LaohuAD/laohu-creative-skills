@@ -6,6 +6,8 @@ description: 当用户要求当代 pop-ballad 编曲时，以钢琴和主唱为�
 本子级仅在用户明确指定 pop-ballad/当代流行抒情歌曲编曲或要求按此方法改编时由 [laohu-arrangement 主 Skill](../../SKILL.md) 加载。慢歌、钢琴伴奏、悲伤歌词或恋爱主题都不单独触发；民谣叙事、戏剧 power ballad 或用户明确要求其他方向时按该目标调整。默认钢琴承担和声与节奏支架，主唱承载表达中心，但不要求全曲只有钢琴与人声。
 
 # Pop-ballad：让钢琴支撑主唱，让递进有依据
+## 独立完整新作的项目蓝图
+未给旋律/曲式/速度的普通完整 Pop-ballad 新作，采用父级 4/4、72 BPM（四分音符 BPM）与 48 小节蓝图：Intro 4 → V1 8 → C1 8 → V2 8 → C2 8 → Final C 8 → Outro 4；只有 V2 证据改变责任/决定且需要独立听见转向时，插入 Bridge 8，总数 56 小节。Dan Wilson 在[制作人访谈](https://www.musicradar.com/news/i-often-get-sent-to-work-with-artists-who-are-scared-of-co-writing-and-dont-want-to-do-it-semisonic-adele-and-john-legend-songwriter-dan-wilson-shares-his-10-tips)讲《Someone Like You》的钢琴分解前奏、直述文本与一次性钢琴尾奏。迁移为先让钢琴—主唱关系独立成立、主唱承重长音处减密，尾奏由当次成品选择而非自动复制弦乐高潮；这是该曲具体决定，不代表所有抒情歌只有钢琴或必须留即兴尾奏。用户给旋律/速度或委托局部时覆盖该纸面方案。
 
 ## 主唱与钢琴的默认职责
 
@@ -38,7 +40,7 @@ Pat Pattison 的 Berklee Online 文章《Prosody in Music and Songwriting》主�
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt直接说清钢琴怎样托主唱、哪处打开： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：contemporary pop ballad, <BPM> BPM, <meter> piano-led pulse and an intimate-to-open arc；默认稳定拍内的主歌/副歌呼吸，锁定演唱/录音若有rubato则写明速度弹性与恢复拍点。
+Global Metadata：contemporary pop ballad, 72 BPM in 4/4, quarter-note pulse; use a user-locked meter/rubato when supplied and an intimate-to-open arc；默认稳定拍内的主歌/副歌呼吸，锁定演唱/录音若有rubato则写明速度弹性与恢复拍点。
 Vocal Details：<已确认的歌者/相对音区>，phrases follow <锁定旋律/歌词语句>，sustain <承重元音定位> and breathe at <实际气口>。
 Arrangement：piano left hand marks <和声低音变化>，right hand uses <broken chords / held voicings> and thins under <主唱持续音>；<bass/drums/strings> enter at <段落> to widen the chorus by <单一主变化>。
 固定主唱清晰度、钢琴低音和和声职责；若已有和弦/旋律，跟随实际功能及拍点。自由速度版本需给乐手共同呼吸/恢复脉冲位置，稳定拍版本不在Style里写任意rubato。若副歌仍亲密，保持窄voicing与稀疏伴奏；若歌词/旋律到达宣泄点，只开放一个主增量并安排回落。

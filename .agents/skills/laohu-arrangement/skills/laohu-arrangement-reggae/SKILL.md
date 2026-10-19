@@ -4,6 +4,8 @@ description: 用户要 Reggae/雷鬼律动时，以 One Drop 的第三拍重心�
 ---
 
 # Reggae：让 One Drop、低音线与反拍切音留出空间
+## 独立完整新作的项目蓝图
+没有锁定节拍/速度/结构的完整 Reggae 新作先选 One Drop：4/4、76 BPM（四分音符 BPM），56 小节：Intro 4 → V1 8 → Chorus 8 → V2 8 → Chorus 8 → 器乐回应 8 → Final Chorus 8 → Outro 4。Kick 与 bass 在第 1 拍共同留空、重心落第 3 拍，吉他/键盘拍间 skank 短切；副歌只加一种可辨的回答或高区和声。Barrett 的两个作品例承担不同方法：《Natural Mystic》用于 One Drop 下拍 bass 留空的说明；《Revolution》用于歌词力度与 commanding bass 表达的关系。这里第 3 拍重心及其余曲式参数仍是本文件的项目工作默认，不把它们冒称为访谈对《Revolution》的说明。用户点名 Rockers/Steppers 时以该鼓型为主，只把本曲速度/总曲式保留为项目决定。
 
 ## 触发与本地默认
 
@@ -40,7 +42,7 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 人声 Style Prompt 起句：
 
 ```text
-Global Metadata: reggae, <BPM> BPM in 4/4, One Drop with the main drum-and-bass weight on beat 3, offbeat skank, spacious relaxed pulse, <production space>.
+Global Metadata: reggae, 76 BPM in 4/4, One Drop with the main drum-and-bass weight on beat 3, offbeat skank, spacious relaxed pulse, <production space>.
 Vocal Details: <singer/register>; use a relaxed melodic phrase that can enter on a weak beat and carry across the barline; add <short sung response / choir> after the lead call when the lyric section permits.
 Arrangement: kick and rim/snare mark beat 3 with bass; leave beats 1 and 2 open in the low register; guitar or keyboard gives short offbeat chords; verse uses one skank layer, chorus adds <one harmony or high-frequency layer>, and dub delay answers only in the lyric gaps.
 ```
@@ -64,5 +66,5 @@ ABC/MusicXML 将第 3 拍 kick/rim、低音延续/休止、反拍和弦的真实
 
 ## 方法依据与范围
 
-- Sly Dunbar 在 Berklee Online 访谈及 Reggaeville 的鼓手访谈中谈到 One Drop、Rockers 等雷鬼鼓型与乐队实际演奏选择，也说明可因歌曲而改变原有套路。这里据此把 One Drop 设为无细分要求时的工作默认，并保留明示变体。
-- One Drop 的第 3 拍主击、反拍吉他/键盘切音和 bass 与鼓共同构成 groove，是本配置明确选定的入门编配路线；并非声称所有 Reggae 都采用相同鼓型、音色或速度。
+- Sly Dunbar 在 Berklee Online 与 Reggaeville 访谈中谈到 One Drop、Rockers 等鼓型和乐队按歌调整的做法；来源支持鼓型选择，不是单一配方。
+- 两个作品单元须分开使用：Aston “Family Man” Barrett 在[本人访谈](https://www.thewailers.com/guitar-world-an-interview-with-aston-family-man-barrett/)以 Wailers《Natural Mystic》说明 One Drop：bass 在小节下拍留空，以此形成 One Drop 的感觉；据此迁移时保留该下拍留空/落点关系，但不把访谈扩写成具体第 3 拍军鼓规则。访谈谈《Revolution》时则称其声音 commanding、militant，并说 bass 应与歌词一样有命令性、让歌词突出；迁移到新作时按本段歌词的力度安排 bass 的表达强度，不把《Revolution》作为 One Drop 拍位证据。无细分输入时采用的 kick/bass 第 1 拍留空、第 3 拍重心及拍间 skank 仍是本文件的项目工作默认；用户点名 Rockers/Steppers 时切换到相应鼓型。

@@ -4,6 +4,8 @@ description: 用户明确要 Techno 编曲或以 Techno 循环为声音目标时
 ---
 
 # Techno：让固定循环由音色与密度轨迹发展
+## 独立完整新作的项目蓝图
+无锁定拍号/速度/时长的完整 Techno 作品采用 4/4、124 BPM（四分音符 BPM），128 小节 DJ 结构：Intro 1–16、A 17–32、B 33–48、Break 49–64、B 回归 65–80、变体 81–96、Outro 97–128。核心循环默认 1 小节；仅当动机本身跨小节线且切为 1 小节会截断起音—回应关系时用 2 小节。每 4/8/16 小节只移动一个主变量（音色/频谱、密度、音区或空间）；除非用户明确需要起落或所选作品确有 drop，不添加 drop。Robert Hood《Ride》在 Ableton 教学页以单音型贯穿并用细微音色/声音变化发展；迁移为锁住一小节事件位置、分段改变音色，而不把来源当 128 小节公式。用户时长、风格分支和演出用途覆盖 DJ 结构。
 
 ## 专项触发与选择路线
 
@@ -23,7 +25,7 @@ description: 用户明确要 Techno 编曲或以 Techno 循环为声音目标时
 ## 声部编配细则
 
 - **低频：** kick 负责稳定拍点；bass/sub 选根音或单音脉冲，并以音长、失拍或滤波与 kick 区分。需要更强驱动时可增加低音重复频率，不要默认加复杂 bassline。
-- **打击细节：** 高频细分承担速度感，金属/噪声事件承担音色焦点。事件应落在可数网格或有意的偏移上；使用微时值前先确认目标是松弛、推拉还是机械稳定。
+- **打击细节：** 高频细分承担速度感，金属/噪声事件承担音色焦点。把事件放在可数网格或有意偏移的位置；使用微时值前先确认目标是松弛、推拉还是机械稳定。
 - **和声：** 若使用 drone、单和弦或极少和弦变化，明确低频/持续层提供的中心音与紧张度。只有主题需要和声转向或用户参考有明确和弦运动时才扩展；不把功能性 V–I 设成必经终止。
 - **段落与循环边界：** 写明事件每几小节变化、循环接缝由哪个起音/尾音连接。连续播放检查尾音叠加、自动化重置、相位/滤波突变和循环首拍是否塌陷。
 - **Drop 例外：** 用户明确要 EDM 式起落时才安排停拍—上升—重入；写清重入由 kick、bass 或主题哪个事件承担，不以噪声 riser 代替作品自身的高潮。
@@ -41,7 +43,7 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 人声方向的 Style Prompt 起句：
 
 ```text
-Global Metadata: Techno, <BPM> BPM in 4/4, fixed four-on-floor pulse, sparse two-bar event cycle, <tension arc, spatial depth and production texture>.
+Global Metadata: Techno, 124 BPM in 4/4, fixed four-on-floor pulse, sparse 1-bar core loop; use 2 bars only when the indivisible motif crosses the barline, <tension arc, spatial depth and production texture>.
 Vocal Details: <confirmed singer identity and register>; choose a restrained melodic phrase when the lyric carries a clear theme, or a short spoken/chopped motif when a repeated vocal fragment is the loop identity; place entries at <actual phrase boundaries> and leave space after each statement.
 Arrangement: quarter-note kick stays fixed; repeat <one short bass, percussion or synth event> on the same two-bar position; develop each section by changing one primary field—timbre/filter, event density, register or space—and return/exit on <actual phrase boundary>.
 ```
@@ -56,7 +58,7 @@ Arrangement: quarter-note kick stays fixed; repeat <one short bass, percussion o
 纯器乐方向将主识别材料放入项目栏 `Motif / Front Identity`，并填写 `Instrumental Form`：
 
 ```text
-Global Metadata: Techno, <BPM> BPM in 4/4, fixed four-on-floor pulse, sparse two-bar event cycle, <tension and spatial arc>.
+Global Metadata: Techno, 124 BPM in 4/4, fixed four-on-floor pulse, sparse 1-bar core loop; use 2 bars only when the indivisible motif crosses the barline, <tension and spatial arc>.
 Motif / Front Identity: <one short pitch, rhythm or sound event; source, register and repeat position>.
 Arrangement: quarter-note kick remains constant; keep the selected event in its loop slot; at each actual section boundary change only <one chosen density/timbre/register/space field>; preserve continuity through the loop and end with <sustained texture / filtered loop / deliberate final release> suited to the cue.
 Instrumental Form: <section lengths, loop return, one-variable transitions, ending or continuous-loop boundary>.
@@ -72,6 +74,7 @@ Instrumental Form: <section lengths, loop return, one-variable transitions, endi
 
 ## 方法依据与范围
 
+- Ableton Learning Music 的 Robert Hood《[Ride](https://learningmusic.ableton.com/make-melodies/ride.html)》示例让一小段单音模式贯穿，并用细微音色/声音变化发展循环。迁移时先锁定一小节循环的音符、起音与休止，再每 4/8/16 小节只改变一个声音变量；只有动机跨小节且切成一小节会损坏起音—回应关系才用两小节。它是该曲循环单元的教学呈现，不支持 128 小节结构或固定 BPM 来自原作。
 - Robert Henke 在 Ableton 的 Monolake 艺术家访谈中讲到从 groove 出发、让关键声音引导其余制作，且必要时删减而非继续叠加；其适用于本配置的循环迭代顺序，不代表所有 Techno 编制。
 - Henke 的访谈 “Beauty and Perfection” 将注意力放在声音、空间、时间、连续变化、色彩和节奏的制作观，可支持此处选择“循环内音色/时间运动”作为主发展轴；它是其创作视角，不是流派定义。
 - Dennis DeSantis, *Making Music: 74 Creative Strategies for Electronic Music Producers* 的 House/Techno 属性目录用于比较可选特征组合，不给出普适速度、音色或段落公式。

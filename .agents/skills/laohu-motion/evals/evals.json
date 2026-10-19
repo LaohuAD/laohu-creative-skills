@@ -1,0 +1,412 @@
+{
+  "skill": "laohu-motion",
+  "problem_contract": {
+    "goal": "把模糊动画目标、口播稿或现有动画工程转换为适合受众的可见表达；在用户委托制作时落实到真实可渲染工程和最后媒体检查，在只要方案/审查时准确停在该模式。",
+    "non_goals": [
+      "默认改写用户锁定的口播、购买配音、安装付费工具或上传用户素材",
+      "以画风代替内容解释，或仅凭材料关键词自动加载三级专项",
+      "把分镜、提示词、代码片段、测试渲染或自我评价说成最终成片质量证据",
+      "伪造数据、档案、因果关系、比较尺度或类比适用范围"
+    ]
+  },
+  "execution_protocol": "评测执行者只接收本轮 prompt、conversation_context、用户实际提供的 input_files、最终 Skill 与实际按条件读取的 Reference/三级专项，不接收 expected_behavior。先记录被读取文件和本轮请求模式。仅方案案例不得渲染；审查案例不得默认修改或渲染。制作案例在独立可恢复工程/临时副本中按环境可用工具落实，保留用户原稿、原音和素材；必须记录实际工具/版本、命令、工程路径、最后媒体路径，并顺播最后文件、检查镜头转换/文字/关键事实/声画锚点。工具阻塞时如实记录最后完成阶段。每案回报意图路由、读取路径、完整交付物与暂停点；不得向用户资产写入评测文件。结构检查不证明 ROUTE/BEHAVIOR/QUALITY；自评最多 OBSERVE，无独立接收者或使用证据时 QUALITY=UNKNOWN。 对 execution_class=fixture_gated 且 fixture_status=missing_from_eval_input_files 的案例，只评估是否发现并准确说明缺失、暂停边界与最小补充项；不得将缺附件后的停答计作脚本/工程/音轨/媒体制作或质量证据。direct 案例从本条目内嵌请求直接执行；工具不可用时仍需报告实际阻塞阶段。",
+  "cases": [
+    {
+      "id": "independent-general-animation",
+      "type": "behavior",
+      "prompt": "请制作一段解释电梯里为什么有配重的动画，面向没学过物理的成年人，控制在一分钟以内。画面方式你来决定，重点是把它讲清楚。",
+      "input_files": [],
+      "expected_behavior": [
+        "把目标观众与理解任务明确为看懂配重如何改变系统受力/能量或运行条件，不只复述“有个配重”",
+        "只在需要确定电梯/配重机制时查可靠来源，区分真实机制和简化示意",
+        "输出逐镜蓝图后选实际可用工具并完成渲染；如环境/权限阻塞须报告具体状态，不停在概念图或提示词",
+        "未明确画风时不加载任一风格子级"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "rough-idea-plan-only",
+      "type": "behavior",
+      "prompt": "我想做一段动画，解释为什么咖啡放久了会变凉。先只给我一份能交给动画师的制作方案，不要做文件或渲染。",
+      "input_files": [],
+      "expected_behavior": [
+        "仅交方案，不建工程、不渲染",
+        "把观众需要看懂的过程拆成可见对象、状态变化和画面增量",
+        "按内容需要核验机制，不把示意动画包装成实验记录",
+        "方案给出镜头编号、语义锚点或暂定时间、实现方式和逐镜验收"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "script-no-audio",
+      "type": "behavior",
+      "prompt": "请根据这段口播制作动画：‘城市夏天越来越热，树荫可以让街道更舒服，但只有树还不够，树冠连不起来的路段仍会留下热区。’我还没有录音。原句和顺序请保留。",
+      "input_files": [],
+      "expected_behavior": [
+        "默认逐字保留稿件与顺序，不改写",
+        "把口播重点和画面补充分别写清楚，不只把整段逐句贴成大字",
+        "按语义设计暂定镜头时间并标记“设计预算/待原音对齐”，不按字数平均分秒、不称已同步",
+        "围绕连贯树冠、阴影覆盖和热区留下的关系设计画面；若作现实温度/效应断言再补相应来源",
+        "如用户请求制作，蓝图进入实际实现与可行渲染"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "script-edits-authorized",
+      "type": "behavior",
+      "prompt": "请根据下面口播稿制作动画。我允许你删掉重复句，但不能改动数据、结论和我的表达立场；原音还没录。稿子：“很多人先看平均数。平均数能概括总体，但不代表每个人都接近它。把分布也摆出来，差异才看得见。最后这句‘看分布能看到差异’我前面已经说过，可以删掉。”",
+      "input_files": [],
+      "expected_behavior": [
+        "仅在已授权范围内提出或实行删重复句，并保留原稿与修改映射",
+        "数据、结论和作者立场保持锁定",
+        "所有暂定时长标记待原音对齐，不伪称已按口播同步",
+        "蓝图记录每段口播承担什么、画面补充什么以及删减理由"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "existing-audio-semantic-sync",
+      "type": "behavior",
+      "prompt": "这个工程已经有最终口播.wav。请把镜头里的三次颜色变化分别对齐“首先”“但问题在于”“所以”的实际出现位置，保留现有旁白和其他画面。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取真实工程、目标音轨版本与时间轴，按语义锚点标记真实时码",
+        "不使用固定逐句时长或文字长度推算同步",
+        "只修改授权的三次颜色变化，保留旁白与其余画面",
+        "重新渲染后检查最后版本的三个声画锚点并报告路径/时间码",
+        "当前评测未附工程与音轨：只能要求补充实际项目/音轨，不能把一次澄清回答算成声画对齐通过"
+      ],
+      "execution_class": "fixture_gated",
+      "fixture_requirements": [
+        "现有动画工程目录/工程文件",
+        "工程实际使用的最终口播音轨 final narration file"
+      ],
+      "fixture_status": "missing_from_eval_input_files",
+      "expected_if_fixture_missing": {
+        "allowed_result": "只检查到本轮缺少所需附件/路径时的暂停与澄清行为。指出哪个素材缺失、哪些工作因此不能声称完成，并给出最小补充项。",
+        "forbidden_claims": "不得声称已检查媒体/工程/来源/原作；不得声称已对齐音轨、改工程、完成资料拼贴、标出原图位置、已渲染或达到成片质量。",
+        "evidence_limit": "不评工程修改、媒介内容、同步或成片质量；这次只验证缺输入识别和正确停止点。"
+      }
+    },
+    {
+      "id": "fact-comparison-baseline-and-causality",
+      "type": "behavior",
+      "prompt": "请把这段话做成动画：‘甲地区去年有 120 起，乙地区有 80 起，所以甲地区的风险高 50%。’我不确定这句话有没有算对，请先查证再制作。",
+      "input_files": [],
+      "expected_behavior": [
+        "先核查数字定义、分母、人口或暴露量、时间范围与来源；不能仅凭起数推成风险率",
+        "比较若不具同口径/单位/基线，暂停或改为清楚标注的不同指标，不用条形长度暗示可比风险",
+        "在内容到运动的镜头数据中写明实际支持的比较与来源限制",
+        "不把不确定或只相关的关系动画成因果"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "analogy-boundary",
+      "type": "behavior",
+      "prompt": "请用‘城市交通像人体血液循环’做一段讲解动画，观众是中学生。需要解释这个比喻哪里有用、哪里不能照搬。",
+      "input_files": [],
+      "expected_behavior": [
+        "把比喻的对应对象与失效边界分别写入镜头设计",
+        "仅动画化有效映射，不让血液、血管或交通控制暗示未经支持的生理等价",
+        "口播/屏幕文字说明限制或退出比喻的时点",
+        "如果声称现实城市机制，再按具体事实需要检索，不把类比本身当证据"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "audit-only-existing-animation",
+      "type": "behavior",
+      "prompt": "只审查这段已经完成的动画，找出它为什么让人读不懂。先不要修复、改工程或重新渲染。",
+      "input_files": [],
+      "expected_behavior": [
+        "进入只审查模式，报告具体镜头/时间码/画面观察、目标差距和证据限制",
+        "不默认重做分镜、修改源文件或渲染新媒体",
+        "把观察、原因推论和建议分开，不声称观众效果已通过",
+        "若缺少实际媒体，只报告检查受限并指出所需材料",
+        "当前评测未附最终媒体：暂停审查并索取文件；不得从请求文字推断具体镜头表现或将其算作审查完成"
+      ],
+      "execution_class": "fixture_gated",
+      "fixture_requirements": [
+        "待审查的最终动画媒体文件"
+      ],
+      "fixture_status": "missing_from_eval_input_files",
+      "expected_if_fixture_missing": {
+        "allowed_result": "只检查到本轮缺少所需附件/路径时的暂停与澄清行为。指出哪个素材缺失、哪些工作因此不能声称完成，并给出最小补充项。",
+        "forbidden_claims": "不得声称已检查媒体/工程/来源/原作；不得声称已对齐音轨、改工程、完成资料拼贴、标出原图位置、已渲染或达到成片质量。",
+        "evidence_limit": "不评工程修改、媒介内容、同步或成片质量；这次只验证缺输入识别和正确停止点。"
+      }
+    },
+    {
+      "id": "existing-project-production",
+      "type": "behavior",
+      "prompt": "请在我现有动画工程里加入一段能解释比例变化的图形动画，并输出最终视频。保留现有字幕和音轨。",
+      "input_files": [],
+      "expected_behavior": [
+        "先检查项目文件、依赖、渲染入口、字幕/音轨与实际输出规格",
+        "备份或分支修改现有工程，不覆盖原始脚本和不可再生素材",
+        "新增图形说明单位、分母、基线或比例口径，不只做视觉增长",
+        "运行工程真实渲染器并检查最后输出视频；失败时报告错误、状态和恢复点",
+        "当前评测未附工程：先指出工程文件缺失并请求路径/附件，不以合成示例宣称已修改用户工程"
+      ],
+      "execution_class": "fixture_gated",
+      "fixture_requirements": [
+        "现有动画工程与依赖入口",
+        "工程使用的字幕、音轨及所需素材"
+      ],
+      "fixture_status": "missing_from_eval_input_files",
+      "expected_if_fixture_missing": {
+        "allowed_result": "只检查到本轮缺少所需附件/路径时的暂停与澄清行为。指出哪个素材缺失、哪些工作因此不能声称完成，并给出最小补充项。",
+        "forbidden_claims": "不得声称已检查媒体/工程/来源/原作；不得声称已对齐音轨、改工程、完成资料拼贴、标出原图位置、已渲染或达到成片质量。",
+        "evidence_limit": "不评工程修改、媒介内容、同步或成片质量；这次只验证缺输入识别和正确停止点。"
+      }
+    },
+    {
+      "id": "explicit-pixel",
+      "type": "behavior",
+      "prompt": "做一段 8-bit 像素风的树冠覆盖动画，想要像素块清晰，但不要出现游戏界面或金币。",
+      "input_files": [],
+      "expected_behavior": [
+        "只因明确的 8-bit/像素风请求读取 laohu-motion-pixel",
+        "将稳定网格、最近邻放大、像素边缘和整数步进用于当前树冠关系",
+        "不擅自添加 HUD、金币或游戏关卡",
+        "把边缘/运动验收落在实际目标尺寸和最终渲染"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "explicit-shuimo",
+      "type": "behavior",
+      "prompt": "请把竹枝生长过程做成写意水墨动画，重点是笔锋、飞白和墨色晕开，不要仿某位画家的具体画。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-motion-shuimo，并只实现媒介处理方法",
+        "给出纸底/留白、笔压/干湿、飞白、受限洇染与运动顺序的可实施选择",
+        "不使用缺少原作证据的艺术家归因，不照搬内部演示构图、人物或印章",
+        "实际预览检查笔迹连续、晕染层级和文字/主体可读"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "explicit-whiteboard-multiple-syntax",
+      "type": "behavior",
+      "prompt": "用白板动画讲清楚一个结论、两个方案的对比和最后的三步执行顺序。先做成方案。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-motion-whiteboard",
+        "选择适合材料的板面组织形式，并同步笔迹、文字顺序和阅读停留",
+        "将白板画风与因果/比较/步骤解释功能分开；按相同尺度和口径布置对比",
+        "方案不渲染，交付逐镜蓝图和读写顺序"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "explicit-geometric-morph",
+      "type": "behavior",
+      "prompt": "把一个圆连续变形成面积相同的正方形，用连续几何变形讲给初中生看；对象身份和面积条件必须始终清楚。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-motion-geometric",
+        "建立起止形状的对应、中间变形状态和稳定语义编码",
+        "不以连续运动伪称面积相同已被证明；明确是示意、构造或证明步骤",
+        "不把该专项描述为复刻某频道全部画风"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "explicit-flat-layering",
+      "type": "behavior",
+      "prompt": "我想把细胞内部结构做成扁平矢量分层动画，从细胞表面推进到内部。请不要复刻某个频道的角色和固定配色。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-motion-flat",
+        "将细胞表面、内部结构和远近层次按实际内容具象化，设置可追踪的尺度穿行",
+        "颜色和形状为本题服务，不复制频道吉祥物/签名配色",
+        "若表示真实细胞结构，只用有来源支持的关系"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "explicit-collage-with-sources",
+      "type": "behavior",
+      "prompt": "我提供了三张真实历史文件照片，请做资料拼贴式动画，按文件上的日期把来龙去脉讲清楚；每张都保留出处。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 laohu-motion-collage",
+        "逐张核对文件来源、日期、语境及使用范围，再沿材料阅读顺序安排镜头",
+        "圈画/路线/标签指向可核实细节，不遮挡原件关键内容",
+        "记录媒体来源与裁切，并检查最后成片仍能看到所需出处",
+        "当前评测 input_files 为空：先指出三张照片未实际到达；不臆测日期、出处、材料细节，也不将示意卡说成已审的原件"
+      ],
+      "execution_class": "fixture_gated",
+      "fixture_requirements": [
+        "声称已提供的三张历史文件照片原件或可访问的路径"
+      ],
+      "fixture_status": "missing_from_eval_input_files",
+      "expected_if_fixture_missing": {
+        "allowed_result": "只检查到本轮缺少所需附件/路径时的暂停与澄清行为。指出哪个素材缺失、哪些工作因此不能声称完成，并给出最小补充项。",
+        "forbidden_claims": "不得声称已检查媒体/工程/来源/原作；不得声称已对齐音轨、改工程、完成资料拼贴、标出原图位置、已渲染或达到成片质量。",
+        "evidence_limit": "不评工程修改、媒介内容、同步或成片质量；这次只验证缺输入识别和正确停止点。"
+      }
+    },
+    {
+      "id": "style-word-in-source-not-trigger",
+      "type": "behavior",
+      "prompt": "这是一个我提供的水墨原作扫描件，动画里要保持它的笔迹和留白，不要把整段动画做成水墨风。只在原图上标出三个我说到的位置。",
+      "input_files": [],
+      "expected_behavior": [
+        "不因材料名为水墨自动加载 laohu-motion-shuimo",
+        "保留原件与来源；只制作用户明确要求的三个位置标记",
+        "如果按用户后续要求动画化标记，视觉增量仍不覆盖原作笔迹/留白",
+        "不得把用户素材作为未经授权的资产复制到外部风格示范",
+        "当前评测未附扫描件：不读取水墨专项，说明无法定位三个位置并请求原件；不伪称已完成标记"
+      ],
+      "execution_class": "fixture_gated",
+      "fixture_requirements": [
+        "声称已提供的水墨原作扫描件"
+      ],
+      "fixture_status": "missing_from_eval_input_files",
+      "expected_if_fixture_missing": {
+        "allowed_result": "只检查到本轮缺少所需附件/路径时的暂停与澄清行为。指出哪个素材缺失、哪些工作因此不能声称完成，并给出最小补充项。",
+        "forbidden_claims": "不得声称已检查媒体/工程/来源/原作；不得声称已对齐音轨、改工程、完成资料拼贴、标出原图位置、已渲染或达到成片质量。",
+        "evidence_limit": "不评工程修改、媒介内容、同步或成片质量；这次只验证缺输入识别和正确停止点。"
+      }
+    },
+    {
+      "id": "collage-word-not-trigger",
+      "type": "behavior",
+      "prompt": "我的稿子提到‘把数据拼在一起’，我没有要求剪贴画风。请用普通清晰的图表解释这三个数据之间的差别。",
+      "input_files": [],
+      "expected_behavior": [
+        "不因出现‘拼’或‘拼贴’近义词加载 laohu-motion-collage",
+        "按图表内容检查单位、分母、基线和时间范围",
+        "视觉方式服务比较任务，不额外制造档案质感",
+        "如果口径不能比较，明确标出或暂停比较"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "combined-whiteboard-geometric",
+      "type": "behavior",
+      "prompt": "请用白板画风加连续几何形变讲解两个三角形如何对应。画面要能停下来读顶点标记，观众需要看出对应边。",
+      "input_files": [],
+      "expected_behavior": [
+        "按明确双风格选择加载 laohu-motion-whiteboard 和 laohu-motion-geometric",
+        "先按几何内容确定对应顶点/边与解释任务，再协调板面写出和连续形变",
+        "在顶点/边标记需要阅读时保持稳定并留停留，不被相机运动遮挡",
+        "从两个子级分别回传板面/笔迹与形变映射，合成到同一镜头蓝图"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "collage-real-event-scope-missing",
+      "type": "behavior",
+      "prompt": "用档案拼贴风格讲一个真实事件，但我还没有提供任何文件或照片。请直接开始，不要假装有证据。",
+      "input_files": [],
+      "expected_behavior": [
+        "用户明确选择时读取 laohu-motion-collage",
+        "把检索真实档案和设计示意画面分开；不存在的材料不得被伪装成真实文件",
+        "可先按真实事件来源检索事实；素材缺口则用已标注示意或停在待素材阶段",
+        "实际制作的镜头与来源状态同步，不用旧纸质感补造证明力",
+        "当前请求未给事件名称/时间范围或实际资料：先要求最少的事件识别信息；不搜索或编造一个无关事件来代替"
+      ],
+      "execution_class": "fixture_gated",
+      "fixture_requirements": [
+        "真实事件的名称与必要时间/地域范围，或事件原始资料"
+      ],
+      "fixture_status": "missing_from_eval_input_files",
+      "expected_if_fixture_missing": {
+        "allowed_result": "只检查到本轮缺少所需附件/路径时的暂停与澄清行为。指出哪个素材缺失、哪些工作因此不能声称完成，并给出最小补充项。",
+        "forbidden_claims": "不得声称已检查媒体/工程/来源/原作；不得声称已对齐音轨、改工程、完成资料拼贴、标出原图位置、已渲染或达到成片质量。",
+        "evidence_limit": "不评工程修改、媒介内容、同步或成片质量；这次只验证缺输入识别和正确停止点。"
+      }
+    },
+    {
+      "id": "plan-only-no-render",
+      "type": "behavior",
+      "prompt": "请比较用代码动画或我现有的剪辑软件做这段图示哪个更适合，然后只给我实施方案；本轮不要创建工程、安装工具或渲染。",
+      "input_files": [],
+      "expected_behavior": [
+        "输入明确是方案模式，只比较现有可行路径",
+        "不创建/修改项目、不安装软件、不渲染",
+        "说明推荐的实际路线、依赖、风险、工具可行性和实现步骤",
+        "方案可以进入后续实施，但不说动画已经完成"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "same-object-preservation-marking-conflict",
+      "type": "behavior",
+      "prompt": "请把我提供的同一张历史文件原图做成资料拼贴。原图像素必须逐像素保持不变，同时要求把红笔圈画直接烧录进原图的同一像素层；不能用独立叠加层、替代图或拆成不同镜头。不要先动原件。",
+      "input_files": [],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt_for_conflict_detection",
+      "expected_behavior": [
+        "识别“原图逐像素不变”与“把圈画烧录进同一像素层”的硬冲突，不静默选择其中一条",
+        "说明可行分支是保留只读原件并在独立可撤销覆盖层显示圈画，或授权生成修改副本；用户明确排除分层/替代时，应询问要放宽哪项",
+        "不写入、覆盖或重编码任何原件；不声称可在同一像素层同时满足两条互斥条件",
+        "用户确认的分支与输入材料齐备后才继续制作；本案不以一次澄清当成拼贴成品通过"
+      ]
+    },
+    {
+      "id": "previous-specialty-does-not-carry-to-general-request",
+      "type": "behavior",
+      "conversation_context": "上一轮用户明确选择 laohu-motion-shuimo 并已完成对应任务。本轮是新动画，没有延续任何专项画风。",
+      "prompt": "本轮请用普通清楚的图形比较两个虚构公交换乘方案；下面这段只提供内容依据，不需要配音或旁白：“方案甲步行 300 米、等车 6 分钟；方案乙步行 120 米、等车 11 分钟。”总时长 20 秒，只给镜头蓝图，不渲染。",
+      "input_files": [],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "expected_behavior": [
+        "按本轮新要求使用通用 laohu-motion 路径，不因上一轮明确选择水墨而自动沿用三级专项",
+        "把两个虚构方案按步行距离与等待时长分别比较，标明单位并用相同图形尺度/口径；不把步行与等待合成一个未经定义的优劣分数",
+        "稿件只作为内容依据且用户明确不需要旁白：按 20 秒目标时长与事件/读数停留排时间，不标“设计预算/待原音对齐”，不等待音轨",
+        "输出可交给工具链实施的镜头字段；本轮只要蓝图，不创建工程、不渲染"
+      ]
+    },
+    {
+      "id": "silent-interface-motion-no-voice-wait",
+      "type": "behavior",
+      "prompt": "下面这句话只用来说明界面行为，不需要旁白、字幕或配音：“按住卡片，拖进收藏夹，松开后出现已收藏状态。”请制作一个 20 秒无声界面动效，用虚构产品示意，不要依赖真实 App 或用户文件。",
+      "input_files": [],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "expected_behavior": [
+        "把提供的句子当作内容依据，而非必须录制的口播；不等待原音，也不标待配音/待原音对齐",
+        "按 20 秒目标节长安排按下、拖动、放入收藏夹、松开与已收藏反馈，停留足以看清状态改变",
+        "界面是虚构示意，不冒充真实产品 UI；不从缺失的真实 App 状态编造功能证据",
+        "用户明确委托制作时走真实渲染和无声媒体播放检查；工具不可用时报告准确停止阶段"
+      ]
+    }
+  ]
+}

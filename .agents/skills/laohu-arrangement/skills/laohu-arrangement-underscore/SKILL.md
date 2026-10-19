@@ -3,9 +3,11 @@ name: laohu-arrangement-underscore
 description: 当用户明确要求影视、游戏或视听场景的 underscore/cue 编曲时，根据叙事节点、时码、对白与音效安排音乐进入、留白和退出。
 ---
 
-本子级仅在用户明确要求为画面/场景/剧情段落写 underscore、scene cue 或同步配乐时由 [laohu-arrangement 主 Skill](../../SKILL.md) 加载。仅提电影、剧集、游戏或某位配乐家不触发；若只要画面之外可独立聆听的主题歌曲，应由宿主判断 screen-theme 或通用歌曲路径。用户没有画面时仍可先形成音乐叙事草案；只暂停依赖真实镜头和剪辑的同步层。
+本子级仅在用户明确要求为画面/场景/剧情段落写 underscore、scene cue 或同步配乐时由 [laohu-arrangement 主 Skill](../../SKILL.md) 加载。仅提电影、剧集、游戏或某位配乐家不触发；若只要画面之外可独立聆听的主题歌曲，由宿主判断 screen-theme 或通用歌曲路径。用户没有画面时仍可先形成音乐叙事草案；只暂停依赖真实镜头和剪辑的同步层。
 
 # Screen underscore：按叙事与声画时间安排音乐
+## 独立 cue 的可执行计划默认
+有画面时，以画面版本、FPS、实际时间码和用户标出的剧情/对白为准，必须输出 cue-in/out 与各关键点，不套以下时长。无画面且未给 cue 长度时，按叙述事件顺序交一份“未同步”60 秒文本计划：0–8 秒 establish；8–24 秒呈示主题/关系；24–40 秒在用户描述的关键行动/证据后改变一项和声、音区或织体；40–52 秒对白/决定前减层或静默；52–60 秒收束并留真实尾音窗口。按用户事件先后把节点放入对应窗口，不得自编情节或声画 hit point；事件少于五个时空窗保留，不增造节点。若交付需量化谱/MIDI 但任务仍是自由时间，继续用秒数/tempo map；仅在用户要均匀拍网格时选择 4/4、72 BPM、18 小节恰为 60 秒的可编辑网格，并标“工作网格，未同步”。制作互锁参考为 Britell/Gilroy 对《Andor》Maarva 葬礼段的共创：音乐在拍摄前开发并成为城镇仪式、反过来启发独白；迁移为音乐职务与场景社区行动共定，不伪造源 cue 的时码和时长。
 
 ## 输入与同步边界
 
@@ -69,4 +71,4 @@ ABC/MusicXML 只能精确写出已确定拍轴和音乐事件：主题音符用�
 
 ## 方法依据与适用边界
 
-Michael Rabiger《Directing the Documentary》有关“Using Music and Working with a Composer”的章节建议导演与作曲沟通 cue 职能及明确的时码入出点，并指出音乐可在新对白等处退出。本文把这类交接转成 cue 表和版本检查，不规定每个动作都设 hit point。Nicholas Britell 谈《Andor》配乐时描述了贯穿主题中的 pulse motif；这是连续动机的一种实例，不意味着 underscore 都应有脉冲或主题。
+Michael Rabiger《Directing the Documentary》“Using Music and Working with a Composer”章节建议明确 cue 职能与真实时码入出点；这是 cue 工作方法来源。具体音乐/场景单元取 Tony Gilroy 与 Nicholas Britell 对《Andor》终集 Maarva 葬礼 procession 的[创作访谈](https://www.starwars.com/news/tony-gilroy-andor-season-1-interview)：约七分钟的场景音乐在拍摄前两年协作完成，演员现场演奏真实乐器，音乐身份与 Ferrix 群体仪式及 Maarva 独白互相影响。迁移到新 cue 时先列用户给出的行动/对白顺序，再给每段声部标职责和出入；无画面只写相对时间计划，不移植七分钟时长、乐器或伪造 hit point。

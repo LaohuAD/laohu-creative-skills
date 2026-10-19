@@ -6,10 +6,12 @@ description: 当用户要求 dance-pop/舞曲流行编曲时，让舞池脉冲�
 本子级由 [laohu-arrangement 主 Skill](../../SKILL.md) 在用户明确指定 dance-pop/舞曲流行编曲，或明确要求按舞曲流行结构改编时加载。快歌、电子音色、重复副歌或派对歌词不自动触发；house/techno 等舞曲制作请求要按其明确方向处理。沿用锁定的 hook、速度和主唱材料，不默认用户希望夜店场景。
 
 # Dance-pop：让舞池脉冲和 hook 互相让位
+## 独立完整新作的项目蓝图
+未给拍号/速度/曲式的完整 Dance-pop 新作，项目起点为 4/4、120 BPM（四分音符 BPM），总蓝图 72 小节：Intro 4 → V1 8 → Pre1 4 → C1 8 → Post/Drop1 8 → V2 8 → Pre2 4 → C2 8 → Post/Drop2 8 → Final C 8 → Outro 4。仅当 Pre 有可听的期待抬升/延迟 hook 才保留两段各 4 小节；没有这项转折，删掉两段 Pre，变为 64 小节。仅当 Post 有独立可唱/可舞的延伸钩子，才各保留 8 小节；否则删掉两段 Post，剩 56 小节（两类都删则 48 小节）。《Don’t Leave Me Alone》的研究个案有 hook 与 drop 功能接力，支持先判记忆点职责，不支持所有 Dance-pop 必须有 drop。删段后重编号并重算总长；不为凑 72 小节填空。
 
 ## 先锁定身体拍感与钩子
 
-无相反参考时，默认以 4/4 四踩 kick 建立舞池脉冲，clap/snare 落在第 2、4 拍，贝司在 kick 间留出可舞动的反拍/切分；再选一个由主唱承担的歌唱 hook，让其成为副歌前景。hat/合成器细分强化运动，但不应盖住 hook。若用户锁定 breakbeat、反拍型或其他 groove，则保留真实拍轴和重音，只调整其余声部配合方式。
+无相反参考时，默认以 4/4 四踩 kick 建立舞池脉冲，clap/snare 落在第 2、4 拍，贝司在 kick 间留出可舞动的反拍/切分；再选一个由主唱承担的歌唱 hook，让其成为副歌前景。hat/合成器细分强化运动，同时为 hook 留出清晰空间。若用户锁定 breakbeat、反拍型或其他 groove，则保留真实拍轴和重音，只调整其余声部配合方式。
 
 在人声段落，先核对歌词重音、主唱句长和 hook 入口，为每次回返选择稳定重复还是有理由的变体。可把一句副歌钩子留给听众参与，也可保持纯器乐钩子；不要把所有歌词压成口号。没有旋律材料时由宿主确认创作责任并补足实际主题音符。
 
@@ -31,12 +33,12 @@ description: 当用户要求 dance-pop/舞曲流行编曲时，让舞池脉冲�
 
 ## 方法依据与适用边界
 
-Berklee Online《Arranging and Producing Contemporary Music Styles》把流派节奏语汇转成节奏组编写与跨风格实践，而非单一配器配方。Selena Gomez 在《Time》的制作访谈中描述《Hands to Myself》先形成 hook，再由 Max Martin修改预副歌并补充结尾 hook；本文只把它作为“围绕 hook 检查结构”的个案，不照搬段落公式，也不称为所有 dance-pop 的固定创作方法。
+Berklee Online《Arranging and Producing Contemporary Music Styles》把流派节奏语汇转成节奏组编写与跨风格实践，不给单一配器配方。Brad Osborn 的[《Formal Functions and Rotations in Top-40 EDM》](https://theory.esm.rochester.edu/integral/36-2023/osborn/)把 David Guetta/Anne-Marie《Don't Leave Me Alone》作为明确作品单元：主唱标题 hook 负责 pre-hook/chorus 的上升段，随后 drop 转由采样/节奏承担记忆点，末轮再把两者叠合。迁移时先判断本作的歌唱 hook 与器乐 hook 是否分工；只有 drop 有独立记忆/舞蹈职责才留 post 段，无该职责就直入下一歌词段。这个细读支持此曲的段落分工，不规定所有 Dance-pop 有 drop。
 
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt使用能听见的节奏和入口描述： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：dance-pop, <BPM> BPM, 4/4 four-on-the-floor pulse, <bass syncopation/pocket>, <明亮/克制等已定方向>。
+Global Metadata：dance-pop, 120 BPM, 4/4 four-on-the-floor pulse, <bass syncopation/pocket>, <明亮/克制等已定方向>。
 Vocal Details：<确认的主唱/音区> presents the hook at <段落/拍位>，stresses <锁定音节>，leaves <句缝> for the synth response。
 Arrangement：kick on each quarter-note beat, clap/snare on beats 2 and 4；Verse keeps <层数> sparse，<若有pre-chorus则> hats/build <细分变化> into a brief low-end gap，Chorus reveals <歌唱/器乐hook> over restored pulse。
 固定副歌hook识别与主脉冲；用户指定breakbeat、三拍或现场乐队律动时保留真实拍轴，不能为了套舞曲模板改拍。pre-chorus不存在时直接设计chorus入口，不添空段；器乐hook主导时把Vocal Details换成Motif/Front Identity。

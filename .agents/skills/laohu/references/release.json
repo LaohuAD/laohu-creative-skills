@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
-  "notice": "新增协作执行与小说创作入口，完善剧本交付和专业衔接规则。",
+  "version": "1.8.0",
+  "notice": "新增内容选题与动画制作入口，扩展剧本、小说和创作交付方法。",
   "details_url": "https://github.com/LaohuAD/laohu-creative-skills/blob/main/CHANGELOG.md"
 }

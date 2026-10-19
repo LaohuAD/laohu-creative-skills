@@ -6,6 +6,8 @@ description: 当用户要求 neo-soul 编曲，或希望以后拍弹性 pocket�
 当用户明确要求 neo-soul，或希望以后拍弹性 pocket、七/九和弦近距扩展 voicing、主唱与器乐句缝问答组成明确声音目标时，由 [laohu-arrangement 主 Skill](../../SKILL.md) 加载本子级。只有“松弛”“爵士和弦”或某位艺人等泛形容而没有上述组合目标时，不自动触发。沿用作品材料和歌手/乐手条件，返回拍感、和声 voicing 与互动职责，不预设所有作品都要爵士化或刻意拖拍。
 
 # Neo-soul：让和声有颜色，让 pocket 仍然落地
+## 独立完整新作的项目蓝图
+完整无锁定速度/曲式的 Neo-soul 新作使用 4/4、84 BPM（四分音符 BPM）作为本地起点，72 小节：Intro 4 → V1 16 → Hook 8 → V2 16 → Hook 8 → pocket vamp 8 → Final Hook 8 → Outro 4。先定 1 小节鼓/贝司 pocket 和能连贯听出的根音，再以七/九和弦及共同音/近距内声建立颜色；11/13 扩展和弦只有在主旋律音区容纳、且内声可逐音写明时使用。D’Angelo《Voodoo》制作谈话里鼓手先后与人声协商后拍位置，迁移为把鼓、人声微观落点分开标注再合听；不把 84 BPM 或拖拍量归给该作品。若关系状态稳定，Hook 原样回返、vamp 不升级。
 
 ## Pocket先于装饰
 
@@ -31,12 +33,12 @@ description: 当用户要求 neo-soul 编曲，或希望以后拍弹性 pocket�
 
 ## 方法依据与边界
 
-Berklee College of Music 的 Instrumental Neo-Soul Ensemble 课程说明把 neo-soul 放在 groove、和声复杂度、即兴与合奏聆听共同训练的语境中。Okayplayer 对音乐人 Q 的采访转述了 D’Angelo 要求 Questlove 略微后靠的制作个案；这不是 Questlove 的第一人称访谈。本文将课程与转述个案转为“先合奏拍感、再安排和弦与互动”的本地操作；不代表每首 neo-soul 都需复杂和声、即兴或延后拍点。
+Berklee College of Music 的 Instrumental Neo-Soul Ensemble 课程说明把 neo-soul 放在 groove、和声复杂度、即兴与合奏聆听共同训练的语境中。可定位作品单元为 D’Angelo《Voodoo》专辑时期的鼓/人声 pocket：Questlove 在[Red Bull Music Academy 讲座](https://www.redbullmusicacademy.com/lectures/questlove-new-york-2013/)讲述先按 D’Angelo 要求让鼓略微后靠，之后主唱又进一步落在鼓后。迁移时给鼓和人声分别标出拍内落点、一起合听，再决定是否保留这种后置；不把“laid-back”换算成所有声部统一延迟或固定毫秒。该录音个案不意味着每首 neo-soul 都需复杂和声、即兴或拖拍。
 
 ## 生成提示、演唱与可编辑事件控制
 
 用完整关系句编译，不把“松弛、爵士感”当作事件： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：neo-soul ensemble, <BPM> BPM, 4/4 laid-back 16th-note pocket over a clear backbeat, <tonal center / loop>。若锁定录音/乐手实际拍感更直或前推，把laid-back换成其实际拍内关系。
+Global Metadata：neo-soul ensemble, 84 BPM, 4/4 laid-back 16th-note pocket over a clear backbeat, <tonal center / loop>。若锁定录音/乐手实际拍感更直或前推，把laid-back换成其实际拍内关系。
 Vocal Details：<确认的主唱音色与相对音区>，phrases <on-grid / slightly behind> with <承重词> held to <位置>，leave rests for Rhodes/guitar replies。
 Arrangement：<bass> anchors <root/approach-note movement>，<Rhodes/guitar> uses <已定七/九和弦voicing> with common-tone inner voices，short answers occupy <句缝>。
 固定共同拍轴、能听见的鼓/贝司落点和一个和弦身份；微时值按锁定参考或乐手实际演奏切换，不能整轨统一拖后。若旋律把扩展音听成冲突，先挪内声/改转位或延后解决；旋律长音处缩短和弦攻击，句间才增加填音。

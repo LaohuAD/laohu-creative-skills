@@ -6,6 +6,8 @@ description: 当用户要求影视/游戏主题曲或片头片尾主题时，以
 本子级由 [laohu-arrangement 主 Skill](../../SKILL.md) 在用户明确委托 screen-theme、影视/游戏主题曲、片头或片尾主题编曲时加载。提及屏幕媒介但只要求场景配乐时使用 underscore；单说“主题”但无作品身份或用途时由宿主按上下文判断。没有完整画面/剪辑时可先创作独立主题方案，只有同步到具体片头/片尾镜头的工作暂停到取得时码和版本后。
 
 # Screen theme：让音乐主题承载作品身份
+## 独立完整主题曲的项目蓝图
+用户未给目标时长/拍号/速度时，器乐 screen-theme 的项目起点是 4/4、96 BPM（四分音符 BPM）、36 小节：motif 首次呈示 8 → A 8 → B 8 → motif 回归/变形 8 → coda 4，纸面约 90 秒。先选择一个身份核（节奏、音程轮廓、和声或音色之一），第一次完整呈示，B 只改一项叙事轴，回归保留识别核，coda 收束；若歌词/标题主题委托，则改走用户确定的完整歌曲结构。Britell 对《Andor》的采访说 pulse motif 可持续构成剧集识别；它支持识别核不必是长旋律，不证明 36 小节或 96 BPM。锁定画面长度、片名点或源主题时按实际时间/来源重算小节和删减。
 
 ## 主题要代表什么
 
@@ -41,12 +43,12 @@ description: 当用户要求影视/游戏主题曲或片头片尾主题时，以
 
 ## 方法依据与边界
 
-Ramin Djawadi 在 Netflix Tudum 的《3 Body Problem》主题访谈描述了把创作者对场景或整体感觉的说明转成音乐草案、在画面前回看再修订的协作循环。Nicholas Britell 在 StarWars.com 的《Andor》访谈说明主题中可使用 pulse motif 建立连续身份。本文将两种实例分别适配到叙事对焦与主题识别核；它们不是所有主题曲必须遵守的固定形式或配器。
+Ramin Djawadi 在[Netflix Tudum《3 Body Problem》主题访谈](https://www.netflix.com/tudum/articles/3-body-problem-soundtrack-theme-song-interview)描述把创作者对场景/整体感觉的说明转成草案，再对照画面修订。Nicholas Britell 在[StarWars.com《Andor》访谈](https://www.starwars.com/news/nicholas-britell-andor-interview)谈到以 pulse motif 建立剧集身份；这是可定位到剧集开场主题身份的具体单元。迁移时先写身份核（节奏、音程、和声或音色），再按本作段落保留或变形；Djawadi 的画面对照流程只在素材可用时执行，不假造同步点。这些是两项作品制作实例，不是所有主题曲必须遵守的固定形式或配器。
 
 ## 生成提示、演唱与可编辑事件控制
 
 把作品身份与音符核写进同一组可组合句，而非只写“史诗、电影感”： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：screen theme for <作品/角色身份>，<BPM/meter/脉冲>，<情绪起点→终点>，<乐队/电子/管弦声场>。
+Global Metadata：screen theme for <作品/角色身份>，96 BPM in 4/4, quarter-note pulse，<情绪起点→终点>，<乐队/电子/管弦声场>。
 Vocal Details：<确认的歌者、语言、音区> carries <主题钩子/标题短句> at <段落/重音定位>，sustain <目标音节> into <收束点>；器乐主题改为Motif / Front Identity。
 Arrangement：state <识别核> at <开场/首个标题点>，return it in <副歌/片尾> with <一项和声/音区/配器变形>，fit <实际时长> and end <已选收束动作>。
 固定识别核至少保留一个可比较的节奏/音程/音色关系；完整主题可扩展呈示，短标题版用动机片段提前到达标题点。角色关系变化时可改和声/配器而保留核心；纯器乐不生成演唱提示。具体片头画面同步时按给定版本、帧率和时码对齐；无画面仅控制时长和音乐句尾，不编造帧点。

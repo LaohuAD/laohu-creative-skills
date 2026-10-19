@@ -23,14 +23,14 @@
 <body>
 <header>
   <h1>gzh-design · 6 套主题排版预览</h1>
-  <p class="sub">同一篇合成技术说明《排查网页表单提交失败》用 6 套主题展示组件结构。每个画框约等于公众号手机宽度，可在框内滚动查看。</p>
-  <p class="sub">此页仅用于对照主题组件；正式正文仍需单独校验，预览不代表微信公众号端粘贴效果。</p>
+  <p class="sub">六套都按 ../assets/sample-article.md 的标题、段落、列表和原有强调完整排版；各自以引言、章节、列表及留白/卡片/分隔组件呈现主题。编号只标示结构次序，没有新增副标题、评分、作者身份或总结。每个画框约等于公众号手机宽度，可在框内滚动查看。</p>
+  <p class="sub">六个片段均通过仓库内静态 HTML 检查，包括结构、文字包裹、标点和本地风险规则。此检查不验证微信公众号编辑器的真实粘贴与最终显示；当前 Gallery 也未做微信端实贴。</p>
 </header>
 <div class="grid" id="grid"></div>
-<footer>合成组件预览 · 主题清单见 references/theme-index.md</footer>
+<footer>主题清单见 ../references/theme-index.md</footer>
 <script>
   const THEMES=[
-    ["摸鱼绿（默认）","#059669","moyu-green.html","default"],
+    ["摸鱼绿（默认）","#059669","moyu-green.html","默认"],
     ["红白色系","#DC2626","red-white.html",""],
     ["石墨极简风","#52525B","graphite-minimal.html",""],
     ["留白禅意风","#4A5D52","zen-whitespace.html",""],

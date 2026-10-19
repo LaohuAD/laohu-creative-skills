@@ -6,6 +6,8 @@ description: 当用户要求 boom-bap 编曲或以说唱口袋为目标时，围
 本子级只由 [laohu-arrangement 主 Skill](../../SKILL.md) 在用户明确要求 boom-bap 风格或按 boom-bap 方法改编时加载。简报、唱片、采样或作者仅提到 boom-bap 不触发；只要求复古、爵士感、采样或嘻哈也不自动等同于此路线。保持用户锁定的说唱内容、速度、旋律和制作目标，返回节奏骨架与采样/音色取舍，由宿主继续全曲设计与输出。
 
 # Boom-bap：让说唱口袋与鼓组重心先成立
+## 独立完整新作的项目蓝图
+用户没有给拍号、速度、曲式或锁定 loop，且委托完整 Boom-bap 新作时，先用 4/4、90 BPM（四分音符为 BPM 单位）做工作起点；分段为 Intro 4 小节、Verse 1 16、Hook 8、Verse 2 16、Hook 8、Outro 4，共 56 小节。按 90 BPM 规划约 149 秒，仅是小节换算，不是成品实测。节奏身份先选 1 小节 loop；只有采样动机跨小节线且切成 1 小节会破坏句尾/摇摆时才用 2 小节。V1 先立 pocket，V2 增加一项论点/叙事或节奏变奏，回归 Hook 保持同一识别句/采样位置；末尾 4 小节只收尾，不追加无职务 fill。用户只要片段时按其长度交付，不扩成 56 小节。KRS-One 对 Boom/Bap 的 kick/snare 历史称呼只支持声部职责，不证明这组时速或曲式。
 
 ## 默认决策
 
@@ -39,12 +41,12 @@ description: 当用户要求 boom-bap 编曲或以说唱口袋为目标时，围
 
 ## 方法依据与适用边界
 
-Red Bull Music Academy 的《In Search of Boom Bap》引用 KRS-One 对 kick/snare 重心及“用较少乐器形成强节奏感”的说明，并回顾该称谓的嘻哈历史语境。这里把历史重心转成本地工作顺序：先定说唱 pocket 与 2/4 backbeat，再决定素材切分和其余声部。该文讨论的是一种重要制作路线，不证明所有 boom-bap 必须采样、使用同一鼓音色或采用固定速度。
+Red Bull Music Academy 的[《In Search of Boom Bap》](https://web03125.microsites03.redbullmusic.academy/2013/11/in-search-of-boom-bap/)引用 KRS-One 对 kick/snare 重心的历史说明；它是术语/传统来源，不单独算作品单元。作品单元采用 Gang Starr《Mass Appeal》：DJ Premier 在[本人官方 So Wassup 第 4 集](https://www.youtube.com/watch?v=YfmPSZDuNp8)回看制作；他在[访谈](https://www.powmag.net/p/the-making-of-gang-starrs-mass-appeal)说明主循环是为讽刺“电梯音乐”式的重复、淡化制作选择的轻旋律采样，还记录 Guru 不从第 1 拍而在第 4 拍入句。迁移到本次作品时，先确定循环与歌词主张是互相强化还是形成反差，再把 sample/鼓的相撞关系写入 1–2 小节；只在歌词句法能承接时试非第 1 拍入句，不能因该曲就强迫每首 rap 在第 4 拍起。它支持的是这个制作决定及其可听位置，不规定所有 boom-bap 都采样或都采用这组速度/结构。
 
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt按宿主的Global Metadata / Vocal Details / Arrangement组句，替换尖括号变量后再投喂： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：boom-bap hip-hop, <BPM> BPM, 4/4 head-nod pocket, <straight / laid-back subdivision>, <sampled loop / sparse original bed>。
+Global Metadata：boom-bap hip-hop, 90 BPM, 4/4 head-nod pocket, <straight / laid-back subdivision>, <sampled loop / sparse original bed>。
 Vocal Details：<已确认的歌者与音区>，rap phrasing <on-grid / slightly behind>，重音落在<锁定音节定位>，句尾在<定位>留出回应空位。
 Arrangement：kick supports <说唱重音定位>，snare anchors beats 2 and 4，<loop> sustains the verse，<指定短切片/乐器> answers after <句尾定位>。
 器乐版删去Vocal Details，改写Motif / Front Identity。固定项是4/4的2、4拍军鼓与清楚人声重音；break/采样已有swing就沿用，原素材更直或歌词要求利落时用直细分。副歌若需要集体记忆点，改采样回句或稀疏人声重音；持续点头感优先时保持循环，只改局部空拍。

@@ -4,6 +4,8 @@ description: 用户要 Salsa/萨尔萨合奏时，以两小节 Son clave 朝向�
 ---
 
 # Salsa：用 2–3 Son clave 组织 montuno、tumbao 与声部呼应
+## 独立完整新作的项目蓝图
+无指定录音/速度/曲式的完整 Son-based Salsa 新作使用 4/4、96 BPM，BPM 明确按四分音符宏拍计；照数 `1 2 3 4`，八分切分另数 `&`。这不是 48 BPM 半速读法；若演奏者以双倍 subdivided 口数，仍保留 96 的 tempo-map，并标记 double-time 细分，不把 BPM 改写成 192 后又沿用相同小节/clave 长度。两小节 2–3 Son clave 为一个方向周期。项目曲式 80 小节：Intro 8 → Verse 16 → Coro/Pregón 16 → Montuno/器乐 16 → Final Coro/Pregón 16 → Outro 8；各组 clave 同向，只有用户指定 3–2 朝向或来源曲确实翻转时才换向。每段起止小节以四分拍网格计算。Berklee/Mauleón/Poole 支持 clave、montuno/tumbao 角色与跨线 anticipations；96 BPM 和这套整曲长度是本项目选择，不是这些来源规定。
 
 ## 触发与默认路线
 
@@ -24,8 +26,8 @@ description: 用户要 Salsa/萨尔萨合奏时，以两小节 Son clave 朝向�
 ## 和声、编制与可演奏性
 
 - Salsa 使用 son 传统中反复循环的和声完全可行；不强迫古典式 V–I 终止。实际和弦按宿主确认的旋律、低音和歌段选择，montuno 负责把和弦节奏化，而不是另造一套和弦。
-- 先写钢琴与 bass 的互锁，再安排铜管短句、合唱或弦乐。铜管齐奏用于指定段落的重音/回答；主唱句头和 clave 朝向应能辨认，铜管不要持续覆盖整段。
-- MIDI 中写出每个打击声部的音色/奏法映射、起音和力度差异；单一鼓轨同时塞入 clave、bell、conga 和 timbales 时，应拆成可读角色轨，而不是以轨数伪装演奏关系。
+- 先写钢琴与 bass 的互锁，再安排铜管短句、合唱或弦乐。铜管齐奏用于指定段落的重音/回答；让主唱句头和 clave 朝向清楚可辨，铜管不要持续覆盖整段。
+- MIDI 中写出每个打击声部的音色/奏法映射、起音和力度差异；单一鼓轨同时塞入 clave、bell、conga 和 timbales 时，拆成可读角色轨，而不是以轨数伪装演奏关系。
 - 本默认使用 2–3 Son clave，不等同所有 Salsa 的唯一结构；二拍 Salsa、Rumba clave 或其他 Cuban-rooted 分支由用户指定/材料证据触发切换。
 
 ## 锁定与组合
@@ -41,7 +43,7 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 人声 Style Prompt 起句：
 
 ```text
-Global Metadata: son-based salsa, <BPM> BPM in 4/4, two-bar 2–3 Son clave cycle, interlocking piano montuno, bass tumbao and layered percussion, <band energy and room>.
+Global Metadata: son-based salsa, 96 BPM in 4/4, two-bar 2–3 Son clave cycle, interlocking piano montuno, bass tumbao and layered percussion, <band energy and room>.
 Vocal Details: <language, singer/register>; verse lead gives a complete rhythmic call, then coro answers after each completed lead call; in montuno, repeat <user-approved response text> with clear entrances and a distinct response register.
 Arrangement: clave cycle is <2–3 default / explicitly requested direction>; piano montuno keeps that two-bar orientation; bass anticipates the next harmony on the previous bar beat 4 and answers on next-bar 2&; add <one percussion layer> at <actual section entry>, reserve brass hits for phrase ends.
 ```
@@ -53,7 +55,7 @@ Arrangement: clave cycle is <2–3 default / explicitly requested direction>; pi
 - 终句长音："Sustain the final cadence only at the section close, then leave the next clave-cycle downbeat clear."
 没有歌词时不要生成拟西语音节；器乐方向用乐器/铜管 call-and-response 替代 vocal 指令。
 
-器樂方向将 piano guajeo/montuno 或主奏动机写入 `Motif / Front Identity`，`Instrumental Form` 标明 clave 周期、打击乐层进入、铜管回答和循环/终止方式；不能要求 AI 在不提供旋律和和弦时捏造精确 montuno 音符。
+器乐方向将 piano guajeo/montuno 或主奏动机写入 `Motif / Front Identity`；在 `Instrumental Form` 中标明 clave 周期、打击乐层进入、铜管回答和循环/终止方式。没有旋律和和弦时，不能要求 AI 捏造精确 montuno 音符。
 
 MIDI 以每小节 4 QN 计，两小节 `cycle_start_qn` 的 2–3 Son clave 默认在第一小节 `+1,+2`，第二小节 `+4,+5.5,+7`；第二小节起点是 `cycle_start_qn+4`。bass tumbao 在前一小节 `+3` 起根音，`offset_qn=cycle_start_qn+5`（即越过 barline 并完整占住下一小节第 1 拍），再留空到下一小节 `+5.5` 的五度/和弦音回应。钢琴 montuno 用实际和弦音，落在 clave 间隙并保持两小节方向；具体起音随和弦/参考确定。力度工作起点 clave 70、conga 65、bell 72、bass 88、piano 74、主唱 85；力度分层由各自音源校准，不能用同一重音复制 clave。打击轨按目标音源 map，不把 percussion note 编成假旋律。
 
@@ -65,6 +67,7 @@ ABC/MusicXML 在两小节网格中写出 clave 的真实拍位、tumbao 根音�
 
 ## 方法依据与范围
 
+- 作品单元采用 Celia Cruz 与 Fania All-Stars 的《Quimbara》（1974 Zaire 74 现场版）。CSU East Bay 音乐系的[逐段听赏指南](https://csuebmusic.github.io/mus302/module1/track2-cruz.html)把开头 cuerpo（主题歌词）与其后 montuno 明确分开：转段由 percussion/horn break 打开，之后固定 coro 与 Cruz 的即兴 guía 交替，乐队维持 clave、percussion、bass tumbao、piano montuno 和 horn mambo 的不同职责；现场录音超过一半为 montuno。迁移时先写歌曲正文和 montuno 分工，再让固定 coro 留给合唱、lead call 留给歌者，打击/钢琴/铜管各承担独立层；段落时长由本作能量决定，不复制现场时长或具体速度。
 - Rebeca Mauleón, *Salsa Guidebook for Piano & Ensemble*, Ch. III–V，提供 clave、乐器角色、montuno 与合奏结构的方法背景；出版社目录和样页可核该书的主题范围，但本规则不把未见的 bass 原谱归给她。
 - Adrian Poole, “Timing and Groove in the Performance of Cuban Bass and Conga Patterns,” *Analytical Approaches to World Musics* 10/2 (2022), Figure 4 与正文 [22]–[24]，把 2& 与 4 标为常见 anticipated bass 的两个起音，并说明第 4 拍音跨小节线连到下一小节第 1 拍、预示和弦变化。Smithsonian Folkways 的 Salsa 教学指南也讲第 2 拍后半与第 4 拍的两次起音及第 4 拍预示和弦变化。这里的“第 4 拍根音—跨线—下一小节 2& 五度/和弦音”是本配置选定的可执行音高安排；Poole 的正文支持节奏位置与和声预期，不单独证明这一具体根音/五度映射。
 - David Peñalosa, *The Clave Matrix: Afro-Cuban Rhythm: Its Principles and African Origins* 讨论 clave 在不同 son/rumba 等传统中的组织差异；本文因此精确限定为 2–3 Son clave，不把一种 clave 方向外推到所有 Afro-Cuban 音乐。

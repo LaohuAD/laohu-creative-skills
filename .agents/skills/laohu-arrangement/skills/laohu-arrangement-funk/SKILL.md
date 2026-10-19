@@ -4,6 +4,8 @@ description: 用户要 Funk/放克乐队律动时，用十六分细分、第 2�
 ---
 
 # Funk：让鼓、贝斯与短促伴奏咬合成一条律动
+## 独立完整新作的项目蓝图
+完整无锁定参照的新 Funk 乐队作品采用 4/4、100 BPM（四分音符 BPM）、80 小节项目起点：Intro 4 → A groove/V1 16 → B horn/response 8 → A/V2 16 → 器乐 solo 16 → B 8 → A/vamp 8 → Outro 4。A 段以同一 1–2 小节 bass riff 和 snare 2/4 backbeat维持 pocket；B 段只改变一种互锁关系或引入一次短回答；solo 不让其它声部同步填满。Larry Finn 的 Berklee 教学以 Funk 十六分 bass-line 和 Rock 均匀八分作比较，故本作先标 bass 的起音、休止和 ghost/kick 错位，再配吉他/clav，不以帽子细分独自判风格。用户指定更短、器乐片段或不同 funk 路线时只交所需形式。
 
 ## 触发与默认路线
 
@@ -40,7 +42,7 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 人声 Style Prompt 起句：
 
 ```text
-Global Metadata: funk band groove, <BPM> BPM in 4/4, sixteenth-note subdivision, firm backbeat on beats 2 and 4, bass-led pocket, <room and energy arc>.
+Global Metadata: funk band groove, 100 BPM in 4/4, sixteenth-note subdivision, firm backbeat on beats 2 and 4, bass-led pocket, <room and energy arc>.
 Vocal Details: <singer/register>; place syncopated phrase accents between the bass anchors, keep lyric-bearing words clear, and use <short call / melodic lead> with replies only after the sung phrase.
 Arrangement: <bass riff identity>; kick reinforces selected bass anchors and leaves other attacks distinct; snare on 2 and 4 with sparse low ghost notes; short muted guitar or clavinet stabs answer the vocal; verse stays lean, chorus repeats <hook> and adds <one response layer>, instrumental break gives the riff one foreground turn.
 ```
@@ -64,5 +66,5 @@ ABC/MusicXML 把真实 bass 轮廓、kick/snare 主拍、ghost 休止、stabs �
 
 ## 方法依据与范围
 
-- Larry Finn, *Beyond the Backbeat: From Rock & Funk to Jazz & Latin*（Berklee Online 节选）将 Funk 鼓的十六分细分与 Rock 的均匀八分作教学对照，同时强调 bass line 会改变相同鼓型的风格感。这里据此把 bass 与鼓的互锁作为验收重点，而不把细分当充分条件。
+- Larry Finn, *Beyond the Backbeat: From Rock & Funk to Jazz & Latin*（Berklee Online 节选）将 Funk 鼓的十六分细分与 Rock 的均匀八分作教学对照，同时强调 bass line 会改变相同鼓型的风格感。具体作品单元取 James Brown《Funky Drummer》（1969）：Roland 的[曲目鼓型拆解与谱例](https://articles.roland.com/behind-the-beat-funky-drummer-by-james-brown/)记录 Clyde Stubblefield 的持续十六分 hi-hat、2/4 拍强 snare 与之间的 ghost notes，并指出鼓手按 James Brown 要求保持 pocket、不扩成炫技独奏；补充的两小节 breakbeat 由鼓型与人声打击、吉他、tambourine 交替。迁移到新作时，先以一个 1–2 小节 bass cell 和鼓的强拍/ghost-note 互锁做 A groove，再只在 B 段加一项回应；采用强 snare、ghost-note 密度或 open-hat 需逐拍照谱/实听核对，不把 Roland 的单曲谱例说成全部 Funk 的通法。
 - Berklee Online 的 Funk Bass 教学以 groove、切分、音高材料和适配 fill 为训练内容，支持先写重复 bass cell 再安排填充；具体拍点是本配置选定的工作路线。

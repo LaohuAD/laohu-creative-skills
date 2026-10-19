@@ -6,7 +6,7 @@
 >
 > **平台限制**：同主题库——禁 `<style>/<script>/class/id/div/position/float/@media/grid`，只用内联 + `flex`，文字全部 `<span leaf="">` 包裹。
 >
-> **结构回归**：新增组件应通过 `scripts/validate_gzh_html.py`。重复的同标签、同内联样式单子节点链不超过 10 层；不要给普通正文 section 加 nodeleaf。渐变留给无文字装饰层，避免让文字直接压在渐变背景上；纯背景渐变可保留。
+> **结构回归**：新增组件必须通过 `scripts/validate_gzh_html.py`。重复的同标签、同内联样式单子节点链不超过 10 层；不要给普通正文 section 加 nodeleaf。渐变留给无文字装饰层，避免让文字直接压在渐变背景上；纯背景渐变可保留。
 
 ---
 
@@ -80,7 +80,7 @@ print(make_skill("gzh-design"))</span></p>
 ```html
 <section style="background:#FFF;border-radius:12px;padding:6px;border:1px solid #E5E7EB;box-shadow:0 4px 12px -2px rgba(0,0,0,0.08);margin-bottom:8px;">
   <section style="margin:0;border-radius:8px;overflow:hidden;">
-    <span leaf=""><img src="图片URL" style="max-width:100%;height:auto;display:block;margin:0 auto;"></span>
+    <span leaf=""><img src="图片URL" alt="替代文本" style="max-width:100%;height:auto;display:block;margin:0 auto;"></span>
   </section>
 </section>
 <p style="font-size:12px;color:#9CA3AF;text-align:center;margin:0 0 24px;">
@@ -92,12 +92,14 @@ print(make_skill("gzh-design"))</span></p>
 
 > **图片尺寸自适应**：`<img>` 用 `max-width:100%;height:auto;display:block;margin:0 auto`——按图片自身尺寸显示并居中，大图缩到容器宽、小图保持原尺寸，**不用 `width:100%` 强制铺满**（小图被拉伸会糊）。
 
+模板中的 alt 是待填写字段，不等于下方图片说明。装配时按[公众号排版 Skill](../SKILL.md)的图片交付步骤填入来源替代文本或证据支持的文本；最终正文不得保留“替代文本”占位。
+
 ### 2b. GIF 动图（同图片，加"GIF 动图"角标）
 
 ```html
 <section style="background:#FFF;border-radius:12px;padding:6px;border:1px solid #E5E7EB;box-shadow:0 4px 12px -2px rgba(0,0,0,0.08);margin-bottom:8px;">
   <section style="margin:0;border-radius:8px;overflow:hidden;">
-    <span leaf=""><img src="动图URL.gif" style="max-width:100%;height:auto;display:block;margin:0 auto;"></span>
+    <span leaf=""><img src="动图URL.gif" alt="替代文本" style="max-width:100%;height:auto;display:block;margin:0 auto;"></span>
   </section>
 </section>
 <p style="text-align:center;margin:0 0 24px;">

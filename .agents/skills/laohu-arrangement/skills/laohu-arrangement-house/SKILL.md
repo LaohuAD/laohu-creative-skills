@@ -4,6 +4,8 @@ description: 用户明确要 House 舞曲编曲或以 House 录音为声音目�
 ---
 
 # House：四拍地板、反拍和弦与低音互锁
+## 独立完整新作的项目蓝图
+未给拍号/速度/结构而要完整 House 新作时，采用 4/4、124 BPM（四分音符 BPM），72 小节：Intro 8 → Groove A 16 → Full A 16 → Break 8 → Return 16 → Outro 8。先以 kick 四踩建立同一拍轴，再让 bass 在 kick 间隙、反拍和弦/单一 hook 在指定反拍进入；Return 回到 Full A 的循环身份，仅增加一项密度或音色差。若主钩子已由 8 小节人声回句承载，可用它替换 Full A 中连续 8 小节的器乐层，不增加总长。Larry Heard 关于《Can You Feel It》手弹 bass 与 Qwazars bass arpeggio 起点的讲述支持“少量低频/和声核心先立住”，不指定 124 BPM 或全 House 编制。
 
 ## 触发与边界
 
@@ -44,7 +46,7 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 人声方向的 Style Prompt 起句：
 
 ```text
-Global Metadata: House, <BPM> BPM in 4/4, steady four-on-floor pulse, backbeat on beats 2 and 4, offbeat eighth-note motion, <energy arc and production space>.
+Global Metadata: House, 124 BPM in 4/4, steady four-on-floor pulse, backbeat on beats 2 and 4, offbeat eighth-note motion, <energy arc and production space>.
 Vocal Details: <confirmed singer identity and register>; use a short repeated chant/sample hook when the loop itself is foreground, or a clear melodic lead when the lyric carries the narrative; place phrase starts and held words at <actual lyric/phrase points>.
 Arrangement: kick on each beat; clap/snare on beats 2 and 4; closed hat on offbeat eighths; syncopated bass fills selected kick gaps; short offbeat chord stabs; keep verse layers lean, let pre-chorus add one chosen layer, and make the chorus hook repeat over the stable floor; replies occupy phrase gaps.
 ```
@@ -59,7 +61,7 @@ Arrangement: kick on each beat; clap/snare on beats 2 and 4; closed hat on offbe
 纯器乐方向改用项目栏 `Motif / Front Identity` 与 `Instrumental Form`：
 
 ```text
-Global Metadata: House, <BPM> BPM in 4/4, steady four-on-floor pulse, offbeat eighth-note motion, <energy arc and production space>.
+Global Metadata: House, 124 BPM in 4/4, steady four-on-floor pulse, offbeat eighth-note motion, <energy arc and production space>.
 Motif / Front Identity: <one lead synth, guitar, sample or chord-rhythm hook; register and repeat identity>.
 Arrangement: kick on each beat; clap/snare on 2 and 4; bass answers in selected kick gaps; short offbeat chords; <entry/exit and one chosen layer change per section>.
 Instrumental Form: <actual section order, hook return/variation, transition and loop ending>.

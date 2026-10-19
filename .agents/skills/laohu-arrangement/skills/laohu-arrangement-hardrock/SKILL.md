@@ -6,6 +6,8 @@ description: 当用户要求 hard-rock/硬摇滚乐队编曲时，以可辨吉�
 本子级只在用户明确指定 hard rock/硬摇滚、吉他 riff 驱动的硬摇滚乐队编曲，或明确要求按该路线改写时由 [laohu-arrangement 主 Skill](../../SKILL.md) 加载。仅出现普通摇滚、金属、吉他、失真、重型音色或一段短 riff 不自动触发；它也不统摄所有摇滚或金属。用户已给 riff 时先保护其重音、音程、调弦与演奏法等身份；未给 riff 时可以按宿主授权创作，但不要声称从参考材料准确还原。
 
 # Hard rock：让乐队围绕吉他 riff 同步呼吸
+## 独立完整新作的项目蓝图
+未给 riff/拍号/速度和形式而委托完整硬摇滚新作时，起点为 4/4、112 BPM（四分音符 BPM）、64 小节：Intro 4 → V1 8 → Pre1 4 → C1 8 → V2 8 → Pre2 4 → C2 8 → Solo 8 → Final C 8 → Outro 4。只有两处 Pre 各自承担独立的期待抬升/新和声或节奏动作时才保留；若它们只是重复主歌，分别删去 4 小节并直接接 Chorus，整曲为 56 小节。Metallica《Enter Sandman》的制作访谈说 demo 已有核心 riff/feel、编排在 pre-production 定型，录音按段落搭建；迁移为先确定可辨 riff 与 verse/chorus 职务，再分段编轨，不推定原曲 BPM 或结构。给了实际 riff/录音就按实际小节和重音覆盖本地值。
 
 ## 先定 riff 的身份和角色
 
@@ -35,12 +37,12 @@ description: 当用户要求 hard-rock/硬摇滚乐队编曲时，以可辨吉�
 
 ## 方法依据与适用边界
 
-James Hetfield 在 Metallica 官方 72 Seasons 访谈中描述了较早引入人声 cadence、强度，帮助鼓手判断何处收放与安排镲片的协作做法；这是可借鉴的乐队协作案例，不是硬摇滚的普遍创作顺序。本文将该个案转为提前核对 riff、节奏组和主唱交接，不照搬曲目结构或音型。
+作品单元使用 Metallica《Enter Sandman》：[制作人与工程师回看录制过程](https://www.mixonline.com/recording/classic-tracks-metallicas-enter-sandman-366232)说明 demo 已有核心 riff/feel，段落职责在 pre-production 定型，鼓与其他声部按 verse/chorus 分段搭建。迁移为先锁一条可辨 riff，再逐段检查它是否给主唱留空间、何处延续或停住；把“先定核心 riff、再在预制作确定段落、最后分段搭轨”当具体制作顺序，不推定原曲 BPM、段落数或轨道布局。James Hetfield 在 Metallica 官方 72 Seasons 访谈另谈较早引入人声 cadence 帮助鼓手判断何处收放；它是第二个乐队协作案例，不是硬摇滚的普遍创作顺序。
 
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt把riff和合奏拍点写成可听关系： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：hard-rock band, <BPM> BPM, <meter>, riff-led straight subdivision with a clear 2/4 backbeat, <guitar tuning/timbre if confirmed>。已给riff/鼓组若为异拍或其他细分，按其实际网格和重拍替换这段默认。
+Global Metadata：hard-rock band, 112 BPM, 4/4, quarter-note pulse, riff-led straight subdivision with a clear 2/4 backbeat, <guitar tuning/timbre if confirmed>。已给riff/鼓组若为异拍或其他细分，按其实际网格和重拍替换这段默认。
 Vocal Details：<已确认歌者/音区> enters <riff之后或并行位置>，lyric stresses <定位>，hold/cut <音节定位> with space for the riff reply。
 Arrangement：bass doubles the riff's <low-note rhythm>，kick reinforces <riff accents>，snare maintains <已定拍点>；guitars <unison / octave / rhythm support> and stop/hold at <rest locations>。
 固定riff识别节奏/音程与乐队可合奏落点；若riff含休止，让用户选齐停还是鼓维持pulse；若主唱占据riff音区/拍位，缩短riff或移到句缝，不同时抢前景。无riff输入时只有在创作授权内填谱，提示词不伪称复刻具体乐队。

@@ -6,6 +6,8 @@ description: 当用户要求 trap 编曲或以半拍人声和808为目标时，�
 本子级由 [laohu-arrangement 主 Skill](../../SKILL.md) 在用户明确要求 trap 风格或按 trap 方法改编时加载。歌词、参考歌或制作人只提到 trap、808、快速 hi-hat 或 Atlanta 不自动触发。沿用用户锁定的人声、调性中心、速度、旋律和目标强度；本配置只返回相应节奏、低音与声部密度选择。
 
 # Trap：让808、鼓组和人声各有清楚的位置
+## 独立完整新作的项目蓝图
+未锁拍号/速度/结构的 Trap 新作采用 4/4、140 BPM（四分音符 BPM）作项目值；snare/clap 放第 3 拍，所以实际身体重心是 70 BPM 半拍感，而不是把项目 tempo 改为 70。56 小节形式：Intro 4 → V1 16 → Hook 8 → V2 16 → Hook 8 → Outro 4；总计 56 小节。基础 hi-hat 先铺八分；roll 只有在主唱句尾/转段前存在至少一拍真实空隙，且下一强拍需要引回时才加，默认每 8 小节至多一次、长度不超过 1 拍，落在该空隙末端并准确回到下一强拍；没有这类空隙则不做 roll。Southside 的制作访谈支持先建立 snare/hat 关系再组织细分，不给 roll 配额；140 BPM、半拍听法和 56 小节是本项目值。既有 beat/tempo/map/旋律优先。
 
 ## 默认节奏骨架
 
@@ -15,9 +17,9 @@ description: 当用户要求 trap 编曲或以半拍人声和808为目标时，�
 
 ## 808与低频协作
 
-808 默认以和弦根音/低音线标定音高：在需要重击的主 kick 点给短而有起音的 808，需要低频延续时将同音/根音拉长至下一和声或鼓点前；不是每个 kick 都必须双击 808。旋律性连接或转段需要滑音时，写清起音、目标音高和到达点；确认目标音源的 portamento/slide 支持，再让滑音连到下一和弦根音或指定经过音。无音源/和弦依据时不编造滑音音高。kick 与 808 错开时应能听出两个独立起音；持续重叠则先改节奏、音符长度、音区或起音包络。
+808 默认以和弦根音/低音线标定音高：在需要重击的主 kick 点给短而有起音的 808，需要低频延续时将同音/根音拉长至下一和声或鼓点前；不是每个 kick 都必须双击 808。旋律性连接或转段需要滑音时，写清起音、目标音高和到达点；确认目标音源的 portamento/slide 支持，再让滑音连到下一和弦根音或指定经过音。无音源/和弦依据时不编造滑音音高。kick 与 808 错开时，让两个起音清楚可辨；持续重叠则先改节奏、音符长度、音区或起音包络。
 
-每个 808 音符都检查音高是否贴合和声或刻意构成张力、尾音是否跨过下一音、是否与 kick 形成不可辨的双起音。滑音要以目标音程和到达时点写明，不能笼统标“滑”而让演奏/音源猜。超低频尽量保持明确的单声道中心；只有目标音源与播放系统能稳定呈现时才把低频宽度作为效果。
+每个 808 音符都检查音高是否贴合和声或刻意构成张力、尾音是否跨过下一音、是否与 kick 形成不可辨的双起音。滑音要以目标音程和到达时点写明，不能笼统标“滑”而让演奏/音源猜。超低频优先保持明确的单声道中心；只有目标音源与播放系统能稳定呈现时才把低频宽度作为效果。
 
 ## 旋律与段落分支
 
@@ -37,12 +39,12 @@ description: 当用户要求 trap 编曲或以半拍人声和808为目标时，�
 
 ## 方法依据与适用边界
 
-Southside 在 Complex 的制作访谈将 snare 与 hi-hat 描述为互相配合的节奏关系；本地流程据此先定两者的拍内关系再添加细分。该访谈是制作个案，不是所有 trap 的定义。808 音高、滑音、饱和和声部密度仍依据用户参考、旋律及音源试听决定。
+Southside 在 Complex 的制作访谈谈到他的 trap 鼓组设计；具体作品单元另取 Lil Uzi Vert《Myron》：Supah Mario 与 Oogie Mane 在[Genius 官方 Deconstructed 拆解](https://www.youtube.com/watch?v=AJFSNRg0jMw)说明该曲从旋律核进入后，先加 hi-hat、snare/open hat，再加 triangle，808 顺着帽子与其余节奏关系组织。迁移到本次新作时，先定半拍 snare，再固定八分帽骨架与 808 根音/时值，最后只在真实句缝或段界触发本地规定的一次短 roll；具体曲目演示的层序不等于所有 Trap 都必用 triangle、808 或滚奏。音高、滑音、饱和仍依据用户参考、旋律及实际音源试听决定。
 
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt由已选关系直接组句，变量只改标注槽位： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：trap hip-hop, <BPM> BPM, 4/4 half-time pocket, snare on beat 3, <sparse / driving> low-end pulse。
+Global Metadata：trap hip-hop, 140 BPM, 4/4 half-time pocket, snare on beat 3, <sparse / driving> low-end pulse。
 Vocal Details：<已确认的主唱身份/音区>，<rap / melodic rap> phrases <在拍上 / 弱起 / 跨小节>，重音音节<定位>，leave space at <句缝>。
 Arrangement：808 follows <根音/旋律低音> with <held notes / target-note slides>，hi-hats hold an 8th-note grid and add short <16th / triplet> rolls before <主句入口/转段>；roll resolves to the pulse。
 器乐版把Vocal Details改为旋律前景；固定半拍snare与稳定帽子骨架，开放帽子细分、808音长和滑音。主唱句头前加roll只在句头需要推进时；鼓点已密或辅音需清晰时减为八分帽/删roll。目标音源不支持可听滑音时改为离散经过音或无滑音，不用标签冒充奏法。

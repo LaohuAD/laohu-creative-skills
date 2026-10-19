@@ -4,6 +4,8 @@ description: 当用户要求中国风融合，或希望传统乐器/曲调承担
 ---
 
 # 中国风：让传统材料与作品脉冲、主题音色形成有来由的融合
+## 独立完整新作的项目蓝图
+未给拍号/速度/曲式而需完整人声融合新作时，项目起点为 4/4、84 BPM（四分音符 BPM），48 小节：Intro 4 → V1 8 → C1 8 → 传统器乐主题/间奏 8 → V2 8 → C2 8 → Outro 4。前奏先陈述一次传统主题；主歌只在句缝留一条短回应；间奏给同一主题完整发言；末副歌仅选一种扩展（主题尾音、音区上移或一条持续声部）。编曲人钟兴民在[《七里香》前奏制作访谈](https://www.exound.com/articles/2fe10a1f-5c25-442f-987d-9981c8e2c13e)回忆：先请北京二胡演奏者录制，后因成品希望减少民乐量而将现场二胡换成 MIDI；这是可定位到“前奏传统旋律/二胡音源取舍”的作品单元。本作迁移为先写传统主题承担识别、回答或过门中的哪一项，再选真实演奏或 MIDI，并只在前奏陈述、主歌句缝回应、间奏完整呈示；不照搬该曲配置。用户指定曲种、器乐主奏或已有歌曲结构时由它们覆盖这一路线。
 
 ## 触发与默认路线
 
@@ -40,7 +42,7 @@ description: 当用户要求中国风融合，或希望传统乐器/曲调承担
 
 ## 方法依据与范围
 
-- Chen-Yu Lin, *Questions of Chineseness: A Study of China Wind Pop Music and the Post-1990s Generation in the PRC, Hong Kong, Taiwan, and the UK* (PhD thesis, University of Liverpool, 2018)，以具体 China Wind 歌曲讨论音乐、歌词及视觉表达中的传统元素；它支撑“按作品分析具体借用关系”，不提供统一配方。
+- Chen-Yu Lin, *Questions of Chineseness: A Study of China Wind Pop Music and the Post-1990s Generation in the PRC, Hong Kong, Taiwan, and the UK* (PhD thesis, University of Liverpool, 2018)，以具体 China Wind 歌曲讨论音乐、歌词及视觉表达中的传统元素；它支撑按作品核对借用关系，不提供统一配方。钟兴民对《七里香》前奏的制作叙述另提供本地可定位的传统乐器/音源更换单元，见正文所链访谈。
 - François Picard 为 Smithsonian Folkways 的《中国：吹打乐器合奏》录音撰写说明，记录具体地区的吹打编制与仪式/户外场景；用来提醒传统类别须按地域和用途区分，不把其合奏直接套进流行歌。
 - Minqi Wang, “Integration of the Traditional Chinese Musical Instrument, the Pipa, with Electronic Music” (master’s thesis, Berklee College of Music, 2023)，是琵琶与电子音乐融合的具体制作案例，可支持“传统乐器进入电子/流行编制需形成实际声部关系”，不代表所有中国传统音乐的统一写法。
 - 本节关于音区、单旋律角色、换气/换把、拨弦延音方式和流行节奏组分工，是针对本地融合路线写出的编配操作，不归给上述来源，也不替代来源曲种的谱例与演奏传统。
@@ -48,7 +50,7 @@ description: 当用户要求中国风融合，或希望传统乐器/曲调承担
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt把来源与乐器角色写成可听动作；交付前将尖括号槽位替换为完整短句，未定项留在蓝图：
-Global Metadata：China-Wind pop fusion / <具体曲种或地域>，<BPM> BPM，<拍号与拍感>，<情绪与声场>。
+Global Metadata：China-Wind pop fusion / <具体曲种或地域>，84 BPM，<拍号与拍感>，<情绪与声场>。
 Vocal Details：<确认的歌手/语言/音区> follows <锁定旋律或稳定落音>，leaves <句缝> for the instrumental reply；器乐作品删除此栏。
 Motif / Front Identity：<乐器与具体奏法> states <主题> in <段落位置>，answers <人声句尾/器乐留白>。
 Arrangement：<流行节奏组或来源编制> maintains <拍点>，harmony supports <中心音/和弦方案>。

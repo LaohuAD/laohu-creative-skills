@@ -55,11 +55,11 @@ python3 tools/install.py install --host codex --write
 
 Agent 专用指引：[打开或下载](https://raw.githubusercontent.com/LaohuAD/laohu-creative-skills/main/docs/agent-guide.txt)。你也可以对 Agent 说：“请先阅读老胡造梦技能的 Agent 专用指引，并按其中说明协助我。”
 
-README 说明可选方式；Agent 不应仅因读到安装说明就执行全局安装。
+README 说明可选方式；Agent 不得仅凭阅读安装说明执行全局安装。
 
 **作品保存：** 在老胡项目内，默认保存到 `works/` 并告知实际路径；在项目外且尚未确定位置时，Agent 会给出具体路径建议，请你确认后再保存。你已指定位置或同一作品已有目录，就直接沿用。外部目录不自动继承本仓库的 Git 忽略规则。
 
-**更新、检查与卸载：** 两种方式都使用 `/laohu-update` 更新完整仓库，保留本地修改；全局模式还同步受管理入口。`python3 tools/install.py status` 查看链接状态。取消 Codex 全局入口时，先运行 `python3 tools/install.py uninstall --host codex` 预览，再加 `--write`；保留仓库和作品。不要移动或删除正在被链接的仓库；需要搬迁时先卸载入口，再搬迁并重新注册。详细操作见 [安装与入口管理](.agents/skills/laohu-update/references/installation.md)。
+**更新、发布、检查与卸载：** 普通更新请求会更新完整仓库并保留本地修改；直接输入 `/laohu-update` 是“更新项目＋对外发布已审阅的可发布改动”的合并指令。只想同步官方版本时，请明确说“只更新，不发布本地改动”。全局模式还同步受管理入口；`python3 tools/install.py status` 查看链接状态。取消 Codex 全局入口时，先运行 `python3 tools/install.py uninstall --host codex` 预览，再加 `--write`；保留仓库和作品。不要移动或删除正在被链接的仓库；需要搬迁时先卸载入口，再搬迁并重新注册。详细操作见 [安装与入口管理](.agents/skills/laohu-update/references/installation.md)。
 
 ## 从哪里开始
 
@@ -96,10 +96,12 @@ README 说明可选方式；Agent 不应仅因读到安装说明就执行全局�
 | /laohu-arrangement | 根据歌词、旋律、音频或创作简报设计编曲，处理曲式、和声、律动、配器、织体、音色与演唱协作，交付制作方案、音乐生成输入或符号乐谱 |
 | /laohu-luna | 使用当前会话模型担任指挥官，将每项有界执行交给 Luna Worker，并检查结果 |
 | /laohu-novel | 小说创作、续写、改编与修订；把主题、构想或分章梗概写成正文 |
+| /laohu-topic | 从真实材料中确定、比较和检查整条内容选题，并判断材料与制作状态能否兑现 |
+| /laohu-motion | 把主题、口播稿或已有工程转成可制作、渲染并检查的动画；固定画风专项只按明确要求读取 |
 
 本表列出当前已有正式定义的公开入口，顺序只便于浏览，不代表推荐优先级或固定执行流程。新增公开入口会由目录扫描发现；未列出的名称请先用 `/laohu 能力目录` 核对实际定义，预留目录不是正式能力。项目内可直接使用表中已部署的入口。全局注册仅包含一级、二级正式入口；三级能力由所属二级入口按需读取，不单独注册。公众号排版由 `/laohu-htmlshow` 在明确公众号任务中按需读取 `laohu-htmlshow-gzh`。
 
-每个正式入口都可以按需要单独使用或组合。你可以用 `/laohu-writing` 整理文章，再用 `/laohu-title` 推敲标题；也可以只处理一个标题或一张封面。每一步都由你决定是否继续、修改或换一个方向。
+每个正式入口都可以按需要单独使用或组合。你可以先用 `/laohu-topic` 确定整条内容选题，再由你决定是否把选题简报交给 `/laohu-title` 推敲标题、交给 `/laohu-cover` 设计封面，或继续写作；也可以只处理其中一项。每一步都由你决定是否继续、修改或换一个方向。
 
 ## 和老胡画梦枋一起使用
 
@@ -117,7 +119,7 @@ README 说明可选方式；Agent 不应仅因读到安装说明就执行全局�
 
 ## 持续更新
 
-版本变化见 [更新记录](CHANGELOG.md)；输入 `/laohu 更新帮助` 了解更新方式，明确需要升级时使用 `/laohu-update`。维护者可运行 `python3 tools/check_project.py --test`，具体发布步骤见 [项目维护指南](docs/maintenance.md)。
+版本变化见 [更新记录](CHANGELOG.md)；输入 `/laohu 更新帮助` 了解更新方式。普通升级可明确说“只更新官方版本”；直接输入 `/laohu-update` 将按完整更新与发布流程执行。维护者可运行 `python3 tools/check_project.py --test`，具体发布步骤见 [项目维护指南](docs/maintenance.md)。
 
 这个项目会随着真实创作持续完善。如果你在使用过程中遇到问题，或有新的创作需求和建议，欢迎通过老胡个人网站联系老胡。
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "laohu-topic | 老胡选题策划"
+  short_description: "从真实材料中确定整条内容选题，比较受众关切、内容依据与实际可交付范围。"
+  default_prompt: "使用 $laohu-topic，根据我的真实问题或材料确定、比较或检查整条内容选题，并说明它如何兑现。"

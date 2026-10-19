@@ -82,10 +82,12 @@ When you know what you want to do, choose the matching command. When you only kn
 | /laohu-arrangement | Arrange music from lyrics, melody, audio, or a brief; shape form, harmony, groove, instrumentation, texture, timbre, and vocals; deliver a production plan, AI-generation input, or notation |
 | /laohu-luna | Keep the current session model as Commander, delegate every bounded task to Luna Worker, and review the result |
 | /laohu-novel | Create, continue, adapt, and revise novels; turn story concepts or chapter briefs into prose |
+| /laohu-topic | Define, compare, or check a full content topic against real material, audience concerns, and production constraints |
+| /laohu-motion | Turn an idea, narration, or existing project into an animation that can be implemented, rendered, and checked; load a fixed visual-style specialization only when explicitly requested |
 
 This table lists currently defined public entries in display order; the order is for browsing and does not set recommendation priority or a fixed workflow. The live scan can discover a newly added public entry before its table entry is updated; use the `/laohu` capability directory to check its current definition. Reserved folders are not formal capabilities. Project workspaces can discover the directly deployed entries in `.agents/skills/`. Global registration includes first- and second-level entries only; third-level capabilities are read on demand by their owning second-level entry and are not registered separately. For a WeChat task, `/laohu-htmlshow` loads `laohu-htmlshow-gzh` when needed.
 
-Use a defined entry on its own or combine several for one project. You can draft an article with `/laohu-writing` and refine its title with `/laohu-title`, or work on one title or cover with `/laohu-cover`. You decide whether to continue, revise, or change direction at every step.
+Use a defined entry on its own or combine several for one project. You can use `/laohu-topic` to settle the full content direction, then decide whether to pass its brief to `/laohu-title` for title work, `/laohu-cover` for visual design, or writing; you can also use only the entry needed for the current step. You decide whether to continue, revise, or change direction at every step.
 
 ## Use It with Laohu Creative Studio
 

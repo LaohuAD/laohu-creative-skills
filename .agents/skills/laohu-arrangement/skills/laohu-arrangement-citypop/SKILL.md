@@ -4,6 +4,8 @@ description: 用户要 City Pop/日本城市流行录音室乐队感时，以切
 ---
 
 # City Pop：以乐队律动、流动低音和精编声部构成都市流行感
+## 独立完整新作的项目蓝图
+未给拍号/速度/曲式的完整人声 City Pop 新作，采用本地晚七十至八十年代日本乐队型路线：4/4、112 BPM（四分音符 BPM），56 小节：Intro 4 → V1 8 → C1 8 → V2 8 → C2 8 → 器乐 solo 8 → Final C 8 → Outro 4。主歌以 clean cutting guitar、切分 bass 和 kick 的错位先立 groove，副歌只加一至两项高区声部，8 小节 solo 只交给一个前景乐器。山下达郎谈《SPARKLE》具体说明 clean Telecaster cutting 直接 DI 入调音台并 EQ，目标是清亮切分声部；它只作为吉他角色/录音链的作品单元，不据此推定《SPARKLE》整首小节布局。指定别的年代、分支、录音或实际拍轴时据此切换；用户只要局部编配不扩曲。
 
 ## 触发与本地路线
 
@@ -43,7 +45,7 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 人声 Style Prompt 起句：
 
 ```text
-Global Metadata: late-1970s/1980s Japanese city-pop band arrangement, <BPM> BPM in 4/4, kick on beats 1 and 3, snare on 2 and 4, eighth-note hi-hat, syncopated bass, <studio depth and section arc>.
+Global Metadata: late-1970s/1980s Japanese city-pop band arrangement, 112 BPM in 4/4, kick on beats 1 and 3, snare on 2 and 4, eighth-note hi-hat, syncopated bass, <studio depth and section arc>.
 Vocal Details: <singer/register/tone>; clear melodic lead with <phrase length and held-word points>, restrained verse delivery and a memorable chorus hook; keep phrase openings clear of guitar and keyboard attacks.
 Arrangement: bass moves independently of kick; clean guitar gives short syncopated replies while electric piano/synth holds the selected chord voicing; verse uses a compact band bed, pre-chorus changes <one register/harmonic/density field>, chorus widens with <strings or brass, choose one unless the reference supports both>, then returns to the lead hook.
 ```
@@ -55,11 +57,11 @@ Arrangement: bass moves independently of kick; clean guitar gives short syncopat
 - 尾句扩宽："Double the final chorus phrase only at the selected ending words when the singer or generation setup supports a stable double."
 长音高点须对应真实段落峰值，不自动拔高；主唱与器乐避免同音区抢前景。
 
-純器樂方向把可辨識的 bass/keyboard/guitar motif 放 `Motif / Front Identity`；`Instrumental Form` 逐段標出鍵盤和弦、短吉他回應與選擇性弦/銅管層何時進退。
+纯器乐方向，把可辨认的 bass/keyboard/guitar motif 放入 `Motif / Front Identity`；在 `Instrumental Form` 中逐段标明键盘和弦、短吉他回应及可选弦/铜管声部何时进入与退出。
 
 MIDI 以 4/4 每小節 4 QN 計：kick 起音 `bar_qn+0,+2`；snare/clap `+1,+3`；hi-hat 可用 `+0,.5,1,1.5,2,2.5,3,3.5` 八分格，力度做強弱交替，不必同音量。bass 從和弦根音/五度出發，在 kick 間填切分；clean guitar 選短反拍，electric piano 承擔實際和弦。力度起點 kick 92、snare 88、hat 強拍 58/弱拍 42、bass 80、短吉他 62、電鋼 68；按音源和主唱距離調整。短和弦 gate 起點 0.25 QN；長 pad/弦樂依實際譜面延音，不將 MIDI gate 值直接等同譜面音符值。
 
-ABC/MusicXML 需呈現 1/3 kick、2/4 snare、八分帽強弱、切分 bass 的實際起音，以及鍵盤和弦的聲部/音值；吉他短切音在相應拍間記音，不用文字“syncopated”替代節奏。弦/銅管長線按樂手可演奏音域與呼吸/弓法安排。鼓用目標 percussion mapping，和弦及旋律用實際音高；詳細字段與時值檢查見[輸出契約 Reference](../../references/output-contracts.md)。
+ABC/MusicXML 需呈现 1/3 kick、2/4 snare、八分帽强弱、切分 bass 的实际起音，以及键盘和弦的声部/音值；吉他短切音在相应拍间记音，不用文字“syncopated”替代节奏。弦/铜管长线按乐手可演奏音域与呼吸/弓法安排。鼓用目标 percussion mapping，和弦及旋律用实际音高；详细字段与时值检查见[输出契约 Reference](../../references/output-contracts.md)。
 
 ## 返回宿主与验收
 
@@ -67,5 +69,5 @@ ABC/MusicXML 需呈現 1/3 kick、2/4 snare、八分帽強弱、切分 bass 的�
 
 ## 方法依据与范围
 
-- 大阪大学论文 *Intermediality and the Discursive Construction of Popular Music Genres: The Case of “Japanese City Pop”* 讨论该标签如何由媒介话语连接风格不一的作品。这里据此把 band-led 路线标为本地默认，不称为普遍定义。
-- Billboard JAPAN 对林哲司、词作者/制作人等的 City Pop 讨论提供创作者和研究者对曲目谱系、制作场景及复兴的观点；其访谈支持按年代/作品细分的必要性，本文节奏组步骤是本地执行路线。
+- 大阪大学论文 *Intermediality and the Discursive Construction of Popular Music Genres: The Case of “Japanese City Pop”* 讨论该标签连接了风格不一的作品；它支持不要把一个标签当单一编制定义。
+- Tatsuro Yamashita 在[FenderNews《SPARKLE》制作访谈](https://fendernews.jp/cover-2025-tatsuroyamashita/)具体谈到清音 Telecaster 的切分吉他声部、DI 直入调音台并以 EQ 塑造清亮中频。迁移到本地晚七十至八十年代 band-led 路线时，先把清音短切分吉他放在 verse 的拍间，与 bass/kick 错位；只从这段创作者描述迁移吉他角色与录音决策，不推定《SPARKLE》全曲段落、全轨音色，也不把该路线扩成所有 City Pop。Billboard JAPAN 对林哲司、词作者/制作人等的访谈支持按年代/作品细分的必要性，本文其余节奏组步骤是本地执行路线。

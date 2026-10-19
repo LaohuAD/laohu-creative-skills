@@ -143,7 +143,7 @@ BTS《봄날 / Spring Day》显示句法动作可以逐段换挡：开头的短�
 
 Loureiro-Rodríguez 与 Moyna 的 Texas conjunto 个案统计 Nick Villarreal 178 首歌曲，其中 39 首有语码转换，35 首以西班牙语为矩阵，只有 3 首均衡交替。《Así es la vida》让英语卷舌音染色西语韵脚，《La Happy Hour》把英语借入语/双关接入西语主句。迁移时先锁矩阵语法，再记录切换在哪个声音或语义位置起作用；这项地区/艺人研究不能推出全球比例、固定主语言或双语歌曲的市场规律。
 
-验收逐处检查切换前后的语法、身份/对象变化、韵脚发音和听众入口；必要信息若故意只让一部分听者听懂，应是用户选定的表达立场。若实际目标只是翻译或字幕，不加载本配置冒称 code-switching；若是可唱译写，加载具体目标语种配置。
+验收逐处检查切换前后的语法、身份/对象变化、韵脚发音和听众入口；必要信息若故意只让一部分听者听懂，须是用户选定的表达立场。若实际目标只是翻译或字幕，不加载本配置冒称 code-switching；若是可唱译写，加载具体目标语种配置。
 
 ## 叠加配置与真实冲突
 
@@ -178,4 +178,4 @@ Loureiro-Rodríguez 与 Moyna 的 Texas conjunto 个案统计 Nick Villarreal 17
 - Miran Yu, “A Study on Phonological Features of Lyrics for Korean Popular Song Writing,” *인문언어* 16(3), 2014, 105–126；韩国国立国语院《韩国语正字法/标准发音法》及官方外语说明页。Yu 目前只依据可核摘要用于 AP/IP 边界、音高和时长的听辨维度；规范资料用于核对拼写/发音事实，不规定旋律填词禁区，也不把 K-pop 个案升格为全体韩语歌词规则。
 - “Lyrical Code-Switching, Multimodal Intertextuality, and Identity in Popular Music,” *Languages* 9(11), 2024；Ian Schneider, “English’s Expanding Linguistic Foothold in K-pop Lyrics: A Mixed-Methods Approach,” *English Today* 40(2), 2024, 105–112, DOI 10.1017/S0266078423000275（first published online 2023）；Verónica Loureiro-Rodríguez and María Irene Moyna, “‘Me aviento el English y el Spanish’: Spanish-English Code-Switching in Texas Conjunto Artist Nick Villarreal,” *International Journal of Bilingualism* 29(4), 2025, 984–1007, DOI 10.1177/13670069241261305。前两项分别讨论流行歌语码切换/身份与特定 K-pop 语料；第三项细读特定德州 conjunto 歌手的混语韵脚、双关与矩阵语言。它们支持逐处判断切换功能，不代表全球双语歌曲的比例、固定语言主次或市场规律。
 
-若要在对话中引用确切原话或主张某具体名家明确提出某句规则，应回到可核实原文核对其措辞和上下文；本 Reference 只保留方法转述、本地操作及书目，不依赖外网才能执行。
+若要在对话中引用确切原话或主张某具体名家明确提出某句规则，回到可核实原文，核对其措辞和上下文；本 Reference 只保留方法转述、本地操作及书目，不依赖外网才能执行。
