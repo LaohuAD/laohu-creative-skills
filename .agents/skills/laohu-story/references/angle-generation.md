@@ -1,6 +1,6 @@
 # 深化分支与生成不同角度
 
-由[主 Skill](../SKILL.md)阶段三在用户点选某个局部可能、要求继续发展或指定数量的角度时读取。输入可以是原始材料、阶段二的假设及其后果、用户反馈或已确认方向；输出为具体且可区分的内容候选，返回主文阶段三。它不要求预先确认唯一核心，也不把变量表当作必填清单。
+由[主 Skill](../SKILL.md)阶段三在用户点选某个局部可能、要求继续发展或指定数量的角度时读取。输入可以是原始材料、阶段二的假设及其后果、用户反馈或已确认方向；输出为具体且可区分的内容候选，返回主文阶段三。它不要求预先确认唯一核心，也不把变量表当作必填清单。普通的“继续想/再深入一点”接续用户选中分支最近一轮实际生成的内容，不重新开一批候选；同一材料的生成—探索与后果再生成由 [从材料生成与探索](core-discovery.md)作为唯一完整方法，本文件只深化本阶段的切口选择与人物观察差异。
 
 ## 根据材料关系选择操作
 
@@ -15,6 +15,14 @@
 | 表达、关系、信息或行动之间有特定差别，或用户明确要求构造某种叙事关系 | 按下表选择反差、冲突、信息差/悬念或重释/反转 | 先分清材料分析与主动构思；未获构思授权时，材料没有依据就不把该关系说成已存在 |
 | 惯常标签压住具体感觉 | 按陌生化恢复使用痕迹、动作、声音、比例、空间或身体感受，并让该细节改变理解 | 只添奇异装饰、细节不进入关系时，删去或另找观察点 |
 | 多个变量同时变化，需检查组合能否成立 | 按形态分析选少数相关维度、给出实际取值，再作交叉一致性检查 | 矛盾条件拆成互斥假设；不穷举无关组合，也不把“相容”当成“更好” |
+
+### 同一材料，从不同人物的理解继续发展
+
+当变化来自人物对同一事件的不同理解时，不把它简化成“谁知道更多”。Burkhard Niederhoff 区分叙事视角（Perspective—Point of View）与聚焦（Focalization）：人物所处位置、个性和价值判断会影响他看见什么、怎样解释和评价同一件事；聚焦主要涉及叙事信息的选择与限制。谁在讲述不自动等于谁在感知，也不意味着所有差异都要靠隐瞒信息制造。
+
+沿用户已给的事件或明确许可的假设，分别辨认相关人物此刻在意什么、所处关系与位置、依据哪些信息作判断，以及会把同一结果看作什么。再写出他们因此作出的行动或回应，以及回应如何让另一人重新理解、改变可行选择，或继续维持原有关系。只展开本次能够改变内容的差异，不按年龄、身份或性格标签推定人物观点，不要求每个人都误会或改变，也不强制切换叙述人称、聚焦者或视角形式；后续小说的具体叙述系统交专业制作。
+
+契诃夫《苦恼》（康斯坦丝·加内特英译）可见同一倾诉诉求如何在不同回应中继续显出“想说”与“被听见”的关系：约纳向军官提起儿子去世，军官询问死因后催他赶路；他又试着对年轻乘客开口，仍被泛泛谈论死亡和催促带过；他再向起身喝水的年轻车夫提起儿子，对方很快蒙头睡去；最后他在马厩向母马说完。这里的可迁移处理是让每次回应具体改变倾诉所处的关系，不是重复一个孤独主题或不断增加灾难；也不表示母马真正理解他，更不是每个故事都要安排多次碰壁、丧子或动物听诉。
 
 ### 从材料提炼与主动构思分流
 
@@ -62,7 +70,8 @@
 - **博登的创造性路径。**Margaret A. Boden, *Creativity and Art: Three Roads to Surprise*, Oxford University Press, 2010, Introduction, p. 2. 原文短语：“unfamiliar combinations of familiar ideas.” 自译：“熟悉观念的不熟悉组合。”组合、探索与转化在主文按各自触发条件落实，不作等级排序。
 - **结构映射。**Dedre Gentner, “Structure-Mapping: A Theoretical Framework for Analogy,” *Cognitive Science* 7, no. 2 (1983): 155–170. 类比先对齐关系结构，再判断载体映射；不是所有创作联想都必须类比。
 - **形态分析。**Tom Ritchey, “General Morphological Analysis” (2002; revised 2013)；“Principles of Cross-Consistency Assessment in General Morphological Modelling,” *Acta Morphologica Generalis* 4(2) (2015). 本地只借用“选择相关维度—给出取值—核查相容”的操作，不穷举全部组合；相容不证明新颖或适切。
-- **聚焦与叙事信息。**Roy Peter Clark, *Help! for Writers*, 第 7 题“I don’t know what my story is really about”；Burkhard Niederhoff, “Focalization,” *The Living Handbook of Narratology*, “Definition” and “Explication” sections. 前者用于在多个方向中按目标聚焦，后者用于区分叙述者、感知位置与信息限制；人称变化本身不等于视角变化。
+- **按目标聚焦。**Roy Peter Clark, *Help! for Writers*, 第 7 题“I don’t know what my story is really about”，用于在多个方向中依当前目标决定焦点，不是所有作品围绕单一命题的要求。
+- **视角与聚焦。**Burkhard Niederhoff, “Perspective—Point of View,” *The Living Handbook of Narratology*（2013 修订，Definition、Explication 及 Parameters 部分）；“Focalization”（Definition、Explication 部分）。前者用于考察位置、个性与价值判断怎样影响对同一事物的感知和评价；后者用于辨认信息选择与限制。叙述者、感知者和信息权限相关但不等同。
 - **语用含意与多义。**Wayne Davis, “Implicature,” *Stanford Encyclopedia of Philosophy*, §§1–2；Poetry Archive, “Ambiguity,” glossary entry. 词语表达内容与语境含意需有依据，多个联想不自动构成多义。
 - **陌生化。**Viktor Shklovsky, “Art as Technique” (1917), trans. Lee T. Lemon and Marion J. Reis, in *Russian Formalist Criticism: Four Essays*, University of Nebraska Press, 1965；本文所用原则与本地动作见[从材料生成与探索](core-discovery.md)。
 - **发散思维维度。**E. Paul Torrance 的流畅性、变通性、独创性与精细化，经 OECD, *Fostering Students’ Creativity and Critical Thinking: What It Means in School*, OECD Publishing, 2019, p. 56 汇述。它们帮助描述生成结果，不规定 Story 每次的输出数量，也不裁决艺术价值。
@@ -70,3 +79,5 @@
 ## 专业案例：观察位置改变了什么
 
 什克洛夫斯基在《Art as Technique》中分析托尔斯泰《Kholstomer》的马叙述者怎样看待人的所有权观念。可迁移的是非人经验与人的社会概念之间的关系差异；只把“我”换成“马”，仍沿用人的默认判断，不会产生同样的认识变化。使用观察位置变换时，先写新主体知道什么、无法理解什么，再让这一差异改变作品内容，不复制原作题材或表面形式。
+
+以上对《苦恼》的描述依据该译本全文，属于本地文本观察，不冒称人物心理的唯一解释或读者效果证据。

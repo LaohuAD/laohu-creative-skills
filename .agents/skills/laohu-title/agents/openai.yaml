@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-title | 老胡标题策划"
-  short_description: "独立创作、诊断或改良原标题，兼顾搜索意图与读者吸引，适配封面和平台发布标题。"
-  default_prompt: "使用 $laohu-title，独立创作、诊断或改良原标题，并兼顾适用的搜索意图与读者吸引。"
+  short_description: "从材料发现值得表达的内容，凝练标题、篇内关键句或歌词副歌核心句。"
+  default_prompt: "使用 $laohu-title，先确认表达职责、实际位置与作者开放范围，再从材料发现值得留下的内容并凝练成句；按需处理标题、篇内关键句或单句歌词核心表达，保留锁定观点与材料关系，不扩写整篇作品或包办旋律。"

@@ -1,5 +1,5 @@
 {
-  "version": "1.8.0",
-  "notice": "新增内容选题与动画制作入口，扩展剧本、小说和创作交付方法。",
+  "version": "1.9.0",
+  "notice": "万能造梦框架纳入共享判断，完善找茬、分析、自进化，以及标题关键表达和图文写作；入口名称与安装方式保持不变。",
   "details_url": "https://github.com/LaohuAD/laohu-creative-skills/blob/main/CHANGELOG.md"
 }
