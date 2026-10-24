@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-evolution | 老胡能力进化与重构"
-  short_description: "把已确认的方法写进实际运行文件，整合主流程、接通调用并核对下游产物。"
-  default_prompt: "使用 $laohu-evolution，按已确认方案重构相关能力文件并接通实际执行链。"
+  short_description: "创建或改进 Skill 规则，沉淀已确认的方法并接通实际执行文件。"
+  default_prompt: "使用 $laohu-evolution，把已确认的能力目标与方法写入对应 Skill 或 Reference。"
