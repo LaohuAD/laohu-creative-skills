@@ -1,0 +1,34 @@
+name: 同步会员服务器造梦技能
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: member-skill-sync
+  cancel-in-progress: false
+jobs:
+  synchronize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 触发受限的技能快照同步
+        shell: bash
+        env:
+          SYNC_HOST: ${{ secrets.MEMBER_SKILL_SYNC_HOST }}
+          SYNC_KEY: ${{ secrets.MEMBER_SKILL_SYNC_SSH_KEY }}
+          SYNC_KNOWN_HOSTS: ${{ secrets.MEMBER_SKILL_SYNC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$SYNC_HOST"
+          test -n "$SYNC_KEY"
+          test -n "$SYNC_KNOWN_HOSTS"
+          sync_dir=$(mktemp -d "$RUNNER_TEMP/member-sync.XXXXXX")
+          trap 'rm -rf "$sync_dir"' EXIT
+          chmod 700 "$sync_dir"
+          printf '%s\n' "$SYNC_KEY" > "$sync_dir/key"
+          printf '%s\n' "$SYNC_KNOWN_HOSTS" > "$sync_dir/known_hosts"
+          chmod 600 "$sync_dir/key" "$sync_dir/known_hosts"
+          ssh -i "$sync_dir/key" -o IdentitiesOnly=yes -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes -o ConnectTimeout=20 \
+            -o "UserKnownHostsFile=$sync_dir/known_hosts" "laohu-skill-sync@$SYNC_HOST" sync
