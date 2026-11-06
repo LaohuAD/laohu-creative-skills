@@ -73,7 +73,7 @@ print(make_skill("gzh-design"))</span></p>
 
 ## 二、图片 / GIF 组件（Markdown `![](...)` → 这里）
 
-文章里**每一处图片、GIF、截图占位都要保留并转成下面的组件**，不得遗漏；保留图片内容、出现顺序、说明文字和样式。输出可携带的正文时，按正文 HTML 所在目录解析本地相对路径，将本地图片真实字节以正确 MIME 编成 data URI；这一步只改变交付用 `src`，不改图片内容。远程 URL 与已有 data URI 原样保留，不下载或上传。无法读取本地文件、无法识别 MIME 或扩展名与实际 MIME 不符时必须报错，不能漏掉图片后仍称正文可携带。GIF 动图与普通图片都用 `<img>`（公众号原生支持 GIF 自动播放），区别只在加不加"动图"角标说明。
+文章里**每一处图片、GIF、截图占位都要保留并转成下面的组件**，不得遗漏；保留图片内容、出现顺序、说明文字和样式。输出可携带的正文时，按正文 HTML 所在目录解析本地相对路径，将本地图片真实字节以正确 MIME 编成 data URI；这一步只改变交付用 `src`，不改图片内容。远程 URL 与已有 data URI 原样保留，不下载或上传。无法读取本地文件、无法识别 MIME 或扩展名与实际 MIME 不符时必须报错，不能漏掉图片后仍称正文可携带。GIF 动图与普通图片都用 `<img>`（公众号原生支持 GIF 自动播放）；只有原文提供对应角标文字或用户明确要求时，才显示“动图”等角标。无来源角标时照常保留 GIF 图片本体。
 
 ### 2a. 标准图片（带说明）
 
@@ -94,7 +94,9 @@ print(make_skill("gzh-design"))</span></p>
 
 模板中的 alt 是待填写字段，不等于下方图片说明。装配时按[公众号排版 Skill](../SKILL.md)的图片交付步骤填入来源替代文本或证据支持的文本；最终正文不得保留“替代文本”占位。
 
-### 2b. GIF 动图（同图片，加"GIF 动图"角标）
+### 2b. GIF 动图（同图片，可选来源角标）
+
+GIF 文件仍按图片组件保留。可见角标和说明文字仅在源文已有对应文字或用户明确要求时才加入，并逐字沿用来源或用户指定内容；无来源文字或授权时省略角标与说明行，不省略或改动 GIF 图片本体。
 
 ```html
 <section style="background:#FFF;border-radius:12px;padding:6px;border:1px solid #E5E7EB;box-shadow:0 4px 12px -2px rgba(0,0,0,0.08);margin-bottom:8px;">
@@ -103,8 +105,8 @@ print(make_skill("gzh-design"))</span></p>
   </section>
 </section>
 <p style="text-align:center;margin:0 0 24px;">
-  <span style="display:inline-block;background:#FEE2E2;color:#991B1B;font-size:11px;font-weight:700;padding:1px 8px;border-radius:4px;margin-right:6px;"><span leaf="">GIF 动图</span></span>
-  <span style="font-size:12px;color:#9CA3AF;"><span leaf="">动图说明文字</span></span>
+  <span style="display:inline-block;background:#FEE2E2;color:#991B1B;font-size:11px;font-weight:700;padding:1px 8px;border-radius:4px;margin-right:6px;"><span leaf="">原文或用户指定的 GIF 角标文字</span></span>
+  <span style="font-size:12px;color:#9CA3AF;"><span leaf="">原文或用户指定的图片说明</span></span>
 </p>
 ```
 

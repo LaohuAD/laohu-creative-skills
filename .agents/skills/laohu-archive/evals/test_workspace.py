@@ -13,6 +13,10 @@ ROOT = SKILL.parents[2]
 spec = importlib.util.spec_from_file_location("workspace", SKILL / "scripts/workspace.py")
 api = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(api)
+library_spec = importlib.util.spec_from_file_location(
+    "library_workspace", SKILL / "scripts/library_workspace.py")
+library_api = importlib.util.module_from_spec(library_spec)
+library_spec.loader.exec_module(library_api)
 
 
 class WorkspaceTests(unittest.TestCase):
@@ -117,6 +121,29 @@ class WorkspaceTests(unittest.TestCase):
             with self.subTest(target=target), self.assertRaises(ValueError):
                 api.prepare_target(target, write=True)
         self.assertEqual(list(parent.iterdir()), [])
+
+    def test_reference_library_container_is_separate_from_works_benchmark(self):
+        planned = library_api.library_workspace(self.root, "benchmark")
+        self.assertEqual(planned["work_dir"], str(self.root / "benchmark"))
+        self.assertEqual(planned["status"], "planned")
+        self.assertFalse((self.root / "benchmark").exists())
+        created = library_api.library_workspace(self.root, "benchmark", write=True)
+        self.assertEqual(created["status"], "created")
+        self.assertEqual(list((self.root / "benchmark").iterdir()), [])
+        analysis = api.workspace(self.root, "benchmark", "Independent Review", write=True)
+        self.assertEqual(analysis["work_dir"], str(self.root / "works/benchmark/Independent Review"))
+        self.assertNotEqual(analysis["work_dir"], created["work_dir"])
+        reused = library_api.library_workspace(self.root, "benchmark", write=True, reuse=True)
+        self.assertEqual(reused["status"], "reused")
+
+    def test_reference_library_external_path_needs_confirmation_and_is_safe(self):
+        target = self.root / "external/benchmark"
+        with self.assertRaises(ValueError):
+            library_api.explicit_library_workspace(target, location_confirmed=False, write=True)
+        self.assertFalse(target.exists())
+        created = library_api.explicit_library_workspace(target, location_confirmed=True, write=True)
+        self.assertEqual(created["status"], "created")
+        self.assertTrue(target.is_dir())
 
 
 if __name__ == "__main__":

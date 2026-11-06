@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atom.schema.json",
+  "title": "Benchmark method atom",
+  "type": "object",
+  "required": ["schema_version", "atom_id", "source_id", "category", "index_card", "analysis", "consumer_bindings", "evidence_status"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "atom_id": {"type": "string", "pattern": "^ATM-[A-F0-9]{16}$"},
+    "source_id": {"type": "string", "pattern": "^SRC-[A-F0-9]{16}$"},
+    "category": {"type": "string", "pattern": "^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$", "not": {"const": "sources"}},
+    "index_card": {
+      "type": "object",
+      "required": ["title", "summary"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "summary": {"type": "string", "maxLength": 200},
+        "terms": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "analysis": {
+      "type": "object",
+      "required": ["observed_unit", "visible_observations", "mechanism_inference", "conditions", "effect_evidence"],
+      "properties": {
+        "observed_unit": {
+          "type": "object",
+          "required": ["location", "context_summary"],
+          "properties": {
+            "location": {"type": "string"},
+            "context_summary": {"type": "string"},
+            "source_unit_ref": {
+              "type": "object",
+              "required": ["unit_key"],
+              "properties": {"unit_key": {"type": "string", "minLength": 1}},
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": true
+        },
+        "visible_observations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "creator_statement": {"type": ["object", "null"]},
+        "mechanism_inference": {"type": "object", "required": ["claim"], "properties": {"claim": {"type": "string"}}, "additionalProperties": true},
+        "conditions": {
+          "type": "object",
+          "required": ["applies_when", "fixed_relations", "open_variables", "limits"],
+          "properties": {
+            "applies_when": {"type": "array", "items": {"type": "string"}},
+            "fixed_relations": {"type": "array", "items": {"type": "string"}},
+            "open_variables": {"type": "array", "items": {"type": "string"}},
+            "limits": {"type": "array", "items": {"type": "string"}}
+          },
+          "additionalProperties": false
+        },
+        "effect_evidence": {"type": "object", "required": ["status"], "properties": {"status": {"enum": ["unknown", "not-assessed", "observed"]}}, "additionalProperties": true}
+      },
+      "additionalProperties": true
+    },
+    "consumer_bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["consumer", "decision", "stage", "required_context", "adaptation", "return", "check"],
+        "properties": {
+          "consumer": {"type": "string", "pattern": "^[a-z][a-z0-9-]*(?:/[a-z0-9][a-z0-9-]*)?$"},
+          "decision": {"type": "string", "minLength": 1},
+          "stage": {"type": "string", "minLength": 1},
+          "required_context": {"type": "string", "minLength": 1},
+          "adaptation": {"type": "string", "minLength": 1},
+          "return": {"type": "string", "minLength": 1},
+          "check": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence_status": {"enum": ["candidate", "observed", "method-candidate", "method-ready"]},
+    "created_at": {"type": "string"}
+  },
+  "additionalProperties": false
+}

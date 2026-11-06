@@ -4,8 +4,8 @@
 
 ## 表达机制：歌词靠什么推进
 
-- **抒情咏唱**：以一个感知支点和歌者对它的关系判断组织内在时间。选择凝视、回忆、自白或矛盾意识为主动作；不要求慢歌、景物或隐喻。每段必须让注意力停驻、转移或改观。
-- **叙事民谣**：以人物的行动、消息、选择和后果组织时间。选定的分支要规定谁讲、何时透露关键信息、用什么诗节/复沓承接事件。传统 ballad 需锁定具体地域/版本谱系；若选 Child ballad 传统，可用四行歌谣节、交替长短行、二四行押韵/半押韵、直接引语和叠句构成可口传叙事；不得把它当所有民谣的普遍格律。现代叙事民谣依旋律与故事采用自由诗节。
+- **抒情咏唱**：以歌者的感情、关系与内在时间组织歌词；从经验取材，以词义、意象联系、句法、语气、声韵和回句让感情在正文中发生。可以凝视一个对象，也可让多个对象围绕共同问题、感受、关系或声音组织；注意力可移动、回返或稳定停留。
+- **叙事民谣**：当用户选择叙事歌谣/叙事民谣传统，或本作明确由口传故事机制组织时，以人物行动、消息、选择和后果组织讲述；再通过叙述声口、披露次序、句群、韵脚、复沓和停顿把故事写成歌。情节叙述也可服务其他歌词机制，不因出现因果事件就自动转为民谣。传统 ballad 需锁定具体地域/版本谱系；若选 Child ballad 传统，可据具体版本的歌谣节、声韵、直接引语和叠句处理，不把它当所有民谣的普遍格律。现代叙事民谣依旋律与故事采用适合的诗节。
 - **喜剧歌**：先确定笑点对象，再选择误认、清单升级、正经错配、自我暴露或反高潮中的主机制；重音、停顿和句尾落点决定笑能否发生。人物可不自知；创作者不能替观众解释包袱。
 - **讽刺歌**：锁定批判对象、其公开说辞/自我形象、具体后果和歌者判断，再选择反语、仿拟、夸张或荒谬规程。批判可以尖锐；不要把行为责任偷换成身份攻击。
 
@@ -13,12 +13,12 @@
 
 ## 使用目的：谁在什么地方发声
 
-- **音乐剧歌曲**属于台上正在发生的戏，必须由角色目标、阻力、策略和唱段前后变化驱动。
+- **音乐剧歌曲**属于台上正在发生的戏，应按唱段分支选择戏剧职责：行动歌由角色目标、阻力与策略推动；人物显影、群体场景、仪式、清单和重现唱段各由自己的舞台关系组织，不要求所有唱段改变外部行动。
 - **影视角色歌**受具体角色知识、关系和镜头已交代信息约束；先决定戏内可听见演唱还是非戏内角色内心声。
 - **影视主题歌**面向观众承载全片母题、片头预期或片尾余韵；不冒充角色独白、不复述剧情梗概。
 - **品牌歌**锁定一项沟通任务、可信发声者和有依据的主张；jingle、品牌形象歌与员工/组织歌不能互相替代。
 - **短内容歌词**锁定真实秒数/小节、画面、剪辑起止点和上下文。完整微歌、长歌摘段、现成视频配词属于不同任务；不存在通用“前三秒”规则。
-- **儿童歌**面向儿童实际听、说、唱、做的任务；按年龄、场景、知识负荷选择行动句、回应位和词汇。儿童不是被动灌输对象，也不等于低智听众。
+- **儿童歌**面向儿童的聆听、想象、感受、跟唱或互动；按年龄、场景和歌曲目的选择语言负荷与参与方式。动作、回答和知识记忆适用于有此任务的歌曲，不是所有儿童歌的必需句法。
 - **摇篮曲**以陪伴安定/入睡为使用意图，建立稳定声音回返；不承诺睡眠、治疗或对所有听者同效。
 - **群体颂歌**必须定义作品内“我们”及其共同场景，再安排领唱、回应、轮唱或齐唱；集体声部本身不代表现实群体共同立场。
 - **抗议歌**锁定责任/权力关系、伤害行动、歌者位置和拒绝/诉求；选见证、控诉、拒绝或动员为主要言语行动。抗议有明确立场，不为平均中立而磨平；是否和解由用户立场和作品证据决定。
@@ -39,7 +39,7 @@
 - Francis James Child, *The English and Scottish Popular Ballads*, vol. II, “Bonny Barbara Allan,” Child 84A；同歌各版本及美国国会图书馆 Todd–Sonkin 1940 采录记录：支持区分有编号的文本版本、事件节点与传唱变体。子级分析 84A 的季节/关系开篇、召唤、病榻对话、旧怨揭示、死讯与回返结尾；LOC 记录 Lois Judd、Rosetta Spainhard 等演唱者在同次采录中演唱不同旋律版本。项目只据此要求先选版本、再抽事件/格律，不把单一文本说成所有民谣规则。
 - Stephen Sondheim, *Finishing the Hat: Collected Lyrics (1954–1981) with Attendant Comments, Principles, Heresies, Grudges, Whines, and Anecdotes* (Knopf, 2010); PBS American Masters, 1999 interview transcript; PBS *Great Performances: Keeping Company with Sondheim*; Stephen Schwartz, “Advice for Songwriters” and “Schwartz on Musicals”: used for content/form, character, scene function, and the analyzed “Being Alive” pronoun/voice pivot. Project adaptation turns these observations into scene branches and sentence actions; it does not equate stage method with screen method.
 - W. S. Gilbert and Arthur Sullivan, *The Pirates of Penzance* (Major-General patter song; 1880 libretto); Tom Lehrer’s official “The Vatican Rag” lyric sheet and score: the former closes an accumulating knowledge catalogue by revealing the Major-General’s tactical gap; the latter orders ritual actions into a comic instructional sequence over ragtime. Project adaptation: use the voice/timing mismatch only when it serves the selected target, never copy the lyric text.
-- Joanne Winning, “Both Sides, Now: Voice, Affect, and Thirdness,” in Ruth Charnock, ed., *Joni Mitchell: New Critical Readings* (Bloomsbury Academic, 2019), and Mitchell’s 1974 Gene Shay interview: support reading the lyric cycle through its three focal objects (clouds, love, life), paired outlooks, and repeated thought. Project adaptation: each stanza supplies distinct experiential evidence to one recurring perception; it does not borrow the objects or turn Mitchell’s interview into a universal lyric formula.
+- Joanne Winning, “Both Sides, Now: Voice, Affect, and Thirdness,” in Ruth Charnock, ed., *Joni Mitchell: New Critical Readings* (Bloomsbury Academic, 2019), and Mitchell’s 1974 Gene Shay interview: support reading the lyric cycle through its three focal objects (clouds, love, life), paired outlooks, and returning thought. Project adaptation: different experiences can be gathered around one recurring perception through parallel sentence movement and refrain; they need not function as a new proof in every stanza. It does not borrow the objects or turn Mitchell’s interview into a universal lyric formula.
 - James Horner 关于《Titanic》片尾歌的 masterclass；Disney 官方《Frozen》“Let It Go”场景说明：前者明言歌曲取用影片开头已有旋律并形成情感书挡；后者可观察角色立场变化与可见变装/空间动作并行。项目据此区分观众主题歌与受镜头约束的角色歌。
 - Coca-Cola 官方“Hilltop”历史资料：记载 1971 广告歌从机场共同处境转向跨地域合唱。项目只抽取“品牌进入一段可见关系”的方法，不把企业愿景当现实效果证据。
 - Gregory Brothers、Tariq 与《Recess Therapy》的《It's Corn》及 NPR 报道：展示保留来源人物独特表达、音乐化重组和共同署名/收益处理；不把个案当作平台流行公式。

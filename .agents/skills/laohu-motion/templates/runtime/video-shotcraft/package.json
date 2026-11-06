@@ -1,0 +1,13 @@
+{
+  "name": "laohu-video-shotcraft-runtime",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pinned Remotion runtime for the vendored video-shotcraft source components.",
+  "dependencies": {
+    "@remotion/bundler": "4.0.484",
+    "@remotion/renderer": "4.0.484",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "remotion": "4.0.484"
+  }
+}

@@ -17,7 +17,7 @@ description: 用户明确要 Techno 编曲或以 Techno 循环为声音目标时
 ## 直接建立循环和演化
 
 1. **固定拍点。** 以 4/4 kick 每拍落点作为本地默认；闭合 hi-hat 或金属短音在八分/十六分网格提供细分。先只选一个细分层，别同时铺满开帽、ride、shaker 和噪声。
-2. **写一个可重复的非主旋律事件。** 选短低音脉冲、打击音型、合成器音色或噪声纹理作为循环识别核。默认让它在 1 或 2 小节内重复，音高材料保持少量；变化先来自音长、滤波、力度、声像或尾音，不自动添加新和弦进行。
+2. **写一个可重复的非主旋律事件。** 选短低音脉冲、打击音型、合成器音色或噪声纹理作为循环识别核，默认在 1 小节内重复；只有动机本身跨小节线且切成 1 小节会截断起音—回应关系时才用 2 小节。音高材料保持少量；变化先来自音长、滤波、力度、声像或尾音，不自动添加新和弦进行。
 3. **建立密度阶梯。** 低密度段仅留 kick 与核心事件；中段增加一种细分或第二音区；高密度段增加持续层、重复频率或更亮的频谱。每次只改变一个主维度，留一段退回前一密度的空间，避免持续加层导致没有起伏。
 4. **建立音色轨迹。** 选 cutoff、共振、衰减、噪声量、延迟反馈或空间宽度中的一项，沿 4/8/16 小节逐步移动；每个自动化要能听到方向，不能只写“逐渐变大”。临近段落交界可短暂抽掉 kick 或收窄高频，再恢复主循环。
 5. **保持主题职责可辨。** 若有人声/旋律，给其句头、长音和结尾留出频谱与节奏空隙；若器乐，明确一个主题、riff 或节奏钩子，不能让所有纹理都同等前景。Techno 的纹理变化不能抹去宿主已确定的主题职责。
@@ -38,18 +38,20 @@ description: 用户明确要 Techno 编曲或以 Techno 循环为声音目标时
 
 ## 提示词、谱面与 MIDI 落实
 
-AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.md)，保留 V4 字段职责和完整包顺序；填实际速度、段落和前景身份。模板描述可听关系，不保证模型按指令执行；人声与纯器乐按本次材料选择。
+AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.md)，按其项目三字段职责组织 Style Prompt 和完整包顺序；V4 只用于核对嵌入标签的外层格式，不决定字段职责或声音方法。填实际速度、段落和前景身份。模板描述可听关系，不保证模型按指令执行；人声与纯器乐按本次材料选择。
 
 人声方向的 Style Prompt 起句：
 
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
 ```text
-Global Metadata: Techno, 124 BPM in 4/4, fixed four-on-floor pulse, sparse 1-bar core loop; use 2 bars only when the indivisible motif crosses the barline, <tension arc, spatial depth and production texture>.
+
+Global Metadata: Techno, <final blueprint BPM> in <final blueprint meter>, fixed four-on-floor pulse, sparse 1-bar core loop; use 2 bars only when the indivisible motif crosses the barline, <tension arc, spatial depth and production texture>.
 Vocal Details: <confirmed singer identity and register>; choose a restrained melodic phrase when the lyric carries a clear theme, or a short spoken/chopped motif when a repeated vocal fragment is the loop identity; place entries at <actual phrase boundaries> and leave space after each statement.
-Arrangement: quarter-note kick stays fixed; repeat <one short bass, percussion or synth event> on the same two-bar position; develop each section by changing one primary field—timbre/filter, event density, register or space—and return/exit on <actual phrase boundary>.
+Arrangement: quarter-note kick stays fixed; repeat <one short bass, percussion or synth event> at <the selected slot in the 1-bar loop by default; use a 2-bar slot only for an indivisible cross-bar motif>; develop each section by changing one primary field—timbre/filter, event density, register or space—and return/exit on <actual section or phrase boundary>. Follow <final blueprint section order, lengths and returns>.
 ```
 
 确有人声时将下列一条完整句式写进 `Vocal Details`，并标段落与循环位置：
-- 循环语音核："Keep a short spoken two-note motif on the same slot of each two-bar cycle when the voice is the loop identity."
+- 循环语音核："Keep a short spoken motif on the same slot of each selected loop cycle (one bar by default; two only when the indivisible motif crosses the barline) when the voice is the loop identity."
 - 切片纹理："Repeat only this user-approved vocal fragment as sparse rhythmic texture; preserve its words and leave the lead phrase opening clear."
 - 叙事主唱："Use a restrained legato melody in the low-density section so the lyric carries the theme over the fixed pulse."
 - 空间长音："Hold one wordless vowel beneath the sustained texture, then release it before the next section boundary."
@@ -58,15 +60,15 @@ Arrangement: quarter-note kick stays fixed; repeat <one short bass, percussion o
 纯器乐方向将主识别材料放入项目栏 `Motif / Front Identity`，并填写 `Instrumental Form`：
 
 ```text
-Global Metadata: Techno, 124 BPM in 4/4, fixed four-on-floor pulse, sparse 1-bar core loop; use 2 bars only when the indivisible motif crosses the barline, <tension and spatial arc>.
+Global Metadata: Techno, <final blueprint BPM> in <final blueprint meter>, fixed four-on-floor pulse, sparse 1-bar core loop; use 2 bars only when the indivisible motif crosses the barline, <tension and spatial arc>.
 Motif / Front Identity: <one short pitch, rhythm or sound event; source, register and repeat position>.
-Arrangement: quarter-note kick remains constant; keep the selected event in its loop slot; at each actual section boundary change only <one chosen density/timbre/register/space field>; preserve continuity through the loop and end with <sustained texture / filtered loop / deliberate final release> suited to the cue.
+Arrangement: quarter-note kick remains constant; keep the selected event in its loop slot; at each actual section boundary change only <one chosen density/timbre/register/space field>; preserve continuity through the loop and end with <sustained texture / filtered loop / deliberate final release> suited to the cue. Follow <final blueprint section order, lengths and returns>.
 Instrumental Form: <section lengths, loop return, one-variable transitions, ending or continuous-loop boundary>.
 ```
 
-可编辑 MIDI 起点按 4/4、每小节 4 QN 计：kick 在 `bar_qn+0,1,2,3` 重复。设两小节循环起点为 `cycle_start_qn`，在第二小节 `cycle_start_qn+7.5`（本小节 4&）放一个低密度辅助事件；若 `bar_qn` 专指第二小节本身的起点，同一位置是 `bar_qn+3.5`。可先用 velocity 100 的 kick、58 的辅助声部；辅助音 gate 可从 0.25 QN（十六分音符时值）起步，循环拍轴不随音长改变。若增密，在已有拍轴上加入一层八分细分；若走音色轨迹，保持 note onset 不变，只改已核实的 DAW 参数映射。MIDI CC/自动化控制按目标音源定义，不把任意 CC 当通用滤波或奏法。
+可编辑 MIDI 起点按 4/4、每小节 4 QN 计：kick 在 `bar_qn+0,1,2,3` 重复。默认一小节循环时，低密度辅助事件可按真实关系放在 `cycle_start_qn` 起点后 0–4 QN 范围内，例如 `+3.5`（4&）；只有所选动机不可分地跨小节线时才建立两小节循环，第二小节的真实辅助位置可例如 `+7.5`。这里的例位不改变一小节默认，也不替代实际蓝图。可先用 velocity 100 的 kick、58 的辅助声部；辅助音 gate 可从 0.25 QN（十六分音符时值）起步，循环拍轴不随音长改变。若增密，在已有拍轴上加入一层八分细分；若走音色轨迹，保持 note onset 不变，只改已核实的 DAW 参数映射。MIDI CC/自动化控制按目标音源定义，不把任意 CC 当通用滤波或奏法。
 
-在 ABC/MusicXML 中，四踩使用重复的四分音符/所定谱面时值；稀疏事件按循环位置写出，未发声的位置留实际空白/休止，长 drone 只在真实延续时 tie。声部需要音色/频谱自动化时，谱面保留音符身份与时值，自动化另交目标 DAW 可识别的控制数据，不把滤波运动伪装成音符。打击声部用目标解析器支持的 percussion map，不能将 kick 写成旋律音名。文件字段、音符时值和目标软件校验按宿主[输出契约 Reference](../../references/output-contracts.md)。
+在 通用谱编译时，ABC/MusicXML 中，四踩使用重复的四分音符/所定谱面时值；稀疏事件按循环位置写出，未发声的位置留实际空白/休止，长 drone 只在真实延续时 tie。声部需要音色/频谱自动化时，谱面保留音符身份与时值，自动化另交目标 DAW 可识别的控制数据，不把滤波运动伪装成音符。打击声部用目标解析器支持的 percussion map，不能将 kick 写成旋律音名。文件字段、音符时值和目标软件校验按宿主[输出契约 Reference](../../references/output-contracts.md)。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
 
 ## 返回宿主与验收
 

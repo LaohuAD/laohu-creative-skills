@@ -374,27 +374,9 @@
 
 ## 组件 8 代码/命令/Prompt
 
-### 8a. prompt-block（PROMPT 展示块）
+组件 8 是代码、命令和 Prompt 的语义入口，不另设主题专属普通段落组件。短或长 Prompt、单行或多行命令、代码块，均使用 `common-components.md` 的 1a 深色代码块或 1b 浅色代码块；单行长度不构成改用普通段落、行内代码或引用块的理由。浅色场景使用 1b，并把左竖条换成摸鱼绿强调色 `#059669`。
 
-```html
-<p style="font-size:13px;color:#374151;margin:0 0 16px;line-height:1.8;">
-  <span style="display:inline-block;background:#059669;color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:3px;margin-right:6px;vertical-align:middle;letter-spacing:0.5px;"><span leaf="">PROMPT</span></span>
-  <span style="font-size:12px;color:#9CA3AF;font-weight:700;"><span leaf="">{{提示词内容}}</span></span>
-</p>
-```
-
-### 8b. cmd-block（CMD 单行命令块）
-
-```html
-<p style="font-size:13px;color:#374151;margin:0 0 24px;line-height:1.8;">
-  <span style="display:inline-block;background:#111827;color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:3px;margin-right:6px;vertical-align:middle;letter-spacing:0.5px;"><span leaf="">CMD</span></span>
-  <span style="background:#F3F4F6;color:#1F2937;padding:2px 6px;border-radius:4px;font-size:13px;font-weight:600;"><span leaf="">{{命令内容}}</span></span>
-</p>
-```
-
-### 8c. 多行代码块 → 用通用增量库
-
-多行代码块**不设主题专属组件**，直接用 `common-components.md` 的 1a 深色代码块（按通用库保留原始字符及空白）；浅色场景用 1b 并把左竖条换成 `#059669`。
+代码块中的原始字符必须保留，包括空格、制表符、空行和末尾换行；只做必要的 HTML 转义，不以全角空格、不换行空格或额外换行替代源字符。生成后按通用库规则逐字符核对代码节点与源文。
 
 ---
 
@@ -878,13 +860,13 @@
 
 | 文章类型 | 核心组件组合 | 点缀组件 |
 |---|---|---|
-| 教程/操作指南 | step-label 7a + cmd/prompt 8a/8b + 代码块（通用库1a） | warn-tip 10a、green-tip 10b、flow-cards 11b |
+| 教程/操作指南 | step-label 7a + 提示词/命令/代码块（通用库1a/1b） | warn-tip 10a、green-tip 10b、flow-cards 11b |
 | 盘点/工具清单 | skill/tool-label 7c + tool-card 11e + pill-list 11a | table 11f、oneliner-card 9b |
 | 观点/深度分析 | paragraph 5 + quote-box 9a + oneliner-card 9b | center-divider 9d、subtitle-highlight 9c |
 | 访谈/人物特稿 | paragraph 5 + quote-box 9a（引语）+ timeline 11d（经历脉络） | oneliner-card 9b、center-divider 9d |
 | 数据复盘/报告 | three-col-cards 11c + table 11f + ordered-list 11g | green-info 10d、黄色渐变高亮 6c |
 | 生活/情感随笔 | paragraph 5 + oneliner-card 9b + center-divider 9d | quote-box 9a（少量） |
-| 案例实战 | case-label 7b / timeline 11d + step-label 7a | prompt-block 8a、yellow-warning 10c |
+| 案例实战 | case-label 7b / timeline 11d + step-label 7a | 提示词/命令/代码块（通用库1a/1b）、yellow-warning 10c |
 
 所有类型可共用目录 3 + 章节标题 4；有来源标题或用户明确要求时可排入封面 2。只有原文已有或用户明确要求时，才附加对应签名或互动区 13。
 
@@ -905,12 +887,12 @@
 | `~~删除线~~` | 组件 6i 删除线灰色 | 被淘汰的概念 |
 | `> 引用段落`（非开头） | 组件 9a quote-box | 灰色虚线框（本主题特征） |
 | 原文明确引用/用户指定原句 | 组件 9b oneliner-card / 9d center-divider | 原句照用；没有则省略，不新提炼金句 |
-| 操作步骤 | 组件 7a step-label（+ 8a/8b） | STEP 01/02… |
+| 操作步骤 | 组件 7a step-label | STEP 01/02… |
 | 案例/场景 | 组件 7b case-label 或 11d timeline | CASE 01/02… |
 | 技能/工具清单 | 组件 7c skill/tool-label + 11e tool-card | |
-| Prompt 提示词 | 组件 8a prompt-block（短）/ 通用库 1a（长多行） | |
-| 单行命令 | 组件 8b cmd-block | |
-| ` ``` 多行代码块 ``` ` | 通用库 1a 深色（默认）/ 1b 浅色（左竖条换 #059669） | 原字符与空白按通用库 1a 保留 |
+| Prompt 提示词 | 通用库 1a 深色 / 1b 浅色 | 长短均用代码块；1b 左竖条换 `#059669`，原字符与空白按通用库保真 |
+| 单行命令 | 通用库 1a 深色 / 1b 浅色 | 单行仍用代码块；1b 左竖条换 `#059669`，原字符与空白按通用库保真 |
+| ` ``` 多行代码块 ``` ` | 通用库 1a 深色（默认）/ 1b 浅色（左竖条换 `#059669`） | 原字符与空白按通用库保真 |
 | 行内 `` `code` `` | 组件 6g 代码标签 | |
 | 并列要点 | 组件 11a pill-list | |
 | 流程（3 步） | 组件 11b flow-cards | 箭头可换 × 做对比 |

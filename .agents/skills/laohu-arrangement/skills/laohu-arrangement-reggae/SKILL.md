@@ -41,10 +41,12 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 
 人声 Style Prompt 起句：
 
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
 ```text
-Global Metadata: reggae, 76 BPM in 4/4, One Drop with the main drum-and-bass weight on beat 3, offbeat skank, spacious relaxed pulse, <production space>.
+
+Global Metadata: reggae, <final blueprint BPM> in <final blueprint meter>, One Drop with the main drum-and-bass weight on beat 3, offbeat skank, spacious relaxed pulse, <production space>.
 Vocal Details: <singer/register>; use a relaxed melodic phrase that can enter on a weak beat and carry across the barline; add <short sung response / choir> after the lead call when the lyric section permits.
-Arrangement: kick and rim/snare mark beat 3 with bass; leave beats 1 and 2 open in the low register; guitar or keyboard gives short offbeat chords; verse uses one skank layer, chorus adds <one harmony or high-frequency layer>, and dub delay answers only in the lyric gaps.
+Arrangement: kick and rim/snare mark beat 3 with bass; leave beats 1 and 2 open in the low register; guitar or keyboard gives short offbeat chords; verse uses one skank layer, chorus adds <one harmony or high-frequency layer>, and dub delay answers only in the lyric gaps. Follow <final blueprint section order, lengths and returns>.
 ```
 
 从下列四条中按歌词与段落选一条可复制到 `Vocal Details` 的句式：
@@ -58,7 +60,7 @@ toast 只在用户/参考明确要求时选；不把唱法默认绑定为雷鬼�
 
 MIDI 在 4/4、每小节 4 QN 下，One Drop 主鼓击与 bass 支点在 `bar_qn+2`（第 3 拍）；skank 默认在 `+0.5,+1.5,+2.5,+3.5`，但按实际编配选择击点，不必四个全奏。可让下一和弦根音在 `+3.5` 提前进入，仅当它不与本小节句尾/ skank 冲突。力度起点 kick 92、rim/snare 88、bass 86、skank 62、轻高频 48；按音源重设。Skank gate 起点 0.20 QN，避免拖入下一拍；MIDI gate 缩短不改变其八分拍位，谱面断奏/休止需由实际作曲决定。
 
-ABC/MusicXML 将第 3 拍 kick/rim、低音延续/休止、反拍和弦的真实时值分声部写明。skank 只在实际反拍起音，不用连续八分音符掩盖空拍；bass 跨小节延音用 tie 表达，若在句尾留空则写休止而非虚构持续音。鼓件用已验证 percussion map 或独立 MIDI 轨，不以音高名称充当鼓件；格式字段按[输出契约 Reference](../../references/output-contracts.md)。
+通用谱编译时，ABC/MusicXML 将第 3 拍 kick/rim、低音延续/休止、反拍和弦的真实时值分声部写明。skank 只在实际反拍起音，不用连续八分音符掩盖空拍；bass 跨小节延音用 tie 表达，若在句尾留空则写休止而非虚构持续音。鼓件用已验证 percussion map 或独立 MIDI 轨，不以音高名称充当鼓件；格式字段按[输出契约 Reference](../../references/output-contracts.md)。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
 
 ## 返回宿主与验收
 

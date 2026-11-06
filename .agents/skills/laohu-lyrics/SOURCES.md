@@ -38,7 +38,7 @@
 
 - Roman Jakobson, “Closing Statement: Linguistics and Poetics,” in Thomas A. Sebeok (ed.), *Style in Language* (Cambridge, MA: MIT Press, 1960), 350–377. 来源：[日本国立国会图书馆 NDL Search 书目记录](https://ndlsearch.ndl.go.jp/books/R100000136-I1570854175910236672)；[该章扫描文本](https://monoskop.org/images/archive/8/84/20141028191454%21Jakobson_Roman_1960_Closing_statement_Linguistics_and_Poetics.pdf)。核验：2026-10-06。文章以“选择关系中的等价投射到组合序列”阐述诗性功能。本地采用：references/language-and-sound.md 将其用于区别词项叠用、语音回环、句法平行、首语重复与乐段回句，并检查声音组织如何与语义并行。边界：这是语言诗学理论，不是歌词市场效果研究，不要求每句押韵、复沓或对仗。
 - Viktor Shklovsky, “Art as Technique” (1917). 来源：[英译文本扫描](https://zuckermanhartung.org/wp-content/uploads/2022/08/shklovsky-art-as-technique.pdf)。核验：2026-10-06。原文讨论习惯化如何使感知自动化、艺术手法如何延长或重启对对象的感受，并以不同视角或命名方式说明熟悉对象可以重新显现。本地采用：references/language-and-sound.md 用“物件替换/句架替换”检查某个常见细节是否真正属于当前关系，再从感知角度、行动或关系变化修订。边界：本地测试是歌词编辑动作，不是 Shklovsky 原文规定的测量法；不把灯、汤、旧衣或任何常见意象列为禁用，也不把“新奇”简化为生僻词。
-- Timothy P. Byron, Carl T. Rushworth, and Maxwell J. Stewart, “Popular Music Excerpts Are Rated As More Memorable And Salient If They Involve Vocals, Compound Hooks, and Choruses,” *Music Perception* 42(3), 2025, 197–206, DOI 10.1525/mp.2024.2322897. 来源：[University of California Press 论文页与摘要](https://doi.org/10.1525/mp.2024.2322897)。核验：2026-10-06。研究让参与者评估四首流行歌曲的片段，发现 topline、chorus 和 compound hook 片段与更高的显著性/可记忆性评分相关。本地采用：先完成全曲，再从任一乐段提炼“亮句候选”，同时看语义关系转折、自然声口与旋律/位置；无旋律时不宣称已形成可验证的音乐 hook。边界：样本仅四首歌，结论是片段评分关联，不能证明某一句歌词单独造成记忆、市场成功或传唱。
+- Timothy P. Byron, Carl T. Rushworth, and Maxwell J. Stewart, “Popular Music Excerpts Are Rated As More Memorable And Salient If They Involve Vocals, Compound Hooks, and Choruses,” *Music Perception* 42(3), 2025, 197–206, DOI 10.1525/mp.2024.2322897. 来源：[University of California Press 论文页与摘要](https://doi.org/10.1525/mp.2024.2322897)。核验：2026-10-06。研究让参与者评估四首流行歌曲的片段，发现 topline、chorus 和 compound hook 片段与更高的显著性/可记忆性评分相关。本地采用：把结果用于提出“这一片段是否可能成为注意/回想锚点”的待检问题；核心句/声音可以先行，也可以从已写成的全曲中提炼候选，无论起笔顺序都要把它放回实际段落与全曲，核对语义关系、自然声口和旋律/位置；无旋律时不宣称已形成可验证的音乐 hook。研究并未支持特定的起笔顺序。边界：样本仅四首歌，结论是片段评分关联，不能证明某一句歌词单独造成记忆、市场成功或传唱。
 - 李清照《声声慢》（维基文库页面题作《声声慢·秋情》）与杜甫《春望》。来源：[《声声慢》文字及异文](https://zh.wikisource.org/wiki/%E8%81%B2%E8%81%B2%E6%85%A2_%28%E6%9D%8E%E6%B8%85%E7%85%A7%29)；[《春望》文字及异文](https://zh.wikisource.org/wiki/%E6%98%A5%E6%9C%9B)。核验：2026-10-06；页面标示宋/唐作者与公有领域文本，均为可追溯的数字转录而非校勘版。references/language-and-sound.md 只短引《声声慢》开篇和杜甫“感时花溅泪，恨别鸟惊心”，分别观察重叠词组如何从动作递进到状态/感受、以及景物如何进入伤时恨别的感知关系。边界：这些是两首特定作品的文本观察，不是通用主歌结构、押韵规范或拟人模板；《声声慢》页面列有字词异文，必要时按指定版本核对。
 
 ## 感官素材、词群与中文短句取法
@@ -149,3 +149,51 @@ Library of Congress、Smithsonian Folkways、Berklee、作者本人材料、同�
 - **摇篮曲：《Hush Little Baby》**：美国国会图书馆的 [Bernice Haynes 1939 采录目录](https://www.loc.gov/item/lomaxbib000626/)只记录拍哄、哼唱与拍手语境，不提供该次采录的逐字歌词；Super Simple Songs 的[公开演唱版本](https://www.youtube.com/watch?v=f_raDpgx_3M)另用于观察常见文本的承诺—条件失效—替代补偿链。Trehub、Ghazban 与 Corbeil 的研究（*Annals of the New York Academy of Sciences* 1337, 2015, 186–192, DOI 10.1111/nyas.12622）只报告特定婴儿实验的唤醒差异。三类证据不可混成一个歌词版本或普遍安睡效果。
 - **群体颂歌：《Lift Every Voice and Sing》**：NAACP 的[历史说明与文本](https://naacp.org/find-resources/history-explained/lift-every-voice-and-sing)记载 James Weldon Johnson 作诗、J. Rosamond Johnson 谱曲及 1900 年儿童群体演唱。子级按三节观察群体召唤、历史见证、祈愿/承诺的时间组织；其宗教语境和共同历史是作品特定条件，不是集体歌必须具备的身份或结构。
 - **抗议歌：Florence Reece《Which Side Are You On?》**：Smithsonian Folkways 的[录音与曲目资料](https://folkways.si.edu/florence-reece/the-almanac-singers/which-side-are-you-on/american-folk-struggle-protest/music/track/smithsonian)及[专辑说明](https://folkways-media.si.edu/docs/folkways/artwork/SFW40231.pdf)将歌曲置于 Harlan County 矿工冲突语境。子级观察每节增加工会、工人身份与中立位置等主张，而副歌稳定重复站位追问；迁移时按用户选择的见证/控诉/拒绝/动员确定句子行动，不把矿工史或固定不和解结尾移植到其他题材。
+
+
+## 本轮歌词取法与共创方法
+
+### 古典抒情理论与词句细读
+
+- 刘勰《文心雕龙·情采》[原文](https://zh.wikisource.org/wiki/文心雕龍/情采)、《物色》[原文](https://zh.wikisource.org/wiki/文心雕龍/物色)。核验日期：2026-10-26。前者讨论情与文的关系，提出“为情而造文”等论述；后者提出“情以物迁，辞以情发”并谈“以少总多”。本地据此把情感经验、材料选择、词句组织作为相互生成的工作：由本作心意取象，再以具体词句成境；这是对古典文论的现代歌词适配，不将其当作现成曲式或比例规则。
+- 李清照《一剪梅·红藕香残玉簟秋》[全文](https://sourcebook.stanford.edu/text/li_qingzhao_red_lotus/)。核验日期：2026-10-26。以完整词境核对相思、分离、独处与上下片声口，再细读末段：眉头是愁意显于神态的外表，心头是内里的相思；“才/却”骤然折转，“下/上”反向而行，两句同为2+2句架并同收“头”，共同写出愁意似退而相思复涌。译释与历史背景须区分；本地只据中文原词观察词义、句法、声响如何共同承受这份经验。
+- 柳永《雨霖铃》[全文](https://zh.wikisource.org/zh/雨霖鈴_(柳永))。核验日期：2026-10-26。与全词离别处境一并阅读“执手相看泪眼，竟无语凝噎”等词句：前文“兰舟催发”带来催行压力，执手与相看让两人共同停在眼前，“竟”转向说不出话，“无语/凝噎”使关系在语言中断处显形；随后“念去去”才将感情推入想象的远路。它说明关系、停顿、转折和后续空间可以共同抒情，不要求所有作品使用同一递进次序。
+
+### 取象、炼字与余味：理论原义、作品观察、本地适配
+
+- **王夫之《姜斋诗话》**：[原文](https://zh.wikisource.org/zh-hant/薑齋詩話)，核验日期 2026-10-26。**理论原义：**“夫景以情合，情以景生”讨论景与情相互生成、不可割裂，并非主张景物天然带有固定情绪。**本地适配：**先看心境怎样改变歌者的注意，再检验材料的真实状态、用途、关系、文化意味和语感能否承受这份情意；不把主题相似或作者临时说明当成取象依据。该古典命题不直接证明任何现代歌词的审美效果，也不规定每首都借景。
+- **姜夔《白石道人诗说》**：[原文](https://zh.wikisource.org/wiki/白石道人詩說)，核验日期 2026-10-26。**理论原义：**篇中并论“雕刻伤气，敷衍露骨”与句篇的“余味/余意”，讨论安排过密、说尽与表达余地之间的取舍。**本地适配：**修词时检查某个字句是否承担了情绪、关系、声口或节奏，是否需要解释性复述；删减只有在关系和声音仍然成立时才有收益，不能把“少字”直接等同于“有余味”。此诗论用于提出细读问题，不作为现代歌词的硬性字数规则或质量证明。
+- **周邦彦《苏幕遮·燎沉香》**：香港教育局[教材全文及教学资料](https://www.edb.gov.hk/attachment/tc/curriculum-development/kla/chi-edu/resources/secondary-edu/lang/chi_chapter/P063_201704.pdf)，核验日期 2026-10-26。**原作观察：**词中由晨光、宿雨、水面与荷叶的连续感知进入故乡遥远和羁旅心情，景物次序与后段明言乡思相接；这是对该词完整语境的阅读，不是“先写景、后点题”的普遍模板。**本地适配：**检查眼前细节是否改变歌者的注意、如何引出心境，以及直接抒情与景语之间是否互相承托；不强求先景后情，也不把意象词表当成已成句。
+- **方文山的两篇不同访谈，分别支持作品观察与作者自述**：人民网－人民日报海外版记者访谈[《让传统文化更流行》](https://tw.people.com.cn/n1/2024/0427/c14657-40224986.html)，核验日期 2026-10-26；报道以《青花瓷》说明歌词没有平铺直叙地讲爱情，而通过文字雕琢和跨时空场景组织表达。这是该报道中的作品观察，不冒充方文山逐字原话或独立审美研究。澎湃新闻刊载的凤凰网文创访谈转载[《方文山：传统文化如何和现代人发生关系》](https://www.thepaper.cn/newsDetail_forward_7350507)，采访发表于 2020-05-12，核验日期 2026-10-26；方文山本人谈到古典词汇需与现代人的情感、生活相接，并以“我/你”这类关系表达说明古典语汇与口语可以同在。此项是创作者自述，不等同于 2024 年人民网报道，也不是通用代词规则。**本地适配：**前者只用于观察词句如何避免平铺并组织场景；后者只作为现代关系表达与古典语汇结合的一例，提示作者按本作声口判断人称是否承载关系/情绪，不机械添“我/你”或把访谈当质量证明。
+
+### 整曲中心、意象展开与回返的来源边界
+
+- **Berklee Online《Lyric Writing 2》课程说明（作者 Erin Chase）**：[课程公开页](https://online.berklee.edu/courses/lyric-writing-2)，核验日期 2026-10-26。**公开课程说明：**页面将第一课列为 Central Metaphor，并列出 Lyric Embodiment、The Art of the Verb、Showing vs. Telling、Object Writing；课程目标包括用准确语言、主动动词和具体意象发展中心比喻，以及考察全曲中想法如何发展、回返。**证据范围：**这是公开的课程简介与目录，不是付费教材全文、实验研究或任何歌词效果证明。**本地适配：**把中心材料、具体词义和主动动作作为整曲成词的可用方法；物象是否承情仍须回到当前歌者、关系、句群和声音检验，Object Writing 只在需要时生成素材候选，不直接代替歌词。
+- **Pat Pattison《Developing Verse Ideas》与 Berklee Online《Lyric Writing: Writing From the Title》**：[作者本人公开文章](https://www.patpattison.com/developing-verse-ideas)；Berklee [课程公开说明与大纲](https://online.berklee.edu/courses/lyric-writing-writing-from-the-title)，课程署名 Pat Pattison，核验日期 2026-10-26。**原文范围：**文章提出标题/Hook 可提示构思、帮助安排包含它的乐段并组织其他乐段；作者以 Scarlet Keys 与 Pat Pattison 合写的《Time to Let Go》示范，同一标题随不同人物视角和上下文而改变颜色，副歌句群需能承接这些意义：V1写父母放手孩子，V2转到离家的孩子，桥段再写年老父母，末轮副歌引入父母的声口。这是该例的段落分配，不是通用故事模板。课程公开说明将标题视为中心概念，提出用标题内含的节奏、音高与速度生成内容，并让段落展开、重新着色和深化标题；大纲具体列有重复带来的重新着色、段落发展、标题节奏模板、重音音节/音高/速度和押韵练习。**本地适配：**将其用作可选的中心概念生成、不同段落承担关系不同面向、声音起笔和回返检查；若本作没有标题中心或不需视角展开，无需套此例，也不强制末轮改义。**证据范围：**课程页只支持公开说明和大纲中这些方法主题，不是课程全文或质量效果证明；prosody 的张力与稳定性取自本节上方 Pattison 的另一来源，不能归到上述文章或课程条目名下。
+
+### 乐段职责、连续性与对照的教学来源
+
+- **Andrea Stolpe《Getting Past Second Verse Troubles》**：[作者网站文章](https://www.andreastolpe.com/articles/getting-past-second-verse-troubles)，页面主题为第二主歌写作困难，讨论从时间、角度等方向打开后续段落。**本地适配：**第二主歌先辨认已写内容，再选择新的时间/视角/距离/感受面向；持续凝视也可深化，不以新增情节作为差异标准。文章不规定每首歌都必须采用某一转折。
+- **Andrea Stolpe《The Importance of Contrast》**：[作者网站文章](https://www.andreastolpe.com/articles/the-importance-of-contrast)。正文署名为 Andrea Stolpe，页面页首显示“Guest User”；保留这项页面归属差异，不扩写其身份背景。文章讨论节奏、韵、行长、内容等歌词参数与音乐组织中的对照。本地把它用作比较段落差异的观察角度，不要求歌词和旋律逐项同步变化，也不把对照设为必需。
+- **Jason Blume《The How and Why of Building Bridges in Your Songs》**：[BMI 作者文章](https://www.bmi.com/advice/the-how-and-why-of-building-bridges-in-your-songs)。用于了解流行歌曲桥段的用途与构建讨论；本地仅迁移“检查桥段是否给已建立内容带来值得进入的角度，并改变后续回返方式”，不把桥段或固定转折做成每首歌的结构配额。
+- **Berklee Online《Songwriting: Writing Hit Songs》**：[公开课程说明](https://online.berklee.edu/courses/songwriting-writing-hit-songs)。课程页支持其公开教学范围与课程定位，不据此补写未公开教材步骤，也不当作“命中”或作品质量效果证据；本地段落写作法仍由项目规则和实际文本观察给出。
+- **University of Puget Sound, Music Theory for the 21st-Century Classroom**：[Form in Popular Music](https://musictheory.pugetsound.edu/mt21c/FormInPopularMusic.html)与[Verse-Chorus Form](https://musictheory.pugetsound.edu/mt21c/VerseChorusForm.html)。用于核对流行音乐形式名称及 verse-chorus 的教学性说明。本地将其作为描述形式的词汇来源，不据此要求固定小节数、段落顺序或高潮路线。
+
+### 现代普通话作品的词句与声音观察
+
+- **方文山词、周杰伦《七里香》**：JOOX [歌曲与歌词页](https://www.joox.com/hk/single/vT8gcKzRFXzZypW6PJuLCA%3D%3D)，本轮复核 2026-10-26；页面列出作品与词作者及完整文本。**文本观察：**开篇由麻雀的鸣叫接到对方对季节感的回应；纸笔与写诗动作建立说话者向“你”表达的言语关系，雨与落叶进入爱和思念的比拟，稻穗、脸颊等承接季节感与亲近感，较后由对方点出七里香。**分析：**这些处理最终汇向两人的关系，但并非每种景物都在交谈或写诗；题名花卉在较后处由对方点出，成为关系材料之一。**本地适配：**辅助材料按其实际感受、互动或言语作用进入全曲，不要求它们都从标题物的字面属性派生。页面支持文本观察，不证明听众效果。
+- **易家扬词、孙燕姿《遇见》**：JOOX [歌曲与歌词页](https://www.joox.com/hk/single/nCfzVmDSINKv9EmNsAZ7zg%3D%3D)，本轮复核 2026-10-25；页面列出作品与词作者，文本可查。用于观察未来未定、空间方向与等待如何共同组织尚未知的关系；本地迁移为选择能承载未知方向的动作词群和句群，不补出原作没有承诺的关系史，也不搬用其空间词语。
+- **李焯雄词、梁静茹《暖暖》**：JOOX [歌曲与歌词页](https://www.joox.com/hk/single/bhd31lBdFGBroy_C17dQVA%3D%3D)，本轮复核 2026-10-25；页面列出作品与词作者，文本可查。用于观察共享生活和照料细节如何支撑副歌的直接关心表达；本地迁移时只在当前关系已有相应事实时使用直陈与细节互托的方法，不移植具体物件或稳定伴侣关系。
+- **姚小民、严云农、陈思宇词、王心凌《睫毛弯弯》**：JOOX [歌曲与歌词页](https://www.joox.com/mo/single/s7ubqgzsY7u_Y_b1_3NYkQ%3D%3D)，本轮复核 2026-10-25；页面列出作品与词作者，文本可查，细读副歌相关段落（页面 L23–61）。形态联想在身体轮廓、话到嘴边转向的表达路径和月形视觉比拟间回响；重叠音组、眨眼动作复现及游戏式问答形成轻快、可参与的声音组织。本地迁移的是按本作材料建立词义联系并用音组/回句制造声音回响，不搬用原作形态线索或表达组合，也不规定身体动作、话语姿态、重复三件套；JOOX 页面支持文本观察，不证明实际演唱效果或接收质量。
+
+
+- **林夕词、王菲《红豆》**：JOOX [歌曲页与歌词](https://www.joox.com/my-zh_cn/single/SN05pu6OimRiLN5QSRbaRw==)，核验日期 2026-10-26。署名与文本呈现可核。**文本观察：**主歌以尚未共同经历的雪天、远行和亲密愿望构成时间；副歌反复以“有时候”并置相信聚散终有尽头、仍选择留恋的心意。后半红豆进入相思表达，随后又回到未经历的亲密与孤独自由的关系。**分析：**全曲的贯穿线是未实现的关系愿望和承认离散却不愿放手的矛盾，标题物只是其中一个具体材料，并非每段都围绕红豆。**本地适配：**可由情感问题、关系矛盾和回返统一多类经验，不把它改造成每首歌都需要的哲理宣言。页面支持文本观察，不证明市场效果。
+- **Joni Mitchell《Both Sides, Now》**：JoniMitchell.com [官方作品页、歌词与1967年访谈](https://jonimitchell.com/music/song.cfm?id=83)，核验日期 2026-10-25。云、爱情、生命是三轮不同对象，共同回应从两面观看、仍不全知的认识运动；它支持一种有共同组织关系的多对象方法，不支持抒情歌必须多对象、必须论证或每段改观。
+- **吴娈词、何炅《栀子花开》**：JOOX [作品与歌词页](https://www.joox.com/hk/single/VjNhgNms9GZ5HhekyPUJVw==)，页面列出演唱、词曲署名和文本。**文本观察：**歌词落在栀子花开的时节，写人物将要分别、难舍对象与留存的花香，之后由挥手告别和时光流逝进入反复回返的花开副歌，并把这场青春告别接到爱。**分析：**花的开与香不是逐段增添植物属性，而与人物分别、记忆和副歌回返共同承受心意。**本地适配：**主意象需与歌者关系和乐段位置相连；标题物并不自动成为全曲中心，也不要求每段换景或改义。页面支持作品信息与文本观察，不作审美评价。
+- **三毛词、齐豫《橄榄树》**：JOOX [作品与歌词页](https://www.joox.com/hk/single/XDcdnrg7O4bYXgwkzqYUQA==)，页面列出齐豫演唱、三毛作词、李泰祥作曲及文本。**文本观察：**开篇先拒绝被追问来处，并把故乡置于远方；继而才问为何流浪。随后用同一“为了”句法列出飞鸟、溪流、草原，停顿后补入梦中的橄榄树，后文又回到流浪追问。**分析：**多种景物由共同的流浪动作、目的句法与回环组织，并非因同属自然就自然连成一体。**本地适配：**辅助材料可依共同心意、关系、动作、时间或声音归拢到中心，不要求都从主意象字面推出。歌词页用于文本观察，不证明歌词评价或效果。
+- **浅影阿《牡丹亭》**：JOOX [歌曲与完整歌词页](https://www.joox.com/hk/single/7KS9dptOSTmwa00J9_I_Rg%3D%3D)列出浅影阿演唱及周仁作词、于瑞洋作曲等署名，并提供本地细读所据歌词文本；不另以标题推断汤显祖《牡丹亭》剧情。文本单元包括月夜饮酒叙旧、谈功名流年、筷敲碗踏歌、梦醒散席、举酒敬孤灯，再转入独唱戏文与冷清孤影。细读机制见 `references/benchmark-method.md`；JOOX 歌词页用于版本/文本核对，不作为独立文学评价证据。
+- **国风堂/哦漏《知我》**：木兰词 [完整歌词与署名页](https://www.mulanci.org/lyric/sl291175/)用于核对沈栀作词、王朝作曲及文本；官方[歌曲影像/发布信息](https://www.youtube.com/watch?v=AXRlhvhRyGg)用于核对演唱版本与元数据。文本先写来客确实懂得琴意，随后回应琴声可被来人领会，歌者再转问知己稀少；不能把后续追问误读成来客只听见、却不懂琴意。细读机制见 `references/benchmark-method.md`；木兰词为歌词文本来源，不作为正式发行证明或独立质量评价。
+- **《壁上观》原唱一棵小葱/张曦匀（张晓涵）**：JOOX [等什么君演唱版本的完整歌词与署名页](https://www.joox.com/hk/single/YTHGpzgAxWUb8KKB3Tj4bQ%3D%3D)列出词作者小六、原唱一棵小葱/张曦匀（张晓涵）及该翻唱版本歌词。此页承担核对歌词文本和原唱署名的作用，不把等什么君说成原唱；原唱身份与翻唱文本来源分别记录。歌词并未直称敦煌或某座石窟，也未锁定壁画人物视角；细读以佛教乐舞文化景群、盛唐/蒙尘、千秋/一刹的时间缩放、醒转为旁观者为准，见 `references/benchmark-method.md`。歌词页不作为独立文学评价证据。
+- **Pat Pattison 共创、乐句与结构资料**：作者本人 [Co-writing](https://www.patpattison.com/co-writing)、[Art of Phrasing](https://www.patpattison.com/art-of-phrasing)、[Structure Creates Expectations](https://www.patpattison.com/structure-creates-expectations)，核验日期 2026-10-25。分别用于观察共同写作中的提议/回应、乐句与重音组织、结构如何建立听者预期。本地“发现—辨认—尝试—反馈—修订”是项目工作流设计，不冒称 Pattison 的原文规定；phrase 与结构工具按实际句群和本作预期使用，不转成格式配额。
+- **林夕本人谈歌词表达**：中央广播电视总台 [采访报道](https://m.cnr.cn/news/20150801/t20150801_519390407_tt.html)，核验日期 2026-10-25。采访区分直接告诉听众结论与让听众体会人物心态的表达方式。本地据此把“传达了什么”与“听者是否经历到人物状态”作为可选写作问题，不据此要求所有歌词含蓄或拒绝直说；这是作者经验观点，不是普遍质量证明。
+- **适用边界**：JOOX 页面用于核对其页面所列作品、词作者和歌词文本，不等同于原始发行记录、专业评价或质量证据；本项目对段落职责、工作流程及其与当前委托的适配均属本地判断。作品机制必须按“原作单元—可观察处理—适用条件—当前决定—成品位置”落地；来源身份不替代真实听者、实际旋律或独立审查证据。
