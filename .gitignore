@@ -4,6 +4,22 @@
 works/**
 !works/.gitkeep
 
+# Keep all accumulated content under the project-root library local; only its public guide may be tracked.
+# This covers future exports, manifests, databases, media and unknown subdirectories as well as canonical records.
+/benchmark/**
+!/benchmark/README.md
+
+# Narrow record/cache patterns document current formats and remain compatible with older checkouts.
+/benchmark/sources/
+/benchmark/*/atoms/
+/benchmark/*/usage/
+/benchmark/*/index.sqlite3*
+/benchmark/*/.index.sqlite3.*.tmp
+/benchmark/.transactions/
+/benchmark/.library.lock/
+/benchmark/.library.lock.stale-*/
+/benchmark/.*.tmp
+
 # Local runtime and temporary files
 .tmp/
 tmp/

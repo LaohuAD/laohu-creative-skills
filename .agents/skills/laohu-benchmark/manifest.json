@@ -1,0 +1,24 @@
+{
+  "format_version": 1,
+  "library_purpose": "Private, rebuildable local research records for source identity and material references, observed work units, method atoms, applicability and actual downstream use.",
+  "canonical_records": {
+    "source": "sources/SRC-<16 uppercase hexadecimal digits>.json (includes source_material reference, version and read scope; authorized captured excerpts live here once)",
+    "atom": "<category>/atoms/ATM-<16 uppercase hexadecimal digits>.json",
+    "usage": "<category>/usage/YYYY-MM.jsonl"
+  },
+  "cli_input_schema": {
+    "usage": "schemas/usage-input.schema.json",
+    "canonical_usage_after_defaults": "schemas/usage.schema.json"
+  },
+  "derived_cache": {
+    "catalog": "catalog.sqlite3",
+    "category_index": "<category>/index.sqlite3",
+    "contains_original_source_text": false,
+    "is_canonical": false,
+    "read_behavior": "info and query are read-only; they do not build, repair or rebuild caches",
+    "managed_updates": "put and explicit rebuild-index maintain the global catalog and compatible category indexes",
+    "rebuild_command": "python3 {SKILL_DIR}/scripts/library.py --library-root <archive-returned-path> rebuild-index"
+  },
+  "categories": "Choose each atom category under SKILL.md > 归类与原子复用: honor explicit user assignment; otherwise inspect and reuse existing categories by primary reuse purpose or work type. The five analysis adapters are method routes, not storage classes; reuse one atom across consumers through authorized bindings. Create a concise stable lowercase slug only if no existing category fits, when the first authorized atom is saved. Clarify only when plausible choices materially change long-term retrieval or existing organization; do not provision empty category directories.",
+  "privacy": "Keep source, atom and usage records local by default. Share only after reviewing each record and destination."
+}

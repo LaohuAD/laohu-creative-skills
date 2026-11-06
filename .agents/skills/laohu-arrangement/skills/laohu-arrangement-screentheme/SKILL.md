@@ -48,11 +48,13 @@ Ramin Djawadi 在[Netflix Tudum《3 Body Problem》主题访谈](https://www.net
 ## 生成提示、演唱与可编辑事件控制
 
 把作品身份与音符核写进同一组可组合句，而非只写“史诗、电影感”： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：screen theme for <作品/角色身份>，96 BPM in 4/4, quarter-note pulse，<情绪起点→终点>，<乐队/电子/管弦声场>。
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
+
+Global Metadata：screen theme for <作品/角色身份>，<final blueprint BPM> in <final blueprint meter>, quarter-note pulse，<情绪起点→终点>，<乐队/电子/管弦声场>。
 Vocal Details：<确认的歌者、语言、音区> carries <主题钩子/标题短句> at <段落/重音定位>，sustain <目标音节> into <收束点>；器乐主题改为Motif / Front Identity。
-Arrangement：state <识别核> at <开场/首个标题点>，return it in <副歌/片尾> with <一项和声/音区/配器变形>，fit <实际时长> and end <已选收束动作>。
+Arrangement：state <识别核> at <开场/首个标题点>，return it in <副歌/片尾> with <一项和声/音区/配器变形>，fit <实际时长> and end <已选收束动作>；按<最终蓝图段落顺序、长度与回返位置>安排
 固定识别核至少保留一个可比较的节奏/音程/音色关系；完整主题可扩展呈示，短标题版用动机片段提前到达标题点。角色关系变化时可改和声/配器而保留核心；纯器乐不生成演唱提示。具体片头画面同步时按给定版本、帧率和时码对齐；无画面仅控制时长和音乐句尾，不编造帧点。
 
-有锁定歌曲时按主唱实际音节/音高标hook，提供换气、延音与全曲回返的相对动态；无旋律只指定歌词句长和相对音区。MIDI将每次主题陈述置于正确section_id，逐音保留pitch_sounding_midi与onset_qn/offset_qn；变形写清移调/截短/配器改变的具体音程或时值，终点按时长闭合。画面同步另建tempo_map/标题cue事件，使用绝对QN映射已给时码，不以小节号猜画面。
+锁定源歌曲/旋律时按已核实音节与音高标 hook，并保护源有据的换气、延音与回返动态；授权新谱曲时写出本轮实际创作的 hook 音高与时值；AI探索时锁定器乐主题或歌词承重句的可辨节奏/轮廓、相对音区/句长与回返关系，具体音符开放。歌手范围未知时不虚构高音极限。MIDI将每次主题陈述置于正确section_id，逐音保留pitch_sounding_midi与onset_qn/offset_qn；变形写清移调/截短/配器改变的具体音程或时值，终点按时长闭合。画面同步另建tempo_map/标题cue事件，使用绝对QN映射已给时码，不以小节号猜画面。
 
-ABC把核心动机写成独立V:并以精确时值/反复或变体行展示回归；主题歌曲用w:对齐锁定歌词。MusicXML用稳定part/voice、measure和direction事件标主题进入/标题点，歌词以lyric/syllabic/extend绑定。两者的cue只标记已有时码/乐段，不替代视频同步表；无画面时保持音乐版结构。
+通用谱编译时，ABC把核心动机写成独立V:并以精确时值/反复或变体行展示回归；主题歌曲用w:对齐锁定歌词。MusicXML用稳定part/voice、measure和direction事件标主题进入/标题点，歌词以lyric/syllabic/extend绑定。两者的cue只标记已有时码/乐段，不替代视频同步表；无画面时保持音乐版结构。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。

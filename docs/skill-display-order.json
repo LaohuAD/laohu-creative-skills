@@ -29,7 +29,9 @@
         { "command": "/laohu-luna", "label": "协作执行与模型分工" },
         { "command": "/laohu-novel", "label": "小说创作" },
         { "command": "/laohu-topic", "label": "选题策划" },
-        { "command": "/laohu-motion", "label": "动画制作" }
+        { "command": "/laohu-motion", "label": "动画制作" },
+        { "command": "/laohu-asrcut", "label": "录音与 ASR 剪辑" },
+        { "command": "/laohu-benchmark", "label": "作品拆解与方法原子" }
       ]
     }
   ]

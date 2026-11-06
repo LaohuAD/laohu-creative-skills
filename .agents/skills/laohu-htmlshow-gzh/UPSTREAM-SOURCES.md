@@ -1,5 +1,17 @@
 # 上游规则来源与许可记录
 
+## WeDraft 阅读主题迁移
+
+固定来源：`pafa/WeDraft`，commit `9663ce505c25d48c10ec6426ee1d106b8421ae06`，2026-10-30 核验。原文件为 `templates/reading-editions.ts`，含五套阅读版；源代码与版本可在 https://github.com/pafa/WeDraft/tree/9663ce505c25d48c10ec6426ee1d106b8421ae06 核对。许可 MIT，完整声明保留于 `WEDRAFT-LICENSE`。
+
+保留：五套正文、章节／编号、引文、表格、代码与图注的样式及差别。改动：本地 ID 加 `wedraft-` 前缀；补 leaf；图片改 max-width 自适应而不强制放大；全局正文留白；编号宽度用 min-width 允许增长；链接目的地可见可复制；不默认生成引号、来源标题、脚注序号、署名或品牌文案。样式数据在 `assets/wedraft-reading.json`，装配实现为 Python 标准库本地编译器，不复制或冒充上游 Markdown 解析器、应用、MCP 或 CLI。
+
+未单独迁入 `default-business.json` 和 `next-edition.json`：本轮先接入独立阅读方向的五套版本；两套品牌化基础模板保留在研究源快照，不新设相近常驻主题。以后若有明确需求，仍须比较实际结构和文字邻色对比，而非只登记名字。
+
+新增预览统一使用 `assets/wedraft-preview.json`，文字整理自画梦枋现有原创产品介绍，表格只归组其中已核事实，不采用 WeDraft 的示例文章／署名。此样稿用于展示版式，不证明真实公众号粘贴效果。原六套画廊内容与样式保持不变。
+
+## 结构检查来源
+
 本地规则对照目标为第三方公开项目 `wechatjs/verify-article-structure-spec`，不是微信官方平台声明。记录固定到 commit `1340988eccbb63181a56141a5c2171d55cd42521`（2026-10-05 核验）；规范版本标记为 v0.2.17。本 Skill 重新表述适用条件并使用 Python 标准库作有限静态候选检查；本地没有复制其 TypeScript CLI 引擎代码，也未安装其 Puppeteer / `mp-darkmode` 依赖。
 
 ## 固定来源

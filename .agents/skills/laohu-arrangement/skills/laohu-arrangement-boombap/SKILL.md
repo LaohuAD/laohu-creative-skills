@@ -45,12 +45,14 @@ Red Bull Music Academy 的[《In Search of Boom Bap》](https://web03125.microsi
 
 ## 生成提示、演唱与可编辑事件控制
 
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
+
 Style Prompt按宿主的Global Metadata / Vocal Details / Arrangement组句，替换尖括号变量后再投喂： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：boom-bap hip-hop, 90 BPM, 4/4 head-nod pocket, <straight / laid-back subdivision>, <sampled loop / sparse original bed>。
+Global Metadata：boom-bap hip-hop, <final blueprint BPM>, <final blueprint meter> head-nod pocket, <straight / laid-back subdivision>, <sampled loop / sparse original bed>。
 Vocal Details：<已确认的歌者与音区>，rap phrasing <on-grid / slightly behind>，重音落在<锁定音节定位>，句尾在<定位>留出回应空位。
-Arrangement：kick supports <说唱重音定位>，snare anchors beats 2 and 4，<loop> sustains the verse，<指定短切片/乐器> answers after <句尾定位>。
+Arrangement：kick supports <说唱重音定位>，snare anchors beats 2 and 4，<loop> sustains the verse，<指定短切片/乐器> answers after <句尾定位>；按<最终蓝图段落顺序、长度与回返位置>安排
 器乐版删去Vocal Details，改写Motif / Front Identity。固定项是4/4的2、4拍军鼓与清楚人声重音；break/采样已有swing就沿用，原素材更直或歌词要求利落时用直细分。副歌若需要集体记忆点，改采样回句或稀疏人声重音；持续点头感优先时保持循环，只改局部空拍。
 
-有干声/旋律时，为每个乐段记主唱句的入拍、承重音节、句尾长度和换气/留白，照原音频精确落到onset_qn；无旋律时只写相对拍前/拍中/拍后、重音字和候选停顿，不能编造具体音高、字头拍值或真实气口。锁定歌词逐字不改。
+锁定源旋律时，按已核实音符记录主唱入拍、承重音节、句尾长度和气口，并精确落到onset_qn；授权新谱曲时填写本轮实际创作的音高与时值；AI探索时锁定可辨节奏/重音/落点和相对起拍关系，具体音符开放。歌手范围未知时不虚构极限。锁定歌词逐字不改。
 
-MIDI以独立part_id编鼓、采样、低音和主唱导唱；每个note写onset_qn、offset_qn、pitch_sounding_midi，采样切片以同一QN网格对齐。snare默认置小节起点后1与3 QN，kick只标已选重音/回应，hat按已定八分或十六分细分逐音填值；ghost note与短fill用较低velocity并让回主拍，数值按目标音源填写。ABC用M:4/4、匹配细分的L:、分开的V:节奏声部及z休止，演唱用w:按实际音节对齐；鼓件写在V:打击乐声部，音高—鼓件映射按接收解析器/目标方言填写；解析器无对应映射时交独立鼓事件表，不把音名字母或GM program当通用鼓谱。MusicXML打击乐音符用unpitched/display-step/display-octave表示谱面位置，instrument id回指part-list中的score-instrument；midi-instrument/midi-unpitched按目标鼓表映射播放音高，MusicXML值用1–128写法并转换目标raw MIDI 0–127键号。鼓点时值用divisions核对；采样旋律仍用实际pitch、duration和voice。
+MIDI以独立part_id编鼓、采样、低音和主唱导唱；每个note写onset_qn、offset_qn、pitch_sounding_midi，采样切片以同一QN网格对齐。snare默认置小节起点后1与3 QN，kick只标已选重音/回应，hat按已定八分或十六分细分逐音填值；ghost note与短fill用较低velocity并让回主拍，数值按目标音源填写。通用谱编译时，ABC用M:4/4、匹配细分的L:、分开的V:节奏声部及z休止，演唱用w:按实际音节对齐；鼓件写在V:打击乐声部，音高—鼓件映射按接收解析器/目标方言填写；解析器无对应映射时交独立鼓事件表，不把音名字母或GM program当通用鼓谱。MusicXML打击乐音符用unpitched/display-step/display-octave表示谱面位置，instrument id回指part-list中的score-instrument；midi-instrument/midi-unpitched按目标鼓表映射播放音高，MusicXML值用1–128写法并转换目标raw MIDI 0–127键号。鼓点时值用divisions核对；采样旋律仍用实际pitch、duration和voice。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。

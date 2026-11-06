@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "usage.schema.json",
+  "title": "Benchmark downstream usage event",
+  "type": "object",
+  "required": ["schema_version", "usage_id", "atom_id", "consumer", "decision", "stage", "required_context", "adaptation", "return", "check", "outcome", "recorded_at"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "usage_id": {"type": "string", "pattern": "^USG-[A-F0-9]{16}$"},
+    "atom_id": {"type": "string", "pattern": "^ATM-[A-F0-9]{16}$"},
+    "category": {"type": "string", "pattern": "^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$", "not": {"const": "sources"}},
+    "consumer": {"type": "string", "minLength": 1},
+    "decision": {"type": "string", "minLength": 1},
+    "stage": {"type": "string", "minLength": 1},
+    "required_context": {"type": "string", "minLength": 1},
+    "adaptation": {"type": "string", "minLength": 1},
+    "return": {"type": "string", "minLength": 1},
+    "check": {"type": "string", "minLength": 1},
+    "outcome": {"enum": ["applied", "adapted", "rejected", "not-used", "pending"]},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "case_ref": {"type": "string"},
+    "result_evidence": {"type": "string"}
+  },
+  "additionalProperties": false
+}

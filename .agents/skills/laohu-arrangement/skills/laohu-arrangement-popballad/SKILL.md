@@ -7,11 +7,11 @@ description: 当用户要求当代 pop-ballad 编曲时，以钢琴和主唱为�
 
 # Pop-ballad：让钢琴支撑主唱，让递进有依据
 ## 独立完整新作的项目蓝图
-未给旋律/曲式/速度的普通完整 Pop-ballad 新作，采用父级 4/4、72 BPM（四分音符 BPM）与 48 小节蓝图：Intro 4 → V1 8 → C1 8 → V2 8 → C2 8 → Final C 8 → Outro 4；只有 V2 证据改变责任/决定且需要独立听见转向时，插入 Bridge 8，总数 56 小节。Dan Wilson 在[制作人访谈](https://www.musicradar.com/news/i-often-get-sent-to-work-with-artists-who-are-scared-of-co-writing-and-dont-want-to-do-it-semisonic-adele-and-john-legend-songwriter-dan-wilson-shares-his-10-tips)讲《Someone Like You》的钢琴分解前奏、直述文本与一次性钢琴尾奏。迁移为先让钢琴—主唱关系独立成立、主唱承重长音处减密，尾奏由当次成品选择而非自动复制弦乐高潮；这是该曲具体决定，不代表所有抒情歌只有钢琴或必须留即兴尾奏。用户给旋律/速度或委托局部时覆盖该纸面方案。
+未给旋律/曲式/速度的普通完整 Pop-ballad 新作，采用本专项的 4/4、72 BPM（四分音符 BPM）与 48 小节蓝图：Intro 4 → V1 8 → C1 8 → V2 8 → C2 8 → Final C 8 → Outro 4；若本作需要桥段，可据前后对照、停留、换气或转向等职责加入 Bridge。8 小节仅作工作起点，按实际完整乐句调整后重算后续段落位置、总小节数与时长；不要求 V2 必须带来新因果、责任或选择。Dan Wilson 在[制作人访谈](https://www.musicradar.com/news/i-often-get-sent-to-work-with-artists-who-are-scared-of-co-writing-and-dont-want-to-do-it-semisonic-adele-and-john-legend-songwriter-dan-wilson-shares-his-10-tips)讲《Someone Like You》的钢琴分解前奏、直述文本与一次性钢琴尾奏。迁移为先让钢琴—主唱关系独立成立、主唱承重长音处减密，尾奏由当次成品选择而非自动复制弦乐高潮；这是该曲具体决定，不代表所有抒情歌只有钢琴或必须留即兴尾奏。用户给旋律/速度或委托局部时覆盖该纸面方案。
 
 ## 主唱与钢琴的默认职责
 
-常规做法是先以钢琴和主唱建立歌曲：左手在和声变化处给根音/低音目标，右手用可唱和弦音区的分解、滚奏或分开的和弦落点承托旋律；主唱关键词与持续长音处降低右手活动，句尾才用短回应。这样让钢琴既交代和声又给歌词留前景。若钢琴旋律本身是主题，或用户参考明确由其他乐器主导，则交换前景角色，保留 pop-ballad 的主唱表达中心。
+先选出承载叙事或转折的一句完整歌词，判断它与前后句是对照、复沓、呼告、设问还是收束，并标注承重词、重音、延音/释放与回返。让主唱句的旋律动作与钢琴左手和声落点、右手留白/回应共同完成这项关系；不能只用“亲密、抒情”代替具体协作。常规做法是先以钢琴和主唱建立歌曲：左手在和声变化处给根音/低音目标，右手用可唱和弦音区的分解、滚奏或分开的和弦落点承托旋律；主唱关键词与持续长音处降低右手活动，句尾才用短回应。这样让钢琴既交代和声又给歌词留前景。若钢琴旋律本身是主题，或用户参考明确由其他乐器主导，则交换前景角色，保留 pop-ballad 的主唱表达中心。
 
 以所选调性、和声节奏与主唱结构音搭建伴奏，先用近距、可唱的和弦排列；在歌手长音、句尾或段落转换处才让高音区加宽、填音或改变 voicing。伴奏可按歌词句法和呼吸呈现规律拍感，也可在旋律自由处放宽，但用低音/和声落点保持合奏可跟随。不要把“抒情”自动等于慢速、三拍、常见四和弦循环或每句终止。若用户已有旋律/和弦，先保留其功能与节奏，再仅在授权范围内重配。
 
@@ -40,11 +40,13 @@ Pat Pattison 的 Berklee Online 文章《Prosody in Music and Songwriting》主�
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt直接说清钢琴怎样托主唱、哪处打开： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：contemporary pop ballad, 72 BPM in 4/4, quarter-note pulse; use a user-locked meter/rubato when supplied and an intimate-to-open arc；默认稳定拍内的主歌/副歌呼吸，锁定演唱/录音若有rubato则写明速度弹性与恢复拍点。
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
+
+Global Metadata：contemporary pop ballad, <final blueprint BPM> in <final blueprint meter>, quarter-note pulse; use a user-locked meter/rubato when supplied and an intimate-to-open arc；默认稳定拍内的主歌/副歌呼吸，锁定演唱/录音若有rubato则写明速度弹性与恢复拍点。
 Vocal Details：<已确认的歌者/相对音区>，phrases follow <锁定旋律/歌词语句>，sustain <承重元音定位> and breathe at <实际气口>。
-Arrangement：piano left hand marks <和声低音变化>，right hand uses <broken chords / held voicings> and thins under <主唱持续音>；<bass/drums/strings> enter at <段落> to widen the chorus by <单一主变化>。
+Arrangement：piano left hand marks <和声低音变化>，right hand uses <broken chords / held voicings> and thins under <主唱持续音>；<bass/drums/strings> enter at <段落> to widen the chorus by <单一主变化>；按<最终蓝图段落顺序、长度与回返位置>安排
 固定主唱清晰度、钢琴低音和和声职责；若已有和弦/旋律，跟随实际功能及拍点。自由速度版本需给乐手共同呼吸/恢复脉冲位置，稳定拍版本不在Style里写任意rubato。若副歌仍亲密，保持窄voicing与稀疏伴奏；若歌词/旋律到达宣泄点，只开放一个主增量并安排回落。
 
-有旋律时逐句标承重字、拍位、持续元音及真实换气；多音一字时按音节绑定多音，只有源旋律可定精确音高/QN。无导唱时只给句长、相对高低与气口候选。MIDI分Vocal/Piano-LH/Piano-RH/Bass/Strings轨，每个pitch事件填pitch_sounding_midi、onset_qn、offset_qn；钢琴左手只在和声目标起音，右手在主唱长音处减音、在句尾回应；弦乐写长音起止，力度随段落设计，不用整轨加响模拟高潮。
+锁定源旋律时逐句标承重字、拍位、持续元音及已核实气口；授权新谱曲时写出本轮新作音符/时值；交 AI 探索时锁定乐句、重音、落点和主唱/钢琴协作关系而开放具体音符。多音一字时按音节绑定多音；无导唱时不伪称源音符，歌手范围未知时不指定高音极限。MIDI分Vocal/Piano-LH/Piano-RH/Bass/Strings轨，每个pitch事件填pitch_sounding_midi、onset_qn、offset_qn；钢琴左手只在和声目标起音，右手在主唱长音处减音、在句尾回应；弦乐写长音起止，力度随段落设计，不用整轨加响模拟高潮。
 
-ABC以分声部V:和歌词w:对齐演唱音节；持续元音用同音tie或w:下划线表示延长，跨小节时值逐小节核准。MusicXML用pitch、divisions制下的duration、lyric/syllabic和melisma的extend标出演唱；如编鼓，按unpitched显示位、instrument id及目标midi-unpitched鼓表映射；自由速度在direction中标速度变化/fermata并保留乐手恢复点。声部与力度均依真实谱曲填写，导入后试唱核对气口、键盘音区和歌词可懂度。
+通用谱编译时，ABC以分声部V:和歌词w:对齐演唱音节；持续元音用同音tie或w:下划线表示延长，跨小节时值逐小节核准。MusicXML用pitch、divisions制下的duration、lyric/syllabic和melisma的extend标出演唱；如编鼓，按unpitched显示位、instrument id及目标midi-unpitched鼓表映射；自由速度在direction中标速度变化/fermata并保留乐手恢复点。声部与力度均依真实谱曲填写，导入后试唱核对气口、键盘音区和歌词可懂度。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。

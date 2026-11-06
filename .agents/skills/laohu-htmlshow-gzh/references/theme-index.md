@@ -14,8 +14,15 @@
 | 留白禅意风 | `#4A5D52` 墨绿 | 禅意冥想、极简生活、深度随笔、艺术留白（呼吸感最强；有原文引言时使用引言卡） | `references/theme-zen-whitespace.md` | `border-bottom:1.5px solid #B5C8BC;font-weight:500;` |
 | 摸鱼票据风 | `#059669` emerald | 测评、工具对比、创意评测（票据/门票视觉隐喻、编号+硬阴影卡片；评分只在原文或授权提供时展示） | `references/theme-moyu-ticket.md` | `border-bottom:2px solid #A7F3D0;font-weight:600;` |
 | 橄榄手记 | `#1e1f23` 墨黑（配橙 `#ed7b2f`） | 内刊手记、深度评测、案例复盘、系统性说明文档（编辑部内刊质感，分节形式多样，信息密度偏高） | `references/theme-olive-journal.md` | `border-bottom:2px solid #ed7b2f;font-weight:600;` |
+| 素笺 | `#756655` 暖灰 | 长文、生活随笔；居中章节、双细线引文、暖纸色代码区 | `references/theme-wedraft-plain-paper.md` | `border-bottom:1px solid #756655;` |
+| 墨刊 | `#272727` 墨黑 | 深度报道、人物文章；衬线标题与引文、同行章节号、刊物细线 | `references/theme-wedraft-ink-journal.md` | `border-bottom:1px solid #272727;` |
+| 青岚 | `#27675C` 松青 | 人文与知识长文；分行短线编号、浅青引文、较舒展正文 | `references/theme-wedraft-jade-notes.md` | `border-bottom:1px solid #27675C;` |
+| 蓝图 | `#2857B7` 理性蓝 | 技术、方法、数据解读；同行等宽章节号、蓝色细引线、紧凑表格 | `references/theme-wedraft-blueprint.md` | `border-bottom:1px solid #2857B7;` |
+| 朱砂 | `#A3453C` 砖红 | 观点、文化与品牌故事；衬线大编号、暖色引文、左侧短分割线 | `references/theme-wedraft-cinnabar.md` | `border-bottom:1px solid #A3453C;` |
 
 ## 选择建议
+
+新增五套的 ID 均带 `wedraft-` 前缀，是 WeDraft 阅读模板的本地适配，不是上游引擎的直接输出。用户说“蓝图／WeDraft 蓝图／blueprint”时均选 `wedraft-blueprint`，其余四套按名称或上游 ID 对应本表；运行时先读所选库，再按主入口的语义块装配分支执行。原六套及默认摸鱼绿不变。
 
 - 用户明确要自己挑、查看选项或比较主题时，列出相关选项及适用场景，由用户选择。
 - 其他排版请求默认由 AI 选择并执行。判断时先看原文承担的阅读任务和真实结构，不只看题材关键词：连续观点/论证、逐步教程、横向工具比较、系统性案例复盘会需要不同的章节节奏、信息密度和强调方式。

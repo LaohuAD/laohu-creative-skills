@@ -42,10 +42,12 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 
 人声 Style Prompt 起句：
 
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
 ```text
-Global Metadata: son-based salsa, 96 BPM in 4/4, two-bar 2–3 Son clave cycle, interlocking piano montuno, bass tumbao and layered percussion, <band energy and room>.
+
+Global Metadata: son-based salsa, <final blueprint BPM> in <final blueprint meter>, two-bar 2–3 Son clave cycle, interlocking piano montuno, bass tumbao and layered percussion, <band energy and room>.
 Vocal Details: <language, singer/register>; verse lead gives a complete rhythmic call, then coro answers after each completed lead call; in montuno, repeat <user-approved response text> with clear entrances and a distinct response register.
-Arrangement: clave cycle is <2–3 default / explicitly requested direction>; piano montuno keeps that two-bar orientation; bass anticipates the next harmony on the previous bar beat 4 and answers on next-bar 2&; add <one percussion layer> at <actual section entry>, reserve brass hits for phrase ends.
+Arrangement: clave cycle is <2–3 default / explicitly requested direction>; piano montuno keeps that two-bar orientation; bass anticipates the next harmony on the previous bar beat 4 and answers on next-bar 2&; add <one percussion layer> at <actual section entry>, reserve brass hits for phrase ends. Follow <final blueprint section order, lengths and returns>.
 ```
 
 按实际歌词/语言从四条中选一句放入 `Vocal Details`，并对应到完整乐句：
@@ -59,7 +61,7 @@ Arrangement: clave cycle is <2–3 default / explicitly requested direction>; pi
 
 MIDI 以每小节 4 QN 计，两小节 `cycle_start_qn` 的 2–3 Son clave 默认在第一小节 `+1,+2`，第二小节 `+4,+5.5,+7`；第二小节起点是 `cycle_start_qn+4`。bass tumbao 在前一小节 `+3` 起根音，`offset_qn=cycle_start_qn+5`（即越过 barline 并完整占住下一小节第 1 拍），再留空到下一小节 `+5.5` 的五度/和弦音回应。钢琴 montuno 用实际和弦音，落在 clave 间隙并保持两小节方向；具体起音随和弦/参考确定。力度工作起点 clave 70、conga 65、bell 72、bass 88、piano 74、主唱 85；力度分层由各自音源校准，不能用同一重音复制 clave。打击轨按目标音源 map，不把 percussion note 编成假旋律。
 
-ABC/MusicXML 在两小节网格中写出 clave 的真实拍位、tumbao 根音跨线延续和 2& 回应：在小节线处分成首尾相接、音高相同的两段 tie，使后一段越过边线至少占住第 1 拍，然后于 2& 前留出空隙；不要把 offset 设为新小节起点。montuno 按实际和弦音/休止写出并标明段落中打击层进退。Clave 与 bell/conga 若由目标软件支持打击谱记法则使用其 percussion mapping；否则可用清楚的角色表配合实际 MIDI 轨。钢琴音符为可演奏 voicing，跨声部时值和小节总量逐小节核验。精确字段与文件检查见[输出契约 Reference](../../references/output-contracts.md)。
+通用谱编译时，ABC/MusicXML 在两小节网格中写出 clave 的真实拍位、tumbao 根音跨线延续和 2& 回应：在小节线处分成首尾相接、音高相同的两段 tie，使后一段越过边线至少占住第 1 拍，然后于 2& 前留出空隙；不要把 offset 设为新小节起点。montuno 按实际和弦音/休止写出并标明段落中打击层进退。Clave 与 bell/conga 若由目标软件支持打击谱记法则使用其 percussion mapping；否则可用清楚的角色表配合实际 MIDI 轨。钢琴音符为可演奏 voicing，跨声部时值和小节总量逐小节核验。精确字段与文件检查见[输出契约 Reference](../../references/output-contracts.md)。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
 
 ## 返回宿主与验收
 

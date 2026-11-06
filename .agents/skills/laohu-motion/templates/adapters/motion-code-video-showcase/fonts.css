@@ -1,0 +1,80 @@
+/*
+ * Local font closure for Moessif/code-video-showcase.
+ * Original page/runtime files still own all drawing and animation behavior.
+ * Each URL includes the pinned upstream SHA-256 so cached files stay tied to a
+ * verified source byte sequence.
+ */
+@font-face {
+  font-family: "Noto Sans SC";
+  src: url("/font-assets/google-fonts-template-fonts/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf?v=fb0637bafbcd804fe32152370a1225990745b4bc") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/font-assets/huashu-art-motion/scripts/engine/lib/fonts/Inter-var.woff?v=a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b") format("woff");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/font-assets/jetbrains-mono-font/fonts/variable/JetBrainsMono%5Bwght%5D.ttf?v=3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/font-assets/google-fonts-template-fonts/ofl/orbitron/Orbitron%5Bwght%5D.ttf?v=f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "ZCOOL KuaiLe";
+  src: url("/font-assets/google-fonts-template-fonts/ofl/zcoolkuaile/ZCOOLKuaiLe-Regular.ttf?v=812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+}
+
+/* These faces are listed in themes.js metadata. The two production HTML pages
+   do not pass them to ctx.font, so their presence does not imply that selecting
+   a theme changes the page's actual typeface. */
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/font-assets/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-700.woff?v=2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469") format("woff");
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/font-assets/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-700i.woff?v=f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1") format("woff");
+  font-style: italic;
+  font-weight: 700;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/font-assets/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-400i.woff?v=30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8") format("woff");
+  font-style: italic;
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Noto Serif SC";
+  src: url("/font-assets/huashu-art-motion/scripts/engine/lib/fonts/NotoSerifSC-sub.woff?v=be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66") format("woff");
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: block;
+}
