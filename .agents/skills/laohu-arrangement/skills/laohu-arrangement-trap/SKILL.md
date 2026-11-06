@@ -44,11 +44,13 @@ Southside 在 Complex 的制作访谈谈到他的 trap 鼓组设计；具体作�
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt由已选关系直接组句，变量只改标注槽位： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：trap hip-hop, 140 BPM, 4/4 half-time pocket, snare on beat 3, <sparse / driving> low-end pulse。
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
+
+Global Metadata：trap hip-hop, <final blueprint BPM>, <final blueprint meter> half-time pocket, snare on beat 3, <sparse / driving> low-end pulse。
 Vocal Details：<已确认的主唱身份/音区>，<rap / melodic rap> phrases <在拍上 / 弱起 / 跨小节>，重音音节<定位>，leave space at <句缝>。
-Arrangement：808 follows <根音/旋律低音> with <held notes / target-note slides>，hi-hats hold an 8th-note grid and add short <16th / triplet> rolls before <主句入口/转段>；roll resolves to the pulse。
+Arrangement：808 follows <根音/旋律低音> with <held notes / target-note slides>，hi-hats hold an 8th-note grid and add short <16th / triplet> rolls before <主句入口/转段>；roll resolves to the pulse；按<最终蓝图段落顺序、长度与回返位置>安排
 器乐版把Vocal Details改为旋律前景；固定半拍snare与稳定帽子骨架，开放帽子细分、808音长和滑音。主唱句头前加roll只在句头需要推进时；鼓点已密或辅音需清晰时减为八分帽/删roll。目标音源不支持可听滑音时改为离散经过音或无滑音，不用标签冒充奏法。
 
-有锁定导唱时以原拍位、音节重音与尾音为准，标注弱起、拖过小节线的音节和呼吸；只有既有旋律才填精确音高、QN时值和换气。器乐作品不写人声控制。MIDI每个808音符填实际pitch_sounding_midi、onset_qn、offset_qn，kick与808只在要加强的重音同位，其余用错位或短尾分离；roll写成逐个note起止与力度，三连音注明拍轴，不用模糊“快速”。滑音另列按note起点关联的pitch-bend/音源portamento控制点及目标音、到达QN、bend范围；该范围跟目标插件设定，未核对时保留待定，别共用通道滑动同时发声的其他音符。
+锁定源旋律时以已核实的拍位、音节重音与尾音为准，按源音符填写精确音高/QN；用户授权新谱曲时填写本轮实际创作的音高/QN；交 AI 探索时锁住关键节奏/重音/落点关系而保留具体音符开放。歌手范围未知时不虚构高音极限。标注弱起、拖过小节线的音节和呼吸。器乐作品不写人声控制。MIDI每个808音符填实际pitch_sounding_midi、onset_qn、offset_qn，kick与808只在要加强的重音同位，其余用错位或短尾分离；roll写成逐个note起止与力度，三连音注明拍轴，不用模糊“快速”。滑音另列按note起点关联的pitch-bend/音源portamento控制点及目标音、到达QN、bend范围；该范围跟目标插件设定，未核对时保留待定，别共用通道滑动同时发声的其他音符。
 
-ABC以M:4/4、L:1/16起草帽子/roll，三连音用(3并按小节核平；帽子和鼓件写在V:打击乐声部，音高—鼓件映射依接收解析器/目标方言，解析器不支持时交独立事件表，不把普通音名字母说成通用鼓件。808连续滑音写成目标音/连线并附实现说明，ABC装饰记号不保证播放成滑音。MusicXML打击乐用unpitched/display-step/display-octave记谱位，instrument id指向score-instrument，midi-instrument/midi-unpitched给接收音源鼓件号（MusicXML 1–128，转换raw MIDI 0–127）；808的slide/glissando成对标在起止音notations，note duration按divisions填写，目标软件实播决定是否产生真实滑音。歌词用w:绑定导唱音符。
+通用谱编译时，ABC以M:4/4、L:1/16起草帽子/roll，三连音用(3并按小节核平；帽子和鼓件写在V:打击乐声部，音高—鼓件映射依接收解析器/目标方言，解析器不支持时交独立事件表，不把普通音名字母说成通用鼓件。808连续滑音写成目标音/连线并附实现说明，ABC装饰记号不保证播放成滑音。MusicXML打击乐用unpitched/display-step/display-octave记谱位，instrument id指向score-instrument，midi-instrument/midi-unpitched给接收音源鼓件号（MusicXML 1–128，转换raw MIDI 0–127）；808的slide/glissando成对标在起止音notations，note duration按divisions填写，目标软件实播决定是否产生真实滑音。歌词用w:绑定导唱音符。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。

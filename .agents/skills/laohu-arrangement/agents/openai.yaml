@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-arrangement | 老胡编曲"
-  short_description: "按歌词、旋律、音频或简报设计编曲，并交付制作方案、AI输入或可核验音乐文件。"
-  default_prompt: "使用 $laohu-arrangement，先核对材料、用途与锁定项；建立共用音乐蓝图，再按需创作旋律、和声、律动和配器，读取对应 Reference 编译目标交付，并依据真实文件、播放或试听证据验收。"
+  short_description: "按歌词、旋律、音频或简报设计编曲；也承接动画视频的声音选材、源剪辑和结构设计。"
+  default_prompt: "使用 $laohu-arrangement，先核对材料、用途与锁定项；完整作曲编曲任务建立音乐蓝图，动画视频声音任务先定整段听觉职责与前中后结构，再按视觉事件选择或剪辑真实素材。读取对应 Reference 编译交付，并依据实际文件、播放或试听证据验收。"

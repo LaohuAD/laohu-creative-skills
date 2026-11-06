@@ -383,7 +383,9 @@ def main():
         result = {"ok": False, "errors": [str(error)], "notes": []}
     if args.test and result["ok"]:
         suites = [SKILLS / "laohu/evals/test_discovery.py", Path("tests/test_maintenance.py"),
-                  Path("tests/test_gzh_tools.py"), Path("tests/test_install.py"), SKILLS / "laohu-archive/evals/test_workspace.py"]
+                  Path("tests/test_gzh_tools.py"), Path("tests/test_install.py"),
+                  SKILLS / "laohu-archive/evals/test_workspace.py",
+                  SKILLS / "laohu-benchmark/evals/test_library.py"]
         for suite in suites:
             run = subprocess.run([sys.executable, "-B", str(root / suite)], cwd=root,
                                  capture_output=True, text=True)

@@ -17,8 +17,12 @@
       "有条件地调用 References，并从主入口检查谁在何时读取哪条路径、解决什么判断或产物、读后回到哪一步",
       "按变更类型验证路径/格式、真实路由、方法输入到产物及旧行为、或脚本成功和失败路径；结构检查不冒充行为或质量证据",
       "在聊天报告实际修改与检查，不默认生成结果台账",
+      "主文要求直接读取根 references/universal-dream-framework.md，并在本入口的实施判断与目标能力写回中，对授权对象的全部方向作实质审视；这是结构要求，不要求对外显示16格、每格改规则或披露隐藏思维链。评测以多个代表场景中可观察的判断、迁移、消费者接通和交付结果检查行为；expected_behavior、自述覆盖或单个顺利案例不能证明全部方向行为通过。真实功能可跨方向，已有方法成立时可保留。",
+      "evolution 主文必须提供可执行的实施工作链，并让未来目标 Skill 主文承载足以完成普通请求的完整核心专业流程：目标与范围如何进入选择，条件怎样改变方法，材料如何处理、形成什么产物并交给谁。不得要求16个方向分别列出核心方法；Reference 深化独立专项，不能替代主文正常路径。",
+      "评测把交点视为规则设计的关注侧重，不把规则限制为只能含对应层内容；观察是否将用途、适用条件/依据、实际操作与所得产物接成可执行规则，并检查它们是否落在目标能力的真实主文与消费者中。按实际取舍、条件、动作和产物评分，不按16标签匹配。",
+      "在目标能力的专业选择确需知识依据时，按输入和条件核对适用的本地方法、标准、理论或成熟经验实际如何指导规则内容；本地依据足够时优先复用，不为形式机械联网。名称标签不能代替条件与动作，缺少特定术语不自动判方法缺失；专业知识方法按各方向的真实判断需要使用，而非专属于某一格。",
       "写回已选专业方法时说明作品目的与取舍如何约束成熟法度及其构成要求、具体表现如何进入可观察成品，并把成品与目标接收体验相连；保留方法内部默认、替代、例外、顺序和示范之间的关系，不把预期效果写成已经发生的结果。",
-      "沿用 analysis capability-design 唯一维护的四层含义；按判断职责使用，不另造定义或固定四栏，也不以流程结构替代作品结构。叙事规则另按所选方法识别实际组织尺度，与四层交叉检查而不作一一映射、不强加未选结构。修订规则时检查已确认的目的与取舍、成熟专业法度和具体表现设计是否接到运行步骤与实际成品。",
+      "按根 references/universal-dream-framework.md 唯一维护的维度和层次定义；创作仍保留灵魂（创作目的、立场、文化与审美判断、宏观策略）、筋骨（成熟专业法度）、血肉（具体表现设计）、表皮（受众、体裁、文化语境和媒介中的实际作品表现）的原意。叙事规则另按所选方法识别组织尺度，不作一一映射或强加未选结构。",
       "区分固定的目标/专业关系与可变的材料、形式和技法；条件不成立时按已选退出或替代办法处理，示范不自动成为配方。",
       "保持目标领域主文对统领流程专业判断的责任，由可实际加载的 Reference 深入专项判据与方法；Reference 可在授权范围内作专业判断，但不得重开总体目标、权限、跨入口职责或全局返回条件。",
       "区分执行者内部完整性检查与目标能力的用户可见格式；用户未指定固定模板或机器接口时，默认按任务以自然段或必要列表表达，不把内部检查项或 Skill 文件结构强制投射成重复栏目。",
@@ -32,7 +36,12 @@
       "维护创作字段时区分方向必需与内容开放，服装/道具/场景及穿搭不以完整性强制微观细节；明确精控、已确认资产复现或剧情关键时才条件展开，未确认AI建议不自动锁定。",
       "把可复用反馈编译成触发条件、优先级、动作、分支、实际消费者和验收，并退役冲突旧默认；沿请求至最终产物定位第一处未传递的控制点。",
       "追加聊天指导若补出文件未提供的核心方法，就不能证明文件独立执行；依 validation Reference 记录并无指导复查。",
-      "拆解、吸收或写回既有规则/专业方法时，主动从本轮明确请求与澄清、源材料目标和独特判断、已选方法还原决定并比较旧规则、执行与成品；当前澄清本身有效，不需完整历史，只有声称历史原句才需原文。写回保留决定的条件、步骤、优先级、动作力度和消费者，不增添未触发的假想回退/软化；真实事实、技术、安全和权限门按适用范围保留，用户要求的讨论/比较另行呈现。出处或效果待核放进交接/既有验证记录，只有会改变运行条件的缺口写入执行规则；最终由消费者实测。"
+      "元入口评测区分从普通请求与真实原始材料形成专业判断并写回的建设案例，和输入已给 approved-method、完整架构或逐项答案的忠实实施案例；后者只支持已选方案实施证据，不能证明第一阶段方法构建，且第一阶段案例不能替代未参与者使用最终文件和新普通输入的第二阶段运行。",
+      "拆解、吸收或写回既有规则/专业方法时，主动从本轮明确请求与澄清、源材料目标和独特判断、已选方法还原决定并比较旧规则、执行与成品；当前澄清本身有效，不需完整历史，只有声称历史原句才需原文。写回保留决定的条件、步骤、优先级、动作力度和消费者，不增添未触发的假想回退/软化；真实事实、技术、安全和权限门按适用范围保留，用户要求的讨论/比较另行呈现。出处或效果待核放进交接/既有验证记录，只有会改变运行条件的缺口写入执行规则；最终由消费者实测。",
+      "使用万能造梦框架时，先以材料建立现有规则、完整方法、直接消费者和目标条件的盘点，再对授权范围内全部16交点逐一实质判断；每个判断都使用盘点材料，分别说明其对 evolution 实施链和目标 Skill 普通任务链的实际作用，结论可为已承接、缺口、条件不足、调用断点或有依据的不适用，不按格数制造变更。",
+      "交点审查完成后再融合跨交点的依赖、重复、冲突与分支，并把唯一完整方法安放在目标 Skill 的实际专业工作流及真实消费者中；同一交点可有多组规则，一种方法可跨多个交点。规则改写自然包含完成任务所需的目的、判断、行动和结果，不按四栏格式扩写。",
+      "保持宽度与深度的实际用途：检查范围扩大到16个不同关注方向；重要处继续展开适用条件、专业方法、材料关系、动作、例外及下游结果。模型不穷尽领域知识，不证明专业方法有效，也不单独证明成品或真实接收质量。",
+      "整体重构必须把目标能力的核心判断、专业方法、条件分支、材料处理、输出和消费者组织在可执行的职责章节中；共享模型说明可以短述，但不能作为附录替代正文规则。评测观察规则组怎样改变普通任务的操作与下游产物，不按标题数、坐标名或关键词判定重构完成。"
     ],
     "must_not": [
       "把外部报告、其他 Skill 建议或原因猜测写成事实；不能因用户说“按报告改”而跳过对实质取舍的分析",
@@ -45,12 +54,17 @@
       "把“用户要求跳过分析”的执行授权说成外部依据已经验证",
       "把示范中的意象、措辞或技法固化为必需配方，或把互为替代的方法分支改成全部连续必做。",
       "把 AI 自拟、改写或生成的创作成品（即使标为“合成”或“示意”）放入正式 Skill／Reference 充当专业教学范例；伪造出处、引文、反馈或验证；因缺少正式范例而停掉仍可执行的方法。",
-      "改写已选原则的适用范围或专业取舍，或在 evolution 参考文件内复制一套与 analysis 竞争的四层定义；把原句改写成更多但无执行作用的解释，或让一种规则文体覆盖所有最终作品。",
+      "改写已选原则的适用范围或专业取舍，或在 evolution 参考文件内复制一套与共享模型竞争的定义；把万能造梦框架改成只选相关交点、固定16问卷或必须逐格输出；把原句改写成更多但无执行作用的解释，或让一种规则文体覆盖所有最终作品；把目标 Skill 的完整核心方法和普通任务主线全放进 Reference，使主文只剩调用声明。",
       "把专业 Reference 当成只能引用知识的仓库，或借专项规则改写主文/上游的总体目标、授权和全局路由。",
       "把一次个人偏好包装成公共默认、要求个人偏好先证明群体共识，或把依据群体偏好/普遍效果提出的候选默认冒称已经普遍验证；也不因缺群体成功率数据就将已选或成熟且适用的方法默认一概降为候选。",
       "要求与改动无关的创作形式迁移测试，例如普通路径或标点修订。",
-      "只给旧正文加标题来冒充整体重构，或只改说明文件而不接通实际消费者。",
-      "以核心摘要、文档通顺或字数变化替代内容迁移核对；把用户可见话术误当外部引文、把示例变成固定模板、把可选字段变成必填，或因重排丢失条件—动作对应和接口可复制性。"
+      "只给旧正文加标题来冒充整体重构，或只改说明文件而不接通实际消费者；只追加万能造梦框架说明而不把对应专业方法和操作组织进目标主文正常路径。",
+      "以核心摘要、文档通顺或字数变化替代内容迁移核对；把用户可见话术误当外部引文、把示例变成固定模板、把可选字段变成必填，或因重排丢失条件—动作对应和接口可复制性。",
+      "把上游坐标、层次标签或范围遗漏当作目标能力的完整方法；或只在 evolution 自身的方法中写模型声明，却不把已选能力方法落实到目标运行步骤和实际消费者。",
+      "先按旧文件标题盘点后只修显眼位置，未用实际规则、材料、条件、责任和消费者逐一检查16交点；将自述‘已覆盖’、方向数量或字数当作实质应用证据。",
+      "将一个交点压成一条规则，或把一个完整专业方法拆成跨文件互不相认的片段；反过来因存在多规则、跨方向承接或不需要改动便判结构错误。",
+      "将共享模型说成穷尽某领域的专业知识、已实证有效的方法或自动保证质量的标准；以坐标覆盖替代独立领域依据和行为/接收验证。",
+      "把预先给出完整方法、理想架构或逐项答案的写回案例当作从普通请求构建目标能力的方法证据；或用结构、邻近指标、其他维度通过关闭已经观察到的原目标质量失败。"
     ]
   },
   "cases": [
@@ -170,17 +184,17 @@
     {
       "id": "method-fidelity-06",
       "type": "normal",
-      "prompt": "将已确认的维护方法整理进 Reference。原方法规定先检查备份、再按顺序迁移，副本保留为独立案例；步骤三是可选项，超时则停止。",
+      "prompt": "将已确认的维护方法整理进 Reference，并核对 target/SKILL.md 是否也写足普通迁移可运行的核心条件和动作，必要时同步主文；Reference 可以深化专项细节。原方法规定先检查备份、再按顺序迁移，副本保留为独立案例；步骤三是可选项，超时则停止。",
       "expected_behavior": [
         "保留备份前置条件、迁移顺序、副本案例和超时停止条件",
         "不把可选步骤改成强制，不先摘要再原创一套简化流程",
         "把输入、成功产物、失败分支、旧副本行为及后续消费者接成可执行链",
-        "Reference 可完整解释方法，主 Skill 只写读取条件和返回执行步骤"
+        "在 target/SKILL.md 中落实执行所需的核心方法：备份前置、清单顺序、超时停止与已完成/失败项及恢复路径、可选步骤不影响主流程，以及完成后的旧路径检查；保留独立副本案例文件及其独立身份。Reference 可深化专项细节，但主文不能只留读取条件和返回步骤"
       ],
       "execution_mode": "write",
       "fixture_setup": {
         "files": {
-          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n迁移时读取 [方法](references/method.md)，执行后交付完成项、暂停项及实际路径。\n",
+          "target/SKILL.md": "---\nname: target\ndescription: 处理已给材料，按引用方法交付结果。\n---\n# 示例能力\n\n迁移时读取 [方法](references/method.md)，按清单搬运文件，完成后检查旧读取路径；执行后交付完成项、暂停项及实际路径。\n",
           "target/references/method.md": "# 维护方法\n\n原规则：按清单搬运文件，完成后检查读取路径。\n\n## 副本案例\n`examples/旧副本.md` 是独立案例，不并入方法正文，不删除。\n",
           "target/examples/旧副本.md": "独立案例：旧版只迁移 a.md。\n",
           "approved.md": "输入：迁移清单和可恢复备份。\n1. 先核验备份；缺备份不写入。\n2. 按清单顺序迁移；超时即停止后续迁移，返回已完成项与失败步骤，保留可恢复路径。\n3. 可选记录版本说明；跳过不影响完成。\n完成后交付文件并检查旧读取路径。target/examples/旧副本.md 作为独立案例保留。\n"
@@ -192,7 +206,7 @@
         "target/examples/旧副本.md",
         "approved.md"
       ],
-      "context": "将 approved.md 写入 target/references/method.md；步骤三的具体内容是版本说明。 所有写入只在测试隔离目录；材料为合成案例。",
+      "context": "approved.md 是本轮已确认并授权写回的完整方法：把足以让普通迁移执行的核心条件与动作落实到 target/SKILL.md，Reference 写入并深化该方法的专项细节；保留 target/examples/旧副本.md 为独立案例，不将案例并入通用步骤。步骤三是可选的版本说明，超时必须停止后续迁移并报告已完成项、失败步骤及可恢复路径。所有写入只在测试隔离目录；材料为合成案例。",
       "acceptance": [
         "查看真实变更与下游产物，不以复述计划代替执行。"
       ]
@@ -1265,11 +1279,444 @@
         }
       },
       "context": "本案例所有夹具均是合成的技术服务通知材料，用于验证规则来源边界、条件动作、文件调用与普通产物；不代表真实用户、生产事故或外部标准。fixture_setup.files 键是隔离根目录内准确相对路径，全部写入只限隔离目录。执行者须仅用最终 target/ 文件处理 request.md；不可把 expected_behavior 当作通知生成指导。"
+    },
+    {
+      "id": "four-by-four-evolution-complete-writeback",
+      "type": "normal",
+      "prompt": "按 approved-method.md 已选定的方法，更新 target 中的服务状态通知能力及其必要评测，让普通请求能按条件交付准确通知。保留仍有效的事实、保护项和接口；写入只限 target/，不联网、不发布，不生成真实通知成品。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/status.md",
+        "target/evals/evals.json",
+        "approved-method.md"
+      ],
+      "expected_behavior": [
+        "在 evolution 自身的改动判断与目标能力的完整写回中运用共享模型。本例按可观察的目标、专业依据、材料关系、执行路径和结果接收关联判断评分，不把自述覆盖当证据，也不要求隐藏思维链或固定16项展示；某些方向没有导致改动不构成失败，单个案例不证明全域行为通过。",
+        "把 approved-method.md 的已选规则写入 target 普通执行路径与实际读取的 status.md：明确 unknown 与 settled/declined 的差异、状态查询的只读/幂等语义和重复提交的非幂等风险，再把适用条件、查询动作、状态仍未知时的停止与用户下一步接成可执行规则。方法名称或‘按专业流程处理’的标签不能代替操作链。",
+        "写回时不把目标、判断、行动或结果某一关注点误当成规则内容限制；核心规则在保持各自焦点的同时保留完成运行所需的条件、动作和交付结果。评分看交易状态分支、查询/停止选择、用户下一步和通知产物是否实际接通，不看是否出现16个模型标签。",
+        "保留与新方法相容的原事实范围、目标、语气及接口；在原控制位置替换与重提交易冲突的旧规则，不留下仍起作用的弱化句。本地接口材料足够时不为形式联网；没有理论名或术语字样不自动失败，只有术语而无判断方法则不通过。",
+        "在 target/evals/evals.json 中保留有效旧案例，并增加可区分 unknown、settled/declined 与缺少 transaction_id 的普通输入；输入不泄露期望通知答案，验收能观察安全分支和事实边界。",
+        "确认 target 主文读取实际更新的 Reference；Reference 写明触发、判断、动作、产物与回到主线的位置。只写入 target/，报告实际改动和检查范围，不声称行为或质量已运行通过。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "在隔离夹具中观察本案例涉及的模型方向是否进入实际判断、已选专业方法保真、调用链、评测和授权；结构覆盖与本例行为分开判断，本例不证明全域行为，不运行真实服务或声称用户质量效果。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: payment-status-notice\ndescription: 根据给定交易记录写简洁准确的支付状态通知。\n---\n# 支付状态通知\n\n读取 [状态处理](references/status.md)，按输入记录写通知。\n\n提交超时后，若页面没有显示结果，建议用户重新提交；只有客服确认成功后才可写‘已成功’。只报告用户提供的事实。\n",
+          "target/references/status.md": "# 状态处理\n\n收到提交回执后检查状态。若结果未知，告诉用户稍后再试。不得猜测根因或损失。\n",
+          "target/evals/evals.json": "{\n  \"skill\": \"payment-status-notice\",\n  \"cases\": [\n    {\n      \"id\": \"known-settled\",\n      \"input\": \"交易状态明确为 settled。\",\n      \"expected\": [\"按已确认事实说明交易已完成\"]\n    }\n  ]\n}\n",
+          "approved-method.md": "# 已选方法（隔离评测材料）\n\n本地支付接口说明采用三种状态：`settled`（已结算）、`declined`（已拒绝）、`unknown`（系统尚不能确认最终状态）。提交交易是非幂等操作，超时后重复提交可能产生第二笔交易；使用 `get_status(transaction_id)` 查询是只读、幂等操作，不会再次提交。\n\n按以下方法处理：回执为 `settled` 或 `declined` 时准确报告对应状态；回执为 `unknown` 时不得称成功或失败，也不得重提，使用已有 `transaction_id` 查询；查询后仍为 `unknown` 时明确说明尚未确认，并告诉用户保留该编号等待后续状态。没有编号时，不重提，向用户索取编号或说明需查明编号后再继续。根因和恢复时间没有依据时不猜测。通知保持简洁，并遵守既有事实与权限边界。\n",
+          "request.md": "请按最近一笔交易的记录写一条通知。提交回执为 unknown，transaction_id 为 T-42；目前没有查询结果、根因或恢复时间。"
+        }
+      },
+      "context": "所有材料均为隔离的合成交易通知fixture，不代表真实事故或外部服务。expected_behavior 只交评分者，不向执行者展示；写入范围限制于隔离 target/。本例检查可复用方法写回，不执行实际支付或外部查询。"
+    },
+    {
+      "id": "four-by-four-same-direction-rule-groups-56",
+      "type": "normal",
+      "prompt": "依据 approved-method.md 更新 target 的当前状态判定规则及必要的直接引用。按本轮请求处理状态判断部分；保留已有效的接口与不冲突内容。完成写回后，只凭最终 target 文件处理 request.md，并将真实下游产物写到隔离目录中的 target/response.md。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/health-rules.md",
+        "target/evals/evals.json",
+        "approved-method.md",
+        "request.md"
+      ],
+      "expected_behavior": [
+        "将状态规则当作多组有区别的条件动作处理：任一有效越阈指标、确认 healthy 所需的双指标有效条件、未越阈但缺失/无效时的 unknown、以及缺项与已确认异常同时存在时的报告责任。它们虽围绕同一状态判断，却不能压成一条模糊规则；把每组规则写到目标普通路径实际读取的位置。",
+        "保留原阈值、字段接口、根因事实边界和不相冲突的旧功能；只同步本次状态判断需要的消费者，不凭坐标标签新增重复规则或改动无关趋势处理。",
+        "只修改隔离 target 的规则与必要评测；再由最终目标 Skill 对 request.md 产生 target/response.md。不得由 evolution 代写简报，也不声称已由真实服务验证。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "观察一个实际方向承载多组相关规则时的条件关系、语义保真与消费者接通；不按条数评分，也不证明全域行为或实际服务效果。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: service-health-brief\ndescription: 根据给定的服务监控记录，生成供运维人员查看的简洁健康简报。\n---\n# 服务健康简报\n\n读取 [健康判定规则](references/health-rules.md)，按输入中每项服务的当前监控记录输出简报。仅依据提供的数据，不查询真实服务或猜测根因。\n\n每项服务按以下顺序输出字段：`service`、`status`、`evidence`、`trend`、`next_check`。`status` 目前只可为 `healthy` 或 `degraded`。当前错误率达到 1% 或 P95 延迟达到 250 ms 时标为 `degraded`；否则标为 `healthy`。缺少某项读数时可省略该项，并按其余数据判断。若有前一时段记录，比较当前与前一时段的趋势。\n",
+          "target/references/health-rules.md": "# 健康判定规则\n\n将错误率统一表示为百分比，将 P95 延迟统一表示为毫秒。当前错误率达到 1% 或 P95 延迟达到 250 ms 时，服务为 `degraded`；否则为 `healthy`。没有读数时省略该项。单项读数已经越过阈值时，报告该异常。\n\n如果提供上一时段，按服务和指标比较读数并给出趋势。趋势与当前状态是分开的字段。简报使用 `service`、`status`、`evidence`、`trend`、`next_check`，每个服务一行；无异常时 `next_check` 写“继续例行监测”，存在异常时写“查看对应服务面板”。不推断原因或恢复时间。\n",
+          "target/evals/evals.json": "{\n  \"skill\": \"service-health-brief\",\n  \"cases\": [{\"id\": \"threshold-current-status\", \"input\": \"合成记录：error_ratio=1.1%，p95_ms缺失。\", \"expected\": [\"报告已观察到的当前异常并标明缺失数据\"]}]\n}\n",
+          "approved-method.md": "# 本轮已选方法（合成材料）\n仅适用于本隔离目标，不主张为行业标准。当前状态需要 `error_ratio` 与 `p95_ms`：任一有效指标达到既有阈值（错误率≥1%或P95≥250 ms）即为 `degraded`，并报告另一项缺失；只有两项都存在、可解析、单位可比较且均低于阈值才是 `healthy`；均未越阈但有必需值缺失、无效或无法换算时为 `unknown`，保留可用读数，不推测原因。趋势只在服务、指标、归一化单位、口径相同，且窗口等长、有效、不重叠时比较；条件不符则标不可比/省略比较值并说明条件缺口，不影响当前状态判断或其他合法分支。保留 `service/status/evidence/trend/next_check` 字段和顺序；不推断恢复时间或损失，不查真实监控。\n",
+          "request.md": "# 合成监控记录\n服务：orders\n当前窗口：10分钟\nerror_ratio：1.1%\np95_ms：缺失\n根因：未知\n恢复时间：未知\n"
+        }
+      },
+      "context": "目标文件与方法为合成技术材料，写入仅限隔离 target。approved-method.md 是本轮已选本地方法，不代表外部行业标准。执行者不接收 expected_behavior。"
+    },
+    {
+      "id": "four-by-four-cross-direction-complete-method-57",
+      "type": "normal",
+      "prompt": "依据 approved-method.md 更新 target 服务健康简报能力，使普通请求能够按本轮方法完成判断与交付。同步有必要的引用、评测和直接消费者，保留有效旧行为。完成写回后，只凭最终 target 文件处理 request.md，并将真实下游产物写到隔离目录中的 target/response.md；不查询真实服务。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/health-rules.md",
+        "target/evals/evals.json",
+        "approved-method.md",
+        "request.md"
+      ],
+      "expected_behavior": [
+        "把能力用途与运维接收者、状态专业判据、当前与历史读数之间的材料条件、状态/趋势的分支动作、实际字段交付接成完整普通路径；不能只在规则里出现‘unknown’或‘可比’等术语。",
+        "实现条件的实际影响：一项读数越阈即使另一项缺失也报告已观察异常；healthy 需要两项都有效且低于阈值；趋势不可比只限制趋势，不污染当前状态判断。",
+        "完整方法保持单一真源并进入真实消费者：主文在普通请求时读取 Reference，Reference 深化判据，必要评测保留旧例并覆盖新增分支，输入本身不泄漏预制产物答案。",
+        "核对普通输入可生成字段顺序正确、依据范围准确的目标产物；不推测原因、恢复时间或损失，不把规则改写说成已证明服务质量，也不由 evolution 代写 response.md。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "在真实材料关系上观察完整方法是否跨方向保持连贯并接入目标主线和消费者；本例不证明全16方向在所有任务通过，也不验证真实服务或接收质量。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: service-health-brief\ndescription: 根据给定的服务监控记录，生成供运维人员查看的简洁健康简报。\n---\n# 服务健康简报\n\n读取 [健康判定规则](references/health-rules.md)，按输入中每项服务的当前监控记录输出简报。仅依据提供的数据，不查询真实服务或猜测根因。\n\n每项服务按以下顺序输出字段：`service`、`status`、`evidence`、`trend`、`next_check`。`status` 目前只可为 `healthy` 或 `degraded`。当前错误率达到 1% 或 P95 延迟达到 250 ms 时标为 `degraded`；否则标为 `healthy`。缺少某项读数时可省略该项，并按其余数据判断。若有前一时段记录，比较当前与前一时段的趋势。\n",
+          "target/references/health-rules.md": "# 健康判定规则\n\n将错误率统一表示为百分比，将 P95 延迟统一表示为毫秒。当前错误率达到 1% 或 P95 延迟达到 250 ms 时，服务为 `degraded`；否则为 `healthy`。没有读数时省略该项。单项读数已经越过阈值时，报告该异常。\n\n如果提供上一时段，按服务和指标比较读数并给出趋势。趋势与当前状态是分开的字段。简报使用 `service`、`status`、`evidence`、`trend`、`next_check`，每个服务一行；无异常时 `next_check` 写“继续例行监测”，存在异常时写“查看对应服务面板”。不推断原因或恢复时间。\n",
+          "target/evals/evals.json": "{\n  \"skill\": \"service-health-brief\",\n  \"cases\": [{\"id\": \"threshold-current-status\", \"input\": \"合成记录：error_ratio=1.1%，p95_ms缺失。\", \"expected\": [\"报告已观察到的当前异常并标明缺失数据\"]}]\n}\n",
+          "approved-method.md": "# 本轮已选方法（合成材料）\n仅适用于本隔离目标，不主张为行业标准。当前状态需要 `error_ratio` 与 `p95_ms`：任一有效指标达到既有阈值（错误率≥1%或P95≥250 ms）即为 `degraded`，并报告另一项缺失；只有两项都存在、可解析、单位可比较且均低于阈值才是 `healthy`；均未越阈但有必需值缺失、无效或无法换算时为 `unknown`，保留可用读数，不推测原因。趋势只在服务、指标、归一化单位、口径相同，且窗口等长、有效、不重叠时比较；条件不符则标不可比/省略比较值并说明条件缺口，不影响当前状态判断或其他合法分支。保留 `service/status/evidence/trend/next_check` 字段和顺序；不推断恢复时间或损失，不查真实监控。\n",
+          "request.md": "# 合成监控记录\n服务：orders\n当前窗口：10分钟；aggregation：平均值\n当前 error_ratio：0.6%；当前 p95_ms：220\n前一窗口：10分钟；aggregation：平均值\n前一 error_ratio：0.7%；前一 p95_ms：230\n"
+        }
+      },
+      "context": "目标文件与方法为合成技术材料，写入仅限隔离 target。approved-method.md 是本轮已选本地方法，不代表外部行业标准。执行者不接收 expected_behavior。"
+    },
+    {
+      "id": "four-by-four-new-conditional-branch-58",
+      "type": "normal",
+      "prompt": "按 approved-method.md 为 target 补充趋势比较的适用条件与退路。只修改趋势功能真实缺少或冲突的控制点，当前窗口状态判断和既有合法分支继续独立工作。完成写回后，只凭最终 target 文件处理 request.md，并将真实下游产物写到隔离目录中的 target/response.md；不运行真实监控。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/health-rules.md",
+        "target/evals/evals.json",
+        "approved-method.md",
+        "request.md"
+      ],
+      "expected_behavior": [
+        "将新分支接到真实趋势决定点：服务、指标、归一化单位、统计口径相同且窗口有效、等长、不重叠时才比较；否则说明缺失的可比条件并标不可比或省略比较值。",
+        "条件分支只支配趋势，不变成整项简报拒绝处理或当前状态未知；当前窗口仍用有效读数按原状态方法判断，并保留目标已有的其他合法分支。",
+        "主文在真实触发点读取更新后的 Reference；必要评测覆盖可比较与不可比较的材料条件，不把预制答案写进普通运行规则或要求无关改写。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "检查新增条件是否局部改变趋势动作并和当前状态分支正确组合；不证明实际生产趋势或服务效果。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: service-health-brief\ndescription: 根据给定的服务监控记录，生成供运维人员查看的简洁健康简报。\n---\n# 服务健康简报\n\n读取 [健康判定规则](references/health-rules.md)，按输入中每项服务的当前监控记录输出简报。仅依据提供的数据，不查询真实服务或猜测根因。\n\n每项服务按以下顺序输出字段：`service`、`status`、`evidence`、`trend`、`next_check`。`status` 目前只可为 `healthy` 或 `degraded`。当前错误率达到 1% 或 P95 延迟达到 250 ms 时标为 `degraded`；否则标为 `healthy`。缺少某项读数时可省略该项，并按其余数据判断。若有前一时段记录，比较当前与前一时段的趋势。\n",
+          "target/references/health-rules.md": "# 健康判定规则\n\n将错误率统一表示为百分比，将 P95 延迟统一表示为毫秒。当前错误率达到 1% 或 P95 延迟达到 250 ms 时，服务为 `degraded`；否则为 `healthy`。没有读数时省略该项。单项读数已经越过阈值时，报告该异常。\n\n如果提供上一时段，按服务和指标比较读数并给出趋势。趋势与当前状态是分开的字段。简报使用 `service`、`status`、`evidence`、`trend`、`next_check`，每个服务一行；无异常时 `next_check` 写“继续例行监测”，存在异常时写“查看对应服务面板”。不推断原因或恢复时间。\n",
+          "target/evals/evals.json": "{\n  \"skill\": \"service-health-brief\",\n  \"cases\": [{\"id\": \"threshold-current-status\", \"input\": \"合成记录：error_ratio=1.1%，p95_ms缺失。\", \"expected\": [\"报告已观察到的当前异常并标明缺失数据\"]}]\n}\n",
+          "approved-method.md": "# 本轮已选方法（合成材料）\n仅适用于本隔离目标，不主张为行业标准。当前状态需要 `error_ratio` 与 `p95_ms`：任一有效指标达到既有阈值（错误率≥1%或P95≥250 ms）即为 `degraded`，并报告另一项缺失；只有两项都存在、可解析、单位可比较且均低于阈值才是 `healthy`；均未越阈但有必需值缺失、无效或无法换算时为 `unknown`，保留可用读数，不推测原因。趋势只在服务、指标、归一化单位、口径相同，且窗口等长、有效、不重叠时比较；条件不符则标不可比/省略比较值并说明条件缺口，不影响当前状态判断或其他合法分支。保留 `service/status/evidence/trend/next_check` 字段和顺序；不推断恢复时间或损失，不查真实监控。\n",
+          "request.md": "# 合成监控记录\n服务：orders\n当前窗口：10分钟；aggregation：平均值\n当前 error_ratio：0.6%；当前 p95_ms：220\n前一窗口：5分钟；aggregation：平均值\n前一 error_ratio：0.7%；前一 p95_ms：230\n"
+        }
+      },
+      "context": "目标文件与方法为合成技术材料，写入仅限隔离 target。approved-method.md 是本轮已选本地方法，不代表外部行业标准。执行者不接收 expected_behavior。"
+    },
+    {
+      "id": "four-by-four-preserve-already-covered-functions-59",
+      "type": "normal",
+      "prompt": "核对 target 对 approved-method.md 的承接情况，并只修改确有缺失或冲突的部分。不要把现已正确承担职责的输出接口、事实边界或分支另写一份。完成写回后，只凭最终 target 文件处理 request.md，并将真实下游产物写到隔离目录中的 target/response.md。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/health-rules.md",
+        "target/evals/evals.json",
+        "approved-method.md",
+        "request.md"
+      ],
+      "expected_behavior": [
+        "按实际材料和消费者区分需要新增/替换的状态与趋势方法，与目标已有且正确承接的字段次序、事实边界、当前状态和趋势字段分工；既不能以原句存在冒充功能充分，也不能把已经充分的有效功能重复维护。",
+        "只在唯一控制位置更新真实缺失或冲突项，让主文、Reference、评测各自承担必要职责；不为显得覆盖全面而新造不改变选择的标题、规则组或免责声明。",
+        "交付说明哪些职责已由旧规则承接、哪些仍需写回，并把结构检查与尚未实际运行的行为或质量证据分开。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "观察是否区分已有承接、真实缺口和需保留的有效内容；本案例不证明全局规则完整或下游质量改善。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: service-health-brief\ndescription: 根据给定的服务监控记录，生成供运维人员查看的简洁健康简报。\n---\n# 服务健康简报\n\n读取 [健康判定规则](references/health-rules.md)，按输入中每项服务的当前监控记录输出简报。仅依据提供的数据，不查询真实服务或猜测根因。\n\n每项服务按以下顺序输出字段：`service`、`status`、`evidence`、`trend`、`next_check`。`status` 目前只可为 `healthy` 或 `degraded`。当前错误率达到 1% 或 P95 延迟达到 250 ms 时标为 `degraded`；否则标为 `healthy`。缺少某项读数时可省略该项，并按其余数据判断。若有前一时段记录，比较当前与前一时段的趋势。\n",
+          "target/references/health-rules.md": "# 健康判定规则\n\n将错误率统一表示为百分比，将 P95 延迟统一表示为毫秒。当前错误率达到 1% 或 P95 延迟达到 250 ms 时，服务为 `degraded`；否则为 `healthy`。没有读数时省略该项。单项读数已经越过阈值时，报告该异常。\n\n如果提供上一时段，按服务和指标比较读数并给出趋势。趋势与当前状态是分开的字段。简报使用 `service`、`status`、`evidence`、`trend`、`next_check`，每个服务一行；无异常时 `next_check` 写“继续例行监测”，存在异常时写“查看对应服务面板”。不推断原因或恢复时间。\n",
+          "target/evals/evals.json": "{\n  \"skill\": \"service-health-brief\",\n  \"cases\": [{\"id\": \"threshold-current-status\", \"input\": \"合成记录：error_ratio=1.1%，p95_ms缺失。\", \"expected\": [\"报告已观察到的当前异常并标明缺失数据\"]}]\n}\n",
+          "approved-method.md": "# 本轮已选方法（合成材料）\n仅适用于本隔离目标，不主张为行业标准。当前状态需要 `error_ratio` 与 `p95_ms`：任一有效指标达到既有阈值（错误率≥1%或P95≥250 ms）即为 `degraded`，并报告另一项缺失；只有两项都存在、可解析、单位可比较且均低于阈值才是 `healthy`；均未越阈但有必需值缺失、无效或无法换算时为 `unknown`，保留可用读数，不推测原因。趋势只在服务、指标、归一化单位、口径相同，且窗口等长、有效、不重叠时比较；条件不符则标不可比/省略比较值并说明条件缺口，不影响当前状态判断或其他合法分支。保留 `service/status/evidence/trend/next_check` 字段和顺序；不推断恢复时间或损失，不查真实监控。\n",
+          "request.md": "# 合成监控记录\n服务：orders\n当前窗口：10分钟；aggregation：平均值\n当前 error_ratio：0.5%；当前 p95_ms：210\n没有前一窗口记录。\n"
+        }
+      },
+      "context": "目标文件与方法为合成技术材料，写入仅限隔离 target。approved-method.md 是本轮已选本地方法，不代表外部行业标准。执行者不接收 expected_behavior。"
+    },
+    {
+      "id": "body-reorganization-functional-rules-60",
+      "type": "normal",
+      "prompt": "请依据 approved-method.md 和 request.md，整体重构 target 的 CSV 导入预览能力。把有效规则组织到执行者能直接操作的真实职责章节中，主文须覆盖普通请求的核心判断和步骤，Reference 只深化独立解析方法；保留既有输出接口、不得写入/修改源文件的边界和不冲突的旧行为。同步必要评测。不要把模型说明作为主体外附录，也不要预制作品答案。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/validation.md",
+        "target/evals/evals.json",
+        "approved-method.md",
+        "request.md"
+      ],
+      "expected_behavior": [
+        "把原来分散在主文、Reference 的目标、字段接口、验证规则、条件分支和禁止写入行为按真实普通任务重组；标题用实际工作语言，陌生执行者仅凭最终目标文件就能从接收文件走到预览结果。不能只改标题、追加万能造梦框架说明或堆标签来代替规则重排。",
+        "保留已选方法并把它落实到会改变处理的具体条件与动作：仅对字段匹配名做去空白和ASCII小写归一；缺任一必需列时报告缺列并停止行级验证；逐条检查ID非空且文件内唯一、时间为带时区的ISO-8601、金额为非负有限十进制；有效行数为零或文件不可解析时blocked，全行有效时ready，部分有效时partial。重复ID只使后续重复行无效。",
+        "维持 `file_name`、`rows_seen`、`valid_rows`、`invalid_rows`、`status`、`issues` 的字段和次序，按数据行给出问题定位；仅生成导入前预览，不改写输入、不连接数据库、不执行导入。主文承载正常任务所需的完整核心方法，Reference 的专门判断有实际触发和返回位置。",
+        "保留已有评测输入和有效预期，新增能区分缺列、重复ID、时间格式/时区、负数/非法金额及ready/partial/blocked的普通案例；不把评分答案塞入目标运行规则。评价重构看规则怎样实际影响普通处理，不按章节数或坐标词判通过。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "检查主体是否按真实功能重组并承载可执行方法、条件和结果接口；不以新增模型说明或标题作为重构证据。本例为合成技术维护材料，不证明全域16方向行为或真实用户质量。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: csv-import-preview\ndescription: 检查一个CSV文件并生成导入前预览。\n---\n# CSV导入预览\n\n读取 [验证细则](references/validation.md)，检查用户给定的CSV，输出预览。返回字段顺序为 `file_name`、`rows_seen`、`valid_rows`、`invalid_rows`、`status`、`issues`。只要文件可以打开就标为 `ready`；文件打不开时标为 `blocked`。\n\n不得修改源文件或实际执行数据库导入。\n",
+          "target/references/validation.md": "# CSV验证细则\n\n读取表头和记录。必需字段为 `event_id`、`occurred_at`、`amount`。记录缺少任一字段时，把该行标成无效。`event_id` 不得为空。时间使用ISO-8601。金额是数字且不得小于零。每行问题写进 `issues`，并按行号定位。\n\n如果所有记录都有效，`status` 为 `ready`；只要有一行有效，`status` 为 `partial`；没有有效记录时为 `blocked`。空白行可以跳过。不得修改源文件或执行导入。\n",
+          "target/evals/evals.json": "{\n  \"skill\": \"csv-import-preview\",\n  \"cases\": [\n    {\"id\": \"simple-valid\", \"input\": \"one valid row\", \"expected\": [\"ready\", \"rows_seen=1\"]}\n  ]\n}\n",
+          "approved-method.md": "# 本轮已选方法（合成技术材料）\n仅适用于此隔离CSV预览目标，不主张为行业标准。读取CSV后，只为字段名匹配将表头去除首尾空白并做ASCII小写归一；不要改动输入内容。必需列为 `event_id`、`occurred_at`、`amount`。缺少任一必需列时报告具体缺列并停止行级验证。逐个数据行检查：event_id非空且在文件内唯一；occurred_at是带明确时区的ISO-8601时间；amount是有限、可解析且不小于零的十进制数。重复ID只使后出现的重复行无效。按数据记录计数并以数据行序号定位问题。有效行数为0、文件不可解析或没有数据行时为blocked；至少一条有效且另有无效行时为partial；所有数据行有效时为ready。保持输出字段顺序 `file_name`、`rows_seen`、`valid_rows`、`invalid_rows`、`status`、`issues`。只做预览，不写数据库、不导入、不改源文件。\n",
+          "request.md": "请整体重构CSV导入预览Skill。把正常请求的核心方法写进主文职责章节，保留独立解析细节在Reference，并让每条规则在实际任务中可执行。不要只把四维×四层模型解释附加到末尾。保留接口和“不实际导入/不修改源文件”的边界。"
+        }
+      },
+      "context": "本例中的目标文件与方法是隔离合成的技术材料；approved-method.md 是用户已选方法，不代表通用CSV标准。执行者不接收 expected_behavior。"
+    },
+    {
+      "id": "evolution-entry-plain-language-reusable-feedback-61",
+      "type": "normal",
+      "prompt": "这套处理办法已经确认下来。我不只是要把这次材料改好，之后遇到类似任务也想重复使用它。请把做法沉淀到对应的能力规则里，让未来执行者能照着做。",
+      "expected_behavior": [
+        "从普通表达识别出把已确认方法沉淀为可复用规则的写回意图，即使用户没有说Skill、Reference或使用固定命令，也进入能力维护入口。",
+        "先确定目标能力、范围、既定方法和需要保护的旧行为，再把已确认做法写入实际被加载的规则位置；不凭‘反复出现’自行补造专业方法。",
+        "区分明确的规则写回与只讨论可能方案、只修改当前作品或同步官方版本等近邻任务；不因材料提到反馈或规则就扩大本轮动作。"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "检查以普通说法提出的规则沉淀意图可被识别；本例没有目标文件，不可计为实际写回成功。"
+    },
+    {
+      "id": "evolution-entry-analysis-only-neighbor-62",
+      "type": "boundary",
+      "prompt": "我还没有决定改不改这套规则。先只帮我比较两种可能方向，讨论利弊即可；明确不要写回文件，也不要把建议当成我已选定的方法。",
+      "expected_behavior": [
+        "识别为尚未决定的分析/方案比较，而不是已授权的规则写回；将未决专业取舍交相应分析流程。",
+        "不修改能力文件、不把讨论中的候选方案沉淀成已确认规则，也不为了调用evolution而重述成写回任务。"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "检查与规则写回相邻但明确只讨论方案的请求是否被排除；不验证分析结论质量。"
+    },
+    {
+      "id": "evolution-description-updates-on-scope-change-63",
+      "type": "normal",
+      "prompt": "这个比较能力的支持范围已经确认扩展：除CSV外，现在也处理顶层JSON对象，按键报告新增、删除及值或类型变化；不处理深层嵌套。请只更新入口description，让未来用户能知道什么时候选择它；正文方法和只返回差异、不写源文件的边界都保持不动。",
+      "input_files": [
+        "target/SKILL.md"
+      ],
+      "context": "写入仅限隔离target。新增格式已在当前正文中实现；本轮只调整加载前入口描述，不重做专业方法。",
+      "expected_behavior": [
+        "识别输入范围和用户适用场景已实质扩展，更新frontmatter description以覆盖CSV与顶层JSON对象差异比较，并保持深层嵌套边界清楚；不要求命中某句固定措辞。",
+        "只改入口描述，不重写已承接新范围的正文方法；保留差异报告方式和不写源文件的既有交付边界。",
+        "交付说明指出为什么本次描述需要变化，并把description与加载后的执行规则分开。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "检查由能力范围变化触发入口描述更新，同时保护已承接的方法、范围边界和输出接口；不评价比较算法质量。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: laohu-diff\ndescription: 比较两个CSV文件，找出单元格的差异。\n---\n# 文件差异比较\n\n支持CSV和顶层JSON对象。CSV按记录位置及列名匹配，报告新增/删除行和改变的单元格前后值。JSON按顶层键比较，报告新增、删除及值或类型变化；不递归处理深层嵌套对象或数组。只在聊天中输出差异，不写入源文件。\n"
+        }
+      }
+    },
+    {
+      "id": "evolution-description-stays-on-internal-refinement-64",
+      "type": "normal",
+      "prompt": "只调整CSV差异结果的排列：改变的单元格先按表头列顺序、再按记录位置排列。其他功能、输入范围和交付方式保持不变，请直接更新能力文件。",
+      "input_files": [
+        "target/SKILL.md"
+      ],
+      "context": "写入仅限隔离target。此排序只改变已有结果的呈现顺序，不新增输入类型或交付方式。",
+      "expected_behavior": [
+        "修改CSV结果排序的内部执行规则，保留原description不变，因为适用情境、输入范围、前提和交付类型没有变化。",
+        "不因本轮有正文改动就机械同步description或UI字段；继续保留按位置匹配、只聊天输出和不写源文件的原有约束。",
+        "交付说明把内部处理变化与加载前入口变化区分开。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "检查纯内部处理调整不机械改变入口description；不评价排序实现的正确性。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: laohu-diff\ndescription: 比较两个CSV文件，找出单元格的差异。\n---\n# 文件差异比较\n\nCSV按记录位置及列名匹配，报告新增/删除行和改变的单元格前后值。只在聊天中输出差异，不写入源文件。\n"
+        }
+      }
+    },
+    {
+      "id": "reference-local-threshold-branch-and-return-65",
+      "type": "normal",
+      "prompt": "按 request.md 更新 target 的健康阈值判定能力。完成后依据 observations.json 处理各服务，并把 Markdown 报告写到 target/response.md。保留不冲突的原规则和输出边界。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/health-checks.md",
+        "request.md",
+        "observations.json"
+      ],
+      "context": "隔离的技术能力更新。只修改与新阈值或实际调用有关的控制点；不查询真实服务。",
+      "expected_behavior": [
+        "在实际由主文读取的 health-checks Reference 中加入 p95/p99 两条阈值及同服务状态取高的规则，保留 error_rate、latency_ms、严格大于边界、相等不触发及缺测不推断；不要把简单内部方法扩成主文重构。",
+        "主文的输入、Reference 调用位置、Markdown 返回接口和只读边界仍能承担新规则；只有当触发条件、输入前提或返回契约改变时才同步调用方。",
+        "按最终规则处理观察数据：alpha 为 warning、beta 为 error、gamma 为 ok，并把实际触发指标及观测值作为依据；不由 evolution 代写规则之外的结果，也不改输入文件。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "观察局部 Reference 方法、严格条件、状态优先关系及既有消费者能否接续；不证明真实服务效果或所有方向均已通过。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: service-health-summary\ndescription: Summarize service health from a JSON payload by applying the local severity thresholds and returning a concise Markdown report.\n---\n\n# Summarize service health\n\nAccept a JSON object containing a `services` array. For each service, read `references/health-checks.md` and apply its severity rules to the available metrics. Return a Markdown table with the service name, highest applicable status, and the metric evidence supporting that status. If no rule applies, report `ok`; if a required metric is absent, report `unknown` for that service. Do not modify the input file.\n",
+          "target/references/health-checks.md": "# Service health thresholds\n\nApply these rules to each service independently:\n\n- If `error_rate` is greater than `error_limit`, assign `error`.\n- If `latency_ms` is greater than `latency_limit_ms`, assign `warning`.\n- If both rules apply, report only the higher status, `error`.\n- A metric equal to its limit does not exceed the limit and does not trigger that rule.\n- If a metric needed to evaluate a rule is absent, treat that rule as unknown; do not infer a threshold breach.\n",
+          "request.md": "Please extend the current health check to classify percentile latency: report `warning` when `p95_ms` exceeds `p95_warning_ms`, and `error` when `p99_ms` exceeds `p99_error_ms`. If both apply to one service, keep only the higher status. Preserve existing metrics, threshold boundaries, and the Markdown report.\n",
+          "observations.json": "{\n  \"error_limit\": 0.01,\n  \"latency_limit_ms\": 200,\n  \"p95_warning_ms\": 250,\n  \"p99_error_ms\": 1000,\n  \"services\": [\n    {\"name\": \"alpha\", \"error_rate\": 0.002, \"latency_ms\": 150, \"p95_ms\": 275, \"p99_ms\": 900},\n    {\"name\": \"beta\", \"error_rate\": 0.001, \"latency_ms\": 180, \"p95_ms\": 280, \"p99_ms\": 1100},\n    {\"name\": \"gamma\", \"error_rate\": 0.001, \"latency_ms\": 180, \"p95_ms\": 240, \"p99_ms\": 950}\n  ]\n}\n"
+        }
+      }
+    },
+    {
+      "id": "reference-return-contract-syncs-consumers-66",
+      "type": "normal",
+      "prompt": "按 request.md 更新 target 的检查结果，使每个状态都能说明具体命中的规则和观测值。保持现有判断条件、只读边界和其他不冲突行为；同步必要的调用方、消费者与评测。完成后依据 sample.json 处理各服务，并把 JSON 报告写到 target/response.json。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/quality-rules.md",
+        "target/evals/evals.json",
+        "request.md",
+        "sample.json"
+      ],
+      "context": "隔离技术维护材料。方法和返回格式由 request.md 明确给定；执行者不接收评分预期。",
+      "expected_behavior": [
+        "让 Reference 的局部判据返回足以支撑状态的规则名、字段、观测值、界限与状态；把该返回格式接入主文实际产物接口，并同步受影响的既有评测，不只在 Reference 加说明。",
+        "只在确有消费者契约变化处同步主文、Reference 与评测；保留既有阈值、缺测规则、输入边界和不写源文件，不重写无关流程。",
+        "用 sample.json 核对报告中的 status 与 evidence 一致，所有被列出的触发规则均有对应实测值和界限，未触发的规则不伪造证据。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "观察 Reference 返回值、主文接口及直接消费者是否因契约变化而最小同步；不评价真实监控或用户质量。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: service-quality-check\ndescription: Check a service metrics JSON input against the local quality rules and return a concise report.\n---\n\n# Check service quality\n\nRead `references/quality-rules.md`, evaluate each service independently, and return a JSON array with `service` and `status` for each service. If a required value is absent, report `unknown`; do not modify the input.\n",
+          "target/references/quality-rules.md": "# Quality rules\n\n- `error_rate` greater than `error_limit` gives `error`.\n- Otherwise, `latency_ms` greater than `latency_limit_ms` gives `warning`.\n- If neither threshold is exceeded, status is `ok`.\n- A value equal to its limit does not exceed it. A missing required value gives `unknown`; do not infer a breach.\n",
+          "target/evals/evals.json": "{\n  \"skill\": \"service-quality-check\",\n  \"cases\": [\n    {\"id\": \"error-rate\", \"input\": {\"service\": \"orders\", \"error_rate\": 0.03, \"latency_ms\": 100}, \"expected\": [\"status=error\"]},\n    {\"id\": \"below-limit\", \"input\": {\"service\": \"catalog\", \"error_rate\": 0.001, \"latency_ms\": 90}, \"expected\": [\"status=ok\"]}\n  ]\n}\n",
+          "request.md": "Add an `evidence` array to each result. For every triggered rule, include its rule name, input field, observed value, threshold, and assigned status. Include all triggered rules in `error`-then-`warning` order; the result's `status` remains the highest triggered status. Use an empty array when no rule triggers. Keep the existing threshold conditions, missing-value handling, and read-only boundary.\n",
+          "sample.json": "{\n  \"error_limit\": 0.02,\n  \"latency_limit_ms\": 200,\n  \"services\": [\n    {\"service\": \"orders\", \"error_rate\": 0.03, \"latency_ms\": 230},\n    {\"service\": \"catalog\", \"error_rate\": 0.001, \"latency_ms\": 90}\n  ]\n}\n"
+        }
+      }
+    },
+    {
+      "id": "meta-capability-builds-from-ordinary-request-and-source-67",
+      "type": "integration",
+      "prompt": "这项能力最近把所有非 2xx 都说成“请重试”，已经造成一次重复提交。我希望通知能如实说明已知状态并给出安全下一步；保留现有字段接口和草稿，不要猜测未知状态。请结合 support-note.md、incident-log.md 与当前 target 文件，自己还原需要的判断和分支，改写实际会加载的规则及必要评测；随后按最终 target 文件处理 request.md，并把通知写入 target/response.json。所有材料为隔离案例，只写 target，不联网或执行真实提交。",
+      "input_files": [
+        "target/SKILL.md",
+        "target/references/notice-rules.md",
+        "target/evals/evals.json",
+        "support-note.md",
+        "incident-log.md",
+        "request.md"
+      ],
+      "context": "合成的技术维护案例。support-note.md 只给目标和保护项，incident-log.md 是原始事实材料；没有提供 approved-method、完整架构或逐项答案。执行者不接收评分预期。",
+      "expected_behavior": [
+        "从用户目标和原始事件材料形成实际可运行的状态判断，而不是只改通知文案：区分认证前未提交、离线未发送、503结果未知；对带 request_id 的未知提交先用只读查询确认，不立即重复提交；已接受不重交，已拒绝只说明当前未接受并把是否重试留给用户，仍未知则如实保持未知。",
+        "在 target 中实际读取的规则位置替换“所有非 2xx 都请重试”，保留草稿、现有 status/message/request_id 字段及只读边界，并让主文调用、Reference 规则和直接消费者接通。",
+        "更新 target/evals/evals.json，保留有效旧案例并覆盖未提交、已接受、已拒绝和仍未知等会切换处理的分支；不把测试预期伪装成源材料。",
+        "按最终文件处理 request.md：报告状态未知、保留 request_id，不声称已完成或失败，也不要求立即重提；不写源文件、不执行真实查询或提交。",
+        "本例只观察第一阶段从普通请求与原始材料形成并写回方法；同一执行者顺手处理 request.md 的产物不算未见过程的独立第二阶段。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "仅观察元入口能否从普通目标和原始材料形成专业判断、接通运行规则并产生本轮消费者产物；不证明第二阶段独立执行或真实用户质量，需另由未参与设计者只凭最终目标文件和新普通输入验证。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: sync-notice\ndescription: Report the result of a submitted sync request using the local notice rules.\n---\n\n# Sync notice\n\nRead references/notice-rules.md and return a JSON object with status, message, and request_id. Keep the local draft. For every non-2xx response, set status to failed and ask the user to retry. Do not modify source data.\n",
+          "target/references/notice-rules.md": "# Notice rules\n\n- A 200 response means the request is complete.\n- A 400 response means the request failed.\n- For all other responses, report failed and tell the user to retry.\n",
+          "target/evals/evals.json": "{\"skill\":\"sync-notice\",\"cases\":[{\"id\":\"retry-on-non-2xx\",\"input\":{\"response_code\":503,\"request_id\":\"r-503\"},\"expected\":[\"status=failed\",\"message asks user to retry\"]}]}",
+          "support-note.md": "Users need to know what is actually known and what safe next step remains. A blanket retry instruction after a timeout has caused duplicate work. Keep the local draft and existing output fields; do not claim receipt or failure without evidence.",
+          "incident-log.md": "Synthetic incident facts:\n\n- HTTP 401 was rejected at the authentication check before job acceptance; the local draft remained available.\n- OFFLINE means the request was not sent; the local draft remained available.\n- HTTP 503 occurred after the gateway forwarded the request. The response alone does not establish whether the job was accepted. One immediate resend created a duplicate.\n- Every submitted request has a request_id. A read-only GET status lookup can return ACCEPTED, DECLINED, or UNKNOWN. ACCEPTED means the job was recorded; DECLINED means it was not accepted; UNKNOWN does not establish either state. The system does not automatically resubmit.",
+          "request.md": "{\"response_code\":503,\"request_id\":\"job-481\",\"status_lookup\":\"UNKNOWN\",\"local_draft\":\"available\"}"
+        }
+      }
+    },
+    {
+      "id": "evolution-language-report-rule-written-and-used-68",
+      "type": "integration",
+      "prompt": "我上次收到改动报告后，只看见几个路径和“已精简”，还是不清楚实际改了什么。请检查 comparison-request.md 和 target 现有规则，把可复用的报告规则改到能让人看懂这次发生的变化，同时保留既有机器输出接口。规则写回后，再按最终 target 文件比较 before.md 与 after.md，把面向人的说明写入 target/response.md，并按既有契约写出 target/response.json；不要改样例原件。",
+      "input_files": [
+        "target/SKILL.md",
+        "comparison-request.md",
+        "before.md",
+        "after.md"
+      ],
+      "context": "隔离的元能力评测。before.md 和 after.md 只含用户提供的条件句片段，不是完整作品；片段的指代在给定语境中可恢复。不得据此声称获得真实读者反馈。",
+      "expected_behavior": [
+        "在 target/SKILL.md 的实际规则位置写回可复用的改动报告要求，并让普通任务路径真实调用它；规则使面向人的报告说明原处理、目标、改后处理和具体差别，证据或影响接在其后，路径只承担定位作用。",
+        "保留 target/SKILL.md 已声明的机器 JSON 字段、顺序、状态取值和只读范围；在 target/response.json 按原契约输出且不添加字段，不以人类可读报告为由改变机器接口。",
+        "写回后按最终规则处理 before.md 与 after.md 并生成 target/response.md；对文字本身能支持的含义、重点或语气差别给出具体依据，处理上下文已建立的指代，不预设哪一版更好，不补造情节或读者反应，也不称片段为完整作品或人类质量标尺。",
+        "不覆盖或修改 before.md、after.md、request.md；报告不把路径列表、规则存在或执行者自评当作实际解释或效果证据。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "观察规则写回、主文真实调用、机器接口保留及同一轮按最终规则生成的解释；不证明独立第二阶段行为、真实受众效果或完整作品质量。",
+      "fixture_setup": {
+        "files": {
+          "target/SKILL.md": "---\nname: change-note\ndescription: Compare an approved change with its prior handling and return the required report.\n---\n\n# Change notes\n\nFor a requested comparison, read the supplied before and after material and return a JSON object with exactly these keys in order: `status`, `paths`. Set `status` to `done` when the comparison is complete and list the inspected paths in `paths`. The report should be concise. After any rule update, use the resulting rule for the requested comparison. Do not edit the supplied source files.\n",
+          "before.md": "如果这些判断只是在当前对话里管用",
+          "after.md": "如果这些好不容易摸索出来的判断，只在眼前这个临时的对话窗口里面管用",
+          "comparison-request.md": "The previous report only listed paths and said “simplified”, so I could not tell what changed. Please update the reusable rule so a human can understand the actual difference. Keep the JSON interface exactly as defined in the current skill. Then compare these two fragments in their supplied context and write the explanation to target/response.md. The antecedent is available in the preceding paragraph; these are condition fragments only, not a complete work.\n"
+        }
+      }
+    },
+    {
+      "id": "approved-source-migration-cross-file-66",
+      "type": "integration",
+      "prompt": "请在隔离材料中执行 approved-plan.md 已确认的迁移。只修改 target/ 下指定文件，不重新选择方法，不改 source.md 或 plan。完成后列出实际变化。",
+      "input_files": [
+        "approved-plan.md",
+        "source.md",
+        "target/SKILL.md",
+        "target/references/core.md"
+      ],
+      "expected_behavior": [
+        "依据来源实际 A/B/C 片段实施：连同 B 所需 A 前提和 C 例外进入指定 Reference，并原样保留 plan 锁定的短句。",
+        "实际修改 target/SKILL.md，使普通请求在指定条件下读取新 Reference；保留并继续调用原 core.md 路径。",
+        "不改 source.md、approved-plan.md 或 fixture 外文件；以实际 diff 和消费者路径作为结果，不只提交迁移建议。"
+      ],
+      "execution_mode": "write",
+      "evaluation_scope": "只检查授权范围内的来源内容落地、跨文件调用和锁定表达；不证明真实目标用户质量或独立复验。",
+      "fixture_setup": {
+        "files": {
+          "approved-plan.md": "目标：对 item-edit 请求迁入来源单元 B。已确认方案：B 必须使用 A 建立的 baseline；C 是 locked 条件下的例外。保留来源中的原句 “Record the baseline before any transition.”，逐字不得改。将方法写入 target/references/selected-b.md，并在 target/SKILL.md 的 item-edit 正常路径中调用；既有 core.md 仍须读取。来源片段由用户提供，授权在此 fixture 中按其内容复用。\n",
+          "source.md": "# Source v4\n## A — baseline\nRecord the baseline before any transition.\n## B — transition\nFor an editable item, compare the requested state with the recorded baseline and apply one transition.\n## C — locked exception\nIf the item is locked, keep the original state and do not apply the transition.\n## D\nUnrelated export guidance.\n",
+          "target/SKILL.md": "---\nname: target\ndescription: Handles item editing requests and returns their result.\n---\n# Target capability\n\n## Normal path\nFor item-edit requests, read [the core procedure](references/core.md) and carry out the requested edit.\n",
+          "target/references/core.md": "# Core procedure\nKeep this procedure available for all item-edit requests.\n"
+        }
+      },
+      "context": "All paths are isolated test fixtures. The explicit exact-phrase preservation applies only to this approved migration case."
+    },
+    {
+      "id": "evidence-based-local-defect-replacement-67",
+      "type": "normal",
+      "prompt": "已确认方案指出，target 中一个具体分支造成了可复现错误；请写出实施者应采取的最小变更范围与核对依据。",
+      "input_files": [
+        "target.md",
+        "failure.md",
+        "replacement-source.md"
+      ],
+      "fixture_setup": {
+        "files": {
+          "target.md": "# Current method\n1. Record the starting state.\n2. For locked items, apply the transition.\n3. Return the final state.\n",
+          "failure.md": "Reproduction: with item.locked=true, step 2 changes the item. Expected by approved goal: locked items remain unchanged. Steps 1 and 3 work as specified in their fixtures.\n",
+          "replacement-source.md": "# Approved rule\nIf item.locked=true, leave the item unchanged and return its original state.\n"
+        }
+      },
+      "expected_behavior": [
+        "仅替换已证实错误的 locked 分支，按批准的来源规则修正，并保留仍有效的起始状态记录和最终返回步骤。",
+        "说明应核查的真实消费者及 locked 与 unlocked 邻近条件，不把一次局部缺陷扩大为整套流程失效。"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "判断有证据的局部替换边界；不声称已执行修复或运行测试。"
+    },
+    {
+      "id": "selected-original-phrase-reuse-68",
+      "type": "boundary",
+      "prompt": "用户明确要求来源中的一句话原样进入规则；请判断写回时怎样处理该句及其余材料。",
+      "input_files": [
+        "source.md",
+        "approved-scope.md",
+        "target.md"
+      ],
+      "fixture_setup": {
+        "files": {
+          "source.md": "# Source\nThe original sentence is: “Keep the next action attached to the state that produced it.”\nThe rest of this chapter covers three unrelated domains.\n",
+          "approved-scope.md": "Use the quoted original sentence verbatim in the rule. Apply only the rule about next-action/state linkage. Do not migrate the other domains.\n",
+          "target.md": "# Target rule\nKeep action records close to their source.\n"
+        }
+      },
+      "expected_behavior": [
+        "把用户锁定的原句逐字保留到实际判断位置，不因通常可改写而改动。",
+        "只迁移该句所承担的已选功能及必要条件；不把来源其余不相关章节或整份结构带入本地。"
+      ],
+      "execution_mode": "decision",
+      "evaluation_scope": "检查用户锁定表达与来源选择范围；不替代许可审查或行为验证。"
     }
   ],
   "execution_protocol": {
     "setup": "使用项目同盘隔离目录；fixture_setup.files 的键是该目录内的相对路径，值为完整 UTF-8 文件内容。逐案例重新建立，不修改正式项目。需要项目工具时复制当前工具与依赖到隔离根，保留其项目结构。",
     "delivery": "执行者只接收 prompt、context、input_files 及已物化文件，不接收 expected_behavior、acceptance 或其他评分预期。",
-    "evidence": "execution_mode=write 的案例必须产生实际修改及消费者产物；路由/说明案例不能替代这些证据。文件与输入预检只证明材料可定位，不自动证明方法完整或效果通过。 需要创作作品验证时，须在最终目标执行 Skill 的规则下实际运行目标 Skill；元入口不代写作品示例或临时试作。"
+    "evidence": "execution_mode=write 的案例必须产生实际修改及消费者产物；路由/说明案例不能替代这些证据。文件与输入预检只证明材料可定位，不自动证明方法完整或效果通过。元入口第一阶段案例须以普通请求与原始材料为起点、不预置足以直接写回的完整方法包；已有 approved-method/完整架构/逐项答案的案例仍用于测试忠实实施，但只支持该实施范围。第一阶段产物中的同轮执行不算独立第二阶段；须另由未参与目标设计者，仅凭最终目标文件与新的普通输入运行。已观察到的原目标质量失败不得由结构或邻近标准通过关闭。需要创作作品验证时，须在最终目标执行 Skill 的规则下实际运行目标 Skill；元入口不代写作品示例或临时试作。"
   }
 }

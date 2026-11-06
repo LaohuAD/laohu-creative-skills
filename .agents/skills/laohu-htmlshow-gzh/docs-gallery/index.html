@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>gzh-design · 6 套主题排版预览</title>
+<title>老胡公众号排版 · 11 套主题预览</title>
 <style>
   body{margin:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;color:#1f2937}
   header{padding:32px 24px 8px;max-width:1480px;margin:0 auto}
@@ -22,9 +22,10 @@
 </head>
 <body>
 <header>
-  <h1>gzh-design · 6 套主题排版预览</h1>
-  <p class="sub">六套都按 ../assets/sample-article.md 的标题、段落、列表和原有强调完整排版；各自以引言、章节、列表及留白/卡片/分隔组件呈现主题。编号只标示结构次序，没有新增副标题、评分、作者身份或总结。每个画框约等于公众号手机宽度，可在框内滚动查看。</p>
-  <p class="sub">六个片段均通过仓库内静态 HTML 检查，包括结构、文字包裹、标点和本地风险规则。此检查不验证微信公众号编辑器的真实粘贴与最终显示；当前 Gallery 也未做微信端实贴。</p>
+  <h1>老胡公众号排版 · 11 套主题预览</h1>
+  <p class="sub">新增素笺、墨刊、青岚、蓝图、朱砂五套 WeDraft 本地适配阅读主题，共用老胡原创产品介绍样稿。保留原有六套预览，可对照不同章节、引用和正文节奏。</p>
+  <p class="sub">原六套仍按 ../assets/sample-article.md 的标题、段落、列表和原有强调完整排版；新增五套使用同一份老胡原创介绍便于横向比较。各自以章节、正文、引文及留白呈现主题，编号只标示结构次序。每个画框约等于公众号手机宽度，可在框内滚动查看。</p>
+  <p class="sub">新增五套片段均通过仓库内静态 HTML 检查，包括结构、文字包裹、标点和本地风险规则。原六套保留既有产物与检查范围。此检查不验证微信公众号编辑器的真实粘贴与最终显示；当前 Gallery 也未做微信端实贴。</p>
 </header>
 <div class="grid" id="grid"></div>
 <footer>主题清单见 ../references/theme-index.md</footer>
@@ -36,6 +37,11 @@
     ["留白禅意风","#4A5D52","zen-whitespace.html",""],
     ["摸鱼票据风","#059669","moyu-ticket.html",""],
     ["橄榄手记","#1e1f23","olive-journal.html",""],
+    ["素笺","#756655","wedraft-plain-paper.html","新增"],
+    ["墨刊","#272727","wedraft-ink-journal.html","新增"],
+    ["青岚","#27675C","wedraft-jade-notes.html","新增"],
+    ["蓝图","#2857B7","wedraft-blueprint.html","新增"],
+    ["朱砂","#A3453C","wedraft-cinnabar.html","新增"],
   ];
   const grid=document.getElementById('grid');
   THEMES.forEach(function(t){

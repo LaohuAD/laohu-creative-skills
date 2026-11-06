@@ -1,0 +1,93 @@
+{
+  "skill": "laohu-asrcut",
+  "problem_contract": {
+    "goal": "把录音/录屏及ASR或SRT转成保留原始口语证据、可追溯的虚拟粗剪精剪、唯一剪后时间轴和可审阅页面；只有授权时输出真实剪后媒体。",
+    "non_goals": [
+      "把字幕文本修正冒充真实音频已剪",
+      "把冻结、格式正确或自评说成用户批准、真实试听通过或质量达标",
+      "猜测未知的音轨偏移、词级时间、静默或来源顺序",
+      "把VAD、相似度、词数或停顿阈值当作自动删除授权",
+      "无授权重排、覆盖源媒体、自动上传或触发付费ASR"
+    ]
+  },
+  "cases": [
+    {
+      "id": "ordinary-asr-virtual-cut",
+      "type": "behavior",
+      "prompt": "这是我录屏讲解的 ASR，帮我做粗剪和精剪，去掉确实重复啰嗦的地方，给我一个能检查的剪辑报告。",
+      "input_files": [],
+      "expected_behavior": [
+        "优先读取现有ASR，保留原始文本和顺序，区分虚拟剪辑、实际音频和显示文字",
+        "原始ASR、待确认/核听确认的实际口语修正和屏幕显示文字分别保存，未经核听的修正不能进入已确认spokenText",
+        "识别重复候选并检验独有条件/证据/结论，不按相似度直接删",
+        "只在用户授权范围内生成删除/重排决定；未知时钟和精度显示为问题",
+        "给出edit-plan、由单一编译器生成的timeline及由htmlshow呈现的可审阅页面"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "srt-sentence-only-precision",
+      "type": "behavior",
+      "prompt": "我只有这份 SRT，没有原音。请把重复的句子整理掉，输出虚拟剪辑时间线。",
+      "input_files": [],
+      "expected_behavior": [
+        "按SRT句段时间工作并标为utterance精度，不推造词时间或实际音频试听",
+        "保留重复删除候选的对应关系，若重复是否有独有信息无法从SRT确定则提问并保留",
+        "可交虚拟计划与时间线，但明确没有原音且无法导出/试听剪后音频",
+        "以 review.html 作为人阅读的检查入口；说明 edit-plan.json 记录剪辑决定，timeline.json 是由单一编译器生成、供下游使用的时间线；只提供真实生成并核验的文件路径。",
+        "分别标明虚拟方案、时间线和审阅页的实际生成或待生成状态；输入没有原音时不声称剪后媒体已导出、可试听或已经听审。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "explicit-reorder-and-media-export",
+      "type": "behavior",
+      "prompt": "请把这段讲解里结论前置，并导出新的剪后音频。原始录音保留，任何未知的多轨同步先列出来。",
+      "input_files": [],
+      "expected_behavior": [
+        "把结论前置解释为本轮重排授权并记入计划",
+        "检查原音实际可用、全源coverage和轨道offset；未解决的跨轨问题阻止相关媒体导出",
+        "只输出新文件且保护原始录音和工程，timeline目标时间由唯一编译器决定"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "repeated-source-occurrences-and-stale-binding",
+      "type": "behavior",
+      "prompt": "我授权重复播放一小段重点，但其中同一个关键词在原录音里也出现过两次。请做剪后时间线，交给动画时不要把两个词混成一个。",
+      "input_files": [],
+      "expected_behavior": [
+        "同一源范围再次出现时分配新的occurrenceId；重复需要独立授权与理由",
+        "tokenId与occurrenceId共同确定定位，不能仅按文本匹配关键词",
+        "旧项目revision/hash失效时拒绝旧绑定，而非指向新的同名词"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "technical-clock-and-whole-word-cuts",
+      "type": "mechanical",
+      "prompt": "使用隔离合成ASR夹具验证源时间转目标采样、删除闭合、保留静默、词级剪点完整性、不同source各自时钟、未知offset、哈希失效、路径别名和不支持操作的阻断行为。",
+      "input_files": [],
+      "expected_behavior": [
+        "半开区间边界和整数采样结果可复现；删除关闭目标间隙，保留静默仍占目标时间",
+        "已知全源范围必须完整分类；未覆盖范围作为question而非默认静默",
+        "词时间精度不足时不接受句内切点；targetRange由同一编译器唯一生成",
+        "同一词列表只有源 transcript 顺序才有效；反排 tokenIds 不能制造音频重排，漏掉整个来源也不能标记coverageComplete",
+        "transcript evidenceRef按plan目录读取原始字节并复核SHA；ASR证据过期或缺失时拒绝冻结/编译/媒体导出",
+        "媒体/ASR哈希、revision或计划哈希不匹配时拒绝过期引用",
+        "输出别名不得覆盖任何输入；变速、重叠等未支持操作明确拒绝"
+      ],
+      "execution_class": "technical_fixture",
+      "fixture_requirements": ["synthetic ASR JSON and SRT fixtures"],
+      "fixture_status": "self_contained_prompt"
+    }
+  ]
+}

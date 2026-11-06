@@ -41,10 +41,12 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 
 人声 Style Prompt 起句：
 
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
 ```text
-Global Metadata: funk band groove, 100 BPM in 4/4, sixteenth-note subdivision, firm backbeat on beats 2 and 4, bass-led pocket, <room and energy arc>.
+
+Global Metadata: funk band groove, <final blueprint BPM> in <final blueprint meter>, sixteenth-note subdivision, firm backbeat on beats 2 and 4, bass-led pocket, <room and energy arc>.
 Vocal Details: <singer/register>; place syncopated phrase accents between the bass anchors, keep lyric-bearing words clear, and use <short call / melodic lead> with replies only after the sung phrase.
-Arrangement: <bass riff identity>; kick reinforces selected bass anchors and leaves other attacks distinct; snare on 2 and 4 with sparse low ghost notes; short muted guitar or clavinet stabs answer the vocal; verse stays lean, chorus repeats <hook> and adds <one response layer>, instrumental break gives the riff one foreground turn.
+Arrangement: <bass riff identity>; kick reinforces selected bass anchors and leaves other attacks distinct; snare on 2 and 4 with sparse low ghost notes; short muted guitar or clavinet stabs answer the vocal; verse stays lean, chorus repeats <hook> and adds <one response layer>, instrumental break gives the riff one foreground turn. Follow <final blueprint section order, lengths and returns>.
 ```
 
 按歌词职务选一条可直接加入 `Vocal Details` 的句式，并填写实际段落/重词：
@@ -58,7 +60,7 @@ Arrangement: <bass riff identity>; kick reinforces selected bass anchors and lea
 
 MIDI 以每小节 4 QN 为坐标，bass riff 每个起音必须先定在 16 分网格（0.25 QN 的倍数）或明确标成有意微时值；不预设音高，由已定和弦/调式取根音、五度、和弦音或获准的经过音。snare 主击在 `bar_qn+1,+3`，ghost 仅在 bass/riff 不遮盖主拍的位置；kick 选 bass 的一两个结构支点并在其余空隙补重，不复制全部 bass 音符。力度起点 bass 88、kick 96、snare 92、ghost 42、短和弦 68；音源不同先按相对强弱调整。短 guitar/clav MIDI gate 起点 0.25 QN，可在实际奏法要求下缩短，但下一音 onset 与谱面拍位不动。
 
-ABC/MusicXML 把真实 bass 轮廓、kick/snare 主拍、ghost 休止、stabs 的短音值与乐句末 fill 分轨记录；不把所有声部都量化成同一 16 分连续流。ABC 采用 parser 支持的 percussion voice，MusicXML 采用目标软件支持的打击谱/无音高符号；键盘/吉他和声写实际音高与和弦时值，短断奏只有确实演奏时才标 staccato。目标映射、门长与谱面值分别校验，见[输出契约 Reference](../../references/output-contracts.md)。
+通用谱编译时，ABC/MusicXML 把真实 bass 轮廓、kick/snare 主拍、ghost 休止、stabs 的短音值与乐句末 fill 分轨记录；不把所有声部都量化成同一 16 分连续流。ABC 采用 parser 支持的 percussion voice，MusicXML 采用目标软件支持的打击谱/无音高符号；键盘/吉他和声写实际音高与和弦时值，短断奏只有确实演奏时才标 staccato。目标映射、门长与谱面值分别校验，见[输出契约 Reference](../../references/output-contracts.md)。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
 
 ## 返回宿主与验收
 

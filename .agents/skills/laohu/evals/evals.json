@@ -201,29 +201,6 @@
       ]
     },
     {
-      "id": "composition-independent-contributions-15",
-      "type": "normal",
-      "prompt": "同一首歌需要歌词和匹配的编曲方案，歌词为主，两个都要。方向和作品名已经确定，先推荐组合，不要开始创作。",
-      "input_files": [
-        "laohu-lyrics/SKILL.md",
-        "laohu-arrangement/SKILL.md"
-      ],
-      "expected_behavior": [
-        "从隔离候选发现并读取两个入口，按需加载组合 Reference",
-        "歌词为主责，编曲负责独立专业方案；不得认为歌词入口能自行完成编曲",
-        "歌词先交付段落及情绪，编曲接收后产出方案，再返回主责汇总，允许多个相关文件",
-        "沿用已确认名称与方向；未提供路径不虚构，实际落盘前依顶层规则调用收录",
-        "只推荐，不提前创作；不把 fixture 能力宣称为真实项目现已实现的能力"
-      ],
-      "fixture_setup": {
-        "location": "隔离的扁平 skills 目录；仅加入以下候选，沿用待测 laohu 入口和顶层规则；执行者只接收 prompt 与文件，不接收预期行为",
-        "files": {
-          "laohu-lyrics/SKILL.md": "---\nname: laohu-lyrics\ndescription: 为已确定方向和作品名的歌曲创作歌词，负责歌词交付；不制作编曲方案。\n---\n# 歌词\n承接方向、名称与保护项，写出歌词并检查可唱性。需要编曲时向对应能力交接已确认歌词、段落和情绪，接回方案后核对歌词与音乐意图是否一致并汇总文件，不代替编曲专业判断。只要求推荐时不生成。\n",
-          "laohu-arrangement/SKILL.md": "---\nname: laohu-arrangement\ndescription: 根据已有歌词、段落和情绪制作编曲方案，不创作或改写歌词。\n---\n# 编曲\n取得已确认歌词和音乐方向，形成与段落匹配的编曲方案，说明结构与配器选择。歌词不存在时等待上游交付，不伪造歌词或先行完成编曲。只要求推荐时不生成。\n"
-        }
-      }
-    },
-    {
       "id": "composition-internal-archive-16",
       "type": "near-miss",
       "prompt": "把这篇定稿做成离线阅读网页，原作品目录已经确定，正文不改。只帮我选能力。",

@@ -44,10 +44,12 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 
 人声 Style Prompt 起句：
 
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
 ```text
-Global Metadata: late-1970s/1980s Japanese city-pop band arrangement, 112 BPM in 4/4, kick on beats 1 and 3, snare on 2 and 4, eighth-note hi-hat, syncopated bass, <studio depth and section arc>.
-Vocal Details: <singer/register/tone>; clear melodic lead with <phrase length and held-word points>, restrained verse delivery and a memorable chorus hook; keep phrase openings clear of guitar and keyboard attacks.
-Arrangement: bass moves independently of kick; clean guitar gives short syncopated replies while electric piano/synth holds the selected chord voicing; verse uses a compact band bed, pre-chorus changes <one register/harmonic/density field>, chorus widens with <strings or brass, choose one unless the reference supports both>, then returns to the lead hook.
+
+Global Metadata: late-1970s/1980s Japanese city-pop band arrangement, <final blueprint BPM> in <final blueprint meter>, kick on beats 1 and 3, snare on 2 and 4, eighth-note hi-hat, syncopated bass, <studio depth and section arc>.
+Vocal Details: <singer/register/tone>; clear melodic lead with <phrase length and held-word points>; when the lead is the listening center, identify the same memory hook's rhythm/contour/stress/landing and first return, plus the needed delivery line; keep phrase openings clear of guitar and keyboard attacks.
+Arrangement: keep the selected City Pop band duties—kick on 1/3, backbeat on 2/4, eighth-note hi-hat, independent syncopated bass, clean-guitar replies and the chosen keyboard chord voicing. When the lead is the listening center, describe how the actual rhythm/low-end and chord or sustain layer support the same hook at its onset, stress, hold/release and next entry; then place guitar replies in confirmed phrase gaps. Preserve the final blueprint's form and chosen section changes; chorus widening remains conditional.
 ```
 
 按歌词/旋律选择一条能复制到 `Vocal Details` 的 City Pop 句式：
@@ -61,7 +63,7 @@ Arrangement: bass moves independently of kick; clean guitar gives short syncopat
 
 MIDI 以 4/4 每小節 4 QN 計：kick 起音 `bar_qn+0,+2`；snare/clap `+1,+3`；hi-hat 可用 `+0,.5,1,1.5,2,2.5,3,3.5` 八分格，力度做強弱交替，不必同音量。bass 從和弦根音/五度出發，在 kick 間填切分；clean guitar 選短反拍，electric piano 承擔實際和弦。力度起點 kick 92、snare 88、hat 強拍 58/弱拍 42、bass 80、短吉他 62、電鋼 68；按音源和主唱距離調整。短和弦 gate 起點 0.25 QN；長 pad/弦樂依實際譜面延音，不將 MIDI gate 值直接等同譜面音符值。
 
-ABC/MusicXML 需呈现 1/3 kick、2/4 snare、八分帽强弱、切分 bass 的实际起音，以及键盘和弦的声部/音值；吉他短切音在相应拍间记音，不用文字“syncopated”替代节奏。弦/铜管长线按乐手可演奏音域与呼吸/弓法安排。鼓用目标 percussion mapping，和弦及旋律用实际音高；详细字段与时值检查见[输出契约 Reference](../../references/output-contracts.md)。
+通用谱编译时，ABC/MusicXML 需呈现 1/3 kick、2/4 snare、八分帽强弱、切分 bass 的实际起音，以及键盘和弦的声部/音值；吉他短切音在相应拍间记音，不用文字“syncopated”替代节奏。弦/铜管长线按乐手可演奏音域与呼吸/弓法安排。鼓用目标 percussion mapping，和弦及旋律用实际音高；详细字段与时值检查见[输出契约 Reference](../../references/output-contracts.md)。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
 
 ## 返回宿主与验收
 

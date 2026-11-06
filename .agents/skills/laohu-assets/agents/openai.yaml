@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-assets | 老胡资产创作"
-  short_description: "筛选、设计或修改单件资产，协调同作方向与组内辨识。"
-  default_prompt: "使用 $laohu-assets 按剧本范围或指定单件需求筛选、从零设计或局部修改资产；多资产时写明适用的共同关系和各自锚点，保留既有 ID 与未授权项，并按授权交付图片提示词。"
+  short_description: "统筹剧本资产关系，按授权设计视觉资产与稳定声音身份。"
+  default_prompt: "使用 $laohu-assets 按剧本范围筛选、归并、设计或修改资产；按授权交付独立完整的视觉提示词或稳定角色声音提示词，保留既有 ID 与未授权项，不把声音身份等同当句表演或实际音频；图片/音频操作另需授权。"

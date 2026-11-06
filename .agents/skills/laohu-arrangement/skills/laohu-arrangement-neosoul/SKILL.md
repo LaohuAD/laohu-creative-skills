@@ -38,9 +38,11 @@ Berklee College of Music 的 Instrumental Neo-Soul Ensemble 课程说明把 neo-
 ## 生成提示、演唱与可编辑事件控制
 
 用完整关系句编译，不把“松弛、爵士感”当作事件： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：neo-soul ensemble, 84 BPM, 4/4 laid-back 16th-note pocket over a clear backbeat, <tonal center / loop>。若锁定录音/乐手实际拍感更直或前推，把laid-back换成其实际拍内关系。
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
+
+Global Metadata：neo-soul ensemble, <final blueprint BPM>, <final blueprint meter> laid-back 16th-note pocket over a clear backbeat, <tonal center / loop>。若锁定录音/乐手实际拍感更直或前推，把laid-back换成其实际拍内关系。
 Vocal Details：<确认的主唱音色与相对音区>，phrases <on-grid / slightly behind> with <承重词> held to <位置>，leave rests for Rhodes/guitar replies。
-Arrangement：<bass> anchors <root/approach-note movement>，<Rhodes/guitar> uses <已定七/九和弦voicing> with common-tone inner voices，short answers occupy <句缝>。
+Arrangement：<bass> anchors <root/approach-note movement>，<Rhodes/guitar> uses <已定七/九和弦voicing> with common-tone inner voices，short answers occupy <句缝>；按<最终蓝图段落顺序、长度与回返位置>安排
 固定共同拍轴、能听见的鼓/贝司落点和一个和弦身份；微时值按锁定参考或乐手实际演奏切换，不能整轨统一拖后。若旋律把扩展音听成冲突，先挪内声/改转位或延后解决；旋律长音处缩短和弦攻击，句间才增加填音。
 
-有主唱导唱时按音节和真实乐句记录轻重、前/后拍、延留与喘息位置；无导唱不写精确时值，只注明候选落点。MIDI保持鼓、bass、键盘/吉他分轨；把实测微时值写进各事件的绝对onset_qn分数，offset_qn记录真实尾长，不能用人性化形容词替代事件。和弦每音独立note事件，velocity体现主次而非自动把所有扩展音打响；共享音可tie/延续。ABC以V:分声部、实际note长度/休止、连线和w:歌词对齐；打击乐V:按目标方言映射鼓件，未支持时保留独立事件表；若采用未量化微时值，另交精确事件表/MIDI，ABC仅记可读拍值。MusicXML鼓件用unpitched/display-step/display-octave记谱，note的instrument id回指score-instrument，midi-instrument/midi-unpitched按目标鼓表编号（1–128）；多个voice与backup/forward写复调和错位，divisions覆盖最小实际细分，旋律歌词用syllabic/extend；目标播放器再听内声是否盖住主唱。
+锁定源旋律/导唱时按已核实音节和音符记录轻重、前/后拍、延留与喘息位置；授权新谱曲时写出本轮实际创作的音高与时值；AI探索时锁定完整乐句、重音、相对拍位和脉冲关系，具体音符/时值开放，不把未核实微时值写成实测。MIDI保持鼓、bass、键盘/吉他分轨；把已实测微时值写进各事件的绝对onset_qn分数，offset_qn记录真实尾长，不能用人性化形容词替代事件。和弦每音独立note事件，velocity体现主次而非自动把所有扩展音打响；共享音可tie/延续。通用谱编译时，ABC以V:分声部、实际note长度/休止、连线和w:歌词对齐；打击乐V:按目标方言映射鼓件，未支持时保留独立事件表；若采用未量化微时值，另交精确事件表/MIDI，ABC仅记可读拍值。MusicXML鼓件用unpitched/display-step/display-octave记谱，note的instrument id回指score-instrument，midi-instrument/midi-unpitched按目标鼓表编号（1–128）；多个voice与backup/forward写复调和错位，divisions覆盖最小实际细分，旋律歌词用syllabic/extend；目标播放器再听内声是否盖住主唱。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
