@@ -5,7 +5,7 @@ description: 用户要 Bossa Nova/巴萨诺瓦律动时，以直八分的二拍�
 
 # Bossa Nova：二拍组织、四拍计数、切分和弦与漂浮旋律
 ## 独立完整新作的项目蓝图
-未给拍号/速度/结构而需完整 Bossa 新作时，采用 4/4、96 BPM（四分音符 BPM；每小节数 `1&2&3&4&`，第 1/3 拍作两个宏拍）作项目起点，不把它说成 Bossa 传统速度。结构为 Intro 4 → A1 8 → B1 8 → A2 8 → B2 8 → 器乐回应 4 → B3 8 → Outro 4，共 52 小节；每一段沿用直八分、bass 宏拍支点和拍间和弦，B 段只增加一项旋律/和弦/轻打击。选 2/4 时须按原拍号重写小节数，不能用相同“96”混淆计拍；既有录音、旋律或用户拍号优先。
+未给拍号/速度/结构而需完整 Bossa 新作时，采用 4/4、96 BPM（四分音符 BPM；每小节数 `1&2&3&4&`，第 1/3 拍作两个宏拍）作项目起点，不把它说成 Bossa 传统速度。结构为 Intro 4 → A1 8 → B1 8 → A2 8 → B2 8 → 器乐回应 4 → B3 8 → Outro 4，共 52 小节；每一段沿用直八分、bass 宏拍支点和拍间和弦，B 段只增加一项旋律/和弦/轻打击。选 2/4 时须按原拍号重写小节数，不能用相同“96”混淆计拍；用户指定的录音/旋律参照和拍号优先于这些起点，旋律事件是否锁定依主文的来源状态判断，不因附件存在就固定。
 
 ## 触发与本地默认
 
@@ -43,10 +43,12 @@ AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.
 
 生成前先把以下字段全部替换为本次明确值：拍号/速度、主唱音区或器乐主奏、真实歌词的弱拍入口/跨线词、逐小节和弦、bass 目标音、和弦起音拍位、所选打击层、仅一项副歌增量。方括号中的说明也必须替换为定值；不得把尖括号或方括号占位符原样交付。
 
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
 ```text
-Global Metadata: bossa nova, 4/4 at 96 BPM counted in quarter notes, straight eighth-note subdivision, two-beat organization, light pulse and open space, close and clear production.
+
+Global Metadata: bossa nova, <final blueprint meter> at <final blueprint BPM> counted in quarter notes, straight eighth-note subdivision, two-beat organization, light pulse and open space, close and clear production.
 Vocal Details: [填本次歌手/音区]; [填真实歌词句子的弱拍起音位置或说明无弱起]; [填实际跨小节延音词或说明无跨线]; keep consonants clear.
-Arrangement: [填逐小节和弦]; bass plays [填根音/五度及小节拍位]; guitar or keyboard plays short chord attacks at [填确切拍位，默认 1&、3&]; percussion is [填具体轻打击层或 none]; refrain adds only [填一项声部增量或 none].
+Arrangement: [填逐小节和弦]; bass plays [填根音/五度及小节拍位]; guitar or keyboard plays short chord attacks at [填确切拍位，默认 1&、3&]; percussion is [填具体轻打击层或 none]; refrain adds only [填一项声部增量或 none]. Follow <final blueprint section order, lengths and returns>.
 ```
 
 依据句法与歌手已确认的声线，从下列句式选一条放进 `Vocal Details`：
@@ -60,7 +62,7 @@ Arrangement: [填逐小节和弦]; bass plays [填根音/五度及小节拍位];
 
 MIDI 起音依宿主原拍號。4/4 bass 默认在 `bar_qn+0` 弹根音、`+2` 弹五度（若该拍前和弦改变则弹新根音）；2/4 bass 默认每小節 `bar_qn+0` 弹根音。上聲部和弦固定起音起点：4/4 在 `bar_qn+.5`（1&）与 `+2.5`（3&）；2/4 在 `bar_qn+.5`（1&）。只有人声句末明确落在第 2/4 拍、且其后一个八分格没有新歌词起音、低音/打击起音或和弦变化时，才在 4/4 的 `+1.5`（2&）或 `+3.5`（4&）增加一次和弦；没有该条件就维持每小节两次（2/4 一次）。换和弦前 `4&` 根音提前仅在下一根音已确认且主唱该格留白时使用。力度起点 bass 72、和弦 54、shaker 42、主旋律 76。和弦 MIDI gate 默认 0.5 QN；只有与主唱辅音/低音同拍冲突且删去起音会破坏声部职责时才降至 0.25 QN，并复核可辨性。无自动 swing，微时值只按参照/明确表演意图加入。
 
-ABC/MusicXML 按原拍号记录直八分、低音落拍、上声部反拍和弦、旋律跨小节连线与实际休止；弱拍起音不能只用演奏说明文字代替。低音与和弦分成可演奏声部，吉他拨弦型注意同一只手可达到的音域和同时发音限制。若要记谱打击声部，使用目标软件支持的 percussion map；详细符号语法和时值检查见[输出契约 Reference](../../references/output-contracts.md)。
+通用谱编译时，ABC/MusicXML 按原拍号记录直八分、低音落拍、上声部反拍和弦、旋律跨小节连线与实际休止；弱拍起音不能只用演奏说明文字代替。低音与和弦分成可演奏声部，吉他拨弦型注意同一只手可达到的音域和同时发音限制。若要记谱打击声部，使用目标软件支持的 percussion map；详细符号语法和时值检查见[输出契约 Reference](../../references/output-contracts.md)。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
 
 ## 返回宿主与验收
 

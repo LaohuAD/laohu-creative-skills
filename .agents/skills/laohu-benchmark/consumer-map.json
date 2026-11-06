@@ -1,0 +1,441 @@
+{
+  "schema_version": 1,
+  "purpose": "Small route map for current public consumers, not a whitelist or method taxonomy. Preserve a specific new consumer/method candidate even when no row exists; professional instructions live in the adapter References and named source methods.",
+  "consumers": [
+    {
+      "consumer": "laohu-story",
+      "branch": "default",
+      "decision": "Select and organize source material so each retained unit contributes to the chosen whole-work relation and its dependencies.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/narrative-analysis.md",
+      "adapter_section": "转成各类消费者的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-story/references/selection-composition.md",
+        ".agents/skills/laohu-story/references/whole-work-conception.md",
+        ".agents/skills/laohu-story/references/reference-discovery.md"
+      ],
+      "media": [
+        "text",
+        "story outline",
+        "complete work when whole-work claims depend on it"
+      ],
+      "return_stage": "Story selection/composition, then whole-work conception"
+    },
+    {
+      "consumer": "laohu-script",
+      "branch": "default and selected dramaturgy/genre configuration",
+      "decision": "Determine how a character's choice changes their circumstances, how a scene's action and information alter the next scene, and what the audience can infer.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/narrative-analysis.md",
+      "adapter_section": "转成各类消费者的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-script/references/narrative-and-structure.md",
+        ".agents/skills/laohu-script/references/scene-development.md",
+        ".agents/skills/laohu-script/references/dialogue-and-audiovisual.md"
+      ],
+      "media": [
+        "script pages",
+        "scene and beat sequence",
+        "actual screen work where claims depend on staging/editing"
+      ],
+      "return_stage": "Script concept, structure/sequence, or scene-development step that owns the decision"
+    },
+    {
+      "consumer": "laohu-novel",
+      "branch": "default and selected serial/interior/suspense configuration",
+      "decision": "Choose the character event, reader expectation, narrative viewpoint, information order, and scene/summary treatment needed by the current novel passage.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/narrative-analysis.md",
+      "adapter_section": "转成各类消费者的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-novel/references/story-design-and-reader-expectation.md",
+        ".agents/skills/laohu-novel/references/narration-and-time.md",
+        ".agents/skills/laohu-novel/references/prose-realization-and-revision.md"
+      ],
+      "media": [
+        "complete chapter or sufficient neighboring passages",
+        "whole work when arc/recovery claims depend on it"
+      ],
+      "return_stage": "Novel event design, reader-expectation, narration, or prose-revision step"
+    },
+    {
+      "consumer": "laohu-writing",
+      "branch": "default",
+      "decision": "Select paragraph purpose, claim/evidence order, and the wording needed for the selected article form.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/language-analysis.md",
+      "adapter_section": "消费者的真实专业任务",
+      "source_method_paths": [
+        ".agents/skills/laohu-writing/references/structure-and-argument.md",
+        ".agents/skills/laohu-writing/references/expression-and-density.md",
+        ".agents/skills/laohu-writing/references/materials-and-evidence.md"
+      ],
+      "media": [
+        "source text",
+        "draft",
+        "complete neighboring paragraphs"
+      ],
+      "return_stage": "Writing method selection, drafting, or revision at the affected paragraph"
+    },
+    {
+      "consumer": "laohu-writing/gzh",
+      "branch": "公众号文章",
+      "decision": "Choose article purpose, reader path, text structure, and the scope promised by the article title and subheads.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
+      "adapter_section": "消费者真实的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-writing/skills/laohu-writing-gzh/SKILL.md",
+        ".agents/skills/laohu-writing/references/structure-and-argument.md",
+        ".agents/skills/laohu-writing/references/openings-and-reading.md"
+      ],
+      "media": [
+        "Markdown article",
+        "title/introduction/section text",
+        "mobile page only for layout claims"
+      ],
+      "return_stage": "GZH article purpose and reader-path choice, then writing and separate page-layout handoff"
+    },
+    {
+      "consumer": "laohu-writing/spoken",
+      "branch": "口播",
+      "decision": "Choose information chunk order, spoken sentence length, audible transitions, and the amount a listener can follow on first hearing.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/language-analysis.md",
+      "adapter_section": "消费者的真实专业任务",
+      "source_method_paths": [
+        ".agents/skills/laohu-writing/skills/laohu-writing-spoken/SKILL.md",
+        ".agents/skills/laohu-writing/references/spoken-explanation.md",
+        ".agents/skills/laohu-writing/references/expression-and-density.md"
+      ],
+      "media": [
+        "spoken transcript",
+        "full adjacent utterance",
+        "actual recording for pause/prosody claims"
+      ],
+      "return_stage": "Spoken-writing information order and drafting, then read-aloud/recording review"
+    },
+    {
+      "consumer": "laohu-lyrics",
+      "branch": "default with only the explicitly selected lyric configuration",
+      "decision": "Choose the lyric section's language, image/relationship movement, word stress, phrase return, and singable constraints supported by actual music evidence.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/language-analysis.md",
+      "adapter_section": "消费者的真实专业任务",
+      "source_method_paths": [
+        ".agents/skills/laohu-lyrics/references/benchmark-method.md",
+        ".agents/skills/laohu-lyrics/references/language-and-sound.md",
+        ".agents/skills/laohu-lyrics/references/expression-and-purpose.md"
+      ],
+      "media": [
+        "complete lyric section and neighboring sections",
+        "melody/recording only when supplied or accessible"
+      ],
+      "return_stage": "Lyric direction/section design, then actual phrase drafting and full-song reread"
+    },
+    {
+      "consumer": "laohu-arrangement",
+      "branch": "default and the selected style/format configuration",
+      "decision": "Choose a specific musical relation to expose: motif/form, harmony, shared rhythmic axis, arrangement role, energy dimension, or lyric handoff.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/time-and-sound-analysis.md",
+      "adapter_section": "分专业决定读取",
+      "source_method_paths": [
+        ".agents/skills/laohu-arrangement/references/composition.md",
+        ".agents/skills/laohu-arrangement/references/orchestration-groove.md",
+        ".agents/skills/laohu-arrangement/references/output-contracts.md"
+      ],
+      "media": [
+        "score/MIDI/stems/audio as available",
+        "lyrics and form map",
+        "actual rendered output for sound claims"
+      ],
+      "return_stage": "Arrangement design and lyric handoff, then the chosen output-format compiler and listening review"
+    },
+    {
+      "consumer": "laohu-title",
+      "branch": "release title, cover title, in-article heading, song title, or key line as actually requested",
+      "decision": "Choose wording that matches the intended reader entry, preserves the material relationship, and promises only what its destination can deliver.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
+      "adapter_section": "消费者真实的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-title/references/audience-value-and-structure.md",
+        ".agents/skills/laohu-title/references/title-structure-generation.md",
+        ".agents/skills/laohu-title/references/title-value-and-review.md"
+      ],
+      "media": [
+        "candidate wording",
+        "full article/song when delivery claims depend on context",
+        "real field/render only for placement claims"
+      ],
+      "return_stage": "Title entry/structure generation, then final-wording review in its real position"
+    },
+    {
+      "consumer": "laohu-cover",
+      "branch": "social/cover image, information graphic, or relationship diagram",
+      "decision": "Choose what earns the first visual/text attention, what supports it next, and how the real diagram encodes its evidence.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/visual-analysis.md",
+      "adapter_section": "不同视觉消费者各自看什么",
+      "source_method_paths": [
+        ".agents/skills/laohu-cover/references/visual-hierarchy.md",
+        ".agents/skills/laohu-cover/references/design-composition.md",
+        ".agents/skills/laohu-cover/references/relationship-diagrams.md",
+        ".agents/skills/laohu-cover/references/layout-typography.md"
+      ],
+      "media": [
+        "actual cover or target-size preview",
+        "headline/subheadline and supporting source material"
+      ],
+      "return_stage": "Cover focus and visual relationship, then layout/type implementation and target-size check"
+    },
+    {
+      "consumer": "laohu-image",
+      "branch": "new image or reference-based transformation",
+      "decision": "Choose visible subjects, their actions/relationships, viewing position, composition, light/color roles, and which prompt variables remain open.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/visual-analysis.md",
+      "adapter_section": "不同视觉消费者各自看什么",
+      "source_method_paths": [
+        ".agents/skills/laohu-image/references/creative-brief-and-reference.md",
+        ".agents/skills/laohu-image/references/image-content-and-viewing.md",
+        ".agents/skills/laohu-image/references/light-color-and-style.md",
+        ".agents/skills/laohu-image/references/prompt-assembly.md"
+      ],
+      "media": [
+        "prompt/brief",
+        "provided reference image",
+        "actual generated image for realized-feature claims"
+      ],
+      "return_stage": "Viewing-purpose choice, image content/composition, prompt assembly, then generated-image review"
+    },
+    {
+      "consumer": "laohu-assets",
+      "branch": "character, costume, prop, scene, state, or grouped visual asset",
+      "decision": "Decide what is a reusable visual identity baseline, what is a continuity state, and what is a scene-specific visual variant.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/visual-analysis.md",
+      "adapter_section": "不同视觉消费者各自看什么",
+      "source_method_paths": [
+        ".agents/skills/laohu-assets/references/identity-continuity-and-variants.md",
+        ".agents/skills/laohu-assets/references/script-candidates-and-integration.md",
+        ".agents/skills/laohu-assets/references/image-handoff-and-output.md"
+      ],
+      "media": [
+        "script and named asset occurrences",
+        "actual reference image where visual identity or state claims depend on it"
+      ],
+      "return_stage": "Asset discovery/integration and visual design, then image/video handoff"
+    },
+    {
+      "consumer": "laohu-assets/voice",
+      "branch": "stable character or voiceover identity design when the voice-specific trigger/authorization is present",
+      "decision": "Choose the target listening impression and primary/supporting audible anchors for a stable voice identity; compare same-work voices only under comparable conditions when confusion risk is real; keep identity separate from line performance.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/time-and-sound-analysis.md",
+      "adapter_section": "分专业决定读取",
+      "source_method_paths": [
+        ".agents/skills/laohu-assets/SKILL.md",
+        ".agents/skills/laohu-assets/skills/laohu-assets-voice/SKILL.md",
+        ".agents/skills/laohu-assets/references/voice-handoff-and-output.md"
+      ],
+      "media": [
+        "user-selected direction or textual role/use information",
+        "actual reference audio only when provided, accessible and authorized; text alone does not prove timbre or discriminability"
+      ],
+      "return_stage": "Return the identity/use, anchor hierarchy, protected/open dimensions, any comparable group differences and actual-media status to Assets parent; parent compiles the complete prompt. Video owns line performance and sound-in-scene decisions."
+    },
+    {
+      "consumer": "laohu-video",
+      "branch": "script-to-shot planning, prompt, continuity, camera, performance, editing, or sound",
+      "decision": "Choose the minimum visible evidence, action phase, viewing task, continuity state, cut, and sound relation needed by the current shot/video unit.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/time-and-sound-analysis.md",
+      "adapter_section": "分专业决定读取",
+      "source_method_paths": [
+        ".agents/skills/laohu-video/references/segmentation-and-handoff.md",
+        ".agents/skills/laohu-video/references/timing-and-shots.md",
+        ".agents/skills/laohu-video/references/audiovisual-and-editing.md",
+        ".agents/skills/laohu-video/references/action-and-camera.md"
+      ],
+      "media": [
+        "script",
+        "shot plan",
+        "actual source/preview video for realized timing and continuity claims"
+      ],
+      "return_stage": "Coverage/viewing purpose, shot/timing plan, then prompt/continuity/editing handoff and actual-media review"
+    },
+    {
+      "consumer": "laohu-motion",
+      "branch": "motion design using only selected relevant internal modules",
+      "decision": "Choose which object/state relation changes over time, how the viewer reads the change, and which sound/visual events must synchronize.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/visual-analysis.md",
+      "adapter_section": "不同视觉消费者各自看什么",
+      "source_method_paths": [
+        ".agents/skills/laohu-motion/SKILL.md",
+        ".agents/skills/laohu-motion/skills/laohu-motion-relations/SKILL.md",
+        ".agents/skills/laohu-motion/skills/laohu-motion-typography/SKILL.md",
+        ".agents/skills/laohu-arrangement/skills/laohu-arrangement-sfx/SKILL.md"
+      ],
+      "media": [
+        "layered design/source assets",
+        "timeline and audio",
+        "actual rendered frames for motion claims"
+      ],
+      "return_stage": "Motion content/reading path, then selected visual/time module and render review"
+    },
+    {
+      "consumer": "laohu-topic",
+      "branch": "standalone topic or angle-development decision",
+      "decision": "Select a complete material-supported topic promise, reader situation, distinct value, and the scope that can be delivered.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
+      "adapter_section": "消费者真实的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-topic/references/angle-development.md",
+        ".agents/skills/laohu-topic/references/materials-and-production.md",
+        ".agents/skills/laohu-topic/SKILL.md"
+      ],
+      "media": [
+        "source notes/interview/recording/draft",
+        "complete content where delivery claims depend on it"
+      ],
+      "return_stage": "Topic range and material-state choice, then candidate comparison and topic brief"
+    },
+    {
+      "consumer": "laohu-asrcut",
+      "branch": "transcript, rough-cut, fine-cut, timeline, or presentation handoff",
+      "decision": "Decide whether a complete spoken unit can be retained/deleted, what exact source range is supported, and which pauses/cut points require listening evidence.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/time-and-sound-analysis.md",
+      "adapter_section": "分专业决定读取",
+      "source_method_paths": [
+        ".agents/skills/laohu-asrcut/references/editing.md",
+        ".agents/skills/laohu-asrcut/references/timeline-and-handoff.md",
+        ".agents/skills/laohu-asrcut/SKILL.md"
+      ],
+      "media": [
+        "original recording",
+        "raw transcript/SRT with known clock basis",
+        "plan/timeline outputs"
+      ],
+      "return_stage": "Coverage/retention decision, then compile/review timeline with evidence precision intact"
+    },
+    {
+      "consumer": "laohu-htmlshow",
+      "branch": "HTML presentation of an existing article",
+      "decision": "Choose how existing document structure is rendered into readable sections, links, images and heading levels without changing content intent.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
+      "adapter_section": "消费者真实的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-htmlshow/references/presentation.md",
+        ".agents/skills/laohu-htmlshow/SKILL.md"
+      ],
+      "media": [
+        "existing Markdown/document",
+        "HTML output",
+        "browser preview at actual target viewport"
+      ],
+      "return_stage": "Document structure normalization, component/layout rendering, then validation and preview"
+    },
+    {
+      "consumer": "laohu-htmlshow-gzh",
+      "branch": "公众号 HTML/theme/component presentation",
+      "decision": "Choose components and hierarchy that preserve the supplied article's actual section roles, mobile readability, and WeChat output rules.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
+      "adapter_section": "消费者真实的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-htmlshow-gzh/SKILL.md",
+        ".agents/skills/laohu-htmlshow-gzh/references/theme-index.md",
+        ".agents/skills/laohu-htmlshow-gzh/references/structure-validation.md"
+      ],
+      "media": [
+        "Markdown article",
+        "selected component/theme",
+        "actual generated HTML/mobile preview"
+      ],
+      "return_stage": "Article structure parse, component assembly, compliance check, then output review"
+    },
+    {
+      "consumer": "laohu-audit",
+      "branch": "supporting evidence/method candidate only",
+      "decision": "Use a specific source observation as a comparison basis for a user-requested issue without substituting it for evidence in the user's own artifact.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
+      "adapter_section": "消费者真实的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-audit/references/object-checks.md",
+        ".agents/skills/laohu-audit/references/retest.md",
+        ".agents/skills/laohu-audit/SKILL.md"
+      ],
+      "media": [
+        "identified user material and located comparison source"
+      ],
+      "return_stage": "Audit question/evidence comparison; audit owns finding, local retest and report"
+    },
+    {
+      "consumer": "laohu-analysis",
+      "branch": "supporting evidence/method candidate only",
+      "decision": "Use retrieved examples to formulate bounded hypotheses, evidence conditions, or validation cases for a defined analysis task.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
+      "adapter_section": "消费者真实的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-analysis/references/capability-design.md",
+        ".agents/skills/laohu-analysis/references/validation.md",
+        "references/exemplar-study.md"
+      ],
+      "media": [
+        "actual user request/artifact",
+        "relevant source range",
+        "receiving artifact or outcome when validating"
+      ],
+      "return_stage": "Analysis evidence selection and hypothesis design; analysis owns validation and claim level"
+    },
+    {
+      "consumer": "laohu-evolution",
+      "branch": "candidate method/experience review only",
+      "decision": "Decide whether an observed method remains a candidate, what scope/conditions to test, and where a demonstrated rule would belong.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
+      "adapter_section": "消费者真实的专业决定",
+      "source_method_paths": [
+        ".agents/skills/laohu-evolution/references/rule-expression.md",
+        ".agents/skills/laohu-evolution/references/change-workflow.md",
+        ".agents/skills/laohu-analysis/references/validation.md"
+      ],
+      "media": [
+        "source evidence",
+        "reproducible skill behavior/output",
+        "independent receiving evidence when available"
+      ],
+      "return_stage": "Candidate hypothesis and scope, then evolution workflow and authorized validation"
+    },
+    {
+      "consumer": "laohu-archive",
+      "branch": "container/path operation only",
+      "decision": "Prepare or return the confirmed project-root benchmark container path; do not classify or evaluate artistic methods.",
+      "adapter_file": ".agents/skills/laohu-archive/SKILL.md",
+      "adapter_section": "参考作品库容器",
+      "source_method_paths": [
+        ".agents/skills/laohu-archive/SKILL.md",
+        ".agents/skills/laohu-archive/references/library-layouts.json"
+      ],
+      "media": [
+        "confirmed project root or user-confirmed exact path"
+      ],
+      "return_stage": "Return library_root to laohu-benchmark before explicit data writes"
+    },
+    {
+      "consumer": "laohu-update",
+      "branch": "repository update operation only",
+      "decision": "No artwork decision; keep the benchmark's method source citations as documentation, not a runtime update dependency.",
+      "adapter_file": ".agents/skills/laohu-update/SKILL.md",
+      "adapter_section": "1. 确认要更新什么",
+      "source_method_paths": [
+        ".agents/skills/laohu-update/SKILL.md"
+      ],
+      "media": [
+        "repository update/status evidence"
+      ],
+      "return_stage": "Use update's own review and preservation flow; do not read or migrate the local benchmark data"
+    },
+    {
+      "consumer": "laohu-luna",
+      "branch": "delegation/coordination operation only",
+      "decision": "Pass a sufficiently concrete source decision and constraints to the responsible creator; do not score the artwork as a routing shortcut.",
+      "adapter_file": ".agents/skills/laohu-luna/SKILL.md",
+      "adapter_section": "任务包启动器的生成、派发与验收",
+      "source_method_paths": [
+        ".agents/skills/laohu-luna/SKILL.md"
+      ],
+      "media": [
+        "task handoff and already-loaded evidence"
+      ],
+      "return_stage": "Coordinate the owning creator and preserve their decision authority"
+    }
+  ],
+  "path_basis": "All adapter_file and source_method_paths values are relative to the repository root."
+}

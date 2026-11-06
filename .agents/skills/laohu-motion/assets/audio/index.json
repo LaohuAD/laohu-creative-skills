@@ -1,0 +1,1412 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "kenney.interface-click-001",
+      "file": "interface-sounds/click_001.ogg",
+      "role": "light-touch",
+      "tags": [
+        "click",
+        "interface",
+        "touch"
+      ],
+      "material": "unknown (interface sound; not material-specific)",
+      "energy": "unspecified",
+      "durationSec": 0.100023,
+      "onsetTimeSec": 0.0,
+      "peakTimeSec": 0.0025,
+      "hitTimeSec": 0.0025,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "ccfb7fa0cccdd9faec0eb16033c732b1e308d139d80f799161495d58f7adcdb9",
+      "source": {
+        "pack": "Interface Sounds",
+        "page": "https://kenney.nl/assets/interface-sounds",
+        "version": "1.0",
+        "archiveSha256": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
+        "originalPath": "Audio/click_001.ogg"
+      },
+      "author": "Kenney (created/distributed by, per included License.txt)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/interface-sounds-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.rpg-metal-latch",
+      "file": "rpg-audio/metalLatch.ogg",
+      "role": "mechanical-latch",
+      "tags": [
+        "latch",
+        "metal",
+        "click",
+        "closure"
+      ],
+      "material": "metal (source filename label; acoustic review pending)",
+      "energy": "unspecified",
+      "durationSec": 0.261333,
+      "onsetTimeSec": 0.04,
+      "peakTimeSec": 0.0475,
+      "hitTimeSec": 0.0475,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708",
+      "source": {
+        "pack": "RPG Audio",
+        "page": "https://kenney.nl/assets/rpg-audio",
+        "version": "1.0",
+        "archiveSha256": "6dbeaf8544da958d8f2adcb4a4a4b76c1ade34a05f8ab9edccd327da7375f38b",
+        "originalPath": "Audio/metalLatch.ogg"
+      },
+      "author": "Kenney Vleugels (Kenney.nl), per included License.txt",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/rpg-audio-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.rpg-book-flip-1",
+      "file": "rpg-audio/bookFlip1.ogg",
+      "role": "page-turn",
+      "tags": [
+        "book",
+        "page",
+        "flip",
+        "friction"
+      ],
+      "material": "book/page (source filename label; acoustic review pending)",
+      "energy": "unspecified",
+      "durationSec": 0.768646,
+      "onsetTimeSec": 0.585,
+      "peakTimeSec": 0.5925,
+      "hitTimeSec": 0.5925,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "fa81ac2fedc8c641661b87e349630a36c9800e795e0c800e029214efdbe26a7d",
+      "source": {
+        "pack": "RPG Audio",
+        "page": "https://kenney.nl/assets/rpg-audio",
+        "version": "1.0",
+        "archiveSha256": "6dbeaf8544da958d8f2adcb4a4a4b76c1ade34a05f8ab9edccd327da7375f38b",
+        "originalPath": "Audio/bookFlip1.ogg"
+      },
+      "author": "Kenney Vleugels (Kenney.nl), per included License.txt",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/rpg-audio-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.rpg-cloth-1",
+      "file": "rpg-audio/cloth1.ogg",
+      "role": "fabric-friction",
+      "tags": [
+        "cloth",
+        "movement",
+        "friction"
+      ],
+      "material": "cloth (source filename label; acoustic review pending)",
+      "energy": "unspecified",
+      "durationSec": 0.661042,
+      "onsetTimeSec": 0.075,
+      "peakTimeSec": 0.2075,
+      "hitTimeSec": 0.2075,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d",
+      "source": {
+        "pack": "RPG Audio",
+        "page": "https://kenney.nl/assets/rpg-audio",
+        "version": "1.0",
+        "archiveSha256": "6dbeaf8544da958d8f2adcb4a4a4b76c1ade34a05f8ab9edccd327da7375f38b",
+        "originalPath": "Audio/cloth1.ogg"
+      },
+      "author": "Kenney Vleugels (Kenney.nl), per included License.txt",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/rpg-audio-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.casino-card-slide-1",
+      "file": "casino-audio/card-slide-1.ogg",
+      "role": "surface-slide",
+      "tags": [
+        "card",
+        "slide",
+        "friction"
+      ],
+      "material": "card (source filename label; acoustic review pending)",
+      "energy": "unspecified",
+      "durationSec": 0.600771,
+      "onsetTimeSec": 0.15,
+      "peakTimeSec": 0.1575,
+      "hitTimeSec": 0.1575,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "006cf9822d15d7063f8899e56041f41646df30adb6fbd8b974ee5d5420012690",
+      "source": {
+        "pack": "Casino Audio",
+        "page": "https://kenney.nl/assets/casino-audio",
+        "version": "1.1",
+        "archiveSha256": "f36250766ac5bc378c13708ddf12a23a8e54a3251f8d482c7536e51b5dbafa18",
+        "originalPath": "Audio/card-slide-1.ogg"
+      },
+      "author": "Kenney Vleugels (Kenney.nl), per included License.txt",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/casino-audio-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.casino-card-place-1",
+      "file": "casino-audio/card-place-1.ogg",
+      "role": "object-settle",
+      "tags": [
+        "card",
+        "place",
+        "settle",
+        "contact"
+      ],
+      "material": "card (source filename label; acoustic review pending)",
+      "energy": "unspecified",
+      "durationSec": 0.689116,
+      "onsetTimeSec": 0.155,
+      "peakTimeSec": 0.1775,
+      "hitTimeSec": 0.1775,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "d8f26c33a665dcbdcc6f632f6050bc9dd548feb0d4942d4547615926d3926810",
+      "source": {
+        "pack": "Casino Audio",
+        "page": "https://kenney.nl/assets/casino-audio",
+        "version": "1.1",
+        "archiveSha256": "f36250766ac5bc378c13708ddf12a23a8e54a3251f8d482c7536e51b5dbafa18",
+        "originalPath": "Audio/card-place-1.ogg"
+      },
+      "author": "Kenney Vleugels (Kenney.nl), per included License.txt",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/casino-audio-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.impact-wood-footstep-000",
+      "file": "impact-sounds/footstep_wood_000.ogg",
+      "role": "footstep-contact",
+      "tags": [
+        "footstep",
+        "floor",
+        "wood",
+        "contact"
+      ],
+      "material": "wood (source filename label; acoustic review pending)",
+      "energy": "unspecified",
+      "durationSec": 0.249592,
+      "onsetTimeSec": 0.0,
+      "peakTimeSec": 0.0025,
+      "hitTimeSec": 0.0025,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "5f1c252942a220d658121bd9417448cd19649ded9fff2ff15f6e50899373ce8e",
+      "source": {
+        "pack": "Impact Sounds",
+        "page": "https://kenney.nl/assets/impact-sounds",
+        "version": "1.0",
+        "archiveSha256": "029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8",
+        "originalPath": "Audio/footstep_wood_000.ogg"
+      },
+      "author": "Kenney (created/distributed by, per included License.txt)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/impact-sounds-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.impact-wood-light-000",
+      "file": "impact-sounds/impactWood_light_000.ogg",
+      "role": "light-impact",
+      "tags": [
+        "impact",
+        "wood",
+        "light",
+        "landing"
+      ],
+      "material": "wood (source filename label; acoustic review pending)",
+      "energy": "light (source filename label)",
+      "durationSec": 0.265601,
+      "onsetTimeSec": 0.0,
+      "peakTimeSec": 0.0025,
+      "hitTimeSec": 0.0025,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3",
+      "source": {
+        "pack": "Impact Sounds",
+        "page": "https://kenney.nl/assets/impact-sounds",
+        "version": "1.0",
+        "archiveSha256": "029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8",
+        "originalPath": "Audio/impactWood_light_000.ogg"
+      },
+      "author": "Kenney (created/distributed by, per included License.txt)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/impact-sounds-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.impact-metal-light-000",
+      "file": "impact-sounds/impactMetal_light_000.ogg",
+      "role": "light-impact",
+      "tags": [
+        "impact",
+        "metal",
+        "light"
+      ],
+      "material": "metal (source filename label; acoustic review pending)",
+      "energy": "light (source filename label)",
+      "durationSec": 0.351474,
+      "onsetTimeSec": 0.0,
+      "peakTimeSec": 0.0025,
+      "hitTimeSec": 0.0025,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "33b5e6e37c6e9d54e07bf5a89b12c76e879f40c1ea83cdd82714df1d6f9fec6d",
+      "source": {
+        "pack": "Impact Sounds",
+        "page": "https://kenney.nl/assets/impact-sounds",
+        "version": "1.0",
+        "archiveSha256": "029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8",
+        "originalPath": "Audio/impactMetal_light_000.ogg"
+      },
+      "author": "Kenney (created/distributed by, per included License.txt)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/impact-sounds-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "kenney.impact-soft-medium-000",
+      "file": "impact-sounds/impactSoft_medium_000.ogg",
+      "role": "soft-impact",
+      "tags": [
+        "impact",
+        "soft",
+        "medium",
+        "contact"
+      ],
+      "material": "soft-contact (source filename label; acoustic review pending)",
+      "energy": "medium (source filename label)",
+      "durationSec": 0.118005,
+      "onsetTimeSec": 0.0,
+      "peakTimeSec": 0.0025,
+      "hitTimeSec": 0.0025,
+      "hitTimeMethod": "Decoded mono at 48 kHz; 5 ms RMS frames. onsetTimeSec is the start of the first frame >= max(10% of peak-frame RMS, -60 dBFS); peakTimeSec and hitTimeSec both mark the center of the highest-RMS frame. This is an RMS-frame estimate, not a single-sample peak or true peak; signal analysis only, not human listening.",
+      "hitTimeConfidence": "low",
+      "sha256": "7d3ba0bb5e60a11b5d3e558c141303dcf494256675fbf753c0d252d2cf0481e3",
+      "source": {
+        "pack": "Impact Sounds",
+        "page": "https://kenney.nl/assets/impact-sounds",
+        "version": "1.0",
+        "archiveSha256": "029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8",
+        "originalPath": "Audio/impactSoft_medium_000.ogg"
+      },
+      "author": "Kenney (created/distributed by, per included License.txt)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "basis": "Included pack License.txt and official Kenney asset page declare CC0.",
+        "notes": "Pack license permits personal and commercial projects; credit to Kenney or kenney.nl is optional.",
+        "licenseTextFile": "licenses/impact-sounds-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "wyzowl.whoosh-medium-soft",
+      "file": "wyzowl-sfx-kit/whoosh-medium-soft.wav",
+      "role": "medium-soft-air-sweep",
+      "tags": [
+        "whoosh",
+        "air",
+        "movement",
+        "transition",
+        "medium",
+        "soft"
+      ],
+      "material": "synthetic airy sweep; catalog describes air and explicitly says it rises/fades without an edge",
+      "energy": "soft (source level.lufs -24 LUFS, loudest 150 ms K-weighted; not integrated LUFS, not locally auditioned, and not a mix target)",
+      "durationSec": 0.5425,
+      "hitTimeSec": 0.229,
+      "hitTimeMethod": "Source-declared sounds.json sync.at (file-local seconds), with sync.meets/how and timing retained in source metadata. It is a publisher alignment point, not a locally measured onset or human audition. audio-plan aligns a cue using this source point and its selected source range/speed; if source playbackRate editing creates a derivative, use the transformed hitpoint from the audio-edit receipt.",
+      "hitTimeConfidence": "source-declared; not locally auditioned",
+      "sha256": "a114611a09e02ab26cfbd8d796279eac358b6df4c3923db3f269ac34c340eeac",
+      "source": {
+        "pack": "SFX Kit by Wyzowl",
+        "page": "https://wyzowl.com/sfx-kit/",
+        "version": "SFX Kit machine manifest 1.0.0; official site checked 2026-11-05.",
+        "originalPath": "sounds/whooshes/whoosh-medium-soft.wav",
+        "sourceDeclaredLengthSec": 0.543,
+        "syncPointSec": 0.229,
+        "catalogCategory": "Whooshes",
+        "catalogDescription": "A smooth, gentle sweep of air that rises and fades without an edge.",
+        "timingSemantics": "sync.at is file-local; sync.meets/how gives the intended visual phase. Place the source sync point on that event/phase using the local audio plan clock. For rate changes, the source manifest says to scale its times by the rate; source playbackRate changes pitch and duration, so record transformed hitpoints from the Arrangement audio-edit receipt. Do not treat source seconds or timing points as film-global time.",
+        "rateSemantics": "The source-declared adapt.rate range and notes are copied verbatim in adapt. Where the note says pitch moves, playbackRate changes pitch as well as duration; do not map this to the Motion plan speed field, which is pitch-preserving. Rate [1,1] means do not rate-shift this sound.",
+        "manifest": "https://raw.githubusercontent.com/wyzowl/sfx-kit/main/sounds.json",
+        "manifestVersion": "1.0.0",
+        "manifestSha256": "67f4debfc7077d15391a896bac71a5d12c5c596dc194564e6054a844a98c9726",
+        "manifestId": "whoosh-medium-soft",
+        "variant": {
+          "speed": "medium",
+          "intensity": "soft"
+        },
+        "description": "A smooth, gentle sweep of air that rises and fades without an edge.",
+        "use_for": [
+          "Panels sliding in",
+          "Gentle card reveals",
+          "Backgrounds shifting",
+          "Calm transitions between explainer scenes"
+        ],
+        "avoid_for": [
+          "Snappy, quick moves",
+          "Energetic edits"
+        ],
+        "manifestTags": [
+          "whoosh",
+          "swish",
+          "transition",
+          "movement",
+          "air",
+          "natural",
+          "standard",
+          "subtle"
+        ],
+        "channels": 2,
+        "sync": {
+          "at": 0.229,
+          "meets": "move-peak",
+          "how": "Ease-in-out: put the sync point at the middle of the move. Ease-out (fast start, slowing to a stop): about a quarter of the way in. Ease-in (slow start, fast exit): about three quarters of the way in."
+        },
+        "timing": {
+          "audible_start": 0.02,
+          "onset": 0.1,
+          "peak": 0.229,
+          "body_end": 0.375,
+          "audible_end": 0.506
+        },
+        "fits_seconds": [
+          0.28,
+          0.81
+        ],
+        "level": {
+          "lufs": -24,
+          "true_peak_dbtp": -15.2,
+          "tier": "soft"
+        },
+        "levelMeasurement": "The source manifest defines level.lufs as the loudest 150 ms, K-weighted (ITU-R BS.1770), in LUFS; it is not integrated LUFS. This is source metadata, not a local audition or mix target.",
+        "under_voiceover_db": -2,
+        "adapt": {
+          "rate": [
+            0.85,
+            1.2
+          ],
+          "notes": "To fit a move up to about 15% shorter or 20% longer, play it faster or slower (its pitch moves with it); beyond that, use the next speed. Adjust level with gain, but for a clearly softer or harder sound use the other intensity rather than a big gain change."
+        },
+        "tuning": null,
+        "pairs_with": [
+          {
+            "category": "impacts",
+            "how": "Something landing: the whoosh on the move (its sync point at the move's fastest point) and the impact on the frame it lands. A whoosh that suits the move's length dies away just before the landing; use one a step softer than the impact."
+          },
+          {
+            "category": "pops",
+            "how": "Something arriving and appearing: the whoosh during the move, the pop as it lands, at a lower gain than the whoosh."
+          },
+          {
+            "category": "shimmers",
+            "how": "A reveal: the whoosh into the reveal, the shimmer starting at the whoosh's sync point."
+          }
+        ],
+        "character": "dark, airy"
+      },
+      "use": [
+        "Panels sliding in",
+        "Gentle card reveals",
+        "Backgrounds shifting",
+        "Calm transitions between explainer scenes"
+      ],
+      "avoidWhen": [
+        "Snappy, quick moves",
+        "Energetic edits"
+      ],
+      "author": "Wyzowl (official page says the sounds were created with Claude and directed by Wyzowl)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "syncUse": "allowed",
+        "basis": "Wyzowl SFX Kit official page states CC0 1.0 for any use and permits change/share; included LICENSE file is CC0 1.0 Universal.",
+        "notes": "Raw files may be synchronized and redistributed under the source-declared CC0 terms; no credit is required. The included file is retained for provenance. Verify current page/license again when redistributing outside this project.",
+        "licenseTextFile": "licenses/wyzowl-sfx-kit-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "wyzowl.whoosh-medium-hard",
+      "file": "wyzowl-sfx-kit/whoosh-medium-hard.wav",
+      "role": "medium-hard-air-sweep",
+      "tags": [
+        "whoosh",
+        "air",
+        "movement",
+        "transition",
+        "medium",
+        "hard",
+        "bright"
+      ],
+      "material": "synthetic airy sweep; catalog describes a bright crack at its peak and weight behind it",
+      "energy": "hard (source level.lufs -17 LUFS, loudest 150 ms K-weighted; not integrated LUFS, not locally auditioned, and not a mix target)",
+      "durationSec": 0.55,
+      "hitTimeSec": 0.201,
+      "hitTimeMethod": "Source-declared sounds.json sync.at (file-local seconds), with sync.meets/how and timing retained in source metadata. It is a publisher alignment point, not a locally measured onset or human audition. audio-plan aligns a cue using this source point and its selected source range/speed; if source playbackRate editing creates a derivative, use the transformed hitpoint from the audio-edit receipt.",
+      "hitTimeConfidence": "source-declared; not locally auditioned",
+      "sha256": "0f59bd63013b353514af902aefc78b5c973a8e92833934e726b68cd2e84e6b34",
+      "source": {
+        "pack": "SFX Kit by Wyzowl",
+        "page": "https://wyzowl.com/sfx-kit/",
+        "version": "SFX Kit machine manifest 1.0.0; official site checked 2026-11-05.",
+        "originalPath": "sounds/whooshes/whoosh-medium-hard.wav",
+        "sourceDeclaredLengthSec": 0.55,
+        "syncPointSec": 0.201,
+        "catalogCategory": "Whooshes",
+        "catalogDescription": "A strong rush of air with a bright crack at its peak and weight behind it.",
+        "timingSemantics": "sync.at is file-local; sync.meets/how gives the intended visual phase. Place the source sync point on that event/phase using the local audio plan clock. For rate changes, the source manifest says to scale its times by the rate; source playbackRate changes pitch and duration, so record transformed hitpoints from the Arrangement audio-edit receipt. Do not treat source seconds or timing points as film-global time.",
+        "rateSemantics": "The source-declared adapt.rate range and notes are copied verbatim in adapt. Where the note says pitch moves, playbackRate changes pitch as well as duration; do not map this to the Motion plan speed field, which is pitch-preserving. Rate [1,1] means do not rate-shift this sound.",
+        "manifest": "https://raw.githubusercontent.com/wyzowl/sfx-kit/main/sounds.json",
+        "manifestVersion": "1.0.0",
+        "manifestSha256": "67f4debfc7077d15391a896bac71a5d12c5c596dc194564e6054a844a98c9726",
+        "manifestId": "whoosh-medium-hard",
+        "variant": {
+          "speed": "medium",
+          "intensity": "hard"
+        },
+        "description": "A strong rush of air with a bright crack at its peak and weight behind it.",
+        "use_for": [
+          "Big transitions between sections",
+          "Objects flying across the frame",
+          "Bold title moves",
+          "A product spinning into view"
+        ],
+        "avoid_for": [
+          "Calm or understated films",
+          "Small elements",
+          "On top of speech: use a softer one"
+        ],
+        "manifestTags": [
+          "whoosh",
+          "swish",
+          "transition",
+          "movement",
+          "air",
+          "natural",
+          "standard",
+          "strong"
+        ],
+        "channels": 2,
+        "sync": {
+          "at": 0.201,
+          "meets": "move-peak",
+          "how": "Ease-in-out: put the sync point at the middle of the move. Ease-out (fast start, slowing to a stop): about a quarter of the way in. Ease-in (slow start, fast exit): about three quarters of the way in."
+        },
+        "timing": {
+          "audible_start": 0.013,
+          "onset": 0.114,
+          "peak": 0.201,
+          "body_end": 0.323,
+          "audible_end": 0.501
+        },
+        "fits_seconds": [
+          0.28,
+          0.81
+        ],
+        "level": {
+          "lufs": -17,
+          "true_peak_dbtp": -7.4,
+          "tier": "hard"
+        },
+        "levelMeasurement": "The source manifest defines level.lufs as the loudest 150 ms, K-weighted (ITU-R BS.1770), in LUFS; it is not integrated LUFS. This is source metadata, not a local audition or mix target.",
+        "under_voiceover_db": -4,
+        "adapt": {
+          "rate": [
+            0.85,
+            1.2
+          ],
+          "notes": "To fit a move up to about 15% shorter or 20% longer, play it faster or slower (its pitch moves with it); beyond that, use the next speed. Adjust level with gain, but for a clearly softer or harder sound use the other intensity rather than a big gain change."
+        },
+        "tuning": null,
+        "pairs_with": [
+          {
+            "category": "impacts",
+            "how": "Something landing: the whoosh on the move (its sync point at the move's fastest point) and the impact on the frame it lands. A whoosh that suits the move's length dies away just before the landing; use one a step softer than the impact."
+          },
+          {
+            "category": "pops",
+            "how": "Something arriving and appearing: the whoosh during the move, the pop as it lands, at a lower gain than the whoosh."
+          },
+          {
+            "category": "shimmers",
+            "how": "A reveal: the whoosh into the reveal, the shimmer starting at the whoosh's sync point."
+          }
+        ],
+        "character": "balanced, airy"
+      },
+      "use": [
+        "Big transitions between sections",
+        "Objects flying across the frame",
+        "Bold title moves",
+        "A product spinning into view"
+      ],
+      "avoidWhen": [
+        "Calm or understated films",
+        "Small elements",
+        "On top of speech: use a softer one"
+      ],
+      "author": "Wyzowl (official page says the sounds were created with Claude and directed by Wyzowl)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "syncUse": "allowed",
+        "basis": "Wyzowl SFX Kit official page states CC0 1.0 for any use and permits change/share; included LICENSE file is CC0 1.0 Universal.",
+        "notes": "Raw files may be synchronized and redistributed under the source-declared CC0 terms; no credit is required. The included file is retained for provenance. Verify current page/license again when redistributing outside this project.",
+        "licenseTextFile": "licenses/wyzowl-sfx-kit-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "wyzowl.impact-light-firm",
+      "file": "wyzowl-sfx-kit/impact-light-firm.wav",
+      "role": "light-wood-set-down",
+      "tags": [
+        "impact",
+        "landing",
+        "contact",
+        "wood",
+        "light",
+        "firm",
+        "small-object",
+        "place"
+      ],
+      "material": "wooden tap (publisher description: small object set down on a table; not a local material audition)",
+      "energy": "light (source level.lufs -25 LUFS, loudest 150 ms K-weighted; not integrated LUFS, not locally auditioned, and not a mix target)",
+      "durationSec": 0.0985,
+      "hitTimeSec": 0.011,
+      "hitTimeMethod": "Source-declared sounds.json sync.at (file-local seconds), with sync.meets/how and timing retained in source metadata. It is a publisher alignment point, not a locally measured onset or human audition. audio-plan aligns a cue using this source point and its selected source range/speed; if source playbackRate editing creates a derivative, use the transformed hitpoint from the audio-edit receipt.",
+      "hitTimeConfidence": "source-declared; not locally auditioned",
+      "sha256": "751a1ec3b67f4f11a90e410d0ada78c0f0e64859fb06352994181abe737725c5",
+      "source": {
+        "pack": "SFX Kit by Wyzowl",
+        "page": "https://wyzowl.com/sfx-kit/",
+        "version": "SFX Kit machine manifest 1.0.0; official site checked 2026-11-05.",
+        "originalPath": "sounds/impacts/impact-light-firm.wav",
+        "sourceDeclaredLengthSec": 0.099,
+        "syncPointSec": 0.011,
+        "catalogCategory": "Impacts",
+        "catalogDescription": "A light wooden tap: a small object set down on a table.",
+        "timingSemantics": "sync.at is file-local; sync.meets/how gives the intended visual phase. Place the source sync point on that event/phase using the local audio plan clock. For rate changes, the source manifest says to scale its times by the rate; source playbackRate changes pitch and duration, so record transformed hitpoints from the Arrangement audio-edit receipt. Do not treat source seconds or timing points as film-global time.",
+        "rateSemantics": "The source-declared adapt.rate range and notes are copied verbatim in adapt. Where the note says pitch moves, playbackRate changes pitch as well as duration; do not map this to the Motion plan speed field, which is pitch-preserving. Rate [1,1] means do not rate-shift this sound.",
+        "manifest": "https://raw.githubusercontent.com/wyzowl/sfx-kit/main/sounds.json",
+        "manifestVersion": "1.0.0",
+        "manifestSha256": "67f4debfc7077d15391a896bac71a5d12c5c596dc194564e6054a844a98c9726",
+        "manifestId": "impact-light-firm",
+        "variant": {
+          "weight": "light",
+          "surface": "firm"
+        },
+        "description": "A light wooden tap: a small object set down on a table.",
+        "use_for": [
+          "Small elements landing or snapping into place",
+          "Icons dropping into a grid",
+          "Labels and tags settling",
+          "Natural, everyday landings"
+        ],
+        "avoid_for": [
+          "Big, heavy moves"
+        ],
+        "manifestTags": [
+          "impact",
+          "hit",
+          "land",
+          "drop",
+          "knock",
+          "light",
+          "natural"
+        ],
+        "channels": 1,
+        "sync": {
+          "at": 0.011,
+          "meets": "instant",
+          "how": "Put the sync point (the moment of contact) exactly where the thing lands: usually the last frame of its move, or the first frame it's at rest."
+        },
+        "timing": {
+          "audible_start": 0,
+          "onset": 0,
+          "peak": 0.011,
+          "body_end": 0.052,
+          "audible_end": 0.077
+        },
+        "fits_seconds": null,
+        "level": {
+          "lufs": -25,
+          "true_peak_dbtp": -11,
+          "tier": "light"
+        },
+        "levelMeasurement": "The source manifest defines level.lufs as the loudest 150 ms, K-weighted (ITU-R BS.1770), in LUFS; it is not integrated LUFS. This is source metadata, not a local audition or mix target.",
+        "under_voiceover_db": -2,
+        "adapt": {
+          "rate": [
+            0.92,
+            1.1
+          ],
+          "notes": "Small rate changes only: faster sounds lighter and slower heavier, so for a different weight use the next weight instead."
+        },
+        "tuning": null,
+        "pairs_with": [
+          {
+            "category": "whooshes",
+            "how": "A move into a landing: the whoosh on the move (its sync point at the move's fastest point), the impact on the frame it lands. Use a whoosh one step softer than the impact."
+          },
+          {
+            "category": "pops",
+            "how": "Something landing and appearing: the impact for the weight, a small pop on top at about −6 dB."
+          }
+        ],
+        "character": "deep, woody"
+      },
+      "use": [
+        "Small elements landing or snapping into place",
+        "Icons dropping into a grid",
+        "Labels and tags settling",
+        "Natural, everyday landings"
+      ],
+      "avoidWhen": [
+        "Big, heavy moves"
+      ],
+      "author": "Wyzowl (official page says the sounds were created with Claude and directed by Wyzowl)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "syncUse": "allowed",
+        "basis": "Wyzowl SFX Kit official page states CC0 1.0 for any use and permits change/share; included LICENSE file is CC0 1.0 Universal.",
+        "notes": "Raw files may be synchronized and redistributed under the source-declared CC0 terms; no credit is required. The included file is retained for provenance. Verify current page/license again when redistributing outside this project.",
+        "licenseTextFile": "licenses/wyzowl-sfx-kit-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "wyzowl.notification-success-soft",
+      "file": "wyzowl-sfx-kit/notification-success-soft.wav",
+      "role": "soft-success-outcome",
+      "tags": [
+        "notification",
+        "success",
+        "done",
+        "outcome",
+        "marimba",
+        "three-note",
+        "soft"
+      ],
+      "material": "synthetic musical cue; publisher describes a warm rising three-note marimba arpeggio",
+      "energy": "soft (source level.lufs -24 LUFS, loudest 150 ms K-weighted; not integrated LUFS, not locally auditioned, and not a mix target)",
+      "durationSec": 0.53,
+      "hitTimeSec": 0,
+      "hitTimeMethod": "Source-declared sounds.json sync.at (file-local seconds), with sync.meets/how and timing retained in source metadata. It is a publisher alignment point, not a locally measured onset or human audition. audio-plan aligns a cue using this source point and its selected source range/speed; if source playbackRate editing creates a derivative, use the transformed hitpoint from the audio-edit receipt.",
+      "hitTimeConfidence": "source-declared; not locally auditioned",
+      "sha256": "49fa865e894e26a59dea81144844270d532fa899d7eb94f2ac0687af4a66ebc1",
+      "source": {
+        "pack": "SFX Kit by Wyzowl",
+        "page": "https://wyzowl.com/sfx-kit/",
+        "version": "SFX Kit machine manifest 1.0.0; official site checked 2026-11-05.",
+        "originalPath": "sounds/notifications/notification-success-soft.wav",
+        "sourceDeclaredLengthSec": 0.53,
+        "syncPointSec": 0,
+        "catalogCategory": "Notifications",
+        "catalogDescription": "A warm, rising three-note marimba arpeggio: done.",
+        "timingSemantics": "sync.at is file-local; sync.meets/how gives the intended visual phase. Place the source sync point on that event/phase using the local audio plan clock. For rate changes, the source manifest says to scale its times by the rate; source playbackRate changes pitch and duration, so record transformed hitpoints from the Arrangement audio-edit receipt. Do not treat source seconds or timing points as film-global time.",
+        "rateSemantics": "The source-declared adapt.rate range and notes are copied verbatim in adapt. Where the note says pitch moves, playbackRate changes pitch as well as duration; do not map this to the Motion plan speed field, which is pitch-preserving. Rate [1,1] means do not rate-shift this sound.",
+        "manifest": "https://raw.githubusercontent.com/wyzowl/sfx-kit/main/sounds.json",
+        "manifestVersion": "1.0.0",
+        "manifestSha256": "67f4debfc7077d15391a896bac71a5d12c5c596dc194564e6054a844a98c9726",
+        "manifestId": "notification-success-soft",
+        "variant": {
+          "kind": "success",
+          "intensity": "soft"
+        },
+        "description": "A warm, rising three-note marimba arpeggio: done.",
+        "use_for": [
+          "A task completed or a form submitted",
+          "A tick or checkmark appearing",
+          "Goals reached, positive results"
+        ],
+        "avoid_for": [
+          "Errors or warnings",
+          "Moments that must cut through loud music (use clear)"
+        ],
+        "manifestTags": [
+          "notification",
+          "success",
+          "soft",
+          "ui",
+          "tone",
+          "marimba",
+          "natural"
+        ],
+        "channels": 1,
+        "sync": {
+          "at": 0,
+          "meets": "instant",
+          "how": "Sync point on the frame the notification, tick or message appears."
+        },
+        "timing": {
+          "audible_start": 0,
+          "onset": 0,
+          "peak": 0.012,
+          "body_end": 0.305,
+          "audible_end": 0.486
+        },
+        "fits_seconds": null,
+        "level": {
+          "lufs": -24,
+          "true_peak_dbtp": -17,
+          "tier": "soft"
+        },
+        "levelMeasurement": "The source manifest defines level.lufs as the loudest 150 ms, K-weighted (ITU-R BS.1770), in LUFS; it is not integrated LUFS. This is source metadata, not a local audition or mix target.",
+        "under_voiceover_db": -3,
+        "adapt": {
+          "rate": [
+            1,
+            1
+          ],
+          "notes": "Don't change the rate: it detunes the notes."
+        },
+        "tuning": "C major pentatonic",
+        "pairs_with": [
+          {
+            "category": "pops",
+            "how": "A badge or bubble appearing: the pop as it appears, the notification 40–80 ms after."
+          },
+          {
+            "category": "interface",
+            "how": "A button that confirms: the click first, the notification 60–120 ms after."
+          }
+        ],
+        "character": "warm marimba, C5 → E5 → G5"
+      },
+      "use": [
+        "A task completed or a form submitted",
+        "A tick or checkmark appearing",
+        "Goals reached, positive results"
+      ],
+      "avoidWhen": [
+        "Errors or warnings",
+        "Moments that must cut through loud music (use clear)"
+      ],
+      "author": "Wyzowl (official page says the sounds were created with Claude and directed by Wyzowl)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "syncUse": "allowed",
+        "basis": "Wyzowl SFX Kit official page states CC0 1.0 for any use and permits change/share; included LICENSE file is CC0 1.0 Universal.",
+        "notes": "Raw files may be synchronized and redistributed under the source-declared CC0 terms; no credit is required. The included file is retained for provenance. Verify current page/license again when redistributing outside this project.",
+        "licenseTextFile": "licenses/wyzowl-sfx-kit-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "id": "wyzowl.sting-minimal-short",
+      "file": "wyzowl-sfx-kit/sting-minimal-short.wav",
+      "role": "minimal-rising-sting",
+      "tags": [
+        "sting",
+        "logo",
+        "reveal",
+        "kalimba",
+        "two-note",
+        "rising",
+        "short"
+      ],
+      "material": "synthetic musical cue; publisher describes two rising kalimba notes",
+      "energy": "minimal (source level.lufs -24 LUFS, loudest 150 ms K-weighted; not integrated LUFS, not locally auditioned, and not a mix target)",
+      "durationSec": 1.2625,
+      "hitTimeSec": 0.1,
+      "hitTimeMethod": "Source-declared sounds.json sync.at (file-local seconds), with sync.meets/how and timing retained in source metadata. It is a publisher alignment point, not a locally measured onset or human audition. audio-plan aligns a cue using this source point and its selected source range/speed; if source playbackRate editing creates a derivative, use the transformed hitpoint from the audio-edit receipt.",
+      "hitTimeConfidence": "source-declared; not locally auditioned",
+      "sha256": "e688de069518fed41c4f5e386d6eca3db95f73e450b36be5d067d7f7edd298c2",
+      "source": {
+        "pack": "SFX Kit by Wyzowl",
+        "page": "https://wyzowl.com/sfx-kit/",
+        "version": "SFX Kit machine manifest 1.0.0; official site checked 2026-11-05.",
+        "originalPath": "sounds/logo-stings/sting-minimal-short.wav",
+        "sourceDeclaredLengthSec": 1.263,
+        "syncPointSec": 0.1,
+        "catalogCategory": "Logo stings",
+        "catalogDescription": "A minimal sting: two kalimba notes, rising.",
+        "timingSemantics": "sync.at is file-local; sync.meets/how gives the intended visual phase. Place the source sync point on that event/phase using the local audio plan clock. For rate changes, the source manifest says to scale its times by the rate; source playbackRate changes pitch and duration, so record transformed hitpoints from the Arrangement audio-edit receipt. Do not treat source seconds or timing points as film-global time.",
+        "rateSemantics": "The source-declared adapt.rate range and notes are copied verbatim in adapt. Where the note says pitch moves, playbackRate changes pitch as well as duration; do not map this to the Motion plan speed field, which is pitch-preserving. Rate [1,1] means do not rate-shift this sound.",
+        "manifest": "https://raw.githubusercontent.com/wyzowl/sfx-kit/main/sounds.json",
+        "manifestVersion": "1.0.0",
+        "manifestSha256": "67f4debfc7077d15391a896bac71a5d12c5c596dc194564e6054a844a98c9726",
+        "manifestId": "sting-minimal-short",
+        "variant": {
+          "character": "minimal",
+          "length": "short"
+        },
+        "description": "A minimal sting: two kalimba notes, rising.",
+        "use_for": [
+          "Understated, elegant brands",
+          "A quiet end card",
+          "Calm films where a big sting would jar",
+          "A logo that appears at once"
+        ],
+        "avoid_for": [
+          "Mid-film transitions: a sting says 'ending' or 'brand moment'",
+          "On top of speech: time its hit to a pause in the voice"
+        ],
+        "manifestTags": [
+          "sting",
+          "logo",
+          "reveal",
+          "signature",
+          "ending",
+          "musical",
+          "minimal",
+          "short",
+          "natural"
+        ],
+        "channels": 2,
+        "sync": {
+          "at": 0.1,
+          "meets": "instant",
+          "how": "Put the sync point (the hit) on the frame the logo appears or lands: start = that frame − sync.at. In a long sting the hit comes about a second in, after a lead-in, so the sound starts before the logo does."
+        },
+        "timing": {
+          "audible_start": 0,
+          "onset": 0,
+          "peak": 0.1,
+          "body_end": 0.705,
+          "audible_end": 1.153
+        },
+        "fits_seconds": null,
+        "level": {
+          "lufs": -24,
+          "true_peak_dbtp": -17.4,
+          "tier": "minimal"
+        },
+        "levelMeasurement": "The source manifest defines level.lufs as the loudest 150 ms, K-weighted (ITU-R BS.1770), in LUFS; it is not integrated LUFS. This is source metadata, not a local audition or mix target.",
+        "under_voiceover_db": -6,
+        "adapt": {
+          "rate": [
+            1,
+            1
+          ],
+          "notes": "Don't change the rate: it detunes the notes. To shorten one, fade its tail over 300 ms or more."
+        },
+        "tuning": "C major pentatonic",
+        "pairs_with": [
+          {
+            "category": "whooshes",
+            "how": "A logo flying in: a soft whoosh on its move (its sync point at the move's fastest point) and the sting's hit on the frame it lands; keep the whoosh 3 dB under the sting."
+          }
+        ],
+        "character": "minimal, kalimba"
+      },
+      "use": [
+        "Understated, elegant brands",
+        "A quiet end card",
+        "Calm films where a big sting would jar",
+        "A logo that appears at once"
+      ],
+      "avoidWhen": [
+        "Mid-film transitions: a sting says 'ending' or 'brand moment'",
+        "On top of speech: time its hit to a pause in the voice"
+      ],
+      "author": "Wyzowl (official page says the sounds were created with Claude and directed by Wyzowl)",
+      "license": "CC0-1.0",
+      "redistribution": {
+        "status": "redistributable",
+        "syncUse": "allowed",
+        "basis": "Wyzowl SFX Kit official page states CC0 1.0 for any use and permits change/share; included LICENSE file is CC0 1.0 Universal.",
+        "notes": "Raw files may be synchronized and redistributed under the source-declared CC0 terms; no credit is required. The included file is retained for provenance. Verify current page/license again when redistributing outside this project.",
+        "licenseTextFile": "licenses/wyzowl-sfx-kit-License.txt"
+      },
+      "reviewStatus": "candidate-unreviewed"
+    }
+  ],
+  "candidateGroupBasis": "These groups are metadata-based search candidates derived from indexed roles, tags, and source labels. They are not a finished, auditioned sound palette and do not establish acoustic fit, human listening, or review readiness; every referenced asset keeps its own status.",
+  "candidateGroups": [
+    {
+      "id": "interface-feedback",
+      "purpose": "A very brief UI or abstract touch confirmation.",
+      "keywords": [
+        "interface",
+        "ui",
+        "tap",
+        "click",
+        "touch",
+        "按钮",
+        "界面",
+        "轻触",
+        "点击"
+      ],
+      "applicability": [
+        "discrete interface feedback",
+        "abstract light touch"
+      ],
+      "excludeWhen": [
+        "physical impact or latch has a distinct material/action",
+        "continuous movement",
+        "whoosh, riser, musical sting, or voice punctuation"
+      ],
+      "default": {
+        "assetId": "kenney.interface-click-001",
+        "when": "For a discrete interface tap/click; the index marks material as not specific.",
+        "actions": [
+          "tap",
+          "click",
+          "confirm",
+          "interface"
+        ],
+        "materials": [],
+        "intensities": []
+      },
+      "alternatives": []
+    },
+    {
+      "id": "metal-latch-close",
+      "purpose": "A short physical metal latch or closure action.",
+      "keywords": [
+        "metal",
+        "latch",
+        "closure",
+        "close",
+        "mechanical",
+        "金属",
+        "门闩",
+        "闭合"
+      ],
+      "applicability": [
+        "physical latch closing",
+        "metal closure with a discrete action"
+      ],
+      "excludeWhen": [
+        "generic UI confirmation",
+        "non-metal contact unless sound is separately auditioned"
+      ],
+      "default": {
+        "assetId": "kenney.rpg-metal-latch",
+        "when": "Only when the pictured action is a metal latch/closure; metal is a source filename label pending audition.",
+        "actions": [
+          "latch",
+          "close",
+          "closure"
+        ],
+        "materials": [
+          "metal"
+        ],
+        "intensities": []
+      },
+      "alternatives": []
+    },
+    {
+      "id": "page-turn",
+      "purpose": "A book/page being turned or flipped.",
+      "keywords": [
+        "book",
+        "page",
+        "turn",
+        "flip",
+        "friction",
+        "书页",
+        "翻页",
+        "翻书"
+      ],
+      "applicability": [
+        "turning or flipping a book/page"
+      ],
+      "excludeWhen": [
+        "fabric-only movement",
+        "generic impact",
+        "continuous paper handling without a distinct turn"
+      ],
+      "default": {
+        "assetId": "kenney.rpg-book-flip-1",
+        "when": "For a pictured page/book turn; source label identifies book/page, acoustic review pending.",
+        "actions": [
+          "turn",
+          "flip",
+          "page"
+        ],
+        "materials": [
+          "book/page"
+        ],
+        "intensities": []
+      },
+      "alternatives": []
+    },
+    {
+      "id": "fabric-motion",
+      "purpose": "A short movement of cloth or fabric.",
+      "keywords": [
+        "cloth",
+        "fabric",
+        "movement",
+        "friction",
+        "衣料",
+        "布料",
+        "衣袖",
+        "摩擦"
+      ],
+      "applicability": [
+        "short cloth/fabric movement"
+      ],
+      "excludeWhen": [
+        "page turn",
+        "footstep",
+        "impact, whoosh, or sustained rustling bed"
+      ],
+      "default": {
+        "assetId": "kenney.rpg-cloth-1",
+        "when": "Only for cloth/fabric movement; material comes from source labeling and needs audition.",
+        "actions": [
+          "move",
+          "shift",
+          "fabric"
+        ],
+        "materials": [
+          "cloth"
+        ],
+        "intensities": []
+      },
+      "alternatives": []
+    },
+    {
+      "id": "card-handling",
+      "purpose": "A discrete card placement or card sliding across a surface.",
+      "keywords": [
+        "card",
+        "place",
+        "settle",
+        "slide",
+        "friction",
+        "扑克牌",
+        "卡片",
+        "放置",
+        "滑动"
+      ],
+      "applicability": [
+        "placing/settling a card",
+        "sliding/moving a card"
+      ],
+      "excludeWhen": [
+        "paper page turn",
+        "generic material-independent movement",
+        "continuous card shuffle (not indexed)"
+      ],
+      "default": {
+        "assetId": "kenney.casino-card-place-1",
+        "when": "For a card being placed or settling on a surface.",
+        "actions": [
+          "place",
+          "settle"
+        ],
+        "materials": [
+          "card"
+        ],
+        "intensities": []
+      },
+      "alternatives": [
+        {
+          "assetId": "kenney.casino-card-slide-1",
+          "when": "Use only when a card slides/moves across a surface; not a substitute for a placement.",
+          "actions": [
+            "slide",
+            "move"
+          ],
+          "materials": [
+            "card"
+          ],
+          "intensities": []
+        }
+      ]
+    },
+    {
+      "id": "wood-footstep",
+      "purpose": "A single footstep/contact on a wood-labeled floor.",
+      "keywords": [
+        "footstep",
+        "step",
+        "walk",
+        "floor",
+        "wood",
+        "脚步",
+        "木地板",
+        "踩踏"
+      ],
+      "applicability": [
+        "single step/contact on a wood-labeled floor"
+      ],
+      "excludeWhen": [
+        "multi-step cadence or a different floor material",
+        "generic impact or an object landing"
+      ],
+      "default": {
+        "assetId": "kenney.impact-wood-footstep-000",
+        "when": "Only for a single footstep on a wood-labeled surface; label is not an audition result.",
+        "actions": [
+          "footstep",
+          "step",
+          "walk"
+        ],
+        "materials": [
+          "wood"
+        ],
+        "intensities": []
+      },
+      "alternatives": []
+    },
+    {
+      "id": "short-contact-impact",
+      "purpose": "A short discrete contact/landing with an indexed surface and intensity label.",
+      "keywords": [
+        "impact",
+        "contact",
+        "landing",
+        "撞击",
+        "接触",
+        "落地"
+      ],
+      "applicability": [
+        "brief single contact/landing",
+        "surface and intensity label match an indexed candidate"
+      ],
+      "excludeWhen": [
+        "crash/explosion",
+        "repeated cadence",
+        "sustained machine",
+        "whoosh, riser, or musical accent"
+      ],
+      "default": {
+        "assetId": "kenney.impact-wood-light-000",
+        "when": "Use as the metadata default only for a light wood-labeled contact/landing.",
+        "actions": [
+          "contact",
+          "impact",
+          "landing"
+        ],
+        "materials": [
+          "wood"
+        ],
+        "intensities": [
+          "light"
+        ]
+      },
+      "alternatives": [
+        {
+          "assetId": "kenney.impact-metal-light-000",
+          "when": "For a light metal-labeled contact/landing.",
+          "actions": [
+            "contact",
+            "impact",
+            "landing"
+          ],
+          "materials": [
+            "metal"
+          ],
+          "intensities": [
+            "light"
+          ]
+        },
+        {
+          "assetId": "kenney.impact-soft-medium-000",
+          "when": "For a soft-contact medium-labeled impact; both labels require audition.",
+          "actions": [
+            "contact",
+            "impact"
+          ],
+          "materials": [
+            "soft-contact"
+          ],
+          "intensities": [
+            "medium"
+          ]
+        },
+        {
+          "assetId": "wyzowl.impact-light-firm",
+          "when": "For a single small, light wooden object landing on a firm/table-like surface. The source manifest labels this as an instant contact at 0.011 s; check the pictured weight/surface and actual listening before using.",
+          "actions": [
+            "contact",
+            "impact",
+            "landing"
+          ],
+          "materials": [
+            "wood"
+          ],
+          "intensities": [
+            "light"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "medium-air-movement",
+      "purpose": "A gentle or stronger medium-length air sweep that supports an actual movement, slide or reveal.",
+      "keywords": [
+        "whoosh",
+        "air",
+        "movement",
+        "transition",
+        "slide",
+        "reveal",
+        "呼啸",
+        "空气",
+        "移动",
+        "转场",
+        "滑入"
+      ],
+      "applicability": [
+        "a visible move whose timing and duration fit the source-specific sync/timing and rate guidance"
+      ],
+      "excludeWhen": [
+        "physical contact or material foley is the needed sound",
+        "no air movement is visible",
+        "small interface detail",
+        "the selected sound would compete with speech or a quiet result"
+      ],
+      "default": {
+        "assetId": "wyzowl.whoosh-medium-soft",
+        "when": "Use for a gentle panel/card/background shift or calm transition when its medium soft sweep fits. The source sync is 0.229 s at move-peak; its rate guidance permits 0.85–1.2 and says pitch changes with rate. Candidate remains unreviewed.",
+        "actions": [
+          "move",
+          "shift"
+        ],
+        "materials": [],
+        "intensities": [
+          "soft"
+        ]
+      },
+      "alternatives": [
+        {
+          "assetId": "wyzowl.whoosh-medium-hard",
+          "when": "Use only when a larger/bolder move needs the brighter peak and weight, and the context is not calm, small or speech-dense. The source sync is 0.201 s at move-peak; its rate guidance permits 0.85–1.2 and says pitch changes with rate. Candidate remains unreviewed.",
+          "actions": [
+            "move",
+            "shift"
+          ],
+          "materials": [],
+          "intensities": [
+            "hard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "positive-success-notification",
+      "purpose": "A brief musical cue for an explicitly positive completed task or result.",
+      "keywords": [
+        "success",
+        "completion",
+        "positive result",
+        "notification",
+        "marimba",
+        "checkmark",
+        "成功",
+        "完成",
+        "正向结果",
+        "通知"
+      ],
+      "applicability": [
+        "the content itself has a positive completion/reward meaning and a musical cue fits the larger sound arc"
+      ],
+      "excludeWhen": [
+        "error or warning",
+        "neutral state change",
+        "loud music needs the cue to cut through",
+        "music or silence already carries the result"
+      ],
+      "default": {
+        "assetId": "wyzowl.notification-success-soft",
+        "when": "Use only for a warm rising three-note success result when the work tone allows it. The source is at sync 0 with an instant visual event, C major pentatonic, and adapt.rate [1,1] (do not retune); candidate remains unreviewed.",
+        "actions": [],
+        "materials": [],
+        "intensities": []
+      },
+      "alternatives": []
+    },
+    {
+      "id": "minimal-ending-sting",
+      "purpose": "A restrained musical signature for a logo/quiet end-card arrival, not a generic transition.",
+      "keywords": [
+        "logo",
+        "sting",
+        "end card",
+        "ending",
+        "brand reveal",
+        "kalimba",
+        "标志",
+        "片尾",
+        "片尾卡",
+        "品牌显现"
+      ],
+      "applicability": [
+        "a calm end card or minimal identity reveal whose arrival can hold the two-note signature and tail"
+      ],
+      "excludeWhen": [
+        "mid-film transition",
+        "speech lies over the sting hit",
+        "silent or sober ending",
+        "tail cannot ring"
+      ],
+      "default": {
+        "assetId": "wyzowl.sting-minimal-short",
+        "when": "Use only for the restrained logo/end-card role; source sync is 0.1 s at the instant of appearance, it avoids mid-film transition and over-speech use, rate is fixed at [1,1], and tail shortening calls for a fade of at least 300 ms. Candidate remains unreviewed.",
+        "actions": [],
+        "materials": [],
+        "intensities": []
+      },
+      "alternatives": []
+    }
+  ]
+}

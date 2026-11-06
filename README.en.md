@@ -79,11 +79,13 @@ When you know what you want to do, choose the matching command. When you only kn
 | /laohu-video | Video shots, audiovisual direction, and three-part prompts |
 | /laohu-script | Develops story ideas into scripts, from structure and scenes to character action, dialogue, audiovisual expression, and review |
 | /laohu-lyrics | Write or revise lyrics from ideas, stories, existing lyrics, or melodies; shape sections, voice, language, sound, and review |
-| /laohu-arrangement | Arrange music from lyrics, melody, audio, or a brief; shape form, harmony, groove, instrumentation, texture, timbre, and vocals; deliver a production plan, AI-generation input, or notation |
+| /laohu-arrangement | Arrange music from lyrics, melody, audio, or a brief; also select and edit source audio for animation/video sound design; deliver production plans, generation inputs, notation, or mix handoff |
 | /laohu-luna | Keep the current session model as Commander, delegate every bounded task to Luna Worker, and review the result |
 | /laohu-novel | Create, continue, adapt, and revise novels; turn story concepts or chapter briefs into prose |
 | /laohu-topic | Define, compare, or check a full content topic against real material, audience concerns, and production constraints |
-| /laohu-motion | Turn an idea, narration, or existing project into an animation that can be implemented, rendered, and checked; load a fixed visual-style specialization only when explicitly requested |
+| /laohu-motion | Turn an idea, narration, or existing project into an animation that can be implemented, rendered, and checked; select and combine only the local methods each shot needs while preserving user-locked visual and material constraints, without fixing one style across the whole film |
+| /laohu-asrcut | Create traceable virtual rough/fine cuts, a compiled timeline, and a review report from recordings, screen captures, ASR, or SRT; export edited audio only when authorized |
+| /laohu-benchmark | Closely analyze works, build evidence-bounded transferable methods, and search or save local method atoms when authorized |
 
 This table lists currently defined public entries in display order; the order is for browsing and does not set recommendation priority or a fixed workflow. The live scan can discover a newly added public entry before its table entry is updated; use the `/laohu` capability directory to check its current definition. Reserved folders are not formal capabilities. Project workspaces can discover the directly deployed entries in `.agents/skills/`. Global registration includes first- and second-level entries only; third-level capabilities are read on demand by their owning second-level entry and are not registered separately. For a WeChat task, `/laohu-htmlshow` loads `laohu-htmlshow-gzh` when needed.
 

@@ -30,7 +30,7 @@
     ]
   },
   "execution_protocol": [
-    "执行者只接收 prompt 与 input_files，不接收 expected_behavior；评审者依据可观察产物检查，不按口头自评给通过。",
+    "执行者只接收 prompt 与 input_files，不接收 expected_behavior；案例含 fixture_setup.files 时，将其 UTF-8 内容按相对路径物化到该案例的隔离目录，并只使用 input_files 明列的文件。评审者依据可观察产物检查，不按口头自评给通过。",
     "未运行案例标记 NOT_RUN。静态格式、文件存在、平台接受、播放/试听和用户反馈分别记录证据；没有真实音频时，声音效果记 UNKNOWN；没有目标听众针对实际成品音频的反馈时，接收质量记 UNKNOWN。",
     "评测输入中的占位描述用于检查边界行为，不是创作范例或音乐质量证据。"
   ],
@@ -41,9 +41,10 @@
       "prompt": "请把我这次已提供的完整歌词编成一份目标音乐生成平台的人声输入包。歌词文本和平台当前接口资料没有随这条评测输入提供；不要自己补写歌词。先告诉我还缺什么，以及在材料到齐后会怎样区分标准歌词和项目控制语法。",
       "input_files": [],
       "expected_behavior": [
-        "指出歌词文本与目标平台/模式资料实际缺失，不虚构最终歌词或假称已核平台版本；只索取继续编译必需的信息。",
-        "说明完整人声包需要演唱风格、Style Prompt、最终已编译歌词和本次相关的平台条件；标准结构歌词与独立演唱控制谱、项目嵌入语法是分支选择，不宣称平台官方支持未核语法。",
-        "歌词获准锁定时保留字符、标点、次序和默认换行；不从视觉换行机械推断演唱乐句。"
+        "指出完整歌词未提供，因此现在不能编译最终人声包；平台和模式未明确时把嵌入语法接受情况标为未知，不虚构平台能力。",
+        "材料到齐后默认使用英语 Style Prompt 正文与英语标签内控制指令，聊天语言和歌词语言不选择控制语言；明确中文要求时这两部分均用中文，源歌词不翻译；明确双语时交两组完整等价且组名唯一的输入。",
+        "完整包顺序为 Style Prompt → 完整 Controlled Lyrics → 本轮必要的平台说明；默认不附加中文演唱风格摘要，明确要求的解释置于机器输入之外。",
+        "歌词/段落保护依歌词锁、结构锁及本轮授权的演唱排版重排或结构开放条件执行；只在获准时调整相应排版/标签，不改写锁定原词。单条控制失效或拖拍时先局部修订并保留整套格式。"
       ],
       "context": "验证 AI 人声分支与输入缺失时的停止点、字段边界和歌词保护，不提供歌词创作样本。"
     },
@@ -91,7 +92,7 @@
       "expected_behavior": [
         "按器乐主题、律动、音色与 loop 边界安排结构，不生成歌词/演唱字段。",
         "保留核心拍轴、低音身份、调式中心和循环接缝；把主要发展限定为有职务的密度、音区、音色或层次变化，不强制每段变满或定时填充。",
-        "非功能 loop 不硬套 V-I；明确循环长度/起止和尾音处理需要的条件，实际无缝效果仍须连续试听。"
+        "非功能 loop 不硬套 V-I；说明循环长度/起止和尾音处理条件。源编辑器的交叉淡化只修技术接缝，不证明完整乐句/和声适合连续重复；实际循环仍须连续试听。"
       ],
       "context": "检查稳定型器乐循环是否被误套流行歌曲/古典终止模板。"
     },
@@ -270,7 +271,7 @@
       "input_files": [],
       "expected_behavior": [
         "读取 laohu-arrangement-chinawind；把未提供地域/曲种时的方案准确标为五声性现代流行配色，不宣称某地正宗语汇。",
-        "选择一种传统乐器用自身可奏法作单旋律应答；让现代鼓贝司维持脉冲并给主唱让位，检查和弦三音与所选音列是否冲突。"
+        "传统音色只在用户要求的歌句间作可演奏的单旋律回应；若主唱是中心，先按已提供的实际句位让基础节奏、低音与和弦/持续层支撑主唱事件，再安排传统主题回应。有可用旋律与和声材料时检查和弦三音与所选音列是否兼容；材料不足时不伪造音符、精确句位或和弦冲突结论。"
       ],
       "context": "验证中国风融合边界与传统乐器奏法。"
     },
@@ -315,9 +316,9 @@
       "prompt": "请为一首人声主导的中文流行歌做编曲：琵琶承担能被记住的主题回应，电子节奏维持现代脉冲，主唱始终在前景。请给可直接使用的生成 Style Prompt 和分段演唱控制谱。歌词和旋律还没提供，先按可用材料给方案。",
       "input_files": [],
       "expected_behavior": [
-        "依据用户明确的琵琶主题角色、现代流行融合和声音中心选择 laohu-arrangement-chinawind，即使用户没有说出‘中国风’标签；不把单纯提到乐器材料当成同等授权。",
-        "给出具体琵琶奏法/声部职责与电子节奏、主唱之间的段落关系，并将 Style Prompt 与可用材料支持的分段控制谱整理为可复制交付；没有歌词或旋律时不伪造歌词、逐词控制或既成音符。",
-        "按真实接口把可执行的平台字段与项目演唱控制谱分开标注；不得把项目格式说成平台保证支持的语法。"
+        "依据用户明确的琵琶主题角色、现代流行融合和主唱前景选择 laohu-arrangement-chinawind，即使用户没有说出“中国风”标签；不把单纯提到乐器材料当成同等授权。",
+        "给出可用的琵琶奏法/声部职责，并说明主唱为中心时节奏、低音及和弦/持续层如何支撑同一主唱事件，传统主题随后在实际完整人声句缝回应；其他中心则按已选主题/脉冲组织。因歌词和旋律尚未提供，不编造精确音符、词句锚点或逐段演唱控制；标出完成实际分段包所需的缺失材料。",
+        "按共同蓝图与中国风局部决定合并生成字段：局部句式遗漏的共同关系、锁项与曲式仍须保留；Style Prompt 与可用材料支持的控制交付不得把项目格式说成平台保证支持的语法。"
       ],
       "context": "待运行的普通请求案例；检查声音意图路由与无歌词时的可交付边界，不构成行为通过证据。"
     },
@@ -372,6 +373,422 @@
         "已指定源材料的拍号、BPM、曲式和音符只依据该源核实；不能用任何新作项目默认补空，也不因只提供8小节而扩展到完整曲式。"
       ],
       "context": "待运行的精确复现边界案例；检查复现任务沿用其指定来源而不扩成新作品搜索。案例设计不代表实际运行。"
+    },
+    {
+      "id": "locked-lyrics-scansion-to-melody",
+      "type": "normal",
+      "prompt": "请给下面这几句已锁定的歌词做一版可供后续试唱的主旋律音符草案，并安排钢琴/伴奏如何让出关键词。歌词不能改字，演唱者音域未知；不需要完整歌曲。\n\n窗擦干净了\n你留在这座城里\n我往外地去\n天亮以后，各有方向",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 composition Reference；从自然朗读辨认词组/句法分组、语义重心和停连，再把这些关系落到实际音符、时值、休止、气口和伴奏留白，而不是平均逐字分配音值。",
+        "分别考虑普通话字调、语句重音和音乐重心；不把情绪词直接翻成大/小调或固定 BPM，不照搬英语固定词重音，也不把视觉换行当成必然重新起唱。",
+        "保留歌词字符、标点和次序；演唱者音域未知时不声称已有可唱范围，音符草案需标为待试唱而非已验证旋律。"
+      ],
+      "context": "待运行的普通请求；歌词摘自本轮冻结的基线成品，作为开发输入材料，不是专业范例或质量标尺。检查锁定歌词上的朗读/scansion到音乐事件的实际连接，不预设旋律答案或效果结论。"
+    },
+    {
+      "id": "foreground-handoff-and-staggered-boundary",
+      "type": "normal",
+      "prompt": "四小节副歌里，主唱这句歌词“窗擦干净了”已锁定。排练时“干净”附近被钢琴和大提琴遮住；进入下一段时，鼓、低音、钢琴和大提琴全在同一拍换层，听起来生硬。请给最小编配修订，让主唱关键词清楚、段落能接上，并说明前景若暂时交给填充声部后怎样回到主唱。歌词、主唱旋律、4/4、96 BPM、和弦和四小节长度均锁定。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 orchestration-groove Reference；明确问题段的听觉前景和竞争层，并按音区重叠、关键词附近起音密度、音程/变化率、音色起音及延音判断遮蔽，不只说整体调小或交给混音。",
+        "提出与已锁定材料兼容的声部级修订，并标明填充声部接管位置、结束位置和主唱回归点。",
+        "把主唱句尾/下一入口、低音与和声落点、鼓的脉冲、回应声部进入/退出作为同一交接事件；标明位置、共同保持项、主要变化及恢复方式。只移动需要的声部，不强迫全轨渐变，也保留有意硬切。",
+        "不改变歌词、主唱旋律、速度、拍号、和弦或小节长度；没有真实新音频时不声称遮蔽问题已试听解决。"
+      ],
+      "context": "待运行的普通请求；引用本轮冻结基线中的歌词片段作开发输入材料，不是专业范例或质量标尺。检查前景判断、具体编配动作、段落交接和锁定保护，不给出标准声部答案。"
+    },
+    {
+      "id": "motif-variation-with-generational-lineage",
+      "type": "normal",
+      "prompt": "我已有一个钢琴主题：A4 八分音符、B4 八分音符、G4 延两拍。请为前奏、句间回应和尾奏分别发展一版有关联的候选，并说明候选之间的来源关系，以及各自适合承担什么段落职务。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 composition Reference，保留主题中可辨认的材料关系，并判断各候选如何服务前奏、句间回应和尾奏；相关性不要求所有候选都按同一生成顺序串接。",
+        "若选择逐代变形，每一代从上一版承接且只改一个有音乐作用的变量，再比较辨认核和段落职务；可选择音色、和声、旋律、节奏或结构的适用变化，不强制该方法或固定代数。",
+        "将候选放回前奏、句间回应和尾奏的全曲位置核对；不把每次回归都升级或变化，也不声称未试听的候选已成立。"
+      ],
+      "context": "待运行的普通请求；动机摘自本轮冻结的基线成品，作为开发输入材料，不是专业范例或质量标尺。检查动机发展中的候选选择、条件式代际继承和全曲职务，不预置变形答案。"
+    },
+    {
+      "id": "vocal-double-methods-remain-distinct",
+      "type": "normal",
+      "prompt": "副歌主唱想比主歌稍微宽一点，但仍保持一个清楚的主唱中心。请按这个目标给我几个可选择的录音/编配方向；当前不确定能否安排第二遍演唱，也没有指定录音软件。",
+      "input_files": [],
+      "expected_behavior": [
+        "依据主唱身份与段落职责判断是否需要变宽，不把 double 设为必选，也不默认需要和声歌词、双人主唱或每段不同唱法。",
+        "区分独立二次演唱形成的真 double 与人工 doubling/ADT 等处理；人工处理可作为选项，但不得把完全相同的复制轨称为第二遍演唱。",
+        "不给未指定软件编造插件、参数或保证效果；把选择写成相对主唱的可听关系，并标出仍需录音/试听确认的部分。"
+      ],
+      "context": "待运行的普通请求；检查双轨定义和艺术选项保持开放，不预设录音配置或声像答案。"
+    },
+    {
+      "id": "abc-score-voice-to-staff-grouping",
+      "type": "normal",
+      "prompt": "我有 ABC 2.1 文件，头部已经定义 V1、V2、V3、V4，目标记谱程序支持 `%%score`。只需调整谱表组织：V1 与 V2 共用一张谱表；V3、V4 各自独立成谱表，但这两张谱表用方括号连接。请给出所需的分组写法和简要说明，不改或创作音符。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 output-contracts Reference；明确 voice 与 staff 是不同映射层，按请求让 V1/V2 共用谱表、V3/V4 各自保留独立谱表，不增改旋律或音符。",
+        "在目标程序支持时正确使用 `%%score` 分组：圆括号表示共享同一谱表，方括号把各自独立的多个谱表连组；不把方括号误作合谱，也不把音乐正文中的圆括号连奏/tuplets 当成 voice 分组。",
+        "核对或说明 voice→staff 对应关系及谱号/音域可读性；只凭正确分组语法不声称目标软件已渲染、导入或呈现正确。"
+      ],
+      "context": "待运行的普通技术请求；仅检查 ABC 2.1 voice→staff 分组判读，不含旋律材料，不是音乐范例或质量证据。"
+    },
+    {
+      "id": "chat-language-does-not-select-control-language",
+      "type": "normal",
+      "prompt": "我用中文和你沟通，但下面是已经定稿的英文歌词。请整理成可以投喂 AI 歌唱生成器的完整人声包，歌词一字不改，没特别指定控制指令语言。\n\n[Verse 1]\nThe hallway holds the afternoon\nI save your place beside the window\n\n[Chorus]\nIf you turn, I will be here",
+      "input_files": [],
+      "expected_behavior": [
+        "用户用中文沟通但未明确指定中文控制时，Style Prompt 正文与标签内控制指令仍默认英语；聊天语言与英语歌词都不改变控制语言。",
+        "歌词文字、标点、次序和默认换行保持不变；歌词不翻译，不因 ASCII 字符占比推断控制模式。",
+        "交付完整 Controlled Lyrics 而非外置控制表；不附加默认中文演唱摘要，并区分项目格式约定与平台实际支持证据。"
+      ],
+      "context": "单独检查聊天语言、歌词语言与控制语言的独立性；不以内容字母比例判模式。"
+    },
+    {
+      "id": "explicit-chinese-control-language-request",
+      "type": "boundary",
+      "prompt": "请把这段已锁定的英文歌词做成人声输入包。唱法控制指令请明确写中文；英文歌词本身保持原样。\n\n[Verse 1]\nStay until the morning light\n\n[Chorus]\nSay the word and let it go",
+      "input_files": [],
+      "expected_behavior": [
+        "用户明确要求中文控制时，Style Prompt 正文与 Controlled Lyrics 标签内控制指令都使用中文；英语歌词原文保持不变、不翻译。",
+        "保留英语歌词字符、标点、段落与排版，并按原稿歌词锁、结构锁及授权例外处理，不因语言切换改写歌词。",
+        "仍使用最终嵌入式 Controlled Lyrics，不把控制谱表当作替代交付；字段名 Global Metadata、Vocal Details、Arrangement 保持英文。"
+      ],
+      "context": "检查用户明确指定中文演唱控制时，是否将本地默认按本轮授权切换，而不混淆歌词语言。"
+    },
+    {
+      "id": "non-chinese-source-lyric-anchor-keeps-source-text",
+      "type": "normal",
+      "execution_mode": "write",
+      "prompt": "请把附件中的英文歌词整理成完整人声生成包，Style Prompt 和唱法控制用中文，歌词原文保持不变。Verse 1 唱到 morning 时稍作停留，到 light 再舒展开；请在对应的句级控制中点明动作落在哪几个原词上。整体仍亲近、克制。",
+      "input_files": [
+        "lyrics.txt"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\nStay until the morning light\n\n[Chorus]\nSay the word and let it go"
+        }
+      },
+      "expected_behavior": [
+        "Style Prompt 与标签内唱法控制按用户要求使用中文；若句级控制需要点明具体目标词，使用源歌词中原样的英文 morning 和 light（保留原拼写及大小写），不翻译或规范化这两个锚点；其余控制说明仍为中文。",
+        "完整 Controlled Lyrics 保留源歌词、标点、段落标签、顺序和原始换行；将“morning”稍作停留、到“light”舒展开的动作落在完整目标乐句上，不拆句或改写锁定歌词。",
+        "按 Style Prompt → 完整 Controlled Lyrics → 本轮必要的平台说明交付；固定字段名 Global Metadata、Vocal Details、Arrangement 不因控制语言而改动。"
+      ],
+      "context": "普通英文歌词人声包请求；复用既有英文歌词材料，核对中文控制说明与非中文源词锚点各自遵循的语言边界。"
+    },
+    {
+      "id": "unknown-platform-keeps-copyable-controlled-package",
+      "type": "normal",
+      "prompt": "请把这几句已定歌词整理成可直接尝试的人声生成包。这轮还没决定用哪个音乐生成平台，先按你正常的项目流程完成，不要替我猜平台。\n\n[Verse 1]\n操场的风吹过树梢\n我把那句话留到明朝\n\n[Chorus]\n若你回头，我还在这里",
+      "input_files": [],
+      "expected_behavior": [
+        "平台未指定时仍按项目默认输出英语指令的完整嵌入式 Controlled Lyrics，不回退成裸歌词或只给蓝图。",
+        "仅补足与本次直接相关的平台说明，将平台/接口接受状态标为未知；不伪造 UI、字段、官方语法或硬上限。",
+        "原词、标点、次序、换行不变；如只有局部唱法结果不理想，应保留格式局部修订。"
+      ],
+      "context": "检查未知平台的应对默认与必要说明的最小范围。"
+    },
+    {
+      "id": "explicit-bare-lyrics-request-skips-vocal-package",
+      "type": "boundary",
+      "prompt": "请只给我下面歌词的文字草稿，保留行序和标点；不要演唱风格、Style Prompt、控制标签或平台说明。\n\n[Verse 1]\n月亮照进旧操场\n我把名字写在纸上",
+      "input_files": [],
+      "expected_behavior": [
+        "只返回用户要求的歌词文字草稿，不加人声包、Style Prompt、演唱控制或额外平台说明。",
+        "原有文字、标点、段落标识和行序保持不变；用户没有授权润色或重排。"
+      ],
+      "context": "检查用户明确要求裸歌词/草稿时能从默认人声包路径退出。"
+    },
+    {
+      "id": "whole-embedded-format-actually-rejected-by-interface",
+      "type": "boundary",
+      "prompt": "目标接口已在本轮真实提交中拒收整套嵌入式歌词，界面返回“该字段不接受方括号段落标签或行内控制”，并确认只有一个纯歌词输入框且没有独立人声控制字段。请据此给出能提交的版本和必要说明，不要假装控制仍会生效。锁定歌词如下：\n\n[Verse 1]\n窗外的天快暗了\n你还没说再见\n\n[Chorus]\n我把那句话留在风里",
+      "input_files": [],
+      "expected_behavior": [
+        "将该证据识别为接口无法接收整套嵌入格式，才据实际可用的纯歌词字段适配；不把单条控制无效当成同类拒收。",
+        "保留锁定歌词文字、标点、次序和原始换行；只提供接口实际支持的字段，不虚构替代控制位置。",
+        "说明在该已知接口路径中控制无法随歌词传递、该限制下的唱法效果未验证；不声称格式解析或纯歌词输入等于控制成功。"
+      ],
+      "context": "边界回归：只有整体格式被实际拒收才转换模式。接口回应由本例明示，不是泛化的官方平台能力结论。"
+    },
+    {
+      "id": "phrase-control-covers-a-cross-line-sung-phrase",
+      "type": "normal",
+      "prompt": "请把下面的人声稿编成完整 Controlled Lyrics。第二段的两行在句意和演唱上连成一个完整乐句，我希望这一个乐句保持连贯，不要让两行之间重新起唱。其他歌词保持原样。\n\n[Verse 1]\n我把窗轻轻关上\n\n[Chorus]\n你的名字到了唇边\n却没有说出口",
+      "input_files": [],
+      "expected_behavior": [
+        "先按语法与实际完整乐句判断控制位置，把需要的句级控制独占放在完整目标乐句第一行上方，覆盖两行，不插在两行之间。",
+        "不把视觉换行直接当作新的演唱起点；若此处无需区别于全局唱法，也可以不增加句级标签。",
+        "全角竖线仅用于控制标签内部；歌词文字、标点、顺序和默认换行保持锁定。"
+      ],
+      "context": "检查跨多个歌词视觉行的真实完整乐句控制位置，而非逐行贴标签。"
+    },
+    {
+      "id": "one-local-control-fails-keep-embedded-format",
+      "type": "boundary",
+      "prompt": "我刚听过这版实际生成音频，只有副歌末句因为我加的 “hold the final vowel through the next bar” 被拖拍；其他唱法和标签都正常，接口也接受这套嵌入格式。请修正这个问题，保留歌词和其余决定。\n\n[Verse 1]\n把晚风留在门外\n\n[Chorus]\n等你说完再离开",
+      "input_files": [],
+      "expected_behavior": [
+        "将证据定位为单条句级控制的局部负效，不推成整套标签格式遭接口拒收。",
+        "只收短、替换或移除导致拖拍的该控制，保留其余标签、嵌入格式、歌词文字、标点、段序和换行。",
+        "报告这是已听到的一处实际结果，不把修复方案本身说成已重新试听通过。"
+      ],
+      "context": "检查局部控制返修链和范围保护；不要求将唱法效果推广到其他歌词。"
+    },
+    {
+      "id": "instrumental-arrangement-does-not-create-vocal-controls",
+      "type": "normal",
+      "prompt": "请为这段器乐电子循环整理完整生成输入。不要人声、歌词、主唱或演唱控制，重点是保留稳定的低音脉冲并让合成器层次缓慢变化。目标平台还没定。",
+      "input_files": [],
+      "expected_behavior": [
+        "保持器乐蓝图和器乐 Style Prompt 路径，不生造歌词、演唱风格、Controlled Lyrics 或声乐控制。",
+        "平台未知时不虚构字段或保证；根据器乐用途给平台无关蓝图或必要输入，并保持循环脉冲与缓慢层次变化的明确身份。"
+      ],
+      "context": "保护既有纯器乐分支不被人声控制默认误触发。"
+    },
+    {
+      "id": "ordinary-popballad-vocal-controls-share-local-blueprint",
+      "type": "normal",
+      "prompt": "请按当代华语 pop-ballad 整理一份可直接使用的人声生成包。整体像夜里把话说得很轻，主歌靠近些；副歌把心意讲清楚，但不要单靠变响。钢琴围绕主唱句尾留空间，不加鼓和弦乐。请保留歌词原文和换行。\n\n[Verse 1]\n灯还亮在走廊尽头\n那句话停在嘴边\n\n[Chorus]\n如果你也刚好回头\n我就不把心事藏太久",
+      "input_files": [],
+      "expected_behavior": [
+        "正常处理完整人声包时，从当前编曲主文的声音蓝图、配器/律动与演唱制作方法出发，并读取本轮所选的 popballad 子级及 AI 生成 Reference；子级模板作为局部风格决定合入共同蓝图，不能省略共同关系或覆盖锁定的“不加鼓和弦乐”及最终曲式；不调用 V4 来补唱法命令或提示词方法。",
+        "Style Prompt 与段级/句级控制使用同一组已决定的音乐关系：全局基线写入 Prompt，只有有独立作用且已确定的乐段/完整乐句增量才进入标签；不因“夜里很轻”自动套用固定技巧。",
+        "实际控制指令为英语，并把本地决定转成有声音对象、动作和位置的动作表达；如引用中文歌词锚点，把原词嵌在该动作指令中，不把孤立中文锚点当作控制。",
+        "沿用本项目三段 Style Prompt 组织及 1000 Unicode code point 工作预算；V4 只用于嵌入式标签的外层格式。保留不加鼓/弦乐的用户决定与歌词字符、标点、行序、换行。",
+        "未做真实生成试听时不声称唱法生效或包已获目标接口接受。"
+      ],
+      "context": "检查普通 pop-ballad 人声包是否由本地设计决定驱动；期望验证同一声音蓝图进入 Prompt 与局部控制的一致性，以及 V4 仅作格式参考，不是完整 Agent 行为或音频质量证据。"
+    },
+    {
+      "id": "locked-reggae-tempo-and-form-override-child-starting-default",
+      "type": "normal",
+      "prompt": "这次请明确按 Reggae 编一首有人声的完整歌曲。速度锁定 92 BPM、4/4；曲式锁定 Intro 4 小节 → V1 8 → Chorus 8 → V2 8 → Chorus 8 → Outro 4。主唱演唱“若你回头，我还在这里”，歌词不要改。请给可投喂的 Style Prompt 与嵌入歌词控制。",
+      "input_files": [],
+      "expected_behavior": [
+        "因用户明确选择 Reggae 才加载 Reggae 子级；Style Prompt 与生成段落按最终蓝图使用 92 BPM、4/4 及用户给定的段落顺序/长度，不把 Reggae 子级较早的 76 BPM 或本地默认曲式写回。",
+        "保留 One Drop 的 beat-3 低音/鼓组语法，但将其放到用户锁定的 92 BPM 与最终曲式中；说明必要的主唱句缝回应/回返，不强制额外段落。",
+        "Style Prompt 正文和标签内控制默认英语，歌词原文、标点和布局保持锁定；Style Prompt 字段间对速度、律动和段落信息一致。",
+        "格式通过只报告结构/输入检查，不声称实际音频已生成或节奏遵从已经验证。"
+      ],
+      "context": "检查风格子级固定速度/结构起点不能覆盖宿主最终锁定蓝图，同时保留 Reggae 的 One Drop 语法；不设唯一编曲答案。"
+    },
+    {
+      "id": "love-theme-and-electronic-timbre-do-not-auto-select-style-child",
+      "type": "normal",
+      "prompt": "请根据这段恋爱歌词和我提到的电子键盘、鼓机，先给一份通用编曲蓝图。我还没有选具体风格，请不要替我决定类型。\n\n[Verse 1]\n操场的风吹过树梢\n我把那句话留到明朝\n\n[Chorus]\n若你回头，我还在这里",
+      "input_files": [],
+      "expected_behavior": [
+        "不因恋爱题材自动触发 Pop-ballad，也不因电子键盘/鼓机自动触发 Dance-pop、House 或 Techno；先按用户要的通用蓝图处理，需要具体风格决定时再由用户明确选择。",
+        "可使用已给出的电子乐器/鼓机作为材料，但不把它们推成四踩舞池脉冲、House/Techno loop 或固定 Pop-ballad 弧线。",
+        "围绕歌词完整乐句关系与主题材料说明一个可辨的音乐核心及其位置，保留可选择空间，不把角色名称或流派标签当作已设计的旋律材料。"
+      ],
+      "context": "仅检查主题意象/材料提及与用户明确选择风格之间的路由边界，不限定具体方案。"
+    },
+    {
+      "id": "instrumental-techno-one-bar-loop-generation-input",
+      "type": "normal",
+      "prompt": "请为 minimal Techno 编一份音乐生成器可用的器乐输入包。目标是稳定的 4/4 脉冲和明确的一小节核心循环，整段保持一小节循环长度；不要人声、歌词或副歌。请交付完整 Style Prompt 与器乐结构栏。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 Techno 子级及 AI 生成 Reference；按项目三字段职责与纯器乐包格式编译，V4 只用于核对嵌入标签外层格式；不生成 Vocal Details、歌词或主唱控制。",
+        "保留稳定 4/4 与明确的一小节循环长度，事件位置在本循环内回返；不把模板或示例改写成两小节默认，不添加人声、流行副歌或未要求的 drop。",
+        "完整包把该一小节核心事件及必要的段落/循环接缝演化落实到 Style Prompt、Motif / Front Identity、Arrangement 和 Instrumental Form 的适用字段；本例只验证技术与字段回归，不据此判断音乐审美或音频质量。"
+      ],
+      "context": "合成的器乐 Techno 输入回归，用于检查一小节默认循环与纯器乐字段契约；不作为音乐审美样本或声音质量证据。"
+    },
+    {
+      "id": "yue2-original-song-full-native-abc",
+      "type": "normal",
+      "prompt": "我已经给出完整中文原词与原创蓝图，授权你为 YuE2 外部 ABC 三输入新作旋律与一条器乐主题。需要保留我选定的旋律和和声，请交付 Style Prompt、Lyrics、ABC，并给 ComfyUI 实际接线注意。",
+      "input_files": [],
+      "expected_behavior": [
+        "明确走 YuE2 外部三输入：Style Prompt 默认英语并写专业演唱、配器与段落控制，Lyrics 保留原中文词文/标点/段序且不加唱法标签，native ABC 写实际 Vocal 与 Ins 单音事件及需要保留的受支持和弦符号。",
+        "用户授权原创时可从蓝图写出实际旋律音高和时值；不得只给情绪/主题词后声称已有谱。选择 full 以保留本轮已选和声；full profile 不要求凭空添加和弦，但若声称锁定和声，须实际编码相应符号。",
+        "ABC 按 bounded profile 编译、交付前运行 inspect；如需保留用户指定和声而质量超出白名单，说明损失并暂停该和弦取舍，不静默近似替换。",
+        "说明 ComfyUI 需把外部 ABC 接到真实非空 abc 输入，模式为 full；parser 通过不宣称云端接受、声音遵从或质量通过。"
+      ],
+      "context": "检查原创 full 的三字段分工、实际事件谱、和声保护与证据边界；不作为音频质量样本。"
+    },
+    {
+      "id": "yue2-version-accurate-cover-melody-mode",
+      "type": "normal",
+      "prompt": "我要翻唱一首已指定版本的歌，已附上该版本可信完整旋律谱和原文歌词。请保留 Vocal 与 Ins 两条旋律，不保留谱面和弦，让模型更自由地安排和声。按 YuE2 外部 ABC 路线交付。",
+      "input_files": [],
+      "expected_behavior": [
+        "根据要保留的内容选 melody，而非仅因“翻唱”；可信谱源应对应指定演出/录音版本并覆盖完整主旋律，不用熟悉的开头动机、曲名或记忆替代全曲旋律。",
+        "输出原文 Lyrics（不翻译、不加标签），ABC 去除音乐行和弦后仍保留两条旋律的发声音高、起音、合并 tie 后时值、休止、拍格与段落位置；使用 strip-chords 新建目标文件，不改原谱。",
+        "以 compare 核对两声部事件不变，并以 inspect --mode melody 确认音乐行无和弦符号；说明 melody 允许和声自由生成，但不保证结果。",
+        "不从录音自动转谱、不调用 SheetSage2；没有实际生成音频时不宣称已按源谱演唱。"
+      ],
+      "context": "验证版本准确的翻唱选择 melody 是基于明确保护目标，且完整旋律与两线事件保真不被熟悉动机替代。"
+    },
+    {
+      "id": "yue2-full-explicitly-preserves-supplied-harmony",
+      "type": "normal",
+      "prompt": "这次是翻唱。我已给出确认版本的 ABC 和明确要保留的原和弦进行；请保留旋律与这些和弦，以 YuE2 外部三输入生成。不要把翻唱默认改成 melody。",
+      "input_files": [],
+      "expected_behavior": [
+        "选择 full，因为用户要求保护和弦；保留源谱和声事件和两条旋律，不把原谱重规划或简化为 melody。",
+        "核和弦质量、根音、斜线低音与时间位置是否在 bounded chord 白名单内；若精确编码受限，不静默近似替代，也不声称 Style Prompt 能锁定确切和弦。",
+        "full 的本地 parser 通过不要求每份 ABC 都必须出现和弦；本例的和弦要求来自用户保护合同，需另核内容完整性。",
+        "原始 ABC 另存保护；核验只报告静态事件，不宣称接口接受或音频和谐。"
+      ],
+      "context": "独立检查 full 保和声需求来自任务保护范围，与 parser 的 full 模式合法性判据区分。"
+    },
+    {
+      "id": "yue2-comfy-empty-abc-is-not-external-score",
+      "type": "boundary",
+      "prompt": "我用 ComfyUI 的 YuE2 text-to-music 模板，关闭 ABC planning 后把外部 ABC 文件接到旁边的 STRING 节点，但不确定它有没有接进音乐节点。请检查我的工作流；如果 abc 仍为空，仍按 full 运行就行。",
+      "input_files": [],
+      "expected_behavior": [
+        "查看实际工作流节点连接：外部 ABC 必须进入 YuE2GenerateMusic 的非空 abc 字符串输入；旁边存在 STRING 节点不证明已经接通。",
+        "指出关闭模板 planning 后可能仍给节点空字符串，节点实现会把 mode 改成 off；不能将空 abc 说成 full 外部谱模式。",
+        "要求重接或替换空串后再核实际值与 full/melody 选项；不推断用户未提供的其他云服务 schema 名称，内部 cot 也不当作用户字段。",
+        "仅静态工作流检查不能证明生成结果采用了谱面。"
+      ],
+      "context": "验证真实 ComfyUI 接线与模式的条件化行为，防止把外部 STRING 节点存在误当作 abc 字段已接通。"
+    },
+    {
+      "id": "yue2-abc-duration-exceeds-configured-cap",
+      "type": "boundary",
+      "prompt": "我的 ABC 是 68 小节、4/4、四分音符 96 BPM。ComfyUI 工作流 max_duration 仍是 120 秒。请判断能否覆盖这份谱并告诉我接下来怎么设。",
+      "input_files": [],
+      "expected_behavior": [
+        "按四分音符总数计算 68×4×60/96=170 秒，因此 120 秒不足以覆盖名义谱长；建议先把上限调到至少覆盖目标时长，再核实际工作流值。",
+        "说明 max_duration 只是秒数上限，不保证成品完整到该长度；上下文长度也可能让输出提前结束。",
+        "不能把 parser 通过或提高上限当成音频生成完整度证据；生成后仍需核实际时长与结尾。"
+      ],
+      "context": "固定长谱—上限边界回归；只核算名义时长，不代表模型可生成 170 秒。"
+    },
+    {
+      "id": "yue2-style-prompt-conflicts-with-locked-abc",
+      "type": "boundary",
+      "prompt": "我锁定了这份 ABC 的主唱旋律、96 BPM、4/4 和 chorus 顺序，请按 YuE2 外部 ABC 生成。但我写的 Style Prompt 草稿又要求 104 BPM、把副歌主唱旋律改成另一句。请把输入包编好。",
+      "input_files": [],
+      "expected_behavior": [
+        "指出 Style Prompt 与受保护 ABC 在速度/节拍或旋律/结构上冲突，不能让两个字段各自描述一首歌。",
+        "优先按已明确锁定的 ABC 保持 96 BPM、4/4、旋律与段序，并修订 Style Prompt；若用户意图其实要改变锁定项，则只暂停该冲突决定并确认授权范围。",
+        "不把这类分歧交给模型自行调和，不声称 bounded checker 可以判断审美或语义冲突已解决。"
+      ],
+      "context": "验证跨字段冲突回到用户锁定合同，不能靠模型提示词与符号谱互相覆盖。"
+    },
+    {
+      "id": "yue2-non-chinawind-uses-shared-three-field-route",
+      "type": "normal",
+      "prompt": "请按 Funk 为我这首英文歌词歌编 YuE2 外部 ABC 输入。我希望 groove 和主唱重音关系保留，暂时不想用中国风音色或五声音阶模板。",
+      "input_files": [],
+      "expected_behavior": [
+        "识别 YuE2 外部 Style Prompt + 原文 Lyrics + native ABC 共用路由，不因三字段流程自动触发 Chinawind 子级或中国配器/调式。",
+        "按用户明确的 Funk 选择相关风格方法；Style Prompt 写明 groove、主唱与段间声音动作，Lyrics 保持英文原文且不加演唱标签，ABC 只编码选定 Vocal/Ins 旋律事件与可用和弦信息。",
+        "不要把完整鼓/贝司多轨声部声称为 native ABC 已编码；接口可用性和生成遵从另行验证。"
+      ],
+      "context": "验证 YuE2 三输入是跨风格共享编译器，非国风请求维持一般风格适用条件。"
+    },
+    {
+      "id": "general-abc-notation-output-remains-unrestricted-by-yue2-profile",
+      "type": "normal",
+      "prompt": "请为记谱软件交付一份通用 ABC 2.1 总谱：需要多个自定义声部、演唱歌词 w: 对齐和打击乐目标方言说明。我没有指定 YuE2。",
+      "input_files": [],
+      "expected_behavior": [
+        "走一般 ABC 2.1/目标解析器交付路线，保留用户需要的多声部、w:、打击乐方言及适用记谱语法，不套用 YuE2 的固定 Vocal/Ins 两线 bounded profile。",
+        "按目标解析器核查一般 ABC 格式；本地 YuE2 checker 拒绝某种一般 ABC 语法不等于通用 ABC 无效。",
+        "不因用户要给记谱软件就猜测其是 YuE2，也不把 AI 云接口字段与一般谱面内容混为一谈。"
+      ],
+      "context": "通用 ABC 2.1 回归，保护多声部、w: 与目标方言任务不被新 YuE2 分支收窄。"
+    },
+    {
+      "id": "authorized-existing-tags-reorder-and-reprise-propagates",
+      "type": "normal",
+      "execution_mode": "write",
+      "prompt": "我授权把现有 [Bridge] 移到 [Pre-Chorus] 前，并将原 [Chorus] 原样复制为 [Final Chorus]；其余歌词正文与标点锁定。请整理成可用的人声生成包。",
+      "input_files": [
+        "lyrics.txt",
+        "music-map.txt"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\nLYRIC_TOKEN_A\n\n[Pre-Chorus]\nLYRIC_TOKEN_B\n\n[Chorus]\nLYRIC_TOKEN_C\n\n[Verse 2]\nLYRIC_TOKEN_D\n\n[Bridge]\nLYRIC_TOKEN_E",
+          "music-map.txt": "MUSIC_TOKEN_MAP\nS1=Verse1\nS2=Pre\nS3=Chorus\nS4=Verse2\nS5=Bridge\nP1=phrase_anchor_A"
+        }
+      },
+      "expected_behavior": [
+        "只执行已有明确授权的段落结构调整和原副歌复用，歌词 TOKEN 正文不润色、不替换。",
+        "用 `sections` 和按需的 `phrase_id`/`lyric_anchor` 更新音乐对应关系，按实际乐句安排入口、重音、时值、延音、气口、句尾和伴奏。",
+        "保留原始词稿，核对标签/调序/回返的具体差异，确定核对后的本轮演唱稿后再同步更新蓝图和所有受影响输出；未受影响锁定项保持。",
+        "现有标签稿不使用 `--structure-open` 解锁；不反复确认已获准的同一变更。"
+      ]
+    },
+    {
+      "id": "cantonese-token-source-keeps-language-unknowns-visible",
+      "type": "boundary",
+      "execution_mode": "write",
+      "prompt": "我只提供了粤语歌词占位 TOKEN 和伴奏结构，先做编曲蓝图，不写或翻译歌词。TOKEN 是测试占位符；真实词句、粤拼、韵尾/声调和旋律尚未提供。请保留占位符并说明后续协作需要承接的内容。",
+      "input_files": [
+        "lyrics-tokens.txt",
+        "music-map.txt"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics-tokens.txt": "[Verse 1]\nCANTONESE_TOKEN_R1\n\n[Chorus]\nCANTONESE_TOKEN_R2",
+          "music-map.txt": "METER=12/8\nGROOVE=swung triplet pulse\nSECTIONS=V1(8 bars), Chorus(8 bars)\nLYRIC_VERSION=technical token only; Jyutping unavailable"
+        }
+      },
+      "expected_behavior": [
+        "将 TOKEN 视为技术占位符而非歌词，原样保留且不翻译、填词或按字数配音。",
+        "可以先完成不依赖发音的 12/8 律动、乐段与伴奏蓝图，明确粤语词形、粤拼、声调/韵尾和旋律未提供。",
+        "给作词/后续演唱交接实际段落及待核位置；不虚构声调—音高关系、不宣称可唱或接口已接受。"
+      ]
+    },
+    {
+      "id": "whole-track-arrival-return-and-part-role-check",
+      "type": "normal",
+      "prompt": "请给一首器乐曲做全曲结构复核。开场先建立稀疏的双音动机，第二次循环加入低音后到达主段；主段回返时保留动机但改变节奏重心；尾部要能接回开场。和声里有一处我有意保留的二度摩擦。现在只有文字蓝图，没有音频。请指出需要检查什么，不要替我改成常规和弦方案。",
+      "input_files": [],
+      "expected_behavior": [
+        "按顺序检查开场基线、主段核心到达、动机回返变化、尾部收束/loop 接续，说明每项蓝图中已有的具体位置或当前缺失信息；不只给“段落发展”标签。",
+        "把低音、动机、节奏重心及其他声部按作品中的实际职务逐一对应到主题、和声、律动、配器或段落承接，并指明失衡时回查的素材关系。",
+        "先把二度摩擦视为用户有意选择的材料，核它怎样承担本作作用；不因复杂或不协和自动判错，也不默认改成三和弦/V-I。",
+        "没有音频时只报告文本蓝图可核内容，把实际到达、听感和 loop 无缝性标为待听/待验证，不声称试听通过。"
+      ],
+      "context": "普通全曲音乐蓝图复核请求，检查段落主次、声部职务和有意不协和的条件化处理；不预制唯一编配或音频听感结论。 本例是构造的普通评测输入，不冒充用户原作或人类范例，也不作为作品质量证据。"
+    },
+    {
+      "id": "av-sound-design-shared-events-and-real-source",
+      "type": "behavior",
+      "prompt": "请为一段无旁白的短动画设计整段声音：前面让纸片分开，中段比较两种表面，结尾落定一个选择。没有要求配乐或固定流派。只交声音结构与素材处理方案，不渲染。",
+      "input_files": [],
+      "expected_behavior": [
+        "按视听声音路径读取对应主文与 Reference，先决定前/中/后听觉中心、声部与留白职责；无旁白不自动要求 BGM，题材也不推断流派。",
+        "先按视觉事件需要判断是否有少数 SFX，再按真实动作/材料/重量选择候选；听其起音、主体、尾巴后决定保留、裁切、淡化或少量叠层，核心质感不匹配才换候选或原创。",
+        "任何声响引用同一事件 ID 与时间源，命中点对齐选定起势、接触或落定相位；不另手写第二时钟，不把画面事件 start 自动当 hitpoint。",
+        "只有实际有授权 WAV 且确需剪辑时才用 audio-edit；MP3/OGG 来源先在工作工程以现有 FFmpeg 解码为 float PCM WAV，并保留原来源 hash/许可、解码记录及派生 WAV hash；不是改扩展名。派生 hitpoint 是参数换算，不冒称检测的真实瞬态。",
+        "回到 Motion 唯一 audio-plan/最终混音交接；此方案不代表文件已生成、已试听、已 ready 或整片听感通过。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "ordinary-motion-new-music-prefers-applicable-source-preset",
+      "type": "behavior",
+      "prompt": "给我这条现有动画重新做一段 15–20 秒、有节奏但听起来舒服的音乐和少量必要音效样片；保留画面，不加配音。内容里现有几个转场需要跟音乐重音配合。",
+      "input_files": [],
+      "expected_behavior": [
+        "先确定音乐/SFX/静音职责和转场事件，不把题材自动映射成固定流派或每个转场必加同一个音效。",
+        "从 pin 的真实 Huashu Motion 产品与风格目录选择适用的 `/2` product/style musicPreset，并生成 music-only stem；普通配乐请求不默认先手写 ABC，只有明确音符/旋律/谱面 mark 控制才走 ABC。",
+        "保留来源 preset 原音乐处理链与调式默认；不运行整片 mixdown，不覆盖旁白/锁定音轨，最终合入现有唯一 `audio-plan.v1`/`audio.mjs`。",
+        "若用户确实要这些转场卡拍且选定音乐是强拍音乐，可只读分析计划映射拍点；实际渲染后从最终 mux 音轨解码回测偏移/漂移，不用原 asset 分析冒充渲后检查，也不自动移动锁定 ASR 或生成事件。",
+        "技术时长/偏移、素材许可和生成回执与真实试听分开报告；未实际播放听审时听感保持 UNKNOWN。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
     }
   ]
 }

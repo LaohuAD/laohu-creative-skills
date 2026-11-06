@@ -127,6 +127,113 @@ class GzhToolsTests(unittest.TestCase):
             self.assertTrue(validator.validate(fragment)[0])
             self.assertTrue(any(level == "ERROR" for level, _ in component_lint.lint_file(source)[1]))
 
+    def test_theme_prompt_command_and_quote_mappings_keep_distinct_roles(self):
+        refs = SCRIPT_DIR.parent / "references"
+        def cells(document, prefix):
+            row = next(line for line in document.splitlines() if line.startswith(prefix))
+            return [part.strip() for part in row.strip().strip("|").split("|")]
+
+        def assert_code_target(target):
+            self.assertIn("1a", target)
+            self.assertIn("1b", target)
+            self.assertNotRegex(target, r"(?<![A-Za-z0-9])8[ab](?![A-Za-z0-9])")
+
+        green = (refs / "theme-moyu-green.md").read_text(encoding="utf-8")
+        for prefix in ("| 教程/操作指南 |", "| 案例实战 |"):
+            assert_code_target(" ".join(cells(green, prefix)[1:]))
+        for prefix in ("| Prompt 提示词 |", "| 单行命令 |"):
+            assert_code_target(cells(green, prefix)[1])
+        operation_target = cells(green, "| 操作步骤 |")[1]
+        self.assertRegex(operation_target, r"\b7a\b")
+        self.assertNotRegex(operation_target, r"(?<![A-Za-z0-9])8[ab](?![A-Za-z0-9])")
+        green_component = green.split("## 组件 8", 1)[1].split("## 组件 9", 1)[0]
+        self.assertIn("common-components.md", green_component)
+        self.assertRegex(green_component, r"\b1a\b")
+        self.assertRegex(green_component, r"\b1b\b")
+        self.assertIn("#059669", green_component)
+
+        for name in ("theme-graphite-minimal.md", "theme-red-white.md"):
+            theme = (refs / name).read_text(encoding="utf-8")
+            assert_code_target(cells(theme, "| Prompt 提示词 |")[1])
+            long_quote_target = cells(theme, "| `> 引用段落`（长段原文引文） |")[1]
+            self.assertRegex(long_quote_target, r"\b8b\b")
+            recipe_rows = [line for line in theme.splitlines()
+                           if line.startswith("|") and "8b" in line and
+                           any(label in line for label in ("观点/深度分析", "访谈/人物特稿", "案例实战"))]
+            for row in recipe_rows:
+                recipe_cells = [part.strip() for part in row.strip().strip("|").split("|")]
+                self.assertNotIn("8b", recipe_cells[1])
+                self.assertIn("8b", recipe_cells[2])
+
+        ticket = (refs / "theme-moyu-ticket.md").read_text(encoding="utf-8")
+        quote_target = cells(ticket, "| `> 引用段落`（非开头） |")[1]
+        summary_target = cells(ticket, "| 章节小结/观点 |")[1]
+        self.assertRegex(quote_target, r"\b3d\b")
+        self.assertNotIn("组件 9", quote_target)
+        self.assertRegex(summary_target, r"\b9\b")
+        self.assertNotRegex(summary_target, r"\b3d\b")
+
+    def test_olive_and_ticket_themes_delegate_to_main_contract(self):
+        refs = SCRIPT_DIR.parent / "references"
+        olive = (refs / "theme-olive-journal.md").read_text(encoding="utf-8")
+        ticket = (refs / "theme-moyu-ticket.md").read_text(encoding="utf-8")
+        for theme in (olive, ticket):
+            link_targets = re.findall(r"\]\(([^)]+)\)", theme)
+            self.assertIn("../SKILL.md#正文片段静态规则", link_targets)
+
+        def component_section(document, heading):
+            start = document.index(heading)
+            end = document.find("\n## ", start + len(heading))
+            return document[start:] if end < 0 else document[start:end]
+
+        self.assertIn("```html", component_section(olive, "## 组件 23"))
+        self.assertIn("```html", component_section(ticket, "## 组件 13"))
+
+    def test_theme_hidden_metadata_marker_stays_inside_single_article_root(self):
+        refs = SCRIPT_DIR.parent / "references"
+        themes = ("theme-moyu-ticket.md", "theme-olive-journal.md")
+        marker_pattern = re.compile(
+            r'(<p\b(?=[^>]*\bdisplay\s*:\s*none)[^>]*>.*?'
+            r'<mp-style-type\b[^>]*>.*?</mp-style-type>.*?</p>)', re.S)
+
+        def check_fragment(fragment):
+            checker = validator.FragmentChecker(article=True)
+            checker.feed(fragment)
+            checker.close()
+            checker.finish()
+            return checker
+
+        visible = '<p><span leaf="">结构测试正文。</span></p>'
+        for name in themes:
+            with self.subTest(theme=name):
+                document = (refs / name).read_text(encoding="utf-8")
+                marker_match = marker_pattern.search(document)
+                self.assertIsNotNone(marker_match)
+                marker = marker_match.group(1).strip()
+                self.assertIn("<mp-style-type", marker)
+
+                skeleton_start = document.index("## 完整文章模板骨架")
+                skeleton_match = re.search(r"```html\s*\n(.*?)```", document[skeleton_start:], re.S)
+                self.assertIsNotNone(skeleton_match)
+                skeleton = skeleton_match.group(1)
+                skeleton_checker = check_fragment(skeleton)
+                self.assertEqual(skeleton_checker.errors, [])
+                self.assertEqual(skeleton_checker.top_level_tags, ["section"])
+                self.assertIn("<mp-style-type", skeleton)
+                self.assertTrue(skeleton.rstrip().endswith("</section>"))
+
+                internal = f"<section>{visible}{marker}</section>"
+                internal_checker = check_fragment(internal)
+                self.assertEqual(internal_checker.errors, [])
+                self.assertEqual(internal_checker.top_level_tags, ["section"])
+                self.assertIn(marker, internal)
+                self.assertTrue(internal.endswith(marker + "</section>"))
+
+                external = f"<section>{visible}</section>{marker}"
+                external_checker = check_fragment(external)
+                self.assertEqual(external_checker.top_level_tags, ["section", "p"])
+                self.assertTrue(external_checker.errors)
+
     def test_truncated_theme_is_not_accepted_as_clean_components(self):
         source = self.root / "theme-truncated.md"
         source.write_text('# 主题\n```html\n<section><span leaf="">残留尾部。</span></section>\n```\n')
@@ -537,6 +644,8 @@ context.gzhCopy().then(()=>{
         self.assertTrue(any("<button>" in error for error in errors))
         self.assertTrue(any("<video>" in error for error in errors))
         self.assertTrue(any("<iframe>" in error for error in errors))
+        errors, _ = validator.validate('<section><svg><text>流程图</text></svg></section>')
+        self.assertTrue(any("<svg>" in error for error in errors))
 
     def test_validator_preserves_english_punctuation_and_handles_void_tags(self):
         html = ("<section><p><span leaf=\"\">Don't merge these notes.</span></p>"

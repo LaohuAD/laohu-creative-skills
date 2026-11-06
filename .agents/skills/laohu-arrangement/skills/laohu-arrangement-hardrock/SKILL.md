@@ -42,9 +42,11 @@ description: 当用户要求 hard-rock/硬摇滚乐队编曲时，以可辨吉�
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt把riff和合奏拍点写成可听关系： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：hard-rock band, 112 BPM, 4/4, quarter-note pulse, riff-led straight subdivision with a clear 2/4 backbeat, <guitar tuning/timbre if confirmed>。已给riff/鼓组若为异拍或其他细分，按其实际网格和重拍替换这段默认。
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
+
+Global Metadata：hard-rock band, <final blueprint BPM>, <final blueprint meter>, quarter-note pulse, riff-led straight subdivision with a clear 2/4 backbeat, <guitar tuning/timbre if confirmed>。已给riff/鼓组若为异拍或其他细分，按其实际网格和重拍替换这段默认。
 Vocal Details：<已确认歌者/音区> enters <riff之后或并行位置>，lyric stresses <定位>，hold/cut <音节定位> with space for the riff reply。
-Arrangement：bass doubles the riff's <low-note rhythm>，kick reinforces <riff accents>，snare maintains <已定拍点>；guitars <unison / octave / rhythm support> and stop/hold at <rest locations>。
+Arrangement：bass doubles the riff's <low-note rhythm>，kick reinforces <riff accents>，snare maintains <已定拍点>；guitars <unison / octave / rhythm support> and stop/hold at <rest locations>；按<最终蓝图段落顺序、长度与回返位置>安排
 固定riff识别节奏/音程与乐队可合奏落点；若riff含休止，让用户选齐停还是鼓维持pulse；若主唱占据riff音区/拍位，缩短riff或移到句缝，不同时抢前景。无riff输入时只有在创作授权内填谱，提示词不伪称复刻具体乐队。
 
-有导唱时标主唱句头、辅音重音、延音和riff交接，歌词不改；器乐版用riff回归点代替人声控制。MIDI分开guitar、bass、drums、guide vocal轨，riff的每音写pitch_sounding_midi、onset_qn与offset_qn；贝司按低音核心加倍，底鼓只打主要riff起音/强重音。闷音、延音、断奏写到articulation或目标音源奏法映射，音色由amp/插件选取，GM program不代表失真吉他音箱。ABC用分开的V:轨、真实时值、休止、同音tie和重音装饰写riff停连；打击乐V:按目标方言映射鼓件，无法映射则附事件表；和弦五度按同时音符写，不能用和弦名替代演奏音。MusicXML鼓件用unpitched/display-step/display-octave与instrument id/score-instrument映射，midi-unpitched按目标鼓表填写；吉他和贝司用part/voice、note的pitch/duration、rest及articulations表示断奏/重音；如需吉他指法/弦品仅在乐手资料已给时加technical string/fret。导入DAW后检查强击同步、尾音截断和真实音源奏法。
+有导唱时标主唱句头、辅音重音、延音和riff交接，歌词不改；器乐版用riff回归点代替人声控制。MIDI分开guitar、bass、drums、guide vocal轨，riff的每音写pitch_sounding_midi、onset_qn与offset_qn；贝司按低音核心加倍，底鼓只打主要riff起音/强重音。闷音、延音、断奏写到articulation或目标音源奏法映射，音色由amp/插件选取，GM program不代表失真吉他音箱。通用谱编译时，ABC用分开的V:轨、真实时值、休止、同音tie和重音装饰写riff停连；打击乐V:按目标方言映射鼓件，无法映射则附事件表；和弦五度按同时音符写，不能用和弦名替代演奏音。MusicXML鼓件用unpitched/display-step/display-octave与instrument id/score-instrument映射，midi-unpitched按目标鼓表填写；吉他和贝司用part/voice、note的pitch/duration、rest及articulations表示断奏/重音；如需吉他指法/弦品仅在乐手资料已给时加technical string/fret。导入DAW后检查强击同步、尾音截断和真实音源奏法。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。

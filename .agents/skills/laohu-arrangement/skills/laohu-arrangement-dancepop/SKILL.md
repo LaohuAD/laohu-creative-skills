@@ -13,7 +13,7 @@ description: 当用户要求 dance-pop/舞曲流行编曲时，让舞池脉冲�
 
 无相反参考时，默认以 4/4 四踩 kick 建立舞池脉冲，clap/snare 落在第 2、4 拍，贝司在 kick 间留出可舞动的反拍/切分；再选一个由主唱承担的歌唱 hook，让其成为副歌前景。hat/合成器细分强化运动，同时为 hook 留出清晰空间。若用户锁定 breakbeat、反拍型或其他 groove，则保留真实拍轴和重音，只调整其余声部配合方式。
 
-在人声段落，先核对歌词重音、主唱句长和 hook 入口，为每次回返选择稳定重复还是有理由的变体。可把一句副歌钩子留给听众参与，也可保持纯器乐钩子；不要把所有歌词压成口号。没有旋律材料时由宿主确认创作责任并补足实际主题音符。
+在人声段落，先从完整歌词句或器乐声中选出实际 hook，写清其节奏/轮廓/重音/落点关系、首次位置和回返；核对歌词重音、主唱句长与 hook 入口，再选择稳定重复还是有理由的变体。让 hook 与准备段的主要变化、释放时脉冲恢复或应答入口互相配合，不能只写“更有冲击力”。可把一句副歌钩子留给听众参与，也可保持纯器乐钩子；不要把所有歌词压成口号。没有旋律材料时由宿主确认创作责任并补足实际主题音符。
 
 ## 段落准备和释放
 
@@ -38,11 +38,13 @@ Berklee Online《Arranging and Producing Contemporary Music Styles》把流派�
 ## 生成提示、演唱与可编辑事件控制
 
 Style Prompt使用能听见的节奏和入口描述： 交付 Style Prompt 前，将尖括号槽位替换成已确认、可直接阅读的短语并合成为完整句；未定项留在声音蓝图/Platform Assumptions，不把槽位名投喂。
-Global Metadata：dance-pop, 120 BPM, 4/4 four-on-the-floor pulse, <bass syncopation/pocket>, <明亮/克制等已定方向>。
-Vocal Details：<确认的主唱/音区> presents the hook at <段落/拍位>，stresses <锁定音节>，leaves <句缝> for the synth response。
-Arrangement：kick on each quarter-note beat, clap/snare on beats 2 and 4；Verse keeps <层数> sparse，<若有pre-chorus则> hats/build <细分变化> into a brief low-end gap，Chorus reveals <歌唱/器乐hook> over restored pulse。
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
+
+Global Metadata：dance-pop, <final blueprint BPM>, <final blueprint meter> four-on-the-floor pulse, <bass syncopation/pocket>, <明亮/克制等已定方向>。
+Vocal Details：<确认的主唱/音区> presents <歌词承重句与可辨节奏/轮廓/重音/落点> at <首次位置>，returns it at <后续段落/拍位>，and leaves <句缝> for the synth response。
+Arrangement：kick on each quarter-note beat, clap/snare on beats 2 and 4；Verse keeps <层数> sparse，<若有pre-chorus则> hats/build <细分变化> into a brief low-end gap，Chorus reveals <歌唱/器乐hook> over restored pulse；按<最终蓝图段落顺序、长度与回返位置>安排
 固定副歌hook识别与主脉冲；用户指定breakbeat、三拍或现场乐队律动时保留真实拍轴，不能为了套舞曲模板改拍。pre-chorus不存在时直接设计chorus入口，不添空段；器乐hook主导时把Vocal Details换成Motif/Front Identity。
 
-有主唱旋律时给hook音节的起拍、强弱、延留与换气；歌词锁定，未有旋律就不编精确拍值。MIDI按4/4常规路线：kick起点为每小节0/1/2/3 QN，clap/snare为+1/+3 QN；bass放在kick空隙或预先选定的切分位，hat以八分音符稳拍、build时才加十六分，所有事件填onset_qn/offset_qn/velocity。用户锁定其他拍轴时依事件底稿换算，不照搬这些位置。
+锁定源旋律时按已核实音符给hook音节的起拍、强弱、延留与气口；授权新谱曲时填写本轮实际音符/时值；AI探索时锁住hook的节奏、重音、落点与回返关系而开放具体音符。歌手范围未知时不虚构极限。MIDI按4/4常规路线：kick起点为每小节0/1/2/3 QN，clap/snare为+1/+3 QN；bass放在kick空隙或预先选定的切分位，hat以八分音符稳拍、build时才加十六分，所有事件填onset_qn/offset_qn/velocity。用户锁定其他拍轴时依事件底稿换算，不照搬这些位置。
 
-ABC将踢鼓、军鼓、帽、bass、hook和主唱分V:，M:与L:写实际拍号/细分，歌词用w:对应音节；打击乐声部的音高—鼓件映射依接收解析器/目标方言，缺映射时交独立事件表，不将音名字母视作通用鼓件。MusicXML打击乐用unpitched/display-step/display-octave显示谱位，note的instrument id回指score-instrument；part-list的midi-instrument/midi-unpitched依目标鼓表指定播放号（MusicXML 1–128，转换raw MIDI 0–127）。主唱/合成器写pitch、duration、part/voice，按divisions核小节满拍。生成后分别试听副歌hook辨识、build是否把听觉导向入口，以及bass和kick是否仍可分辨。
+通用谱编译时，ABC将踢鼓、军鼓、帽、bass、hook和主唱分V:，M:与L:写实际拍号/细分，歌词用w:对应音节；打击乐声部的音高—鼓件映射依接收解析器/目标方言，缺映射时交独立事件表，不将音名字母视作通用鼓件。MusicXML打击乐用unpitched/display-step/display-octave显示谱位，note的instrument id回指score-instrument；part-list的midi-instrument/midi-unpitched依目标鼓表指定播放号（MusicXML 1–128，转换raw MIDI 0–127）。主唱/合成器写pitch、duration、part/voice，按divisions核小节满拍。生成后分别试听副歌hook辨识、build是否把听觉导向入口，以及bass和kick是否仍可分辨。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。

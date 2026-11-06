@@ -1,0 +1,20 @@
+{
+  "reference_libraries": {
+    "benchmark": {
+      "label": "作品方法原子库",
+      "path": "benchmark",
+      "owner": "laohu-benchmark",
+      "purpose": "Source identity and provenance, observed work units, method atoms, category usage logs and rebuildable category search indexes.",
+      "records": {
+        "sources": "sources/SRC-<id>.json",
+        "atoms": "<category>/atoms/ATM-<id>.json",
+        "usage": "<category>/usage/YYYY-MM.jsonl",
+        "derived_index": "<category>/index.sqlite3"
+      }
+    }
+  },
+  "compatibility": {
+    "works": "Existing works/<category>/<work-name>/ project paths and workspace.py behavior remain unchanged.",
+    "work_category_benchmark": "works/benchmark/<work-name> remains an independent benchmark analysis project and is not the atom library."
+  }
+}

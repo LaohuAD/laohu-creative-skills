@@ -20,7 +20,7 @@ description: 用户明确要 House 舞曲编曲或以 House 录音为声音目�
 
 1. **先定地板。** 沿用宿主已确认的速度；未指定时以 4/4 起步。kick 每拍落下，clap/snare 在第 2、4 拍标出 backbeat；闭合 hi-hat 或 shaker 以反拍八分音符维持高频运动，开放 hi-hat 只在乐句尾或段落交界增加。只有用户锁定的参考曲明确采用无 backbeat、半拍或其他拍型时，才替换该拍点职责，并记录新的定位声部。
 2. **让低音与地板互锁。** 写短 bass cell，以根音或和弦目标音承接和声；默认在 kick 之间加入反拍/切分起音，避免每拍复制 kick。需要更重、更整齐时，可让根音与部分 kick 同位，其余音符仍填空隙。低音起音避开 kick 瞬态密集处；重叠时先改音长或移开其中一个起音，再判断是否需要音色分层。
-3. **用反拍和弦给循环身份。** 若歌曲已有和弦，保留根音与原有进行；在反拍用短键盘/吉他 voicing，优先保留共同音并让内声部小步移动。若获准创作和声，先按低音目标音与旋律结构音筛选候选和弦，再挑适合反拍短奏的转位。七和弦、九和弦、sus 音只在旋律或已选参考支持时采用，不为“像 House”强塞爵士和弦。
+3. **用反拍和弦给循环身份。** 依主文区分音乐来源状态：用户锁定或本轮要求忠实转换的和弦，保留根音与进行；作者暂定和声只在本轮获准改进时回作曲步骤检查结构音、低音目标与句尾，再决定是否改写。反拍用短键盘/吉他 voicing，优先保留共同音并让内声部小步移动。创作或获准重写时，按低音目标音与旋律结构音筛选候选和弦，再挑适合反拍短奏的转位。七和弦、九和弦、sus 音只在旋律或已选参考支持时采用，不为“像 House”强塞爵士和弦。
 4. **给循环一个可记住的前景。** 选主唱短句、合成器音型、采样或和弦节奏中的一个承担钩子；它必须与 bass cell 的空隙互补。主唱入句和关键词处减少同时起音，回应只占句尾或明确的呼吸位置。
 5. **以增减层组织段落。** 先让 kick、bass 和核心钩子能独立成立，再按乐段加入/移除打击细节、和弦层、反应音或高频纹理。每次段落变化先选一两个维度（音区、细分密度、和弦长度、低频重量、音色明暗）改变；若用户要 hypnotic 稳定循环，核心材料可不变，只让细节缓慢活动。不要为了“副歌”自动制造 EDM riser/drop。
 
@@ -41,14 +41,16 @@ description: 用户明确要 House 舞曲编曲或以 House 录音为声音目�
 
 ## 提示词、谱面与 MIDI 落实
 
-AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.md)，保留其 V4 三段和完整包顺序；下列句式只提供 House 的声音决定，不是平台语法保证。填写实际 BPM、主唱音区和段落标签，人声与纯器乐选一条，不把另一条的占位文字投喂。
+AI 生成时读取宿主[生成控制 Reference](../../references/ai-generation.md)，按其项目三字段职责组织 Style Prompt 和完整包顺序；V4 只用于核对嵌入标签的外层格式，不决定字段职责或声音方法。下列句式只提供 House 的声音决定，不是平台语法保证。填写实际 BPM、主唱音区和段落标签，人声与纯器乐选一条，不把另一条的占位文字投喂。
 
 人声方向的 Style Prompt 起句：
 
+最终 Style Prompt 以宿主蓝图确定的 BPM、拍号、曲式、段落长度和回返为准；本子级默认只作起点。
 ```text
-Global Metadata: House, 124 BPM in 4/4, steady four-on-floor pulse, backbeat on beats 2 and 4, offbeat eighth-note motion, <energy arc and production space>.
+
+Global Metadata: House, <final blueprint BPM> in <final blueprint meter>, steady four-on-floor pulse, backbeat on beats 2 and 4, offbeat eighth-note motion, <energy arc and production space>.
 Vocal Details: <confirmed singer identity and register>; use a short repeated chant/sample hook when the loop itself is foreground, or a clear melodic lead when the lyric carries the narrative; place phrase starts and held words at <actual lyric/phrase points>.
-Arrangement: kick on each beat; clap/snare on beats 2 and 4; closed hat on offbeat eighths; syncopated bass fills selected kick gaps; short offbeat chord stabs; keep verse layers lean, let pre-chorus add one chosen layer, and make the chorus hook repeat over the stable floor; replies occupy phrase gaps.
+Arrangement: kick on each beat; clap/snare on beats 2 and 4; closed hat on offbeat eighths; syncopated bass fills selected kick gaps; short offbeat chord stabs; keep verse layers lean, let pre-chorus add one chosen layer, and make the chorus hook repeat over the stable floor; replies occupy phrase gaps. Follow <final blueprint section order, lengths and returns>.
 ```
 
 将下面一条可复制句式写入 `Vocal Details`，并填入真实段落/歌词位置；只选一条主动作：
@@ -61,15 +63,15 @@ Arrangement: kick on each beat; clap/snare on beats 2 and 4; closed hat on offbe
 纯器乐方向改用项目栏 `Motif / Front Identity` 与 `Instrumental Form`：
 
 ```text
-Global Metadata: House, 124 BPM in 4/4, steady four-on-floor pulse, offbeat eighth-note motion, <energy arc and production space>.
+Global Metadata: House, <final blueprint BPM> in <final blueprint meter>, steady four-on-floor pulse, offbeat eighth-note motion, <energy arc and production space>.
 Motif / Front Identity: <one lead synth, guitar, sample or chord-rhythm hook; register and repeat identity>.
-Arrangement: kick on each beat; clap/snare on 2 and 4; bass answers in selected kick gaps; short offbeat chords; <entry/exit and one chosen layer change per section>.
+Arrangement: kick on each beat; clap/snare on 2 and 4; bass answers in selected kick gaps; short offbeat chords; <entry/exit and one chosen layer change per section>. Follow <final blueprint section order, lengths and returns>.
 Instrumental Form: <actual section order, hook return/variation, transition and loop ending>.
 ```
 
 MIDI/谱面以 4/4 每小节 4 个 QN 为计位起点；第 `n` 小节起点 `bar_qn=4(n-1)`。默认 kick 起音 `bar_qn+0,1,2,3`，clap/snare 为 `+1,+3`，闭合高频在 `+0.5,+1.5,+2.5,+3.5`；bass 只挑与低音目标相合的若干拍间位置，和弦钩子先挑一至两个拍间落点，不把所有格子填满。可调工作力度为 kick 96、clap 88、hat 56、bass 82、和弦 70（MIDI 1–127）；按实际音源重设并保留相对主次。短和弦 MIDI gate 可先取 0.25 QN（十六分音符时值），节奏组后续起音仍留在原拍轴；谱面音值、休止和 staccato 只按实际作曲标记，不从 MIDI gate 自动推导。音符与鼓件编译、移调和奏法映射按宿主[输出契约 Reference](../../references/output-contracts.md)；鼓声用目标解析器/记谱软件支持的打击乐映射，不以旋律音名伪装。
 
-写 ABC/MusicXML 时，将四踩 kick 与第 2、4 拍 backbeat 写成各自的真实节奏声部，将反拍 hat/和弦写在 `&` 对应的八分位置；bass 的休止就是实际休止，短和弦是否 staccato 由作曲决定。ABC 用目标 parser 支持的 percussion 声部/标记；MusicXML 用目标软件支持的无音高打击谱或分开的节奏轨。若软件不支持该打击语法，保留鼓件名称—拍位映射表，并把可播放事件交给 MIDI，不把 kick/clap 写成假旋律音高。字段、解析与时值校验按[输出契约 Reference](../../references/output-contracts.md)。
+写 通用谱编译时，ABC/MusicXML 时，将四踩 kick 与第 2、4 拍 backbeat 写成各自的真实节奏声部，将反拍 hat/和弦写在 `&` 对应的八分位置；bass 的休止就是实际休止，短和弦是否 staccato 由作曲决定。ABC 用目标 parser 支持的 percussion 声部/标记；MusicXML 用目标软件支持的无音高打击谱或分开的节奏轨。若软件不支持该打击语法，保留鼓件名称—拍位映射表，并把可播放事件交给 MIDI，不把 kick/clap 写成假旋律音高。字段、解析与时值校验按[输出契约 Reference](../../references/output-contracts.md)。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
 
 ## 返回宿主并验收
 

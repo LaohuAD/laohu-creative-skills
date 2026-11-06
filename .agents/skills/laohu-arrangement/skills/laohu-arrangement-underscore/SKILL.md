@@ -61,7 +61,7 @@ Instrumental Form: <cue-in and cue-out; cue-by-cue dramatic function; motif stat
 
 将 cue 计划转成符号/事件底稿时，每个声部事件用绝对 `onset_qn` 与 `offset_qn`，以及可选的独立 `midi_gate_qn`、力度和 cue/section 标识。已给真实时码和素材 fps 时，按同一版本的时间轴与速度图换算；自由速度/时码无拍轴时，先保持绝对时间点或 tempo map，不制造等间隔小节。没有画面仅有叙事草案时，用 `cue_start_qn + <相对拍位>` 表达探索性位置并标“未同步”，不可声称 hit point 对齐。MIDI 力度起点按声部职责定：主题/显著 hit 高于持续床层，低层留动态余量；Note Off 后仍有释放的声源须核实际尾音长度与 cue-out，不能将 MIDI gate 当成音响静音时刻。
 
-ABC/MusicXML 只能精确写出已确定拍轴和音乐事件：主题音符用实际音高/时值，持续音 tie，真正静默写休止，节奏打击按目标软件支持的 percussion mapping。cue-in/out、timecode、帧率、同步音效等作为伴随 cue 表元数据，不伪造为 ABC 音符或 MusicXML 的通用时间码字段。对话/画面锁定后复核谱面速度图及事件位置；独立草案只保留相对小节/拍位。声音自动化另用已核实的目标 DAW 控制格式，详见[生成控制 Reference](../../references/ai-generation.md)与[输出契约 Reference](../../references/output-contracts.md)。
+通用谱编译时，ABC/MusicXML 只能精确写出已确定拍轴和音乐事件：主题音符用实际音高/时值，持续音 tie，真正静默写休止，节奏打击按目标软件支持的 percussion mapping。cue-in/out、timecode、帧率、同步音效等作为伴随 cue 表元数据，不伪造为 ABC 音符或 MusicXML 的通用时间码字段。对话/画面锁定后复核谱面速度图及事件位置；独立草案只保留相对小节/拍位。声音自动化另用已核实的目标 DAW 控制格式，详见[生成控制 Reference](../../references/ai-generation.md)与[输出契约 Reference](../../references/output-contracts.md)。 YuE2 外部 ABC 的事件选择与投影由主 Skill 统一处理，见[YuE2 外部谱编译](../../references/yue2.md)。
 
 ## 返回宿主与验收
 
