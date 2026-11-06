@@ -176,7 +176,7 @@ class LibraryTests(unittest.TestCase):
         self.assertEqual(library.stats(self.root)["atoms_by_category"], {})
         self.assertTrue(library.validate(self.root)["ok"])
         self.assertEqual(library.validate(self.root)["index_state"], "empty")
-        self.assertEqual([path.name for path in self.root.iterdir()], ["catalog.sqlite3", "sources"])
+        self.assertCountEqual([path.name for path in self.root.iterdir()], ["catalog.sqlite3", "sources"])
         self.assertFalse((self.root / "sources" / "atoms").exists())
         self.assertFalse((self.root / "language").exists())
         self.assertFalse((self.root / "usage").exists())
