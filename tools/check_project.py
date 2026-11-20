@@ -2,6 +2,7 @@
 """Offline project checks. Reserved entries and explicit scaffolds are informational."""
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import re
@@ -16,6 +17,11 @@ SKILLS = Path(".agents/skills")
 PACKAGE = SKILLS / "laohu/references/release.json"
 IGNORED = {".git", "tmp", ".tmp", "output", ".cache", "works", "knowledge",
            "node_modules", "__pycache__", ".venv"}
+STYLE_INDEX = Path(".agents/skills/laohu-motion/templates/styles/index.json")
+STYLE_INDEX_SHA256 = "644e99aca4d5254cef5e58e671bfc87428fc53c5fc0b6a4b09f5c54a9066f20e"
+STYLE_SOURCE_REPOSITORY = "https://github.com/wqb578/code-animation-341-styles"
+STYLE_SOURCE_COMMIT = "01576924a2b316d1f11ae33f75d3c005e8781451"
+STYLE_SOURCE_INDEX_SHA256 = "5649497294ff60d0ae1a33780ab59ea7e3bad1f5f777b566ecc23c37aaccdd27"
 
 
 def load_module(path, name):
@@ -30,6 +36,18 @@ def release_api(root):
 
 
 def project_files(root):
+    skill_root = root / SKILLS
+    vendor_library = skill_root / "laohu-motion/assets/motion-library/openmotion"
+
+    def is_private_library(path):
+        if path == vendor_library:
+            return True
+        owner = path.parent
+        if path.name != "benchmark" or not (owner / "SKILL.md").is_file():
+            return False
+        return (owner.parent == skill_root or
+                (owner.parent.name == "skills" and owner.parent.parent.parent == skill_root))
+
     def walk(directory):
         for path in sorted(directory.iterdir()):
             if path.name in IGNORED:
@@ -37,7 +55,8 @@ def project_files(root):
             if path.is_symlink():
                 yield path
             elif path.is_dir():
-                yield from walk(path)
+                if not is_private_library(path):
+                    yield from walk(path)
             else:
                 yield path
     yield from walk(root)
@@ -48,6 +67,50 @@ def markdown_targets(text):
     prose = re.sub(r"^\s*(`{3,}|~{3,}).*?^\s*\1\s*$", "", text, flags=re.M | re.S)
     prose = re.sub(r"(`+).*?\1", "", prose)
     return re.findall(r"!?\[[^\]\n]*\]\((<[^>]+>|[^\s)]+)(?:\s+[^)]*)?\)", prose)
+
+
+def pinned_raw_style_entries(root):
+    """Return byte-pinned preserved style source files eligible for source-link reporting."""
+    index_path = root / STYLE_INDEX
+    try:
+        raw = index_path.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != STYLE_INDEX_SHA256:
+            return {}
+        data = json.loads(raw)
+    except (OSError, ValueError, TypeError):
+        return {}
+    source = data.get("source", {}) if isinstance(data, dict) else {}
+    if (data.get("format") != "laohu.motion.style-library/1"
+            or source.get("repository") != STYLE_SOURCE_REPOSITORY
+            or source.get("commit") != STYLE_SOURCE_COMMIT
+            or source.get("sourceIndexSha256") != STYLE_SOURCE_INDEX_SHA256
+            or not isinstance(data.get("entries"), list)):
+        return {}
+    verified = {}
+    for item in data["entries"]:
+        if not isinstance(item, dict):
+            continue
+        style_id = item.get("id")
+        content_path = item.get("contentPath")
+        if (not isinstance(style_id, str) or not re.fullmatch(r"[A-Z0-9]+", style_id)
+                or content_path != f"entries/{style_id}.md"):
+            continue
+        source_hash = item.get("sourceSha256")
+        local_hash = item.get("localSha256")
+        if (not isinstance(source_hash, str) or source_hash != local_hash
+                or not re.fullmatch(r"[0-9a-f]{64}", source_hash)):
+            continue
+        content = root / STYLE_INDEX.parent / content_path
+        try:
+            if content.is_symlink() or hashlib.sha256(content.read_bytes()).hexdigest() != local_hash:
+                continue
+            resolved = content.resolve()
+            if root not in resolved.parents:
+                continue
+        except OSError:
+            continue
+        verified[resolved] = {"id": style_id, "sha256": local_hash}
+    return verified
 
 
 def check_interface(path, name, read_scalar):
@@ -132,10 +195,18 @@ def evaluation_material_errors(data):
 
 
 def child_file_errors(directory):
-    """A deployed third-level Skill directory may contain only its SKILL.md."""
+    """Check deployable files, leaving the owner's private research library local."""
     allowed = directory / "SKILL.md"
     errors = []
-    for path in directory.rglob("*"):
+    def deployable_files():
+        for entry in directory.iterdir():
+            if entry.name == "benchmark" and not entry.is_symlink() and entry.is_dir():
+                continue
+            yield entry
+            if entry.is_dir() and not entry.is_symlink():
+                yield from entry.rglob("*")
+
+    for path in deployable_files():
         if path.is_symlink():
             errors.append(f"third-level Skill contains a symlink: {path.relative_to(directory)}")
         elif path.is_dir():
@@ -150,6 +221,8 @@ def child_file_errors(directory):
 def check_project(root):
     root = root.resolve()
     errors, notes = [], []
+    source_link_warnings = []
+    pinned_style_files = pinned_raw_style_entries(root)
     active, reserved, scaffolds = [], [], []
     valid_child_skill_files = set()
     scaffold_parent_dirs = set()
@@ -339,7 +412,12 @@ def check_project(root):
                     if root not in linked.parents and linked != root:
                         errors.append(f"local link leaves project: {relative} -> {raw}")
                     elif not linked.exists():
-                        errors.append(f"broken Markdown link: {relative} -> {raw}")
+                        source = pinned_style_files.get(path.resolve())
+                        if source:
+                            source_link_warnings.append(
+                                f"source-carried unresolved Markdown link: {relative} [{source['id']} sha256:{source['sha256']}] -> {raw}")
+                        else:
+                            errors.append(f"broken Markdown link: {relative} -> {raw}")
                 if path.parent == root and path.name.startswith("README"):
                     commands = re.findall(r"^\|\s*/(laohu(?:-[a-z0-9]+)*)\s*\|", text, re.M)
                     for command in commands:
@@ -365,9 +443,12 @@ def check_project(root):
         if listed_order != expected_order:
             errors.append(f"README capability table order differs from display order: {readme_name}")
     notes.append(f"{len(active)} public entries; {len(reserved)} reserved directories; {len(scaffolds)} explicit scaffolds (not active entries)")
+    if source_link_warnings:
+        notes.append(f"{len(source_link_warnings)} unresolved links carried by hash-pinned raw style-source entries are reported separately")
     notes.append("Checks cover metadata, UI fields, display-order tree and README ordering, formal-entry README coverage, declared eval materials, root-level discovery, deployed third-level boundaries, links, syntax and release consistency; not full YAML, semantic routing or creative quality.")
     return {"ok": not errors, "errors": errors, "notes": notes, "active": active,
-            "reserved": reserved, "scaffolds": scaffolds}
+            "reserved": reserved, "scaffolds": scaffolds,
+            "sourceLinkWarnings": source_link_warnings}
 
 
 def main():

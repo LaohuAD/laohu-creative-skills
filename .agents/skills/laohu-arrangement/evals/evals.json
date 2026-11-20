@@ -436,6 +436,21 @@
       "context": "待运行的普通技术请求；仅检查 ABC 2.1 voice→staff 分组判读，不含旋律材料，不是音乐范例或质量证据。"
     },
     {
+      "id": "ordinary-chinese-vocal-package-locked-campus-lyrics",
+      "type": "normal",
+      "prompt": "这首《含羞草》是我锁定的歌词，想把它做成适合 AI 歌唱生成器使用的完整人声输入包，气质清新、含蓄，像校园里第一次喜欢一个人。保留原词、标点、行序和段落，按需决定唱法细节，给我可以直接使用的完整结果。\n\n[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+      "input_files": [],
+      "expected_behavior": [
+        "交付可独立复制的 Style Prompt 与完整 Controlled Lyrics，默认 Style Prompt 正文和标签内控制指令均用英语，不另交默认中文演唱摘要；只有用户明确要求中文控制时这两部分才都改用中文。",
+        "从实际歌词关系选出承重完整乐句（例如“不敢看你，又盼你看见”的对照或“喜欢你，喜欢你”的复沓），落实相应重音、连断、时值/元音与有目的的回返；不要以固定旋律或情绪词代替音乐动作。",
+        "若主唱承载主要情感/意义且没有另定听觉中心，明确实际主唱记忆材料（节奏/轮廓/重音/落点及首次、回返）和必要表演线，再按同一主唱事件安排实际采用的节奏、低音与和弦/持续层在起音、延展、释放和下一入口处的支撑，随后加入回应/装饰；记忆 hook 可与歌词转折/承转句不同。局部风格模板不可省去共同蓝图已定关系。不把“主唱在前景”或单一动作下限当作完整设计，也不因一般人声包强加清唱义务。",
+        "在真正的转折/主唱交接处，说明主唱句尾/入口、低音/和声落点、脉冲和乐器回应如何组成一个有位置的事件；写明保持项、主要变化与恢复/收束，不强迫所有声部一起扩张。",
+        "Controlled Lyrics 保留全部锁定歌词文字、标点、段落顺序与原始换行；如需新标签，按蓝图与已有结构/授权条件处理。不得把控制语法说成平台保证。",
+        "Style Prompt 按项目 1000 Unicode code point 工作预算压缩，优先保留锁定项、声音身份、可辨材料、groove 和关键交接；没有真实试听时不声称唱法已验证。"
+      ],
+      "context": "以本对话已锁定的《含羞草》原稿检查普通中文创作请求下的全包输出与原词保真；此原稿是回归输入，不是唱法范例或质量通过证据。"
+    },
+    {
       "id": "chat-language-does-not-select-control-language",
       "type": "normal",
       "prompt": "我用中文和你沟通，但下面是已经定稿的英文歌词。请整理成可以投喂 AI 歌唱生成器的完整人声包，歌词一字不改，没特别指定控制指令语言。\n\n[Verse 1]\nThe hallway holds the afternoon\nI save your place beside the window\n\n[Chorus]\nIf you turn, I will be here",
@@ -564,6 +579,19 @@
       "context": "检查普通 pop-ballad 人声包是否由本地设计决定驱动；期望验证同一声音蓝图进入 Prompt 与局部控制的一致性，以及 V4 仅作格式参考，不是完整 Agent 行为或音频质量证据。"
     },
     {
+      "id": "bilingual-complete-vocal-package-preserves-source-lyrics",
+      "type": "normal",
+      "prompt": "请把下面这段已锁定歌词做成中英双语 AI 歌唱输入。两套都要完整、音乐决定等价，组名请唯一；原词、段名、顺序、标点和排版保持原样。\n\n[Verse 1]\n不敢看你，又盼你看见\n\n[Chorus]\n喜欢你，喜欢你\n满心的花，都向着你啊",
+      "input_files": [],
+      "expected_behavior": [
+        "分别输出两组独立的 Style Prompt 与完整 Controlled Lyrics，组名唯一；英语组用英文正文/标签控制，中文组用中文正文/标签控制。",
+        "两组的 Global Metadata、Vocal Details、Arrangement 标签名都保持英文，核心声音决定和记忆材料关系等价；不默认追加中文人类摘要。",
+        "两组嵌入完全相同、未翻译的歌词原文；段名、顺序、标点与原始布局相同，仅按源稿锁定和已授权例外处理；各自可用独立 --section 完成保真校验。",
+        "根据“又盼你看见”的对照和“喜欢你，喜欢你”的重复识别可选承重句与回返位置，不预设一条唯一旋律或固定配器。"
+      ],
+      "context": "使用现有校园歌词任务中的原句检查双语机器输入的完整性、等价性与歌词锁；不是唱法范例或质量通过证据。"
+    },
+    {
       "id": "locked-reggae-tempo-and-form-override-child-starting-default",
       "type": "normal",
       "prompt": "这次请明确按 Reggae 编一首有人声的完整歌曲。速度锁定 92 BPM、4/4；曲式锁定 Intro 4 小节 → V1 8 → Chorus 8 → V2 8 → Chorus 8 → Outro 4。主唱演唱“若你回头，我还在这里”，歌词不要改。请给可投喂的 Style Prompt 与嵌入歌词控制。",
@@ -587,6 +615,45 @@
         "围绕歌词完整乐句关系与主题材料说明一个可辨的音乐核心及其位置，保留可选择空间，不把角色名称或流派标签当作已设计的旋律材料。"
       ],
       "context": "仅检查主题意象/材料提及与用户明确选择风格之间的路由边界，不限定具体方案。"
+    },
+    {
+      "id": "vocal-center-background-rhythm-feedback-no-audio",
+      "type": "normal",
+      "prompt": "上一轮《含羞草》文字包写了 92 BPM、4/4、四音琵琶动机，soft kick 在 1/3 拍、dry clap 在 2/4 拍、稀疏八分音符、短 bass，副歌加一条 airy pad。歌词局部如下：\n\n[Chorus]\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n我用它生成了两首，听到背景节奏杂乱盖住人声，主唱音色和表演不突出；希望这首清唱或最小伴奏也有吸引力。现在只有文字包和这段听感反馈，没有音频。请给出可执行的局部蓝图/生成包修订及验证点，不改歌词、不创作新词。",
+      "input_files": [],
+      "expected_behavior": [
+        "把两首实际生成结果未达到用户听感目标记录为已有反馈证据；没有音频时不臆造具体声部、频段、动态或空间原因，也不把某一种制作修正说成已证实根因。",
+        "回到蓝图分别确定主唱记忆材料和承载歌词转折/承转的乐句，二者可以不同；把需要的声音身份与细微表演差异绑定到实际词句/位置，再按同一主唱事件安排鼓、bass、琵琶、pad 等相关声部的音区、起音、持续、密度、留白或回应，给出可执行的事件关系。",
+        "保留原歌词、段序和已给的节拍/编配事实作为现有输入；不臆写精确旋律音符、固定 dB/频点/插件值，不默认减鼓、加气声、加混响或仅写“vocal upfront”；拍轴连续不要求每层持续发声。",
+        "因为清唱/最小伴奏是本作明确目标，可提出同一人声在最小必要支撑与完整伴奏下的核听；没有实际音频/接口结果时，不声称声音效果、平台接受或验证通过，也不以两次不同生成推断单一编配因果。"
+      ],
+      "context": "基于两次生成后的真实用户听感目标建立回归分支；只有文字包和用户反馈，没有可供声学诊断的音频。本例检验是否回到主唱材料、表演与伴奏协作设计，不预设单一修正答案。"
+    },
+    {
+      "id": "ordinary-citypop-vocal-package-locked-campus-lyrics",
+      "type": "normal",
+      "prompt": "请把下面这首歌按 City Pop 编成适合 AI 歌唱生成器使用的完整人声输入包。气质清新、含蓄，像校园里第一次喜欢一个人，主唱是这首歌的主要吸引力。保留原词、标点、行序、段落标签与换行，给出完整可用的生成结果。\n\n[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 City Pop 子级及 AI 生成 Reference，保留其 band-led groove 语法；完整 Style Prompt/歌词控制从同一最终蓝图编译，不让局部模板替代共同材料、锁项或最终曲式。",
+        "主唱为主要吸引力时，依据实际歌词选出可回返的主唱记忆材料，写出可听的节奏/轮廓/重音/落点及首次和回返，并给必要的音色/表演线；不假称存在未提供的源旋律或精确音符。",
+        "把 kick/backbeat、切分 bass 与和弦/持续层对同一主唱事件的基础支撑写入 Style Prompt 或准确局部标签，再安排清音吉他等风格回应于实际句缝；保留 City Pop 声部职责与舞动感，不以泛化 sparse/soft、固定减鼓、气声或效果词代替关系设计。",
+        "输出完整可复制的人声包，默认英语 Style Prompt 和英语标签内控制；严格保持来源歌词、标点、行序、段落标签与换行，按项目 1000 Unicode code point 工作预算压缩；不声称平台接受或真实声音效果已验证。"
+      ],
+      "context": "跨风格普通人声生成案例；提示仅给风格、情绪、主唱吸引力与锁定歌词/结构，不给方法或评分答案。歌词复用本轮已锁定来源，非唱法范例或质量通过证据。"
+    },
+    {
+      "id": "ordinary-funk-vocal-package-locked-campus-lyrics",
+      "type": "normal",
+      "prompt": "请把下面这首歌按 Funk 编成适合 AI 歌唱生成器使用的完整人声输入包。气质清新、含蓄，像校园里第一次喜欢一个人，主唱是这首歌的主要吸引力。保留原词、标点、行序、段落标签与换行，给出完整可用的生成结果。\n\n[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 Funk 子级及 AI 生成 Reference，保留 Funk pocket、bass riff 与鼓组/短和弦切分的互锁；完整生成包从最终共同蓝图编译，局部 Funk 句式不能抹掉锁项或已定曲式。",
+        "主唱为主要吸引力时，依据实际歌词设计/标出可回返的主唱记忆材料及必要表演线，再以同一事件安排 bass、kick/ghost 与短和弦层的起音、时值、音区或让位/保持关系；可同位强化、错位、持续或休止，具体选择服务已定 groove，不预设统一减层。",
+        "让 Funk 节奏组保有 bass-led pocket 与短句回应，同时保证主唱记忆材料和承重词可辨；不以十六分密度、单一鼓型、泛化 sparse/soft、气声或效果词替代主唱与基础伴奏的实际关系。无源旋律时不伪称已有音符。",
+        "输出完整可复制的人声包，默认英语 Style Prompt 和英语标签内控制；严格保持来源歌词、标点、行序、段落标签与换行，按项目 1000 Unicode code point 工作预算压缩；不声称平台接受或真实声音效果已验证。"
+      ],
+      "context": "跨风格普通人声生成案例；提示仅给风格、情绪、主唱吸引力与锁定歌词/结构，不给方法或评分答案。歌词复用本轮已锁定来源，非唱法范例或质量通过证据。"
     },
     {
       "id": "instrumental-techno-one-bar-loop-generation-input",
@@ -701,6 +768,153 @@
       "context": "通用 ABC 2.1 回归，保护多声部、w: 与目标方言任务不被新 YuE2 分支收窄。"
     },
     {
+      "id": "original-melody-from-locked-campus-lyrics",
+      "type": "normal",
+      "prompt": "请为附件中的《含羞草》歌词创作一版原创旋律草案，只处理 Verse 1 和 Pre-Chorus。歌词锁定，没有旧旋律要保留，歌手音域未知。请给出实际音高与拍内时值，或能明确还原这些事件的谱面草案，并说明副歌还留有哪些创作选择。",
+      "input_files": [
+        "lyrics.txt"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏"
+        }
+      },
+      "expected_behavior": [
+        "读取 composition Reference；按完整语义/演唱乐句组织 Verse 1 与 Pre-Chorus，从自然朗读的句意重心落实实际起音、节奏重音、旋律轮廓/目标音、时值、休止与句尾落点，而非按歌词视觉行或单字平均切分。",
+        "歌词与副歌外的文字保持锁定；歌手音域未知时给可移调的中声区草案并标待试唱，不虚构高音极限或声乐已验证。",
+        "明确尚未写出的副歌旋律仍开放；不把创作意图、Style Prompt 或情绪标签冒称为已经完成的音符。"
+      ],
+      "context": "带有实际项目歌词文件的普通原创谱曲请求；歌词是已有真实创作材料，不是旋律范例或质量答案。"
+    },
+    {
+      "id": "revise-author-provisional-melody-draft",
+      "type": "normal",
+      "prompt": "附件里的 Lyrics 是锁定文本，ABC 是此前作出的作者草案，我还没有确认这条旋律；这次允许你改进，只处理 Verse 1 和第一个 Pre-Chorus。请先对照整句意思与现有音符，给出修订后的这部分旋律事件和必要的理由。不要覆盖附件原文件，也不要扩写其他乐段。",
+      "input_files": [
+        "lyrics.txt",
+        "draft.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "draft.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "把作者暂定谱与用户锁定的歌词分开处理：保留原文件，但依据本轮明确的改进授权实际调整指定范围的音符，而不是把现有 ABC 文件的存在推断成旋律已锁定。",
+        "结合完整歌词句法/语义乐句检查指定段中的起音、重音、旋律方向、结构音、时值、休止和落点；给出实际修订事件，避免只加抽象的“更抒情/更顺”说明。",
+        "改动限于 Verse 1 和第一个 Pre-Chorus；不改 Lyrics，不改动其他段落/全曲形式，不把修订稿说成试唱验证通过。"
+      ],
+      "context": "真实歌词与此前生成的 ABC 草案，用于检验“保留源文件”与“音乐事件仍可改进”的状态区分。"
+    },
+    {
+      "id": "faithful-locked-score-melody-projection",
+      "type": "normal",
+      "prompt": "请把附件中已经锁定的谱面整理为 YuE2 可用的 `melody` 模式 ABC。保留主唱与器乐两条声部的实际音高、起音、时值、休止、顺序和拍格；本次模式不需要和弦符号。歌词按附件原样提供。",
+      "input_files": [
+        "lyrics.txt",
+        "locked.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "locked.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "识别为忠实格式/模式转换：原谱的主唱与器乐音符、拍位、时值、休止和事件顺序原样投影，不因文件转换而优化旋律或补写音乐。",
+        "按明确的 melody 模式要求省略和弦符号，但不误删或重写两条单音声部；如源中某条器乐声部是休止，应保留该事实，不为了填满声部而造主题。",
+        "将 Lyrics 与锁定稿逐字符核对；说明原件保持不覆盖。结构检查只能证明投影/格式，不声称 YuE2 或云端已接受或演唱已遵从。"
+      ],
+      "context": "以真实锁定歌词和 native ABC 作为忠实转换输入；本例要检验转换边界，不把源曲当成需要改进的示范。"
+    },
+    {
+      "id": "phrase-map-versus-score-duration-release-and-rest",
+      "type": "normal",
+      "prompt": "我唱这一段时觉得句意接不住，换气也不自然。请对照歌词和谱子看看问题在哪里。这轮只检查，歌词和音符都先别改。",
+      "input_files": [
+        "lyrics.txt",
+        "locked.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "locked.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "从自然朗读和句意关系划分完整演唱乐句，再对照 ABC 的主唱事件与明确写出的休止；只在材料支持的位置建立对应。若歌词未逐音节绑定、不能唯一对齐，指出不确定范围，不编逐字映射。",
+        "分别说明谱面记出的音符时值、歌手在既定音符内的字尾释放/换气处理、以及主唱声部实际记出的休止；视觉换行或推测的气口不算谱面休止。",
+        "遵守本轮只检查的范围，不改锁定歌词或音符；把推断与原谱事实分开，不把纸面检查描述成已试听验证。"
+      ],
+      "context": "使用实际歌词与谱面核对完整句意和精确事件边界；材料没有附逐音节映射，评测检查是否诚实报告对齐证据的限度。"
+    },
+    {
+      "id": "simple-harmony-supports-structural-notes-and-hook-return",
+      "type": "normal",
+      "prompt": "附件中的歌词、主唱音符和段落顺序都锁定。我担心和弦太简单，请检查现有和弦是否支撑主旋律的长音、重音和句尾落点；相同的副歌句再次出现时也请核对和声关系。只提出有明确音乐理由的最小变化，没有必要就保留现状。",
+      "input_files": [
+        "lyrics.txt",
+        "locked.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "locked.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "读取 composition Reference，按旋律结构音、关键词/长音、句尾与段落职务核验和弦支撑，不以和弦数量、复杂度或“更丰富”为质量代理。",
+        "识别适合维持的重复/循环以及副歌回返；只有具体音符冲突或段落到达需要变化时才给最小和弦候选，并明确它怎样改善该处支撑。",
+        "不改锁定旋律、歌词或结构；核对建议时标明是否只是假设、待听，而不声称和声质量已通过试听。"
+      ],
+      "context": "将实际主唱谱与和弦符号作为检查输入；不预置“必须加和弦”或某一标准进行。"
+    },
+    {
+      "id": "three-inputs-share-one-musical-blueprint",
+      "type": "normal",
+      "prompt": "我准备把附件里的 Style Prompt、Lyrics 和 ABC 一起交给 YuE2。歌词已经定稿，ABC 是我自己的作曲草案。这三份东西一起用时，有没有哪里会互相打架或让生成结果跑偏？请指出具体位置，并给出尽量少改动的协调建议。",
+      "input_files": [
+        "style-prompt.txt",
+        "lyrics.txt",
+        "draft.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "style-prompt.txt": "Global Metadata: Guofeng electronic pop in D major, 4/4 at 96 BPM, with a steady, light pop pulse and a warm, youthful, gently buoyant character. Move from an intimate verse to a more open chorus, then settle softly at the end. Keep the midrange clear and the arrangement uncluttered.\n\nVocal Details: One female Mandarin lead, close and centered, with natural, clearly articulated Chinese diction. Follow the supplied Vocal melody exactly: keep its pitches, note onsets, durations, rests, and section order. Use relaxed conversational phrasing in the verses; let the pre-chorus gather energy without rushing the written notes. At each “含羞草，开花吧,” make the words and melodic landing easy to hear. In the Bridge, soften the delivery for the two questions; return with a fuller, confident lead in the Final Chorus, then ease back in the Outro. Avoid ad-libs or competing vocal lines that blur the lyrics.\n\nArrangement: Keep the supplied ABC chord symbols and vocal events unchanged; do not transpose, reharmonize, shorten, repeat, or reorder the form. Use the source score’s low, sparse guzheng-pluck role as quiet support, with short replies only in vocal phrase gaps and no doubling of the lead melody. Let restrained electronic bass follow the supplied harmony and provide a controlled low pulse; use light programmed percussion to maintain the groove without covering consonants, sustained vowels, or melodic rests. Keep any electronic sustain layer subtle and behind the lead. Do not add a competing instrumental lead.\n\nSection actions: Verse 1, bars 1–8, stays close and sparse. Pre-Chorus 1, bars 9–12, lifts gently while leaving space around the vocal. Chorus 1, bars 13–24, opens the pulse but keeps the lead clearly in front. Verse 2, bars 25–32, returns to the intimate texture. Pre-Chorus 2, bars 33–36, gathers energy again. Chorus 2, bars 37–48, is more energized than the first chorus without crowding the words. Bridge, bars 49–52, pulls the backing back for “你心里，也有花在开吗 / 会不会，也正朝着我呀.” Final Chorus, bars 53–64, is the fullest section while preserving the same vocal melody and chord progression. Outro, bars 65–68, softens and resolves within the written notes.\n",
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "draft.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "分别识别三种材料承担的内容：Lyrics 保存定稿歌词；ABC 记录其中已经写明的精确音符、时值、休止和和弦事件；Style Prompt 可以描述整体声音身份、自然表演方向与希望生成的配器角色。ABC 没有编码某个乐器的精确事件，不等于 Style 不能提出它作为目标伴奏。",
+        "核对三份实际附件。当前附带的 native.abc 中 Ins 声部记为休止，因此该文件没有编码古筝的具体音符/起音；这只能说明当前 native 的谱面内容，不能据此推断 Style 所说的“source score”一定没有古筝。完整包 README 将 native 指向另一份原始 ABC，而那份原谱含有古筝低位拨奏与电子低音声部；但原谱与 README 不在本案例提供的三个附件中。因此把 “Use the source score’s...” 视为需要确认其所指来源的表述，而非已证实错误：若当前三附件不足以定位它，应说明出处待核/询问指向；若能访问并核验原谱，则据可定位事件报告。",
+        "提出最小且有条件的协调：如果 “source score” 指随附 native.abc，应澄清古筝是希望模型生成的目标配器，避免暗示该 native 已编码古筝具体事件；如果它指向另一个原谱，先定位/引用该来源，再决定保留来源描述。稀疏古筝支撑和句缝短回应本身是可成立的配器方向，Ins 休止不构成冲突，也不要求删除该指导或补写 ABC。只有用户要求古筝/回应具有精确音高和拍位时，才提出经授权写入实际 Ins 事件。",
+        "继续核对三份材料中歌词、段落、速度/拍号、主唱事件、和弦符号及其他可证的冲突；若这些项目一致，允许如实报告未发现其他已确认冲突，不为满足评测而制造问题。Style 的自然配器方向不是拍内命令，本地文本核对也不证明 YuE2 云端已采纳或成品音质已通过。"
+      ],
+      "context": "把同一真实 YuE2 试验包的三份输入同时供给，检查跨输入一致性和精准事件边界；不是标准改写答案。"
+    },
+    {
+      "id": "instrumental-techno-neighbor-keeps-locked-loop-identity",
+      "type": "normal",
+      "prompt": "附件是我已锁定的四小节器乐循环。这次明确想把它用于 minimal techno，但保留 96 BPM、拍号、所有现有声部音符和循环接缝，不扩成带人声的歌曲。请给一段循环发展蓝图，指出可以变化的声音维度和需要保持的识别核。",
+      "input_files": [
+        "instrumental-loop.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "instrumental-loop.abc": "%abc-2.1\nX:1\nT:Window-Cleaned Four-Bar Loop\nM:4/4\nL:1/8\nQ:1/4=96\nK:Am\n%%score (Kick Bass Pad Lead)\nV:Kick clef=perc stafflines=1 name=\"Kick\"\nV:Bass clef=bass name=\"Bass\"\nV:Pad clef=treble name=\"Pad\"\nV:Lead clef=treble name=\"Lead\"\n\nV:Kick\n%%MIDI channel 10\n%%MIDI drummap C 36\nC2 z2 C2 z2|C2 z2 C2 z2|C2 z2 C2 z2|C2 z2 C2 z2|\nV:Bass\nA,,2 z E, A,,2 z G,,|F,,2 z C, F,,2 z A,,|E,,2 z G,, E,,2 z B,,|G,,2 z D, G,,2 z D,|\nV:Pad\n[A,CEG]8|[F,ACE]8|[G,CEG]8|[G,B,DE]8|\nV:Lead\nz e z g a2 e2|f e z c2 z A2|e g a2 z g e2|d e g2 e d B2|\n"
+        }
+      },
+      "expected_behavior": [
+        "将明确的 minimal techno 目标路由到 techno 子级，并沿用器乐分支；不因歌曲/人声默认生成 Lyrics、演唱控制或 verse/chorus。",
+        "实际读取附件并保留其 96 BPM、拍号、四小节音符事件及 1/3 拍 kick 关系；不能用子级的四踩 kick 或默认长曲式覆盖用户锁定 loop。",
+        "以稳定循环和可辨主题为基础，给出有位置的疏密/音色/音区/空间演变候选；一次只突出有限主变量，不强加 drop 或固定 128 小节结构。",
+        "如只交文字发展蓝图，说明循环接缝和效果尚未实际连续播放核验。"
+      ],
+      "context": "以真实的既有器乐 ABC loop 检查明确 Techno 子级与锁定节奏源的优先关系；材料本身不预置目标发展答案。"
+    },
+    {
       "id": "authorized-existing-tags-reorder-and-reprise-propagates",
       "type": "normal",
       "execution_mode": "write",
@@ -720,6 +934,134 @@
         "用 `sections` 和按需的 `phrase_id`/`lyric_anchor` 更新音乐对应关系，按实际乐句安排入口、重音、时值、延音、气口、句尾和伴奏。",
         "保留原始词稿，核对标签/调序/回返的具体差异，确定核对后的本轮演唱稿后再同步更新蓝图和所有受影响输出；未受影响锁定项保持。",
         "现有标签稿不使用 `--structure-open` 解锁；不反复确认已获准的同一变更。"
+      ]
+    },
+    {
+      "id": "locked-existing-structure-stays-strict-in-embedded-package",
+      "type": "boundary",
+      "execution_mode": "write",
+      "prompt": "请为附件编译普通嵌入式人声包。歌词段标签、顺序、正文、标点和换行全都锁定；这轮只开放音色与伴奏。",
+      "input_files": [
+        "lyrics.txt",
+        "locked.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "locked.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "只生成指定格式需要的控制内容；歌词文本、既有标签、顺序和排版严格保持。",
+        "不因音乐侧开放而推定结构开放；已有标签时不使用 `--structure-open`，按原有严格校验合同处理。",
+        "不把静态包/校验结果说成平台接受、演唱效果或音质证据。"
+      ]
+    },
+    {
+      "id": "locked-mandarin-lyrics-open-melody-syncopated-groove",
+      "type": "normal",
+      "execution_mode": "write",
+      "prompt": "请为《含羞草》设计一版 4/4、带切分入口的轻律动新旋律和伴奏。歌词字符、标点、段落顺序和换行完全锁定；附件 ABC 是作者暂定谱稿，本轮允许重作。暂无人声录音。",
+      "input_files": [
+        "lyrics.txt",
+        "draft.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "draft.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "辨明歌词锁定、旋律为作者暂定且本轮开放；保持歌词字符/标点/段序/换行，先改音乐安排解决重音或气口冲突。",
+        "按完整语义/演唱乐句设计切分入口、承重词重音、时值、气口、句尾及伴奏支撑；不把歌词行当小节，也不把普通话字调机械映射到音高。",
+        "保留原谱源并标明新本轮演唱稿基线；按适用范围更新蓝图与所有输出，不把纸面方案称为试听或真实可唱验证。"
+      ]
+    },
+    {
+      "id": "locked-melody-explicitly-authorized-lyric-revision",
+      "type": "normal",
+      "execution_mode": "write",
+      "prompt": "附件《含羞草》的 ABC 主旋律及除 [Verse 1] 第 1–2 小节对应句子外的全部歌词都锁定；我允许只为适配旋律而微调那句，若原句合适就保留。请完成本轮修改并给出完整可用版本。",
+      "input_files": [
+        "lyrics.txt",
+        "locked.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "locked.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "锁定旋律时先说明目标小节/乐句的实际拍位、音符容量、重音/延音/气口冲突和受保护文本，再将这些信息交作词处理。",
+        "仅使用本轮对指定乐句的改词授权；其余歌词与旋律保持，不扩大到邻句或整曲改写。",
+        "保留原始词稿并逐项核对增删替换，之后建立本轮演唱稿并传播到蓝图/输出；不以改基线追认越权变化，也不重复确认已授权修改。"
+      ]
+    },
+    {
+      "id": "popballad-bridge-can-contrast-or-breathe-without-new-cause",
+      "type": "normal",
+      "execution_mode": "write",
+      "prompt": "请按 pop-ballad 风格给这首《含羞草》安排桥段与最后回返。现有桥段是两个尚未确认双向关系的问题；不要新增事实、责任、决定或恋情成立的情节，歌词不改。交付可供后续谱曲和生成的音乐蓝图。",
+      "input_files": [
+        "lyrics.txt"
+      ],
+      "fixture_setup": {
+        "files": {
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏"
+        }
+      },
+      "expected_behavior": [
+        "保留 pop-ballad 72 BPM 本地默认，明确它不是父级通用 96 BPM 的替代。",
+        "桥段可由关系对照、停留、换气或转向履职；不得要求 V2 新事实/责任/选择作为触发门槛。",
+        "8 小节只作工作起点；按实际完整乐句决定长度并重算后续段落、小节总数与纸面时长，不改锁定歌词。"
+      ]
+    },
+    {
+      "id": "same-verified-sung-version-compiles-embedded-and-yue2",
+      "type": "normal",
+      "execution_mode": "write",
+      "prompt": "请把附件这首歌分别整理成普通嵌入式 Controlled Lyrics 人声包，以及 YuE2 的三个输入。歌词和音乐事件以附件与现有蓝图为准，不另改歌词、段序或旋律。",
+      "input_files": [
+        "style-prompt.txt",
+        "lyrics.txt",
+        "draft.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "style-prompt.txt": "Global Metadata: Guofeng electronic pop in D major, 4/4 at 96 BPM, with a steady, light pop pulse and a warm, youthful, gently buoyant character. Move from an intimate verse to a more open chorus, then settle softly at the end. Keep the midrange clear and the arrangement uncluttered.\n\nVocal Details: One female Mandarin lead, close and centered, with natural, clearly articulated Chinese diction. Follow the supplied Vocal melody exactly: keep its pitches, note onsets, durations, rests, and section order. Use relaxed conversational phrasing in the verses; let the pre-chorus gather energy without rushing the written notes. At each “含羞草，开花吧,” make the words and melodic landing easy to hear. In the Bridge, soften the delivery for the two questions; return with a fuller, confident lead in the Final Chorus, then ease back in the Outro. Avoid ad-libs or competing vocal lines that blur the lyrics.\n\nArrangement: Keep the supplied ABC chord symbols and vocal events unchanged; do not transpose, reharmonize, shorten, repeat, or reorder the form. Use the source score’s low, sparse guzheng-pluck role as quiet support, with short replies only in vocal phrase gaps and no doubling of the lead melody. Let restrained electronic bass follow the supplied harmony and provide a controlled low pulse; use light programmed percussion to maintain the groove without covering consonants, sustained vowels, or melodic rests. Keep any electronic sustain layer subtle and behind the lead. Do not add a competing instrumental lead.\n\nSection actions: Verse 1, bars 1–8, stays close and sparse. Pre-Chorus 1, bars 9–12, lifts gently while leaving space around the vocal. Chorus 1, bars 13–24, opens the pulse but keeps the lead clearly in front. Verse 2, bars 25–32, returns to the intimate texture. Pre-Chorus 2, bars 33–36, gathers energy again. Chorus 2, bars 37–48, is more energized than the first chorus without crowding the words. Bridge, bars 49–52, pulls the backing back for “你心里，也有花在开吗 / 会不会，也正朝着我呀.” Final Chorus, bars 53–64, is the fullest section while preserving the same vocal melody and chord progression. Outro, bars 65–68, softens and resolves within the written notes.\n",
+          "lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "draft.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "两个包从同一 `sections`/phrase mapping 和本轮演唱稿基线编译，不静默改词、段序、标点、换行或音乐事件。",
+        "普通嵌入式保留现有英语默认、标签语法与严格比较；YuE2 使用 Style + 裸歌词 + native ABC，不添加 `w:` 或不支持的声乐硬字段，也不强制一字一音。",
+        "真实受限制接口、生成遵从和声音质量没有材料时分别标未知；仅报告静态输入结构，不冒称行为/质量验证。"
+      ]
+    },
+    {
+      "id": "authorized-sung-version-diff-propagates-through-syncopated-outputs",
+      "type": "normal",
+      "execution_mode": "write",
+      "prompt": "第一个歌词文件是原稿，第二个是用户已经批准用于本轮演唱的版本，两者只在 [Bridge] 的位置不同、正文完全相同。请按第二份歌词和 4/4 切分律动准备完整蓝图、生成输入与谱面交付。",
+      "input_files": [
+        "source-lyrics.txt",
+        "current-sung-lyrics.txt",
+        "draft.abc"
+      ],
+      "fixture_setup": {
+        "files": {
+          "source-lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "current-sung-lyrics.txt": "[Verse 1]\n窗台的含羞草\n细叶间藏着小花苞\n满教室的喧闹\n偏偏听清你的笑\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Verse 2]\n多想放学的路再长\n长过操场，长过夕阳\n把一路蝉鸣分你一半\n再分你半个橘色傍晚\n\n[Bridge]\n你心里，也有花在开吗\n会不会，也正朝着我呀\n\n[Pre-Chorus]\n一页书遮住半张脸\n遮不住唇边的笑\n\n[Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Final Chorus]\n含羞草，开花吧\n把这欢喜开满整个夏\n不敢看你，又盼你看见\n脸颊上藏不住的红霞\n喜欢你，喜欢你\n满心的花，都向着你啊\n\n[Outro]\n含羞草，开花吧\n开满有你的夏",
+          "draft.abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=96\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:D\n% verse 1\nV: Vocal\n\"D\" D8 E8 F16 | \"Bm\" E8 F8 A16 | \"D\" F4 E4 D8 E16 | \"Asus2\" F4 A4 B8 A16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"D\" A8 F8 E16 | \"D\" E4 F12 D16 | \"Asus2\" E8 F8 A16 | \"D\" F4 E4 F8 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 1\nV: Vocal\n\"Bm\" A4 B4 d8 B16 | \"Asus2\" A4 B4 d8 e16 | \"Bm\" A8 B8 d16 | \"Asus2\" B4 d4 B8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 1\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"D\" E4 F4 A4 B4 d16 | \"D\" A4 B4 d8 e16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"D\" A4 B4 d16 z8 | \"Asus2\" B4 d4 B8 A8 z8 | \"D\" A4 B4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% verse 2\nV: Vocal\n\"Bm\" F4 A4 B8 A16 | \"D\" F4 E4 F8 B16 | \"D\" B4 d4 e8 d8 z8 | \"D\" B4 d4 e8 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" e4 d4 B4 A4 F16 | \"Bm\" A4 B4 d8 B16 | \"D\" A4 B4 d4 B4 A16 |\nV: Ins\nZ | Z | Z | Z |\n% pre-chorus 2\nV: Vocal\n\"Bm\" F4 A4 B8 d16 | \"D\" B4 d4 e8 d16 | \"Bm\" A8 B8 d16 | \"Asus2\" F4 B4 d8 e16 |\nV: Ins\nZ | Z | Z | Z |\n% chorus 2\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 F12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 B4 A4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B8 A8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" B4 d4 e8 d16 | \"D\" B4 d4 B4 A4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" F4 A4 B16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" A4 B4 d8 B8 z8 | \"D\" F4 A4 B4 d4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% bridge\nV: Vocal\n\"Bm\" A8 B8 d8 z8 | \"Asus2\" A4 B4 d4 e4 d4 e12 | \"Bm\" B8 d8 B8 z8 | \"Asus2\" A4 F4 A4 B4 A4 B12 |\nV: Ins\nZ | Z | Z | Z |\n% final chorus\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"Bm\" B8 A8 d12 z4 | \"D\" A4 B4 d8 e16 | \"D\" d4 e4 d4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d8 B8 z8 | \"Asus2\" F4 A4 B4 d4 e16 | \"D\" d4 e4 d8 B16 | \"Asus2\" A4 B4 d4 B4 e16 |\nV: Ins\nZ | Z | Z | Z |\nV: Vocal\n\"Bm\" A4 B4 d16 z8 | \"Asus2\" B4 d4 e16 z8 | \"Asus2\" d4 B4 A8 B8 z8 | \"D\" A4 d4 e4 B4 d16 |\nV: Ins\nZ | Z | Z | Z |\n% outro\nV: Vocal\n\"D\" A8 B8 d12 z4 | \"D\" B8 A8 F12 z4 | \"D\" A8 B8 A16 | \"D\" F4 E4 D24 |\nV: Ins\nZ | Z | Z | Z |\n"
+        }
+      },
+      "expected_behavior": [
+        "将输入的本轮演唱稿视为既有授权范围内的用户版本，但仍先与原始词稿核出桥段调序并确认正文未变。",
+        "建立新的 `sections`/乐句对应，按完整语义乐句安排切分入口、重音、时值和气口；不把视觉换行当乐句或小节。",
+        "以已核对的演唱稿作为 `--lyrics`/下游比较基线，将同一修订传播到所有受影响蓝图与输出；不改未受影响的锁项。"
       ]
     },
     {

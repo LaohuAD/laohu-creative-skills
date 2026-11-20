@@ -1,0 +1,43 @@
+<template>
+<style>
+#welcome-intro{position:absolute;inset:0;overflow:hidden}
+#intro-prompt-view{position:absolute;inset:0;text-align:center}
+#intro-lockup{position:absolute;left:100px;top:75px;display:flex;align-items:center;gap:16px;font-size:37px;font-weight:750;letter-spacing:-1px}#intro-lockup img{width:42px;height:42px}
+#intro-invitation{position:absolute;top:237px;left:180px;width:1560px;margin:0;font:600 85px/1.1 Welcome Serif,serif;letter-spacing:-4px}
+#intro-invitation span{background:linear-gradient(transparent 30%,#a7f985 30%,#a7f985 90%,transparent 90%)}
+#intro-small{position:absolute;top:355px;left:0;width:100%;font-size:22px;color:#527067}
+#intro-prompt{position:absolute;left:330px;top:465px;width:1260px;height:265px;border:2px solid #e5ebe6;border-radius:27px;background:#fff;box-shadow:0 12px 35px #4c8b9233,0 0 0 12px #ffffff44;text-align:left}
+#intro-typed{position:absolute;top:37px;left:40px;font-size:40px;white-space:nowrap;overflow:hidden;width:1080px;height:54px}
+#intro-typed span{border-right:3px solid #60935b;padding-right:5px}
+#intro-tools{position:absolute;left:40px;right:40px;bottom:32px;display:flex;align-items:center;gap:28px;font-size:25px;color:#8b9890}
+#intro-tools b{font-size:24px;background:#f1ffea;border-radius:14px;padding:8px 17px;color:#467339;font-weight:600}
+#intro-send{margin-left:auto;width:68px;height:68px;background:#172a20;color:white;border-radius:50%;display:grid;place-items:center;font-size:42px}
+#intro-cursor{position:absolute;left:1515px;top:667px;width:42px;height:54px;background:#121713;clip-path:polygon(0 0,95% 55%,55% 61%,80% 96%,60% 100%,38% 68%,7% 91%);filter:drop-shadow(1px 1px 1px white)}
+#intro-hero{position:absolute;inset:0;text-align:center;perspective:1200px;transform-style:preserve-3d;color:#fffdf0}
+#intro-kicker{position:absolute;top:200px;left:0;width:100%;font-size:42px;font-style:italic;letter-spacing:1px}
+#intro-brand{position:absolute;top:300px;left:140px;width:1640px;font-size:124px;line-height:1.1;font-weight:750;letter-spacing:-4px}
+#intro-headline{position:absolute;top:445px;left:100px;width:1720px;font-size:295px;line-height:1;font-weight:850;letter-spacing:-12px;white-space:nowrap}
+#intro-brand .film-letter,#intro-headline .film-letter{position:relative;transform-style:preserve-3d}
+.intro-depth{position:absolute;inset:0;color:#165549;pointer-events:none}
+</style>
+<div id="welcome-intro" class="film-scene" data-composition-id="welcome-intro" data-width="1920" data-height="1080" data-duration="4.6666666667">
+ <div class="film-sky"></div>
+ <div id="intro-prompt-view"><div id="intro-lockup"><img src="assets/brand-mark.svg" alt=""><span data-var-text="brand">OpenMotion</span></div><h1 id="intro-invitation" data-var-text="invitation">Let’s create Motion design</h1><div id="intro-small">Great work starts here.</div>
+ <div id="intro-prompt"><div id="intro-typed"><span data-var-text="prompt">Introducing OpenMotion</span></div><div id="intro-tools"><span>＋</span><span>↖</span><b>✦ Motion design⌄</b><div id="intro-send">↑</div></div></div><div id="intro-cursor"></div></div>
+ <div id="intro-hero"><div id="intro-kicker">Introducing</div><div id="intro-brand" data-var-text="brand">OpenMotion</div><div id="intro-headline" data-var-text="headline">MOTION</div></div>
+</div>
+<script>
+(() => {
+  const letters=WelcomeArt.letters('#intro-brand, #intro-headline',true);
+  const tl=gsap.timeline({paused:true});
+  tl.fromTo('#intro-typed',{clipPath:'inset(0 100% 0 0)'},{clipPath:'inset(0 0% 0 0)',duration:1.65,ease:'steps(24)'},0.35);
+  tl.fromTo('#intro-cursor',{x:385,y:340},{x:0,y:0,duration:1.55,ease:'power3.inOut'},0.8);
+  tl.fromTo('#intro-send',{scale:1},{scale:0.88,duration:0.1,yoyo:true,repeat:1},2.4);
+  tl.fromTo('#intro-prompt-view',{y:0,opacity:1},{y:760,opacity:0,duration:0.62,ease:'power3.in'},2.62);
+  tl.fromTo('#intro-kicker',{opacity:0,y:90},{opacity:1,y:0,duration:0.45,ease:'power3.out'},2.68);
+  tl.fromTo(letters,{opacity:0,scale:0.05,rotationX:-125,rotationY:95,y:180,z:-300},{opacity:1,scale:1,rotationX:0,rotationY:0,y:0,z:0,duration:0.63,stagger:0.026,ease:'power3.out'},2.6);
+  tl.to('#intro-kicker',{opacity:0,duration:0.18},4.36);
+  tl.to('#intro-brand .film-letter',{y:-35,opacity:0,stagger:0.012,duration:0.2},4.43);
+  window.__timelines['welcome-intro']=tl;
+})();
+</script></template>

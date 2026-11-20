@@ -40,7 +40,9 @@
 
 不同方案需要比较时沿用同一组真实维度；材料缺失处明确未提供，不虚构效果评分、成本或耗时。能以文字顺序解释清楚就不强造流程图；因果、分支或空间关系确实重要时再画图，并给可阅读的文字说明。
 
-展示 ASR 虚拟剪辑与后续动画交接时，`edit-plan` 保留编辑决定，`timeline` 保留唯一编译时钟；HTML 直接读取 timeline 的 occurrence、源/目标区间、词/句段精度、删除映射、问题与版本信息，不能自己压缩静音、重排片段或重算连续目标时间。剪后顺序应保留连续话语作为主阅读视图；需要核对时再展开源段、原始 ASR、删除理由和多来源时间，不把一个词做成一张卡或把每个词都当动画触发。动画栏只有存在真实、同版本的语义锚点/phase 消费结果时才显示；否则省略，不留空栏制造“已经同步”的印象。交接信息必须带 project id、integer revision 和 planSha256，旧版本反馈要标过期。
+展示 ASR 虚拟剪辑与后续动画交接时，`edit-plan` 保留编辑决定，`timeline` 保留唯一编译时钟；HTML 直接读取 timeline 的 occurrence、源/目标区间、词/句段精度、删除映射、问题与版本信息，不能自己压缩静音、重排片段或重算连续目标时间。剪后顺序应保留连续话语作为主阅读视图；需要核对时再展开源段、原始 ASR、删除理由和多来源时间，不把一个词做成一张卡或把每个词都当动画触发。动画栏只有存在真实、同版本的语义锚点/phase 消费结果时才显示；否则省略，不留空栏制造“已经同步”的印象。交接信息带 project id、integer revision 和 planSha256；解释注释与动画绑定同时带 `annotationSha256`，因为 Motion 可以在不改剪辑哈希和冻结时钟的前提下更新独立注释层。旧版本反馈要按对应哈希标过期。
+
+若 `timeline.annotations[]` 存在，将每条注释放在它实际解析到的段落或词旁，并清楚分开三个来源：`userNote` 是用户备注，`analysisNote` 是内容/观看解释，`motionDirection` 是导演说明。展示 `annotation.id`、source/segment/token/occurrence 身份及 `resolvedTargets[].targetRange`，避免相同文本的重复出现互相串位。Motion 的对象/状态/素材/组件/phase/transition/audio event 只在 `motionBinding` 有真实 consumer 和有效锚点时显示；可用本地组件 ID 和片段 phase 做链接/标记，但说明文字、字幕或一个已有组件名本身都不能证明运动已执行。`resolution=not-in-retained-timeline` 时将备注保留在源证据/删除对照区，不把它贴到临近保留句。用户备注不得复制进 raw ASR、显示字幕或 spoken correction；句段精度时不生成词级动画时间。此视图使用同一份 annotations/timeline blueprint，不另造一套低保真动画摘要。
 
 原音区间试听与剪后拼接试听分开显示；前者只能播放真实 source range，不能标成剪后试听。若没有真实可访问的剪后媒体，就禁用 join-preview 控件并说明缺少实体输出，不用 timeline、SRT 或波形图假装播放。审阅反馈导出时绑定当前 timeline 版本，只作为待 Agent 复核的意见；HTML 按钮不直接应用剪切/重排、不更改 timeline，也不伪称审批。
 

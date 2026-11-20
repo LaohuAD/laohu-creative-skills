@@ -2,6 +2,8 @@
 
 本文件把实际图像、版面、封面、镜头、动作和动画关系接到下游的视觉/制作决定。读图时先确认用户要观者看见什么、目标尺寸/介质是什么、原作被观察的是成品还是提示词/草图。只有构思说明时可分析作者明写的视觉意图，不把它当成已经实现的画面。
 
+用户明确认可或要求拆解实际动画/视频的动效、视觉风格、转场或实现方式时，按[动画样片与动态风格分析](animation-analysis.md)读取真实视频及其前后上下文，记录关键连续帧和时钟证据后再解释对象与运动关系；本文件只承接其中的可见构图、形态、空间和观看路径观察。读后把这些观察交回 animation-analysis，按证据范围决定转成局部动作配方、风格候选或其他下游材料。仅有静态截图时按本文件做静态观察，不推演动态效果。
+
 ## 观察依赖双重识别的形态
 
 当同一可见形态允许两种不同读法时，把两种识别分别拆开；它们可以同时成立，也可以在观看过程中先后被识别。说明实际可见的轮廓、朝向、部分遮挡、颜色/材质线索和彼此位置是什么；第一种读法由哪些形态线索成立，第二种读法又靠哪条新增或重新解释的线索出现。再说明它们是否需要移动视点或改变观看距离才成立。若当前任务需要判断两种读法分别支持什么用途、动作预期或文化意味，就把这些解释连回具体形态、命名和场景条件，说明它们怎样支持或偏离读者可能带入的熟悉理解；没有来源或语境依据时保留为条件推论，不泛化成所有观者都会如此理解。不要只写“像某物”“有反差”或“有双关”，也不把预想的观众反应说成已测效果。
@@ -25,7 +27,7 @@
 | laohu-cover：封面、信息图与关系图 | 目标发布位置、受众、标题/副标题、内容证据、画布比例/缩略尺寸；决定单位为题目入口及其后续层级 | 核对标题文字的第一文字落点、图像是否指向标题承诺、下一层证据/解释承接什么；比较标题与对象的面积、字底、距离、方向和真实文本优先级；信息图对照结论、关系、证据节点与图例，不用海报式对比改含义 | 返回第一落点为何由此承担、下一阅读对象、需要强调的通道和目标尺寸复核；交封面版面、排印和图形关系 Reference，成品后检查缩图与真实邻接 |
 | laohu-image：新图像与参考转化 | 创作简报、主体身份、动作/关系、机位观察、媒介能力、用户锁定元素；输入可能只有文字、参考图或成图 | 将用户目标拆为可见主体、关系、构图、光色、背景职责与可变化项；比较参考和目标在视点、层级、动作/状态与质感上的具体差别；成图才核对提示词意图是否真实出现 | 返回需保留的形态/关系、开放变量和可以由生成工具实现的可见描述；交图像创作/提示词拼装，成图核对身份、关系和用户锁定项，不把提示词愿望记作图像事实 |
 | laohu-assets（视觉资产身份）：角色/场景/服装/道具/状态，不含声音身份（声音身份见[时间与声音分析](time-and-sound-analysis.md)） | 剧本/设定的具名视觉资产、复用范围、身份特征、当前状态和下游生产要求 | 对照同一资产在不同场次/镜头中的身份一致性、状态变化、因果来源与仅属临时变体的部分；辨认资产本身、连续状态和本镜表现差别，不从视觉资料推断声线身份 | 返回视觉资产候选/身份基线、当前状态、差异来源与引用场次；交资产子 Skill 判定能否复用、是否要拆出变体、给视频/图像生成什么稳定描述 |
-| laohu-motion：图形叙事、动画和动态信息 | 已定内容、面向观众的观看路径、真实图层/素材/时长预算；单位为状态、动作、相邻帧与声音事件 | 看对象如何出现、位移、转化、聚合/拆分、关系如何改变；比较每次运动前后的可读信息、空间关系和停留；文本图形、几何形状、颜色等只有承担明确内容职责时才编码 | 返回可读关系、状态变化和未定的视觉变量；交 motion 方法与模块决定运动策略、参数和代码，渲染后检查真实帧，不以文字脚本推断动态效果通过 |
+| laohu-motion：图形叙事、动画和动态信息 | 当前创作的内容、观看路径、图层/素材/时长预算；研究样片时则用用户指认的实际版本、前后片段、时钟、关键帧和连续帧 | 看对象如何出现、位移、转化、聚合/拆分，关系如何改变；比较运动前后的可读信息、空间关系和停留；研究样片的具体播放、连续帧、帧率和声音证据按[动画样片与动态风格分析](animation-analysis.md)执行 | 返回可读关系、状态变化和未定视觉变量；样片研究还要说明证据覆盖到哪一段，以及属于局部效果、完整风格候选还是经源码核实的实现；再交 Motion 本地方法/资源或 Analysis brief，渲染后按真实帧检查 |
 | laohu-video：画面构图、动作和镜头 | 实际剧本文本、场景/时空、目标观看任务、提示词或渲染视频；镜头、视频段与动作节拍分别判断 | 对照剧本动作和实际画面可见证据、连续状态、焦点转移、接触结果、镜头切换前后新信息；观察观众还原空间/因果的最低充分线索 | 返回应出现的可见事件、观看点、首尾状态、参考来源和未知项；交视频 Skill 挑景别/机位/摄影/剪辑，生成后按实片修正 |
 | laohu-htmlshow 与 laohu-htmlshow-gzh：文章页面呈现 | 已有正文/Markdown、阅读媒介、主题组件、真实移动/桌面视口；文本职责不自动授权改写内容 | 比较页面中标题—导语—正文—说明/引用—图片的真实阅读层级、段落切分、边距/间距、图文邻接和组件节奏；只凭主题名不判断实际模板效果 | 返回页面要保留的文本层级、阅读路径和素材位置；由 HTML Skill 按组件库、文章结构和规范装配，浏览器预览/脚本校验后按真实输出复核 |
 
@@ -50,7 +52,7 @@
 - 封面焦点、真实阅读路径、版面与排印：[visual-hierarchy.md](../../laohu-cover/references/visual-hierarchy.md)、[design-composition.md](../../laohu-cover/references/design-composition.md)、[layout-typography.md](../../laohu-cover/references/layout-typography.md)、[relationship-diagrams.md](../../laohu-cover/references/relationship-diagrams.md)。
 - 图像创意简报、观看证据、光色与样式：[creative-brief-and-reference.md](../../laohu-image/references/creative-brief-and-reference.md)、[image-content-and-viewing.md](../../laohu-image/references/image-content-and-viewing.md)、[light-color-and-style.md](../../laohu-image/references/light-color-and-style.md)。
 - 资产身份、连续性与交付：[identity-continuity-and-variants.md](../../laohu-assets/references/identity-continuity-and-variants.md)、[script-candidates-and-integration.md](../../laohu-assets/references/script-candidates-and-integration.md)、[image-handoff-and-output.md](../../laohu-assets/references/image-handoff-and-output.md)。
-- 运动、镜头、动作和视频输出：[laohu-motion/SKILL.md](../../laohu-motion/SKILL.md)、[action-and-camera.md](../../laohu-video/references/action-and-camera.md)、[audiovisual-and-editing.md](../../laohu-video/references/audiovisual-and-editing.md)、[timing-and-shots.md](../../laohu-video/references/timing-and-shots.md)。
+- 动画样片与已认可动效的证据、局部方法和交接：[animation-analysis.md](animation-analysis.md)；Motion 本地风格、配方与运行资源由 [laohu-motion/SKILL.md](../../laohu-motion/SKILL.md) 及其 `templates/runtime/laohu-showreel/` 维护。分镜/写实动作再按需读取 [action-and-camera.md](../../laohu-video/references/action-and-camera.md)、[audiovisual-and-editing.md](../../laohu-video/references/audiovisual-and-editing.md)、[timing-and-shots.md](../../laohu-video/references/timing-and-shots.md)。
 - HTML/公众号页面结构：[presentation.md](../../laohu-htmlshow/references/presentation.md)、[laohu-htmlshow-gzh/SKILL.md](../../laohu-htmlshow-gzh/SKILL.md)。
 
 图像来源与媒介证据边界遵循项目的 [exemplar-study.md](../../../../references/exemplar-study.md)。这些方法入口保存各自工具规格和制作流程；本适配只负责把原作证据落实到当前视觉决定。

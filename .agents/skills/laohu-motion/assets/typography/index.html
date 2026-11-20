@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>动画字体样张｜老胡造梦技能</title>
+  <link rel="stylesheet" href="gallery.css">
+  <script src="gallery-data.js" defer></script>
+  <script src="gallery.js" defer></script>
+</head>
+<body>
+  <header class="masthead wrap">
+    <a class="identity" href="#top">老胡造梦技能 <span>／</span> Motion</a>
+    <nav aria-label="页面导航">
+      <a href="#compare">中文对照</a>
+      <a href="#catalog">全部字样</a>
+    </nav>
+  </header>
+  <main class="wrap" id="top">
+    <section class="title-row" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title">动画字体样张</h1>
+        <p class="catalog-count" id="counts">正在读取字体目录</p>
+      </div>
+      <form class="tool" id="sample-form">
+        <div class="input-row">
+          <label for="sample-text">换一句试排</label>
+          <button class="text-button" id="reset" type="button">还原样句</button>
+        </div>
+        <textarea id="sample-text" rows="1" spellcheck="false">如果有一天</textarea>
+        <div class="tool-footer">
+          <div class="examples" aria-label="试排示例">
+            <button type="button" data-example="先在前面等风口">先在前面等风口</button>
+            <button type="button" data-example="基础设施 A-19">基础设施 A-19</button>
+          </div>
+          <div class="size-control">
+            <label for="sample-size">字号</label>
+            <input id="sample-size" type="range" min="30" max="100" value="56">
+            <output id="size-value" for="sample-size">56 px</output>
+          </div>
+        </div>
+      </form>
+    </section>
+    <section class="comparison" id="compare" aria-labelledby="compare-title">
+      <div class="section-head">
+        <h2 id="compare-title">中文字形对照</h2>
+        <select id="compare-set" aria-label="选择对照字组">
+          <option value="expanded">新收录的九款</option>
+          <option value="classic">文楷、快乐体、宋体与黑体</option>
+        </select>
+      </div>
+      <div id="featured" class="featured expanded"></div>
+      <div id="classic" class="featured" hidden></div>
+    </section>
+    <section class="inventory" id="catalog" aria-labelledby="catalog-title">
+      <div class="section-head">
+        <h2 id="catalog-title">全部字体文件</h2>
+        <label class="family-search"><span>查找字体</span>
+          <input id="family-filter" type="search" placeholder="试搜「行书」「手记」或字体名" autocomplete="off">
+        </label>
+      </div>
+      <div class="guide-row">
+        <nav id="jump-list" aria-label="字体类别"></nav>
+        <p id="visible-count" role="status"></p>
+      </div>
+      <p class="reading-note">纯西文字体遇到中文原句时，显示拉丁字母和数字样张，并列出原句的缺字。</p>
+      <div id="font-groups"></div>
+      <p id="empty-results" class="empty" hidden>没有匹配的字体。可换字族名或类别继续查找。</p>
+    </section>
+    <footer class="page-footer">
+      <p>样张使用本地文件。正式制作时按字体 ID 核对文件与许可。</p>
+      <a href="README.md">字体库与排印用法</a>
+    </footer>
+    <noscript><p class="empty">开启浏览器的 JavaScript 后即可载入字体并试排。</p></noscript>
+  </main>
+</body>
+</html>

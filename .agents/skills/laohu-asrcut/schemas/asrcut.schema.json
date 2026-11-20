@@ -1,13 +1,129 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "laohu.asrcut/1",
-  "title": "laohu-asrcut edit plan and compiled timeline",
+  "title": "laohu-asrcut edit plan, compiled timeline, and audio postproduction",
+  "$comment": "Caption design and caption manifest contracts are versioned separately in ./caption.schema.json under $defs.captionDesignV1/V2 and $defs.captionManifestV1/V2.",
   "oneOf": [
     { "$ref": "#/$defs/editPlan" },
     { "$ref": "#/$defs/timeline" },
-    { "$ref": "#/$defs/audioArtifact" }
+    { "$ref": "#/$defs/editOps" },
+    { "$ref": "#/$defs/animationHandoff" },
+    { "$ref": "#/$defs/roomToneRequest" },
+    { "$ref": "#/$defs/audioArtifact" },
+    { "$ref": "#/$defs/audioPlan" },
+    { "$ref": "#/$defs/audioPostprocessReceipt" }
   ],
   "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "nonemptyText": { "type": "string", "minLength": 1 },
+    "pacingProfile": { "enum": ["standard-narration", "compact", "natural"] },
+    "pauseKind": { "enum": ["head", "tail", "micro", "clause", "sentence", "paragraph", "emphasis"] },
+    "pauseFunction": { "enum": ["emotional-beat", "system-sound", "visual-action", "user-locked", "visual-comprehension"] },
+    "pauseException": { "enum": ["retake-adjacent", "speech-error-adjacent"] },
+    "editorialPause": {
+      "type": "object", "required": ["id", "sourceId", "sourceRange", "pauseKind", "reason"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonemptyText" }, "sourceId": { "$ref": "#/$defs/nonemptyText" },
+        "sourceRange": { "$ref": "#/$defs/range" }, "pauseKind": { "$ref": "#/$defs/pauseKind" },
+        "reason": { "$ref": "#/$defs/nonemptyText" }, "function": { "$ref": "#/$defs/pauseFunction" }
+      }, "additionalProperties": false
+    },
+    "editorialBeat": {
+      "type": "object", "required": ["id", "sourceId", "segmentIds", "role"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonemptyText" }, "sourceId": { "$ref": "#/$defs/nonemptyText" },
+        "segmentIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/nonemptyText" } },
+        "role": { "$ref": "#/$defs/nonemptyText" }
+      }, "additionalProperties": false
+    },
+    "editOps": {
+      "type": "object", "required": ["format", "expectedRevision", "expectedPlanSha256", "operations"],
+      "properties": {
+        "format": { "const": "laohu.asrcut.edit-ops/1" },
+        "expectedRevision": { "type": "integer", "minimum": 1 }, "expectedPlanSha256": { "$ref": "#/$defs/sha256" },
+        "pacingProfile": { "$ref": "#/$defs/pacingProfile" },
+        "pauseWindows": { "type": "array", "items": { "$ref": "#/$defs/editorialPause" } },
+        "narrativeBeats": { "type": "array", "items": { "$ref": "#/$defs/editorialBeat" } },
+        "operations": { "type": "array", "items": { "$ref": "#/$defs/editOperation" } }
+      }, "additionalProperties": false
+    },
+    "editOperation": {
+      "type": "object", "required": ["id", "op"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonemptyText" },
+        "op": { "enum": ["delete-range", "trim-pause", "reorder", "repeat", "spoken-correction", "set-display-text"] },
+        "sourceId": { "$ref": "#/$defs/nonemptyText" }, "sourceRange": { "$ref": "#/$defs/range" },
+        "reason": { "$ref": "#/$defs/nonemptyText" }, "pauseRange": { "$ref": "#/$defs/range" },
+        "pauseKind": { "$ref": "#/$defs/pauseKind" }, "pauseException": { "$ref": "#/$defs/pauseException" },
+        "visualSeamRisk": { "$ref": "#/$defs/nonemptyText" }, "visualMaskHint": { "$ref": "#/$defs/nonemptyText" },
+        "relation": { "const": "repeated-content" }, "revertedFromDecisionId": { "$ref": "#/$defs/nonemptyText" }, "restore": { "const": true },
+        "keptOccurrenceIds": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonemptyText" } },
+        "keptTokenIds": { "type": "array", "items": { "$ref": "#/$defs/nonemptyText" } },
+        "occurrenceIds": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonemptyText" } },
+        "occurrenceId": { "$ref": "#/$defs/nonemptyText" }, "newOccurrenceId": { "$ref": "#/$defs/nonemptyText" },
+        "segmentId": { "$ref": "#/$defs/nonemptyText" }, "tokenId": { "type": ["string", "null"] },
+        "tokenIds": { "type": "array", "items": { "$ref": "#/$defs/nonemptyText" } },
+        "text": { "type": "string" }, "spokenText": { "$ref": "#/$defs/nonemptyText" },
+        "status": { "enum": ["candidate", "confirmed"] },
+        "verification": { "oneOf": [{ "$ref": "#/$defs/spokenEditVerification" }, { "$ref": "#/$defs/pauseVerification" }] }
+      },
+      "allOf": [
+        { "if": { "properties": { "op": { "enum": ["delete-range", "trim-pause"] } } }, "then": { "required": ["sourceId", "sourceRange", "reason"] } },
+        { "if": { "properties": { "op": { "const": "trim-pause" } } }, "then": { "required": ["pauseRange", "pauseKind"], "properties": { "verification": { "$ref": "#/$defs/pauseVerification" } } } },
+        { "if": { "properties": { "op": { "const": "reorder" } } }, "then": { "required": ["occurrenceIds", "reason"] } },
+        { "if": { "properties": { "op": { "const": "repeat" } } }, "then": { "required": ["occurrenceId", "newOccurrenceId", "reason"] } },
+        { "if": { "properties": { "op": { "const": "spoken-correction" } } }, "then": { "required": ["sourceId", "segmentId", "spokenText"], "properties": { "verification": { "$ref": "#/$defs/spokenEditVerification" } } } },
+        { "if": { "properties": { "op": { "const": "set-display-text" } } }, "then": { "required": ["segmentId", "text"] } }
+      ], "additionalProperties": false
+    },
+    "spokenEditVerification": {
+      "type": "object", "required": ["method", "listeningStatus", "sourceRange", "reviewedBy", "sourceSha256"],
+      "properties": { "method": { "const": "audio-listening" }, "listeningStatus": { "const": "listened" },
+        "sourceRange": { "$ref": "#/$defs/range" }, "reviewedBy": { "$ref": "#/$defs/nonemptyText" },
+        "sourceSha256": { "$ref": "#/$defs/sha256" }, "alignmentStatus": { "enum": ["not-provided", "aligned", "failed"] } },
+      "additionalProperties": false
+    },
+    "pauseVerification": {
+      "oneOf": [
+        { "type": "object", "required": ["method", "listeningStatus", "sourceRange", "reviewedBy", "finding", "sourceSha256"],
+          "properties": { "method": { "const": "audio-listening" }, "listeningStatus": { "const": "listened" },
+            "sourceRange": { "$ref": "#/$defs/range" }, "reviewedBy": { "$ref": "#/$defs/nonemptyText" },
+            "finding": { "$ref": "#/$defs/nonemptyText" }, "sourceSha256": { "$ref": "#/$defs/sha256" } }, "additionalProperties": false },
+        { "type": "object", "required": ["method", "sourceRange", "sourceSha256", "userNoteId", "excerpt", "targetDurationSamples"],
+          "properties": { "method": { "const": "user-direction" }, "sourceRange": { "$ref": "#/$defs/range" }, "sourceSha256": { "$ref": "#/$defs/sha256" },
+            "userNoteId": { "$ref": "#/$defs/nonemptyText" }, "excerpt": { "$ref": "#/$defs/nonemptyText" },
+            "targetDurationSamples": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }
+      ]
+    },
+    "roomToneReplacement": {
+      "type": "object", "required": ["presentationId", "sourceId", "roomToneSourceRange"],
+      "properties": { "presentationId": { "$ref": "#/$defs/nonemptyText" }, "sourceId": { "$ref": "#/$defs/nonemptyText" },
+        "roomToneSourceRange": { "$ref": "#/$defs/range" }, "targetRange": { "$ref": "#/$defs/range" },
+        "sourceSha256": { "$ref": "#/$defs/sha256" }, "probeSha256": { "$ref": "#/$defs/sha256" } },
+      "additionalProperties": false
+    },
+    "roomToneRequest": {
+      "type": "object", "required": ["format", "projectId", "revision", "planSha256", "replacements"],
+      "properties": { "format": { "const": "laohu.asrcut.room-tone/1" }, "projectId": { "$ref": "#/$defs/nonemptyText" },
+        "revision": { "type": "integer", "minimum": 1 }, "planSha256": { "$ref": "#/$defs/sha256" },
+        "replacements": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/roomToneReplacement" } } },
+      "additionalProperties": false
+    },
+    "animationHandoff": {
+      "type": "object", "required": ["format", "project", "planSha256", "timelineSha256", "sampleRateHz", "durationSamples", "pacingProfile", "silenceProbe", "narrativeBeats", "availablePauseWindows", "visualCueCandidates", "visualSeamRisks"],
+      "properties": {
+        "format": { "const": "laohu.asrcut.animation-handoff/1" }, "project": { "$ref": "#/$defs/editPlan/properties/project" },
+        "planSha256": { "$ref": "#/$defs/sha256" }, "timelineSha256": { "$ref": "#/$defs/sha256" },
+        "sampleRateHz": { "type": "integer", "minimum": 1 }, "durationSamples": { "type": "integer", "minimum": 0 },
+        "pacingProfile": { "oneOf": [{ "$ref": "#/$defs/pacingProfile" }, { "type": "null" }] },
+        "silenceProbe": { "oneOf": [{ "type": "null" }, { "type": "object", "required": ["sourceId", "sourceSha256", "probeSha256"],
+          "properties": { "sourceId": { "$ref": "#/$defs/nonemptyText" }, "sourceSha256": { "$ref": "#/$defs/sha256" }, "probeSha256": { "$ref": "#/$defs/sha256" } }, "additionalProperties": false }] },
+        "narrativeBeats": { "type": "array", "items": { "type": "object", "required": ["role", "occurrenceId", "segmentIds", "targetRange", "firstWordAnchor", "lastWordAnchor"] } },
+        "availablePauseWindows": { "type": "array", "items": { "type": "object", "required": ["pauseKind", "targetRange", "startSec", "endSec", "durationSec", "sourceParts", "evidence"] } },
+        "visualCueCandidates": { "type": "array", "items": { "type": "object", "required": ["occurrenceId", "tokenId", "targetRange", "timingPrecision", "phraseRange", "category"] } },
+        "visualSeamRisks": { "type": "array", "items": { "type": "object", "required": ["targetSample", "type", "risk", "visualMaskHint", "decisionIds"] } }
+      }, "additionalProperties": false
+    },
     "range": {
       "type": "object",
       "required": ["startSample", "endSample", "sampleRateHz"],
@@ -162,11 +278,45 @@
             "method": { "enum": ["not-reviewed", "audio-listening"] },
             "listeningStatus": { "enum": ["not-reviewed", "listened"] },
             "alignmentStatus": { "enum": ["not-provided", "aligned", "failed"] },
-            "sourceRange": { "oneOf": [{ "$ref": "#/$defs/range" }, { "type": "null" }] }
+            "sourceRange": { "oneOf": [{ "$ref": "#/$defs/range" }, { "type": "null" }] },
+            "reviewedBy": { "$ref": "#/$defs/nonemptyText" },
+            "sourceSha256": { "$ref": "#/$defs/sha256" }
           },
           "additionalProperties": false
         }
       },
+      "additionalProperties": false
+    },
+    "annotation": {
+      "type": "object",
+      "required": ["id", "sourceId", "segmentId"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "sourceId": { "type": "string", "minLength": 1 },
+        "segmentId": { "type": "string", "minLength": 1 },
+        "tokenId": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] },
+        "occurrenceId": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] },
+        "userNote": { "type": "string", "minLength": 1 },
+        "analysisNote": { "type": "string", "minLength": 1 },
+        "motionDirection": { "type": "string", "minLength": 1 },
+        "motionBinding": {
+          "type": "object",
+          "required": ["objects", "states", "assets", "componentCalls", "phases", "transitions", "audioEvents"],
+          "properties": {
+            "objects": { "type": "array", "items": { "type": "object" } },
+            "states": { "type": "array", "items": { "type": "object" } },
+            "assets": { "type": "array", "items": { "type": "object" } },
+            "componentCalls": { "type": "array", "items": { "type": "object" } },
+            "phases": { "type": "array", "items": { "type": "object", "required": ["id", "anchor", "entryState", "exitCondition"], "properties": { "id": { "type": "string", "minLength": 1 }, "anchor": { "type": "object" }, "entryState": { "type": "string", "minLength": 1 }, "exitCondition": { "type": "string", "minLength": 1 } }, "additionalProperties": true } },
+            "transitions": { "type": "array", "items": { "type": "object" } },
+            "audioEvents": { "type": "array", "items": { "type": "object" } }
+          },
+          "additionalProperties": false
+        },
+        "resolution": { "enum": ["resolved", "not-in-retained-timeline"] },
+        "resolvedTargets": { "type": "array", "items": { "type": "object", "required": ["occurrenceId", "targetRange", "timingPrecision"], "properties": { "occurrenceId": { "type": "string" }, "targetRange": { "$ref": "#/$defs/compiledRange" }, "timingPrecision": { "$ref": "#/$defs/timingPrecision" } }, "additionalProperties": false } }
+      },
+      "anyOf": [{ "required": ["userNote"] }, { "required": ["analysisNote"] }, { "required": ["motionDirection"] }],
       "additionalProperties": false
     },
     "editPlan": {
@@ -185,11 +335,15 @@
           { "type": "object", "required": ["occurrenceId", "coverageId"], "properties": { "kind": { "const": "source" }, "occurrenceId": { "type": "string", "minLength": 1 }, "coverageId": { "type": "string", "minLength": 1 } }, "additionalProperties": false },
           { "type": "object", "required": ["kind", "id", "decisionId", "reason", "sceneId", "durationSamples", "visualHandoff", "audioHandoff"], "properties": { "kind": { "const": "presentation" }, "id": { "type": "string", "minLength": 1 }, "decisionId": { "type": "string", "minLength": 1 }, "reason": { "type": "string", "minLength": 1 }, "sceneId": { "type": "string", "minLength": 1 }, "durationSamples": { "type": "integer", "minimum": 1 }, "visualHandoff": { "type": "object", "required": ["focus", "entryState", "exitCondition"], "properties": { "focus": { "type": "string", "minLength": 1 }, "entryState": { "type": "string", "minLength": 1 }, "exitCondition": { "type": "string", "minLength": 1 } }, "additionalProperties": false }, "audioHandoff": { "type": "object", "required": ["role", "rationale"], "properties": { "role": { "enum": ["continue-bed", "bed-duck", "sound-effect", "quiet", "none"] }, "rationale": { "type": "string", "minLength": 1 } }, "additionalProperties": false } }, "additionalProperties": false }
         ] } },
-        "decisions": { "type": "array", "items": { "type": "object", "required": ["id", "action", "reason", "coverageIds", "sourceRanges", "keptOccurrenceIds", "tokenIds"], "properties": { "id": { "type": "string", "minLength": 1 }, "action": { "enum": ["retain", "delete", "reorder", "repeat", "merge", "query", "presentation"] }, "reason": { "type": "string" }, "relation": { "oneOf": [{ "const": "repeated-content" }, { "type": "null" }] }, "coverageIds": { "type": "array", "items": { "type": "string" } }, "sourceRanges": { "type": "array", "items": { "type": "object", "required": ["sourceId", "sourceRange"], "properties": { "sourceId": { "type": "string" }, "sourceRange": { "$ref": "#/$defs/range" } }, "additionalProperties": false } }, "keptOccurrenceIds": { "type": "array", "items": { "type": "string" } }, "tokenIds": { "type": "array", "items": { "type": "string" } }, "presentationIds": { "type": "array", "items": { "type": "string", "minLength": 1 } } }, "allOf": [{ "if": { "properties": { "action": { "const": "presentation" } }, "required": ["action"] }, "then": { "required": ["presentationIds"], "properties": { "reason": { "minLength": 1 }, "coverageIds": { "maxItems": 0 }, "sourceRanges": { "maxItems": 0 }, "keptOccurrenceIds": { "maxItems": 0 }, "tokenIds": { "maxItems": 0 }, "presentationIds": { "minItems": 1, "maxItems": 1 } } } }], "additionalProperties": false } },
+        "pacingProfile": { "$ref": "#/$defs/pacingProfile" },
+        "pauseWindows": { "type": "array", "items": { "$ref": "#/$defs/editorialPause" } },
+        "narrativeBeats": { "type": "array", "items": { "$ref": "#/$defs/editorialBeat" } },
+        "decisions": { "type": "array", "items": { "type": "object", "required": ["id", "action", "reason", "coverageIds", "sourceRanges", "keptOccurrenceIds", "tokenIds"], "properties": { "id": { "type": "string", "minLength": 1 }, "action": { "enum": ["retain", "delete", "reorder", "repeat", "merge", "query", "presentation"] }, "reason": { "type": "string" }, "operation": { "enum": ["trim", "concatenate", "reorder", "repeat"] }, "relation": { "oneOf": [{ "const": "repeated-content" }, { "type": "null" }] }, "coverageIds": { "type": "array", "items": { "type": "string" } }, "sourceRanges": { "type": "array", "items": { "type": "object", "required": ["sourceId", "sourceRange"], "properties": { "sourceId": { "type": "string" }, "sourceRange": { "$ref": "#/$defs/range" } }, "additionalProperties": false } }, "keptOccurrenceIds": { "type": "array", "items": { "type": "string" } }, "tokenIds": { "type": "array", "items": { "type": "string" } }, "presentationIds": { "type": "array", "items": { "type": "string", "minLength": 1 } }, "visualSeamRisk": { "$ref": "#/$defs/nonemptyText" }, "visualMaskHint": { "$ref": "#/$defs/nonemptyText" }, "revertedFromDecisionId": { "$ref": "#/$defs/nonemptyText" }, "pauseKind": { "$ref": "#/$defs/pauseKind" }, "pauseRange": { "$ref": "#/$defs/range" }, "pauseException": { "$ref": "#/$defs/pauseException" }, "pauseVerification": { "$ref": "#/$defs/pauseVerification" } }, "allOf": [{ "if": { "properties": { "action": { "const": "presentation" } }, "required": ["action"] }, "then": { "required": ["presentationIds"], "properties": { "reason": { "minLength": 1 }, "coverageIds": { "maxItems": 0 }, "sourceRanges": { "maxItems": 0 }, "keptOccurrenceIds": { "maxItems": 0 }, "tokenIds": { "maxItems": 0 }, "presentationIds": { "minItems": 1, "maxItems": 1 } } } }], "additionalProperties": false } },
         "questions": { "type": "array", "items": { "type": "object", "required": ["id", "question", "blocks"], "properties": { "id": { "type": "string" }, "sourceId": { "type": ["string", "null"] }, "sourceRange": { "oneOf": [{ "$ref": "#/$defs/range" }, { "type": "null" }] }, "question": { "type": "string" }, "blocks": { "type": "array", "items": { "enum": ["freeze", "mediaExport", "crossTrackSync", "precision"] } } }, "additionalProperties": false } },
         "spokenCorrections": { "type": "array", "items": { "$ref": "#/$defs/spokenCorrection" } },
         "displayText": { "type": "array", "items": { "type": "object", "required": ["id", "segmentId", "text"], "properties": { "id": { "type": "string" }, "segmentId": { "type": "string" }, "text": { "type": "string" }, "tokenIds": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": false } },
-        "integrity": { "type": "object", "required": ["planSha256"], "properties": { "planSha256": { "oneOf": [{ "type": "string", "pattern": "^[a-f0-9]{64}$" }, { "type": "null" }] } }, "additionalProperties": false }
+        "annotations": { "type": "array", "items": { "$ref": "#/$defs/annotation" } },
+        "integrity": { "type": "object", "required": ["planSha256"], "properties": { "planSha256": { "oneOf": [{ "type": "string", "pattern": "^[a-f0-9]{64}$" }, { "type": "null" }] }, "annotationSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }
       },
       "allOf": [
         { "if": { "properties": { "format": { "const": "laohu.asrcut.edit-plan/1" } }, "required": ["format"] }, "then": { "properties": { "authorization": { "not": { "required": ["presentationTiming"] } }, "sequence": { "items": { "not": { "required": ["kind"] } } }, "decisions": { "not": { "contains": { "properties": { "action": { "const": "presentation" } }, "required": ["action"] } } } } } },
@@ -282,6 +436,7 @@
         "state": { "enum": ["draft", "frozen"] },
         "review": { "$ref": "#/$defs/editPlan/properties/review" },
         "planSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "annotationSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
         "sources": { "type": "array", "items": { "type": "object", "required": ["id", "order", "recordingSegment", "sha256", "primaryAudioTrackId", "tracks", "transcript"], "properties": { "id": { "type": "string" }, "order": { "type": "integer", "minimum": 0 }, "recordingSegment": { "type": ["integer", "null"] }, "sha256": { "type": ["string", "null"] }, "primaryAudioTrackId": { "type": ["string", "null"] }, "tracks": { "type": "array", "items": { "type": "object" } }, "transcript": { "type": "object", "required": ["sha256", "evidenceRef", "evidenceHashMode"], "properties": { "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "evidenceRef": { "type": ["string", "null"] }, "evidenceHashMode": { "enum": ["raw-bytes", "json-serialization"] } }, "additionalProperties": false } }, "additionalProperties": false } },
         "clock": { "type": "object", "required": ["sampleRateHz", "unit", "quantization"], "properties": { "sampleRateHz": { "type": "integer", "minimum": 1 }, "unit": { "const": "sample" }, "quantization": { "type": "string" } }, "additionalProperties": false },
         "coverageComplete": { "type": "boolean" },
@@ -291,6 +446,7 @@
         "questions": { "$ref": "#/$defs/editPlan/properties/questions" },
         "warnings": { "type": "array", "items": { "type": "string" } },
         "spokenCorrections": { "$ref": "#/$defs/editPlan/properties/spokenCorrections" },
+        "annotations": { "type": "array", "items": { "$ref": "#/$defs/annotation" } },
         "units": { "type": "array", "items": { "$ref": "#/$defs/timelineUnit" } }
       },
       "allOf": [
@@ -315,17 +471,95 @@
         "channels": { "type": "integer", "minimum": 1 },
         "exportedAt": { "type": "string", "format": "date-time" },
         "auditionStatus": { "const": "not_auditioned" },
+        "timelineSha256": { "$ref": "#/$defs/sha256" },
+        "seamFadeMs": { "type": "number", "minimum": 0, "maximum": 30 },
+        "seamFades": { "type": "array", "items": { "type": "object", "required": ["targetSample", "leftOccurrenceId", "rightOccurrenceId", "fadeOutSamples", "fadeInSamples"], "properties": { "targetSample": { "type": "integer", "minimum": 1 }, "leftOccurrenceId": { "$ref": "#/$defs/nonemptyText" }, "rightOccurrenceId": { "$ref": "#/$defs/nonemptyText" }, "fadeOutSamples": { "type": "integer", "minimum": 0 }, "fadeInSamples": { "type": "integer", "minimum": 0 } }, "additionalProperties": false } },
+        "roomToneReplacements": { "type": "array", "items": { "allOf": [{ "$ref": "#/$defs/roomToneReplacement" }, { "required": ["targetRange", "sourceSha256", "probeSha256"] }] } },
         "operation": { "type": "string" },
         "transcriptEvidence": { "type": "object", "required": ["verifiedSourceIds", "unlocatedSourceIds"], "properties": { "verifiedSourceIds": { "type": "array", "items": { "type": "string" } }, "unlocatedSourceIds": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": false },
         "clips": { "type": "array", "items": { "type": "object", "required": ["occurrenceId", "sourceId", "coverageId", "sourceRange", "targetRange"], "properties": { "occurrenceId": { "type": "string" }, "sourceId": { "type": "string" }, "coverageId": { "type": "string" }, "sourceRange": { "$ref": "#/$defs/compiledRange" }, "targetRange": { "$ref": "#/$defs/compiledRange" } }, "additionalProperties": false } },
         "units": { "type": "array", "items": { "$ref": "#/$defs/audioReceiptUnit" } },
         "voiceWindows": { "type": "array", "items": { "type": "object", "required": ["startSample", "endSample", "sampleRateHz", "basis", "timingPrecision"], "properties": { "startSample": { "type": "integer", "minimum": 0 }, "endSample": { "type": "integer", "minimum": 1 }, "sampleRateHz": { "type": "integer", "minimum": 1 }, "basis": { "const": "conservative-retained-source-range" }, "timingPrecision": { "$ref": "#/$defs/timingPrecision" } }, "additionalProperties": false } },
-        "voiceTrackPlayback": { "type": "string", "minLength": 1 }
+        "voiceTrackPlayback": { "type": "string", "minLength": 1 },
+        "audioTreatment": {
+          "type": "object",
+          "required": ["format", "sourceId", "audioPlanSha256", "treatmentReceiptSha256", "originalSourceSha256", "processedSourceSha256", "sampleRateHz", "sampleCount", "channels", "renderedBeforeTimelineRanges", "timelineMapping"],
+          "properties": {
+            "format": { "const": "laohu.asrcut.source-treatment/1" },
+            "sourceId": { "type": "string", "minLength": 1 },
+            "audioPlanSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "treatmentReceiptSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "originalSourceSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "processedSourceSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "sampleRateHz": { "type": "integer", "minimum": 1 },
+            "sampleCount": { "type": "integer", "minimum": 1 },
+            "channels": { "type": "integer", "minimum": 1, "maximum": 8 },
+            "renderedBeforeTimelineRanges": { "const": true },
+            "timelineMapping": { "const": "existing-compiled-source-ranges" }
+          },
+          "additionalProperties": false
+        }
       },
       "allOf": [
         { "if": { "properties": { "format": { "const": "laohu.asrcut.audio-artifact/1" } }, "required": ["format"] }, "then": { "properties": { "timelineFormat": { "const": "laohu.asrcut.timeline/1" } }, "not": { "anyOf": [{ "required": ["units"] }, { "required": ["voiceWindows"] }, { "required": ["voiceTrackPlayback"] }] } } },
         { "if": { "properties": { "format": { "const": "laohu.asrcut.audio-artifact/2" } }, "required": ["format"] }, "then": { "required": ["units", "voiceWindows", "voiceTrackPlayback"], "properties": { "timelineFormat": { "const": "laohu.asrcut.timeline/2" } } } }
       ],
+      "additionalProperties": false
+    },
+    "audioPlanStep": {
+      "oneOf": [
+        { "type": "object", "required": ["type", "reason"], "properties": { "type": { "const": "denoise" }, "reason": { "type": "string", "minLength": 8 }, "noiseReductionDb": { "type": "number", "minimum": 0.1, "maximum": 24 }, "noiseFloorDb": { "type": "number", "minimum": -80, "maximum": -20 }, "residualFloorDb": { "type": "number", "minimum": -80, "maximum": -20 }, "trackNoise": { "type": "boolean" }, "trackResidual": { "type": "boolean" } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "reason", "frequencyHz"], "properties": { "type": { "const": "highpass" }, "reason": { "type": "string", "minLength": 8 }, "frequencyHz": { "type": "number", "minimum": 35, "maximum": 180 }, "poles": { "type": "integer", "enum": [1, 2] } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "reason", "frequencyHz", "gainDb"], "properties": { "type": { "const": "equalizer" }, "reason": { "type": "string", "minLength": 8 }, "frequencyHz": { "type": "number", "minimum": 40, "maximum": 95980 }, "gainDb": { "type": "number", "minimum": -6, "maximum": 6 }, "widthQ": { "type": "number", "minimum": 0.35, "maximum": 4 } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "reason"], "properties": { "type": { "const": "deesser" }, "reason": { "type": "string", "minLength": 8 }, "intensity": { "type": "number", "minimum": 0.05, "maximum": 0.8 }, "maxDeessing": { "type": "number", "minimum": 0.05, "maximum": 0.8 } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "reason"], "properties": { "type": { "const": "compressor" }, "reason": { "type": "string", "minLength": 8 }, "thresholdDb": { "type": "number", "minimum": -40, "maximum": -6 }, "ratio": { "type": "number", "minimum": 1.2, "maximum": 4 }, "attackMs": { "type": "number", "minimum": 1, "maximum": 100 }, "releaseMs": { "type": "number", "minimum": 30, "maximum": 500 }, "makeupDb": { "type": "number", "minimum": 0, "maximum": 6 } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "reason", "gainDb"], "properties": { "type": { "const": "gain" }, "reason": { "type": "string", "minLength": 8 }, "gainDb": { "type": "number", "minimum": -12, "maximum": 12 } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "reason", "targetLufs"], "properties": { "type": { "const": "normalize" }, "reason": { "type": "string", "minLength": 8 }, "targetLufs": { "type": "number", "minimum": -28, "maximum": -14 }, "maxTruePeakDbtp": { "type": "number", "minimum": -6, "maximum": -0.5 }, "maxGainDb": { "type": "number", "minimum": 0, "maximum": 12 } }, "additionalProperties": false }
+      ]
+    },
+    "audioPlan": {
+      "type": "object",
+      "required": ["format", "revision", "project", "binding", "diagnosis", "protection", "steps", "review"],
+      "properties": {
+        "format": { "const": "laohu.asrcut.audio-plan/1" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "project": { "oneOf": [{ "type": "null" }, { "type": "object", "required": ["id", "revision"], "properties": { "id": { "type": "string", "minLength": 1 }, "revision": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }] },
+        "binding": {
+          "type": "object",
+          "required": ["kind", "mediaPath", "mediaSha256", "sampleRateHz", "sampleCount", "channels"],
+          "properties": {
+            "kind": { "enum": ["source", "compiled-timeline"] }, "mediaPath": { "type": "string", "minLength": 1 }, "mediaSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "sampleRateHz": { "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 8000, "maximum": 192000 }] }, "sampleCount": { "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 1 }] }, "channels": { "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 1, "maximum": 8 }] },
+            "sourceId": { "type": "string", "minLength": 1 }, "project": { "type": "object", "required": ["id", "revision"], "properties": { "id": { "type": "string", "minLength": 1 }, "revision": { "type": "integer", "minimum": 1 } }, "additionalProperties": false },
+            "editPlanPath": { "type": "string", "minLength": 1 }, "timelinePath": { "type": "string", "minLength": 1 }, "receiptPath": { "type": "string", "minLength": 1 }, "planSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "timelineFormat": { "enum": ["laohu.asrcut.timeline/1", "laohu.asrcut.timeline/2"] }, "timelineSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "receiptSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+          },
+          "allOf": [
+            { "if": { "properties": { "kind": { "const": "source" } }, "required": ["kind"] }, "then": { "not": { "anyOf": [{ "required": ["editPlanPath"] }, { "required": ["timelinePath"] }, { "required": ["receiptPath"] }, { "required": ["planSha256"] }, { "required": ["timelineSha256"] }, { "required": ["receiptSha256"] }] } } },
+            { "if": { "properties": { "kind": { "const": "compiled-timeline" } }, "required": ["kind"] }, "then": { "required": ["editPlanPath", "timelinePath", "receiptPath", "planSha256", "timelineFormat", "timelineSha256", "receiptSha256", "project"] } }
+          ],
+          "additionalProperties": false
+        },
+        "diagnosis": { "type": "object", "required": ["voice", "issues", "basis"], "properties": { "voice": { "enum": ["spoken_voice", "mixed_voice", "unknown"] }, "issues": { "type": "array", "items": { "type": "string" } }, "basis": { "type": "string", "minLength": 1 } }, "additionalProperties": false },
+        "protection": { "type": "object", "required": ["preserveBackgroundAudio", "preserveDuration", "preserveSampleRate", "preserveChannels", "timeStretch", "pitchShift", "mix", "overwriteSource"], "properties": { "preserveBackgroundAudio": { "const": true }, "preserveDuration": { "const": true }, "preserveSampleRate": { "const": true }, "preserveChannels": { "const": true }, "timeStretch": { "const": false }, "pitchShift": { "const": false }, "mix": { "const": false }, "overwriteSource": { "const": false } }, "additionalProperties": false },
+        "steps": { "type": "array", "items": { "$ref": "#/$defs/audioPlanStep" } },
+        "review": { "type": "object", "required": ["method", "status", "auditionStatus"], "properties": { "method": { "const": "same-content-same-loudness-ab" }, "status": { "enum": ["pending", "reviewed"] }, "auditionStatus": { "const": "not_auditioned" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "audioPostprocessReceipt": {
+      "type": "object",
+      "required": ["format", "audioPlanSha256", "project", "binding", "input", "output", "comparison", "processing", "timing", "auditionStatus", "processedAt"],
+      "properties": {
+        "format": { "const": "laohu.asrcut.audio-postprocess/1" }, "audioPlanSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "project": { "oneOf": [{ "type": "null" }, { "type": "object", "required": ["id", "revision"], "properties": { "id": { "type": "string" }, "revision": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }] },
+        "binding": { "type": "object", "required": ["kind"], "properties": { "kind": { "enum": ["source", "compiled-timeline"] }, "sourceId": { "type": ["string", "null"] }, "project": { "type": "object" }, "planSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "timelineFormat": { "enum": ["laohu.asrcut.timeline/1", "laohu.asrcut.timeline/2"] }, "timelineSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "sourceOccurrences": { "type": "array" }, "timelineUnits": { "type": "array" } }, "additionalProperties": false },
+        "input": { "type": "object", "required": ["name", "sha256", "sampleRateHz", "sampleCount", "channels", "sampleFormat"], "properties": { "name": { "type": "string" }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "sampleRateHz": { "type": "integer", "minimum": 8000 }, "sampleCount": { "type": "integer", "minimum": 1 }, "channels": { "type": "integer", "minimum": 1, "maximum": 8 }, "sampleFormat": { "const": "pcm_f32le-decode" } }, "additionalProperties": false },
+        "output": { "type": "object", "required": ["name", "sha256", "sampleRateHz", "sampleCount", "channels", "sampleFormat"], "properties": { "name": { "type": "string" }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "sampleRateHz": { "type": "integer", "minimum": 8000 }, "sampleCount": { "type": "integer", "minimum": 1 }, "channels": { "type": "integer", "minimum": 1, "maximum": 8 }, "sampleFormat": { "const": "pcm_s32le" } }, "additionalProperties": false },
+        "comparison": { "type": "object", "required": ["baselineOriginal", "baseline", "processed", "matchedCopy", "commonTargetLufs", "differenceLufs", "isMatchedWithinTolerance", "toleranceLufs", "peakCeilingDbtp"], "properties": { "baselineOriginal": { "type": "object" }, "baseline": { "type": "object" }, "processed": { "type": "object" }, "matchedCopy": { "type": "object" }, "commonTargetLufs": { "type": "number" }, "differenceLufs": { "type": "number" }, "isMatchedWithinTolerance": { "const": true }, "toleranceLufs": { "const": 0.5 }, "peakCeilingDbtp": { "const": -1 } }, "additionalProperties": false },
+        "processing": { "type": "object", "required": ["engine", "version", "steps", "filterChain", "normalization", "bypass"], "properties": { "engine": { "const": "FFmpeg" }, "version": { "type": "string" }, "steps": { "type": "array", "items": { "$ref": "#/$defs/audioPlanStep" } }, "filterChain": { "type": "array", "items": { "type": "string" } }, "normalization": { "oneOf": [{ "type": "null" }, { "type": "object" }] }, "bypass": { "type": "boolean" } }, "additionalProperties": false },
+        "timing": { "type": "object", "required": ["latencyCalibration", "latencyCompensation", "exactSampleCountPreserved", "exactSampleRatePreserved", "channelCountPreserved", "unexplainedTrimOrPadding"], "properties": { "latencyCalibration": { "type": "object", "required": ["status", "method"], "properties": { "status": { "enum": ["passed", "unverified"] }, "method": { "type": "string" }, "offsetsSamples": { "type": "array", "items": { "type": "integer" } }, "postCompensationOffsetsSamples": { "type": "array", "items": { "type": "integer" } }, "confidence": { "type": "array" }, "measuredLatencySamples": { "type": "integer" }, "compensationSamples": { "type": "integer", "minimum": 0 }, "reason": { "type": "string" } }, "additionalProperties": false }, "latencyCompensation": { "type": "object", "required": ["inputLeadingPadSamples", "inputTrailingPadSamples", "removedOutputLeadingSamples", "expectedOutputSampleCount", "method"], "properties": { "inputLeadingPadSamples": { "type": "integer", "minimum": 0 }, "inputTrailingPadSamples": { "type": "integer", "minimum": 0 }, "removedOutputLeadingSamples": { "type": "integer", "minimum": 0 }, "expectedOutputSampleCount": { "type": "integer", "minimum": 1 }, "method": { "type": "string" } }, "additionalProperties": false }, "exactSampleCountPreserved": { "const": true }, "exactSampleRatePreserved": { "const": true }, "channelCountPreserved": { "const": true }, "unexplainedTrimOrPadding": { "const": false } }, "additionalProperties": false },
+        "auditionStatus": { "const": "not_auditioned" }, "processedAt": { "type": "string", "format": "date-time" }
+      },
       "additionalProperties": false
     }
   }

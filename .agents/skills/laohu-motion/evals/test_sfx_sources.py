@@ -11,6 +11,8 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import wave
+import zipfile
 from unittest import mock
 
 
@@ -53,6 +55,98 @@ def fake_invalid_media_ffprobe(path):
 
 
 class SfxSourcesInterfaceTests(unittest.TestCase):
+    def test_arrangement_source_uses_stable_project_cache_defaults_when_omitted(self):
+        with tempfile.TemporaryDirectory(prefix="motion source defaults-", dir=ROOT / ".cache") as temp:
+            work = Path(temp)
+            args = ADAPTER.parser().parse_args([
+                "source-search", "--work-root", str(work), "--python", "python3.12",
+                "--query", "soft click", "--providers", "kenney,mixkit", "--limit", "4",
+            ])
+            expected = {"schemaVersion": 1, "status": "success"}
+            completed = subprocess.CompletedProcess([], 0, json.dumps(expected) + "\n", "")
+            with mock.patch.dict(os.environ, {"SSL_CERT_FILE": str(work / "fixture-ca.pem")}):
+                with mock.patch.object(ADAPTER.subprocess, "run", return_value=completed) as run:
+                    result, code = ADAPTER.arrangement_source(args, "source-search")
+            self.assertEqual((result, code), (expected, 0))
+            command = run.call_args.args[0]
+            self.assertEqual(command[command.index("--cache-dir") + 1], str(work / ".cache" / "sound"))
+            self.assertEqual(command[command.index("--tmp-dir") + 1], str(work / ".cache" / "tmp" / "sound"))
+
+    def test_arrangement_source_search_bridge_passes_external_cache_and_fit_controls(self):
+        with tempfile.TemporaryDirectory(prefix="motion source bridge-", dir=ROOT / ".cache") as temp:
+            work = Path(temp)
+            args = ADAPTER.parser().parse_args([
+                "source-search", "--work-root", str(work), "--cache-dir", ".cache/validation/provider-run",
+                "--tmp-dir", ".cache/tmp/provider-run", "--python", "python3.12",
+                "--ffmpeg", ".cache/tools/ffmpeg", "--ffprobe", ".cache/tools/ffprobe",
+                "--query", "wooden door latch", "--action", "closing", "--material", "wood",
+                "--max-duration-sec", "1.2", "--providers", "kenney,mixkit,freesound,pixabay",
+                "--role", "ui", "--limit", "12", "--pages", "2",
+            ])
+            expected = {"schemaVersion": 1, "status": "success", "providerSearchOrder": ["kenney"]}
+            completed = subprocess.CompletedProcess([], 0, json.dumps(expected) + "\n", "")
+            with mock.patch.object(ADAPTER.subprocess, "run", return_value=completed) as run:
+                result, code = ADAPTER.arrangement_source(args, "source-search")
+            self.assertEqual((result, code), (expected, 0))
+            command = run.call_args.args[0]
+            search_index = command.index("search")
+            self.assertLess(command.index("--ffmpeg"), search_index)
+            self.assertLess(command.index("--ffprobe"), search_index)
+            self.assertEqual(command[search_index + 1:], [
+                "--query", "wooden door latch", "--providers", "kenney,mixkit,freesound,pixabay",
+                "--role", "ui", "--limit", "12", "--pages", "2", "--action", "closing",
+                "--material", "wood", "--max-duration-sec", "1.2", "--freesound-license", "any",
+            ])
+            self.assertIn(str(work / ".cache/validation/provider-run"), command)
+            self.assertIn(str(work / ".cache/tmp/provider-run"), command)
+
+    def test_arrangement_source_get_keeps_candidate_key_and_output_inside_workflow(self):
+        with tempfile.TemporaryDirectory(prefix="motion source get-", dir=ROOT / ".cache") as temp:
+            work = Path(temp)
+            args = ADAPTER.parser().parse_args([
+                "source-get", "--work-root", str(work), "--key", "mk:123", "--key", "kn:ui-pack/click.ogg",
+                "--out-dir", "assets/audio/sfx", "--python", "python3.12",
+            ])
+            expected = {"schemaVersion": 1, "status": "network_error", "networkAttempted": True}
+            completed = subprocess.CompletedProcess([], 3, json.dumps(expected) + "\n", "")
+            with mock.patch.object(ADAPTER.subprocess, "run", return_value=completed) as run:
+                result, code = ADAPTER.arrangement_source(args, "source-get")
+            self.assertEqual((result, code), (expected, 3))
+            command = run.call_args.args[0]
+            get_index = command.index("get")
+            self.assertEqual(command[get_index + 1:], [
+                "--key", "mk:123", "--key", "kn:ui-pack/click.ogg", "--out-dir", "assets/audio/sfx",
+            ])
+
+    def test_arrangement_source_reuses_cache_python_and_its_certifi_bundle(self):
+        with tempfile.TemporaryDirectory(prefix="motion source venv-", dir=ROOT / ".cache") as temp:
+            work = Path(temp)
+            cache = work / ".cache" / "validation" / "provider-run"
+            local_python = cache / "venv" / "bin" / "python"
+            local_python.parent.mkdir(parents=True)
+            local_python.write_text("fixture interpreter path", encoding="utf-8")
+            cert_bundle = local_python.parent.parent / "lib" / "python3.12" / "site-packages" / "certifi" / "cacert.pem"
+            cert_bundle.parent.mkdir(parents=True)
+            cert_bundle.write_text("fixture CA bundle", encoding="utf-8")
+            args = ADAPTER.parser().parse_args([
+                "source-search", "--work-root", str(work), "--cache-dir", str(cache),
+                "--query", "soft click", "--providers", "freesound", "--limit", "3",
+            ])
+            expected = {"schemaVersion": 1, "status": "success"}
+
+            def fake_run(command, **kwargs):
+                if "-c" in command:
+                    return subprocess.CompletedProcess(command, 0, str(cert_bundle) + "\n", "")
+                return subprocess.CompletedProcess(command, 0, json.dumps(expected) + "\n", "")
+
+            with mock.patch.object(ADAPTER.subprocess, "run", side_effect=fake_run) as run:
+                result, code = ADAPTER.arrangement_source(args, "source-search")
+            self.assertEqual((result, code), (expected, 0))
+            self.assertEqual(run.call_count, 2)
+            provider_call = run.call_args
+            self.assertEqual(provider_call.args[0][0], str(local_python))
+            self.assertEqual(provider_call.kwargs["env"]["SSL_CERT_FILE"], str(cert_bundle.resolve()))
+
     def make_project(self, temp_root):
         project = temp_root / "project"
         index_dir = project / "assets" / "audio"
@@ -98,6 +192,36 @@ class SfxSourcesInterfaceTests(unittest.TestCase):
             check=False,
             env=os.environ.copy(),
         )
+
+    def run_local_asset(self, project, index_path, probe_path, asset_id, use_case=None, source_in=None, source_out=None, review_scope=None):
+        command = [
+            sys.executable, str(ADAPTER_PATH), "local-search",
+            "--asset-id", asset_id, "--work-root", str(project),
+            "--index", str(index_path), "--ffprobe", str(probe_path),
+        ]
+        if use_case is not None:
+            command.extend(["--use-case", use_case])
+        if source_in is not None:
+            command.extend(["--source-in-sec", str(source_in)])
+        if source_out is not None:
+            command.extend(["--source-out-sec", str(source_out)])
+        if review_scope is not None:
+            command.extend(["--review-scope", review_scope])
+        return subprocess.run(command, capture_output=True, text=True, check=False, env=os.environ.copy())
+
+    def run_review(self, project, index_path, probe_path, **values):
+        command = [
+            sys.executable, str(ADAPTER_PATH), "local-review",
+            "--work-root", str(project), "--index", str(index_path), "--ffprobe", str(probe_path),
+        ]
+        for key, value in values.items():
+            flag = "--" + key.replace("_", "-")
+            if isinstance(value, bool):
+                if value:
+                    command.append(flag)
+            else:
+                command.extend([flag, str(value)])
+        return subprocess.run(command, capture_output=True, text=True, check=False, env=os.environ.copy())
 
     def run_groups(self, project, index_path, **options):
         return self.run_groups_with_indexes(project, [index_path], **options)
@@ -217,6 +341,24 @@ class SfxSourcesInterfaceTests(unittest.TestCase):
             self.assertEqual(candidate["audioPlanAsset"]["file"], "assets/audio/wood-latch.ogg")
             self.assertEqual(candidate["audioPlanAsset"]["durationSec"], 0.25)
 
+    def test_local_search_exact_asset_id_does_not_return_other_token_matches(self):
+        temp_base = Path(os.environ["TMPDIR"])
+        with tempfile.TemporaryDirectory(prefix="sfx-local-search-exact-id-", dir=temp_base) as name:
+            temp_root = Path(name)
+            project, _audio, index, index_path = self.make_project(temp_root)
+            self.add_candidate_group_fixture(index, project)
+            index_path.write_text(json.dumps(index), encoding="utf-8")
+            probe = temp_root / "ffprobe-exact-id"
+            fake_ffprobe(probe, duration="0.25", codec="vorbis", format_name="ogg")
+            result = self.run_local_asset(project, index_path, probe, "project.wood-latch")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            document = json.loads(result.stdout)
+            self.assertEqual(document["assetId"], "project.wood-latch")
+            self.assertEqual([row["assetId"] for row in document["results"]], ["project.wood-latch"])
+            self.assertEqual(document["results"][0]["matches"], [{
+                "term": "project.wood-latch", "field": "id", "match": "exact",
+            }])
+
     def test_local_groups_valid_references_preserve_candidate_review_state_and_filter_with_reasons(self):
         temp_base = Path(os.environ["TMPDIR"])
         with tempfile.TemporaryDirectory(prefix="sfx-groups-fit-", dir=temp_base) as name:
@@ -259,6 +401,79 @@ class SfxSourcesInterfaceTests(unittest.TestCase):
             document = json.loads(result.stdout)
             self.assertEqual(document["status"], "unknown_group")
             self.assertEqual(document["groupId"], "does-not-exist")
+
+    def test_local_groups_duty_reports_role_coverage_and_external_gap_without_claiming_audition(self):
+        bundled = json.loads(ADAPTER.DEFAULT_INDEX.read_text(encoding="utf-8"))
+        temp_base = Path(os.environ["TMPDIR"])
+        with tempfile.TemporaryDirectory(prefix="sfx-duty-routing-", dir=temp_base) as name:
+            temp_root = Path(name)
+            project, _audio, index, index_path = self.make_project(temp_root)
+            index["candidateGroups"] = [{
+                "id": "wood-latch-duty",
+                "purpose": "fixture for duty role validation",
+                "keywords": ["wood", "latch"],
+                "duty": {"id": "wood-closure", "eligibleRoles": ["footstep-contact"]},
+                "default": {"assetId": "project.wood-latch", "actions": [], "materials": [], "intensities": []},
+                "alternatives": [],
+            }]
+            index_path.write_text(json.dumps(index), encoding="utf-8")
+            role_mismatch = self.run_groups(project, index_path, duty="wood-closure")
+            self.assertEqual(role_mismatch.returncode, 0, role_mismatch.stderr)
+            mismatch_doc = json.loads(role_mismatch.stdout)
+            self.assertEqual(mismatch_doc["status"], "ok")
+            mismatch_group = mismatch_doc["results"][0]
+            self.assertEqual(mismatch_group["candidates"][0]["status"], "excluded")
+            self.assertFalse(mismatch_group["candidates"][0]["dutyRoleEligible"])
+            self.assertEqual(mismatch_group["dutyCoverage"]["status"], "gap-no-role-eligible-candidate")
+            self.assertIn("source-register", mismatch_group["dutyCoverage"]["nextAction"])
+
+            registered_path = project / "assets" / "audio" / "registered-footstep.ogg"
+            registered_path.write_bytes(b"offline unassigned role candidate fixture")
+            registered_asset = json.loads(json.dumps(index["assets"][0]))
+            registered_asset.update({
+                "id": "project.registered-footstep",
+                "file": registered_path.name,
+                "role": "footstep-contact",
+                "sha256": hashlib.sha256(registered_path.read_bytes()).hexdigest(),
+                "reviewStatus": "candidate-unreviewed",
+            })
+            index["assets"].append(registered_asset)
+            index_path.write_text(json.dumps(index), encoding="utf-8")
+            role_only = self.run_groups(project, index_path, duty="wood-closure")
+            self.assertEqual(role_only.returncode, 0, role_only.stderr)
+            role_only_group = json.loads(role_only.stdout)["results"][0]
+            registered = next(row for row in role_only_group["candidates"] if row["assetId"] == "project.registered-footstep")
+            self.assertEqual(registered["kind"], "registered-role-candidate")
+            self.assertEqual(registered["status"], "unconfirmed")
+            self.assertIn("not assigned explicit", registered["uncertainties"][0])
+            self.assertEqual(role_only_group["dutyCoverage"]["status"], "candidate-needs-event-condition")
+
+            missing = self.run_groups(project, index_path, duty="music-explanation-bed")
+            self.assertEqual(missing.returncode, 0, missing.stderr)
+            missing_doc = json.loads(missing.stdout)
+            self.assertEqual(missing_doc["status"], "gap")
+            self.assertEqual(missing_doc["duty"]["status"], "gap-duty-not-indexed")
+            self.assertIn("same audio index", missing_doc["duty"]["nextAction"])
+
+            present = self.run_groups(ROOT, ADAPTER.DEFAULT_INDEX, duty="music-explanation-bed")
+            self.assertEqual(present.returncode, 0, present.stderr)
+            present_doc = json.loads(present.stdout)
+            self.assertEqual(len(present_doc["results"]), 1)
+            selected = present_doc["results"][0]
+            self.assertEqual(selected["status"], "matched")
+            self.assertEqual(selected["duty"]["eligibleRoles"], ["music-explanation-bed"])
+            self.assertEqual(selected["dutyCoverage"]["status"], "candidate-needs-file-license-and-listening-check")
+            self.assertEqual(selected["candidates"][0]["reviewStatus"], "candidate-unreviewed")
+            self.assertEqual(selected["selectionPolicy"], "parallel-unranked-candidates")
+            self.assertFalse(selected["defaultSelectionAllowed"])
+            self.assertTrue(all(row["kind"] == "candidate" for row in selected["candidates"]))
+            self.assertTrue(all(row["defaultSelectionAllowed"] is False for row in selected["candidates"]))
+            self.assertIn("no selection priority", selected["candidateOrderBasis"])
+            self.assertEqual(selected["useCase"], "narration-bed-light-advance")
+            self.assertIn("ratingCount", selected["candidates"][0]["communityAtSearch"])
+            self.assertIn("commentCount", selected["candidates"][0]["communityFeedback"])
+            self.assertIn("local-search", selected["dutyCoverage"]["nextAction"])
+            self.assertEqual(len(bundled["assets"]), len(json.loads(ADAPTER.DEFAULT_INDEX.read_text(encoding="utf-8"))["assets"]))
 
     def test_local_groups_unreadable_index_returns_index_error_not_unknown_group(self):
         temp_base = Path(os.environ["TMPDIR"])
@@ -412,25 +627,350 @@ class SfxSourcesInterfaceTests(unittest.TestCase):
             self.assertEqual(selected["source"]["adapt"]["rate"], [0.85, 1.2])
             self.assertEqual(selected["reviewStatus"], "candidate-unreviewed")
 
-    def test_bundled_candidate_groups_cover_current_assets_with_valid_default_and_alternative_refs(self):
+    def test_bundled_candidate_groups_cover_current_assets_in_sfx_and_flat_music_shapes(self):
         document = json.loads(ADAPTER.DEFAULT_INDEX.read_text(encoding="utf-8"))
         assets = {asset["id"]: asset for asset in document["assets"]}
         groups = document["candidateGroups"]
-        self.assertEqual(len(groups), 10)
+        self.assertGreater(len(groups), 0)
         self.assertEqual(len({group["id"] for group in groups}), len(groups))
         referenced = []
         for group in groups:
             with self.subTest(group=group["id"]):
-                self.assertIsInstance(group["default"], dict)
-                self.assertIn(group["default"]["assetId"], assets)
-                self.assertIsInstance(group["alternatives"], list)
-                referenced.append(group["default"]["assetId"])
-                for candidate in group["alternatives"]:
+                self.assertIsInstance(group["duty"], dict)
+                self.assertTrue(group["duty"]["eligibleRoles"])
+                if "candidates" in group:
+                    self.assertTrue(str(group["id"]).startswith(("music-", "digital-glitch-", "text-entry-", "camera-shutter")))
+                    self.assertNotIn("default", group)
+                    self.assertNotIn("alternatives", group)
+                    self.assertEqual(group["selectionPolicy"], "parallel-unranked-candidates")
+                    self.assertFalse(group["defaultSelectionAllowed"])
+                    self.assertEqual(group["candidates"], sorted(group["candidates"], key=lambda row: row["assetId"]))
+                    candidate_rows = group["candidates"]
+                else:
+                    self.assertIsInstance(group["default"], dict)
+                    candidate_rows = [group["default"], *group.get("alternatives", [])]
+                    self.assertIsInstance(group.get("alternatives", []), list)
+                for candidate in candidate_rows:
                     self.assertIn(candidate["assetId"], assets)
                     referenced.append(candidate["assetId"])
         self.assertEqual(set(referenced), set(assets))
         self.assertEqual(len(referenced), len(set(referenced)))
         self.assertEqual({asset["reviewStatus"] for asset in assets.values()}, {"candidate-unreviewed"})
+
+    def test_music_groups_cover_all_six_contexts_as_flat_unranked_candidates(self):
+        document = json.loads(ADAPTER.DEFAULT_INDEX.read_text(encoding="utf-8"))
+        assets = {asset["id"]: asset for asset in document["assets"]}
+        groups = [group for group in document["candidateGroups"] if str(group["id"]).startswith("music-")]
+        expected_use_cases = {
+            "narration-bed-light-advance", "lively-explanation", "rhythm-demonstration-collage",
+            "tense-reveal", "no-voice-chapter-showcase", "closing-resolution",
+        }
+        self.assertEqual(len(groups), 6)
+        self.assertEqual({group["useCase"] for group in groups}, expected_use_cases)
+        refs = []
+        for group in groups:
+            self.assertEqual(group["selectionPolicy"], "parallel-unranked-candidates")
+            self.assertFalse(group["defaultSelectionAllowed"])
+            self.assertTrue(group.get("voiceContext"))
+            self.assertTrue(group.get("visualContext"))
+            self.assertNotIn("default", group)
+            self.assertNotIn("alternatives", group)
+            self.assertEqual(group["candidateOrderBasis"], "assetId alphabetical for stable display only; no selection priority.")
+            refs.extend(row["assetId"] for row in group["candidates"])
+        music_ids = {asset["id"] for asset in assets.values() if str(asset.get("role", "")).startswith("music")}
+        self.assertEqual(len(refs), 15)
+        self.assertEqual(set(refs), music_ids)
+        self.assertEqual(len(refs), len(set(refs)))
+        for group in groups:
+            result = self.run_groups(ROOT, ADAPTER.DEFAULT_INDEX, group_id=group["id"])
+            self.assertEqual(result.returncode, 0, result.stderr)
+            returned = json.loads(result.stdout)["results"][0]
+            self.assertFalse(returned["defaultSelectionAllowed"])
+            self.assertEqual(returned["selectionPolicy"], "parallel-unranked-candidates")
+            self.assertEqual(returned["candidateOrderBasis"], "assetId alphabetical for stable display only; no selection priority.")
+            self.assertEqual([row["assetId"] for row in returned["candidates"]],
+                             [row["assetId"] for row in group["candidates"]])
+            for candidate in returned["candidates"]:
+                self.assertEqual(candidate["kind"], "candidate")
+                self.assertFalse(candidate["defaultSelectionAllowed"])
+                self.assertIsInstance(candidate["communityAtSearch"], dict)
+                self.assertIsInstance(candidate["communityFeedback"], dict)
+
+    def test_music_696111_feedback_separates_comments_from_uploader_description(self):
+        document = json.loads(ADAPTER.DEFAULT_INDEX.read_text(encoding="utf-8"))
+        asset = next(row for row in document["assets"] if row.get("source", {}).get("key") == "fs:696111")
+        feedback = asset["source"]["communityFeedback"]
+        self.assertEqual(feedback["commentCount"], 7)
+        self.assertIn("piano", feedback["commentSummary"].casefold())
+        self.assertNotIn("full-version", feedback["commentSummary"].casefold())
+        self.assertIn("uploader description", feedback["uploaderDescriptionSummary"].casefold())
+        self.assertIn("soundcloud", feedback["uploaderDescriptionSummary"].casefold())
+        self.assertFalse(feedback["sourceCommunityFeedbackIsListeningReview"])
+        evidence = ROOT / asset["source"]["licenseEvidenceFile"]
+        self.assertEqual(hashlib.sha256(evidence.read_bytes()).hexdigest(), asset["source"]["licenseEvidenceSha256"])
+
+    def test_music_human_fail_records_source_hash_range_use_case_and_blocks_local_search(self):
+        temp_base = Path(os.environ["TMPDIR"])
+        with tempfile.TemporaryDirectory(prefix="sfx-music-negative-review-", dir=temp_base) as name:
+            temp_root = Path(name)
+            project, _audio, index, index_path = self.make_project(temp_root)
+            asset = index["assets"][0]
+            asset.update({"role": "music-loop", "durationSec": 0.25})
+            asset["reviewHistory"] = [{"reviewer": "previous", "conclusion": "conditional"}]
+            asset["reviewRecord"] = {"reviewer": "previous", "conclusion": "pass"}
+            index["candidateGroups"] = [{
+                "id": "music-negative-fixture",
+                "purpose": "fixture group to verify group selection respects a scoped rejection",
+                "applicability": ["fixture use"],
+                "excludeWhen": [],
+                "duty": {"id": "music-negative-fixture", "eligibleRoles": ["music-loop"]},
+                "useCase": "lively-explanation",
+                "selectionPolicy": "no-unreviewed-default",
+                "defaultSelectionAllowed": False,
+                "default": {"assetId": "project.wood-latch", "when": "fixture candidate",
+                            "actions": [], "materials": [], "intensities": []},
+                "alternatives": [],
+            }]
+            index_path.write_text(json.dumps(index), encoding="utf-8")
+            probe = temp_root / "ffprobe-music-negative"
+            fake_ffprobe(probe, duration="0.25")
+            recorded = self.run_review(
+                project, index_path, probe, asset_id="project.wood-latch", scope="bright narration under title cards",
+                in_sec="0.05", out_sec="0.15", reviewer="reviewer-42", reviewer_type="human",
+                conclusion="fail", use_case="lively-explanation", confirm_listened=True,
+                notes="fixture rejection; same source range masks the spoken line",
+            )
+            self.assertEqual(recorded.returncode, 0, recorded.stderr)
+            persisted = json.loads(index_path.read_text(encoding="utf-8"))["assets"][0]
+            self.assertEqual(persisted["reviewStatus"], "candidate-unreviewed")
+            self.assertEqual(persisted["reviewRecord"]["conclusion"], "fail")
+            self.assertTrue(persisted["reviewRecord"]["listeningConfirmed"])
+            self.assertEqual(len(persisted["reviewHistory"]), 2)
+            self.assertEqual(persisted["applicabilityExclusions"], [{
+                "fileSha256": persisted["sha256"],
+                "sourceRange": {"inSec": 0.05, "outSec": 0.15},
+                "useCase": "lively-explanation", "conclusion": "fail",
+                "reason": "fixture rejection; same source range masks the spoken line",
+                "reviewer": "reviewer-42", "reviewerType": "human",
+                "recordedAtUtc": persisted["reviewRecord"]["recordedAtUtc"],
+            }])
+            blocked = self.run_local_asset(project, index_path, probe, "project.wood-latch", use_case="lively-explanation", source_in="0.1", source_out="0.2")
+            self.assertEqual(blocked.returncode, 0, blocked.stderr)
+            blocked_row = json.loads(blocked.stdout)["results"][0]
+            self.assertEqual(blocked_row["status"], "applicability_excluded")
+            self.assertIsNone(blocked_row["audioPlanAsset"])
+            blocked_group = self.run_groups(project, index_path, group_id="music-negative-fixture",
+                                           use_case="lively-explanation")
+            self.assertEqual(blocked_group.returncode, 0, blocked_group.stderr)
+            group_row = json.loads(blocked_group.stdout)["results"][0]["candidates"][0]
+            self.assertEqual(group_row["status"], "excluded")
+            self.assertFalse(group_row["defaultSelectionAllowed"])
+            self.assertTrue(any(row["status"] == "excluded" for row in group_row["applicabilityFeedback"]))
+            outside_range = self.run_local_asset(project, index_path, probe, "project.wood-latch", use_case="lively-explanation", source_in="0.16", source_out="0.24")
+            self.assertEqual(outside_range.returncode, 0, outside_range.stderr)
+            self.assertEqual(json.loads(outside_range.stdout)["results"][0]["status"], "candidate")
+            other_use = self.run_local_asset(project, index_path, probe, "project.wood-latch", use_case="closing-resolution", source_in="0.1", source_out="0.2")
+            self.assertEqual(other_use.returncode, 0, other_use.stderr)
+            self.assertEqual(json.loads(other_use.stdout)["results"][0]["status"], "candidate")
+
+    def test_music_negative_feedback_propagates_across_same_hash_aliases_in_search_and_groups(self):
+        temp_base = Path(os.environ["TMPDIR"])
+        with tempfile.TemporaryDirectory(prefix="sfx-music-alias-negative-review-", dir=temp_base) as name:
+            temp_root = Path(name)
+            project, audio, index, index_path = self.make_project(temp_root)
+            canonical = index["assets"][0]
+            canonical.update({"role": "music-loop", "durationSec": 0.25})
+            alias_path = audio.parent / "identical-copy.mp3"
+            alias_path.write_bytes(audio.read_bytes())
+            alias = json.loads(json.dumps(canonical))
+            alias.update({"id": "project.wood-latch-alias", "file": alias_path.name})
+            index["assets"].append(alias)
+            candidates = [
+                {"assetId": asset["id"], "when": "same bytes", "actions": [], "materials": [], "intensities": []}
+                for asset in index["assets"]
+            ]
+            index["candidateGroups"] = [
+                {
+                    "id": "music-alias-negative-fixture",
+                    "purpose": "verify a scoped rejection reaches aliases by file hash",
+                    "useCase": "lively-explanation",
+                    "selectionPolicy": "parallel-unranked-candidates",
+                    "defaultSelectionAllowed": False,
+                    "duty": {"id": "music-bed", "eligibleRoles": ["music-loop"]},
+                    "candidates": candidates,
+                },
+                {
+                    "id": "music-alias-no-context-fixture",
+                    "purpose": "verify aliases require context when a matching rejection is scoped",
+                    "selectionPolicy": "parallel-unranked-candidates",
+                    "defaultSelectionAllowed": False,
+                    "duty": {"id": "music-bed", "eligibleRoles": ["music-loop"]},
+                    "candidates": candidates,
+                },
+            ]
+            index_path.write_text(json.dumps(index), encoding="utf-8")
+            probe = temp_root / "ffprobe-music-alias-negative"
+            fake_ffprobe(probe, duration="0.25")
+            recorded = self.run_review(
+                project, index_path, probe, asset_id=canonical["id"], scope="bright narration under title cards",
+                in_sec="0.05", out_sec="0.15", reviewer="reviewer-42", reviewer_type="human",
+                conclusion="fail", use_case="lively-explanation", confirm_listened=True,
+                notes="fixture rejection; same source range masks the spoken line",
+            )
+            self.assertEqual(recorded.returncode, 0, recorded.stderr)
+            persisted = json.loads(index_path.read_text(encoding="utf-8"))
+            self.assertEqual(len(persisted["assets"][0]["applicabilityExclusions"]), 1)
+            self.assertNotIn("applicabilityExclusions", persisted["assets"][1])
+
+            blocked = self.run_local_asset(
+                project, index_path, probe, alias["id"], use_case="lively-explanation", source_in="0.1", source_out="0.2",
+            )
+            self.assertEqual(blocked.returncode, 0, blocked.stderr)
+            blocked_row = json.loads(blocked.stdout)["results"][0]
+            self.assertEqual(blocked_row["status"], "applicability_excluded")
+            self.assertEqual(blocked_row["applicabilityFeedback"][0]["recordedOnAssetId"], canonical["id"])
+
+            no_context = self.run_local_asset(
+                project, index_path, probe, alias["id"], source_in="0.1", source_out="0.2",
+            )
+            self.assertEqual(no_context.returncode, 0, no_context.stderr)
+            no_context_row = json.loads(no_context.stdout)["results"][0]
+            self.assertEqual(no_context_row["status"], "applicability_excluded")
+            self.assertEqual(no_context_row["applicabilityFeedback"][0]["status"], "context-required")
+
+            other_use = self.run_local_asset(
+                project, index_path, probe, alias["id"], use_case="closing-resolution", source_in="0.1", source_out="0.2",
+            )
+            self.assertEqual(other_use.returncode, 0, other_use.stderr)
+            self.assertEqual(json.loads(other_use.stdout)["results"][0]["status"], "candidate")
+            outside_range = self.run_local_asset(
+                project, index_path, probe, alias["id"], use_case="lively-explanation", source_in="0.16", source_out="0.24",
+            )
+            self.assertEqual(outside_range.returncode, 0, outside_range.stderr)
+            self.assertEqual(json.loads(outside_range.stdout)["results"][0]["status"], "candidate")
+
+            grouped = self.run_groups(project, index_path, group_id="music-alias-negative-fixture")
+            self.assertEqual(grouped.returncode, 0, grouped.stderr)
+            group_rows = json.loads(grouped.stdout)["results"][0]["candidates"]
+            self.assertEqual([row["status"] for row in group_rows], ["excluded", "excluded"])
+            self.assertTrue(all(row["applicabilityFeedback"][0]["recordedOnAssetId"] == canonical["id"] for row in group_rows))
+
+            grouped_without_context = self.run_groups(project, index_path, group_id="music-alias-no-context-fixture")
+            self.assertEqual(grouped_without_context.returncode, 0, grouped_without_context.stderr)
+            no_context_rows = json.loads(grouped_without_context.stdout)["results"][0]["candidates"]
+            self.assertTrue(all(row["status"] == "excluded" for row in no_context_rows))
+            self.assertTrue(all(row["applicabilityFeedback"][0]["status"] == "context-required" for row in no_context_rows))
+
+    def test_sfx_scoped_conditional_review_keeps_scope_without_creating_global_music_block(self):
+        temp_base = Path(os.environ["TMPDIR"])
+        with tempfile.TemporaryDirectory(prefix="sfx-scoped-negative-review-", dir=temp_base) as name:
+            temp_root = Path(name)
+            project, _audio, index, index_path = self.make_project(temp_root)
+            asset = index["assets"][0]
+            asset.update({"role": "interface"})
+            index_path.write_text(json.dumps(index), encoding="utf-8")
+            probe = temp_root / "ffprobe-sfx-negative"
+            fake_ffprobe(probe, duration="0.25")
+            recorded = self.run_review(
+                project, index_path, probe, asset_id="project.wood-latch", scope="soft wood latch closure",
+                in_sec="0", out_sec="0.12", reviewer="reviewer-42", reviewer_type="human",
+                conclusion="conditional", confirm_listened=True,
+                notes="fixture: unsuitable for the soft closure tested in this range",
+            )
+            self.assertEqual(recorded.returncode, 0, recorded.stderr)
+            persisted = json.loads(index_path.read_text(encoding="utf-8"))["assets"][0]
+            self.assertEqual(persisted["reviewStatus"], "candidate-unreviewed")
+            self.assertEqual(persisted["reviewRecord"]["applicableScope"], "soft wood latch closure")
+            self.assertNotIn("applicabilityExclusions", persisted)
+            self.assertEqual(len(persisted["applicabilityFeedback"]), 1)
+            feedback = persisted["applicabilityFeedback"][0]
+            self.assertEqual(feedback["useCase"], None)
+            self.assertEqual(feedback["applicabilityScope"], "soft wood latch closure")
+            self.assertEqual(feedback["sourceRange"], {"inSec": 0.0, "outSec": 0.12})
+            self.assertEqual(feedback["enforcement"], "feedback-only-without-canonical-music-use-case")
+
+    def test_sfx_expansion_has_real_source_bound_files_and_unheard_metadata_boundary(self):
+        document = json.loads(ADAPTER.DEFAULT_INDEX.read_text(encoding="utf-8"))
+        expanded_wyzowl = [
+            asset for asset in document["assets"]
+            if asset.get("source", {}).get("downloadKind") == "official-public-github-raw"
+        ]
+        expanded_kenney = [
+            asset for asset in document["assets"]
+            if asset.get("selectionGuidance", {}).get("basis", "").startswith("Kenney package filename/category metadata")
+        ]
+        self.assertEqual(len(expanded_wyzowl), 44)
+        self.assertEqual(len(expanded_kenney), 25)
+        for asset in expanded_wyzowl:
+            with self.subTest(asset=asset["id"]):
+                source = asset["source"]
+                target = ADAPTER.DEFAULT_INDEX.parent / asset["file"]
+                self.assertTrue(target.is_file())
+                self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(), asset["sha256"])
+                self.assertEqual(asset["sha256"], source["downloadedFileSha256"])
+                self.assertRegex(source["downloadUrl"], r"^https://raw\.githubusercontent\.com/wyzowl/sfx-kit/main/sounds/")
+                self.assertEqual(asset["reviewStatus"], "candidate-unreviewed")
+                self.assertEqual(asset["hitTimeConfidence"], "source-declared; not locally auditioned")
+                self.assertTrue(asset["selectionGuidance"]["useFor"])
+                self.assertTrue(asset["selectionGuidance"]["avoidWhen"])
+                self.assertIn("listeningRequired", asset["selectionGuidance"])
+                source_timing = asset["source"].get("timing")
+                if source_timing:
+                    self.assertEqual(asset["selectionGuidance"]["publisherAudibleWindowSec"], [source_timing["audible_start"], source_timing["audible_end"]])
+                self.assertEqual(asset["selectionGuidance"]["fitsMoveSeconds"], asset["source"].get("fits_seconds"))
+        for asset in expanded_kenney:
+            with self.subTest(asset=asset["id"]):
+                guidance = asset["selectionGuidance"]
+                self.assertIn("not a listening result", guidance["basis"])
+                self.assertIn("onset/body/tail", guidance["timingStatus"])
+                self.assertEqual(asset["reviewStatus"], "candidate-unreviewed")
+
+    def test_sfx_expansion_duty_filters_surface_intensity_and_reveal_conditions(self):
+        index_path = ADAPTER.DEFAULT_INDEX
+        result = self.run_groups(
+            ROOT, index_path, duty="short-contact-impact", action="landing", material="glass", intensity="heavy",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        group = json.loads(result.stdout)["results"][0]
+        matches = [row for row in group["candidates"] if row["status"] == "matched"]
+        self.assertEqual([row["assetId"] for row in matches], ["kenney.impact-glass-heavy-000"])
+
+        result = self.run_groups(ROOT, index_path, duty="reveal-riser", action="reveal", intensity="strong")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        group = json.loads(result.stdout)["results"][0]
+        matches = [row["assetId"] for row in group["candidates"] if row["status"] == "matched"]
+        self.assertEqual(set(matches), {"wyzowl.riser-1s-strong", "wyzowl.riser-2s-strong"})
+
+        result = self.run_groups(ROOT, index_path, duty="footstep-other-surfaces", action="walk", material="carpet")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        group = json.loads(result.stdout)["results"][0]
+        matches = [row["assetId"] for row in group["candidates"] if row["status"] == "matched"]
+        self.assertEqual(set(matches), {"kenney.footstep-carpet-000", "kenney.footstep-carpet-001"})
+
+    def test_music_duty_metadata_keeps_source_claims_separate_from_unheard_structure_and_hitpoint(self):
+        document = json.loads(ADAPTER.DEFAULT_INDEX.read_text(encoding="utf-8"))
+        assets = {asset["id"]: asset for asset in document["assets"]}
+        expected = {
+            "freesound.music-explanatory-soft-piano-710546": "Soft Piano Loop",
+            "freesound.music-reveal-calm-melody-727259": "Calm Melody Loop",
+            "freesound.music-progress-memories-826622": "Memories of a sweet summer (music) (loop)",
+            "freesound.music-ending-intro-outro-733734": "intro/outro music",
+        }
+        for asset_id, title in expected.items():
+            with self.subTest(asset=asset_id):
+                asset = assets[asset_id]
+                self.assertEqual(asset["source"]["pageTitle"], title)
+                self.assertIn("not listening evidence", asset["source"]["metadataBasis"])
+                guidance = asset["selectionGuidance"]
+                self.assertTrue(guidance["useFor"])
+                self.assertTrue(guidance["avoidFor"])
+                self.assertEqual(guidance["sourceStructure"]["onset"]["status"], "unknown-no-listening")
+                self.assertEqual(guidance["sourceStructure"]["tail"]["status"], "unknown-no-listening")
+                self.assertFalse(guidance["sourceStructure"]["loopSeam"]["checked"])
+                self.assertIsNone(guidance["selectedSourceRangeSec"])
+                self.assertIsNone(guidance["estimatedHitTimeSec"])
+                self.assertIsNone(asset["hitTimeSec"])
+                self.assertEqual(asset["reviewStatus"], "candidate-unreviewed")
 
     def test_local_search_reuses_only_an_exact_full_file_review_after_group_metadata_addition(self):
         temp_base = Path(os.environ["TMPDIR"])
@@ -445,6 +985,8 @@ class SfxSourcesInterfaceTests(unittest.TestCase):
                 "applicableScope": "wood latch closure",
                 "sourceRange": {"inSec": 0.0, "outSec": 0.25},
                 "reviewer": "reviewer-42",
+                "reviewerType": "human",
+                "listeningConfirmed": True,
                 "conclusion": "pass",
             }
             index_path.write_text(json.dumps(index), encoding="utf-8")
@@ -455,6 +997,56 @@ class SfxSourcesInterfaceTests(unittest.TestCase):
             row = json.loads(result.stdout)["results"][0]
             self.assertEqual(row["reviewReuseStatus"], "reused-exact-scope-and-file-hash")
             self.assertEqual(row["reviewStatus"], "ready")
+
+    def test_local_review_records_only_confirmed_actual_file_review_in_existing_index(self):
+        temp_base = Path(os.environ["TMPDIR"])
+        with tempfile.TemporaryDirectory(prefix="sfx-local-review-writeback-", dir=temp_base) as name:
+            temp_root = Path(name)
+            project, _audio, index, index_path = self.make_project(temp_root)
+            index_path.write_text(json.dumps(index), encoding="utf-8")
+            probe = temp_root / "ffprobe-review-fixture"
+            fake_ffprobe(probe, duration="0.25", codec="vorbis", format_name="ogg")
+            original = index_path.read_bytes()
+            refused = self.run_review(
+                project, index_path, probe, asset_id="project.wood-latch", scope="wood closure",
+                in_sec="0", out_sec="0.25", reviewer="reviewer-42", reviewer_type="human", conclusion="pass",
+            )
+            self.assertEqual(refused.returncode, 2)
+            self.assertEqual(json.loads(refused.stdout)["status"], "listening_confirmation_required")
+            self.assertEqual(index_path.read_bytes(), original, "no listening assertion means no index write")
+
+            recorded = self.run_review(
+                project, index_path, probe, asset_id="project.wood-latch", scope="wood closure",
+                in_sec="0", out_sec="0.25", reviewer="reviewer-42", reviewer_type="human", conclusion="pass",
+                notes="fixture-only review record used to test exact-file writeback", confirm_listened=True,
+            )
+            self.assertEqual(recorded.returncode, 0, recorded.stderr)
+            result = json.loads(recorded.stdout)
+            self.assertEqual(result["operation"], "local-review")
+            self.assertEqual(result["status"], "recorded")
+            self.assertEqual(result["reviewStatus"], "ready")
+            persisted = json.loads(index_path.read_text(encoding="utf-8"))
+            asset = persisted["assets"][0]
+            self.assertEqual(asset["reviewRecord"]["fileSha256"], asset["sha256"])
+            self.assertTrue(asset["reviewRecord"]["listeningConfirmed"])
+            self.assertEqual(asset["reviewRecord"]["conclusion"], "pass")
+            searched = self.run_local(project, index_path, probe, review_scope="wood closure")
+            self.assertEqual(searched.returncode, 0, searched.stderr)
+            result_asset = json.loads(searched.stdout)["results"][0]
+            self.assertEqual(result_asset["reviewReuseStatus"], "reused-exact-scope-and-file-hash")
+            self.assertEqual(result_asset["reviewStatus"], "ready")
+
+            partial = self.run_review(
+                project, index_path, probe, asset_id="project.wood-latch", scope="wood closure",
+                in_sec="0", out_sec="0.1", reviewer="reviewer-42", reviewer_type="human", conclusion="conditional",
+                notes="fixture-only partial-range review", confirm_listened=True,
+            )
+            self.assertEqual(partial.returncode, 0, partial.stderr)
+            updated = json.loads(index_path.read_text(encoding="utf-8"))["assets"][0]
+            self.assertEqual(updated["reviewStatus"], "candidate-unreviewed")
+            self.assertEqual(len(updated["reviewHistory"]), 1)
+            self.assertEqual(updated["reviewHistory"][0]["conclusion"], "pass")
+            self.assertEqual(updated["reviewRecord"]["conclusion"], "conditional")
 
     def test_local_search_preserves_sync_only_boundary_and_rejects_missing_basis(self):
         temp_base = Path(os.environ["TMPDIR"])
@@ -853,6 +1445,8 @@ class SfxSourcesInterfaceTests(unittest.TestCase):
                 "applicableScope": "paper page turning on a desk",
                 "sourceRange": {"inSec": 0.1, "outSec": 0.8},
                 "reviewer": "reviewer-42",
+                "reviewerType": "human",
+                "listeningConfirmed": True,
                 "conclusion": "pass",
             }
         }
@@ -908,6 +1502,219 @@ class SfxSourcesInterfaceTests(unittest.TestCase):
             ADAPTER.review_reuse_status(asset, "a" * 64, "paper crumpling on a desk", 1.0),
             "scope-mismatch",
         )
+
+
+class SourceRegistrationTests(unittest.TestCase):
+    def make_fixture(self, temp_root):
+        project = temp_root / "registration-project"
+        index_dir = project / "assets" / "audio"
+        index_dir.mkdir(parents=True)
+        index_path = index_dir / "index.json"
+        index_path.write_text(json.dumps({"schemaVersion": 1, "assets": []}), encoding="utf-8")
+
+        license_path = index_dir / "licenses" / "fixture-License.txt"
+        license_path.parent.mkdir(parents=True)
+        license_text = (
+            "Fixture Pack (1.0)\n"
+            "License: Creative Commons Zero, CC0\n"
+            "http://creativecommons.org/publicdomain/zero/1.0/\n"
+        )
+        license_path.write_text(license_text, encoding="utf-8")
+
+        source_path = project / ".cache" / "tmp" / "downloads" / "click.wav"
+        source_path.parent.mkdir(parents=True)
+        with wave.open(str(source_path), "wb") as media:
+            media.setnchannels(1)
+            media.setsampwidth(2)
+            media.setframerate(8000)
+            media.writeframes(b"\x00\x00" * 80)
+        ffprobe_path = project / ".cache" / "tmp" / "ffprobe-fixture"
+        ffprobe_path.parent.mkdir(parents=True, exist_ok=True)
+        fake_ffprobe(ffprobe_path, duration="0.01", codec="pcm_s16le", format_name="wav")
+        file_bytes = source_path.read_bytes()
+        key = "kn:fixture-pack/Audio/click.wav"
+        archive_path = project / ".cache" / "tmp" / "fixture-pack.zip"
+        with zipfile.ZipFile(archive_path, "w") as package:
+            package.writestr("Audio/click.wav", file_bytes)
+            package.writestr("License.txt", license_text)
+
+        receipt_path = project / ".cache" / "validation" / "source-get.json"
+        receipt_path.parent.mkdir(parents=True)
+        receipt = {
+            "schemaVersion": 1,
+            "status": "success",
+            "networkAttempted": False,
+            "results": [{
+                "key": key,
+                "status": "downloaded",
+                "asset": {
+                    "key": key,
+                    "provider": "kenney",
+                    "title": "click",
+                    "path": source_path.relative_to(project).as_posix(),
+                    "sha256": hashlib.sha256(file_bytes).hexdigest(),
+                    "bytes": len(file_bytes),
+                    "extension": ".wav",
+                    "duration": {"method": "not_measured", "seconds": None},
+                    "probe": {"status": "unavailable"},
+                    "author": None,
+                    "sourcePage": "https://kenney.nl/assets/fixture-pack",
+                    "sourcePageStatus": "available",
+                    "license": {"providerLabel": "Kenney pack", "exactVersionVerified": False},
+                    "preview": {"url": None, "localPath": source_path.relative_to(project).as_posix()},
+                    "downloadKind": "cached-pack-file",
+                    "reviewStatus": "candidate-unreviewed",
+                },
+            }],
+        }
+        receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+        search_path = project / ".cache" / "validation" / "source-search.json"
+        search_path.write_text(json.dumps({"schemaVersion": 1, "results": [{"key": key, "provider": "kenney"}]}), encoding="utf-8")
+        return {
+            "project": project,
+            "index": index_path,
+            "license": license_path,
+            "archive": archive_path,
+            "receipt": receipt_path,
+            "search": search_path,
+            "source": source_path,
+            "ffprobe": ffprobe_path,
+            "key": key,
+        }
+
+    def args_for(self, fixture, *extra):
+        args = [
+            "source-register",
+            "--work-root", str(fixture["project"]),
+            "--index", str(fixture["index"]),
+            "--source-get-receipt", str(fixture["receipt"]),
+            "--source-search-receipt", str(fixture["search"]),
+            "--key", fixture["key"],
+            "--asset-id", "kenney.fixture-click",
+            "--file", "fixture/click.wav",
+            "--role", "light-touch",
+            "--material", "unknown (fixture interface sound)",
+            "--energy", "unspecified",
+            "--tag", "click",
+            "--tag", "interface",
+            "--author", "Kenney",
+            "--source-pack", "Fixture Pack",
+            "--source-archive", str(fixture["archive"]),
+            "--license-id", "CC0-1.0",
+            "--license-proof", str(fixture["license"]),
+            "--ffprobe", str(fixture["ffprobe"]),
+        ]
+        return ADAPTER.parser().parse_args(args + list(extra))
+
+    def run_register(self, fixture, *extra):
+        args = self.args_for(fixture, *extra)
+        return args.handler(args)
+
+    def test_source_register_adds_verified_candidate_and_source_chain_fields(self):
+        with tempfile.TemporaryDirectory(prefix="sfx-register-", dir=ROOT / ".cache" / "tmp" / "finished-assets-production" / "assets") as temp:
+            fixture = self.make_fixture(Path(temp))
+            result, code = self.run_register(fixture)
+            self.assertEqual(code, 0)
+            self.assertEqual(result["status"], "registered")
+            entry = result["asset"]
+            self.assertEqual(entry["durationSec"], 0.01)
+            self.assertEqual(entry["probe"]["method"], fixture["ffprobe"].name)
+            self.assertEqual(entry["reviewStatus"], "candidate-unreviewed")
+            self.assertEqual(entry["source"]["provider"], "kenney")
+            self.assertEqual(entry["source"]["pack"], "Fixture Pack")
+            self.assertIsNone(entry["source"]["version"], "an undocumented package version must remain unknown")
+            self.assertEqual(entry["source"]["page"], "https://kenney.nl/assets/fixture-pack")
+            self.assertEqual(entry["source"]["originalPath"], "Audio/click.wav")
+            self.assertEqual(entry["source"]["downloadKind"], "cached-pack-file")
+            self.assertEqual(entry["source"]["archiveSha256"], hashlib.sha256(fixture["archive"].read_bytes()).hexdigest())
+            self.assertEqual(entry["source"]["sourceGetReceiptSha256"], hashlib.sha256(fixture["receipt"].read_bytes()).hexdigest())
+            self.assertEqual(entry["source"]["sourceSearchReceiptSha256"], hashlib.sha256(fixture["search"].read_bytes()).hexdigest())
+            self.assertEqual(result["assetIndexFragment"]["sha256"], entry["sha256"])
+            self.assertTrue((fixture["index"].parent / entry["file"]).is_file())
+            indexed = json.loads(fixture["index"].read_text(encoding="utf-8"))
+            self.assertEqual(indexed["assets"][0], entry)
+
+    def test_source_register_never_promotes_receipt_review_status(self):
+        with tempfile.TemporaryDirectory(prefix="sfx-register-candidate-", dir=ROOT / ".cache" / "tmp" / "finished-assets-production" / "assets") as temp:
+            fixture = self.make_fixture(Path(temp))
+            receipt = json.loads(fixture["receipt"].read_text(encoding="utf-8"))
+            receipt["results"][0]["asset"]["reviewStatus"] = "ready"
+            fixture["receipt"].write_text(json.dumps(receipt), encoding="utf-8")
+            result, code = self.run_register(fixture)
+            self.assertEqual(code, 0)
+            self.assertEqual(result["asset"]["reviewStatus"], "candidate-unreviewed")
+            self.assertEqual(result["asset"]["source"]["receiptReviewStatus"], "ready")
+
+    def test_source_register_rejects_hash_mismatch_without_writing(self):
+        with tempfile.TemporaryDirectory(prefix="sfx-register-hash-", dir=ROOT / ".cache" / "tmp" / "finished-assets-production" / "assets") as temp:
+            fixture = self.make_fixture(Path(temp))
+            receipt = json.loads(fixture["receipt"].read_text(encoding="utf-8"))
+            receipt["results"][0]["asset"]["sha256"] = "0" * 64
+            fixture["receipt"].write_text(json.dumps(receipt), encoding="utf-8")
+            before = fixture["index"].read_bytes()
+            result, code = self.run_register(fixture)
+            self.assertEqual((result["status"], code), ("hash_mismatch", 6))
+            self.assertEqual(fixture["index"].read_bytes(), before)
+            self.assertFalse((fixture["index"].parent / "fixture" / "click.wav").exists())
+
+    def test_source_register_keeps_unknown_or_nonredistributable_license_as_candidate(self):
+        for license_id in (None, "CC-BY-NC-4.0"):
+            with self.subTest(license_id=license_id), tempfile.TemporaryDirectory(prefix="sfx-register-rights-", dir=ROOT / ".cache" / "tmp" / "finished-assets-production" / "assets") as temp:
+                fixture = self.make_fixture(Path(temp))
+                if license_id is None:
+                    args = self.args_for(fixture)
+                    args.license_id = None
+                    result, code = args.handler(args)
+                else:
+                    result, code = self.run_register(fixture, "--license-id", license_id)
+                self.assertEqual((result["status"], code), ("rights_unverified", 5))
+                self.assertFalse(result["registered"])
+                self.assertEqual(result["candidate"]["reviewStatus"], "candidate-unreviewed")
+                self.assertEqual(json.loads(fixture["index"].read_text(encoding="utf-8"))["assets"], [])
+                self.assertFalse((fixture["index"].parent / "fixture" / "click.wav").exists())
+
+    def test_source_register_rejects_path_escape(self):
+        with tempfile.TemporaryDirectory(prefix="sfx-register-escape-", dir=ROOT / ".cache" / "tmp" / "finished-assets-production" / "assets") as temp:
+            fixture = self.make_fixture(Path(temp))
+            before = fixture["index"].read_bytes()
+            result, code = self.run_register(fixture, "--file", "../escape.wav")
+            self.assertEqual((result["status"], code), ("path_escape", 4))
+            self.assertEqual(fixture["index"].read_bytes(), before)
+
+    def test_source_register_rejects_duplicate_ids_and_output_conflicts(self):
+        with tempfile.TemporaryDirectory(prefix="sfx-register-conflict-", dir=ROOT / ".cache" / "tmp" / "finished-assets-production" / "assets") as temp:
+            fixture = self.make_fixture(Path(temp))
+            result, code = self.run_register(fixture)
+            self.assertEqual(code, 0)
+            duplicate, duplicate_code = self.run_register(fixture, "--file", "fixture/second.wav")
+            self.assertEqual((duplicate["status"], duplicate_code), ("duplicate_id", 4))
+            conflict, conflict_code = self.run_register(fixture, "--asset-id", "kenney.fixture-second")
+            self.assertEqual((conflict["status"], conflict_code), ("output_conflict", 7))
+            self.assertEqual(len(json.loads(fixture["index"].read_text(encoding="utf-8"))["assets"]), 1)
+
+    def test_source_register_returns_specific_probe_unavailable_without_fallback(self):
+        with tempfile.TemporaryDirectory(prefix="sfx-register-probe-unavailable-", dir=ROOT / ".cache" / "tmp" / "finished-assets-production" / "assets") as temp:
+            fixture = self.make_fixture(Path(temp))
+            missing_probe = fixture["project"] / ".cache" / "tmp" / "missing-ffprobe"
+            before = fixture["index"].read_bytes()
+            result, code = self.run_register(fixture, "--ffprobe", str(missing_probe))
+            self.assertEqual((result["status"], code), ("probe_unavailable", ADAPTER.PROBE_UNAVAILABLE_EXIT))
+            self.assertEqual(result["error"], "ffprobe executable is unavailable")
+            self.assertEqual(fixture["index"].read_bytes(), before)
+            self.assertFalse((fixture["index"].parent / "fixture" / "click.wav").exists())
+
+    def test_source_register_ffprobe_default_uses_existing_environment_names(self):
+        args = [
+            "source-register", "--source-get-receipt", "get.json", "--key", "kn:pack/sound.ogg",
+            "--asset-id", "kenney.test-sound", "--file", "sound.ogg", "--role", "impact",
+            "--material", "unknown", "--energy", "unspecified", "--tag", "sound",
+            "--license-id", "CC0-1.0", "--license-proof", "license.txt",
+        ]
+        with mock.patch.dict(os.environ, {"LAOHU_FFPROBE": "/env/laohu-ffprobe", "MOTION_FFPROBE": "/env/motion-ffprobe"}):
+            parsed = ADAPTER.parser().parse_args(args)
+            self.assertEqual(parsed.ffprobe, "/env/laohu-ffprobe")
+            explicit = ADAPTER.parser().parse_args(args + ["--ffprobe", "/explicit/ffprobe"])
+            self.assertEqual(explicit.ffprobe, "/explicit/ffprobe")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,431 @@
+{
+  "format": "laohu.motion.selected-native-clip-runtime/1",
+  "source": {
+    "id": "huashu-art-motion",
+    "repository": "https://github.com/alchaincyf/huashu-art-motion",
+    "commit": "8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c",
+    "license": "MIT source code; SIL Open Font License 1.1 for bundled font files"
+  },
+  "scope": {
+    "templateIds": [
+      "laohu-motion-t1-3b1b",
+      "laohu-motion-t2-keynote-ui",
+      "laohu-motion-t3-finance-chart",
+      "laohu-motion-y1-kurzgesagt",
+      "laohu-motion-y2-vox",
+      "laohu-motion-y3-whiteboard",
+      "laohu-motion-y4-storytime",
+      "laohu-motion-y5-kinetic-type"
+    ],
+    "grammars": [
+      "t1_3b1b",
+      "t2_keynote_ui",
+      "t3_finance_chart",
+      "y1_kurzgesagt",
+      "y2_vox",
+      "y3_whiteboard",
+      "y4_storytime",
+      "y5_kinetic_type"
+    ],
+    "runtimeEntrypoint": "clip.html",
+    "servedRoot": "/engine",
+    "fontFamilies": [
+      "PuHui-Medium",
+      "PuHui-Bold",
+      "PuHui-Heavy",
+      "PuHui-Black",
+      "Inter",
+      "RobotoCondensed",
+      "LXGWWenKai-500"
+    ],
+    "dependencyBasis": "Original clip entrypoint and script order retained; all catalogued available grammars and conditional y4 storytime grammar plus the entrypoint-referenced runtime libraries are bundled. FONT_FACES contains only faces consumed by this grammar set; source clip implementations and runtime libraries are byte copies.",
+    "excluded": "Unselected scene modules, examples, sample media, and unused font assets remain outside the production closure."
+  },
+  "files": [
+    {
+      "path": "clip.html",
+      "urlPath": "/engine/clip.html",
+      "sha256": "15b9ab6f7e3e29dddf8a0f8a181239f94f60c7b1c2e3defc05bdd57f0705dfd3",
+      "bytes": 1299,
+      "sourcePath": "scripts/engine/clip.html",
+      "sourceSha256": "15b9ab6f7e3e29dddf8a0f8a181239f94f60c7b1c2e3defc05bdd57f0705dfd3",
+      "sourceGitBlob": "cfe53e3700fe0d9a17a54550bebf1b195920197d",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clip.js",
+      "urlPath": "/engine/clip.js",
+      "sha256": "4be7a02d636b1e6ebf864822fec54c8e925ce415be2e2f1be1098ffb7a7b8799",
+      "bytes": 10907,
+      "sourcePath": "scripts/engine/clip.js",
+      "sourceSha256": "4be7a02d636b1e6ebf864822fec54c8e925ce415be2e2f1be1098ffb7a7b8799",
+      "sourceGitBlob": "e0536dab8c0d1f5ce86669f15b2833b694389a11",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clips/t1_3b1b.js",
+      "urlPath": "/engine/clips/t1_3b1b.js",
+      "sha256": "84ed102301a066410aca1b0d06ba0459f7d5da09ae4831edf58a27f2152a6e7a",
+      "bytes": 18940,
+      "sourcePath": "scripts/engine/clips/t1_3b1b.js",
+      "sourceSha256": "84ed102301a066410aca1b0d06ba0459f7d5da09ae4831edf58a27f2152a6e7a",
+      "sourceGitBlob": "4bc656b603a341f080708c8dea2d2110c079bfa5",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clips/t2_keynote_ui.js",
+      "urlPath": "/engine/clips/t2_keynote_ui.js",
+      "sha256": "31c59a08e39f5799e1f59017fafa0c7d07f40a360e27737fcdefa69b2fae5e56",
+      "bytes": 36870,
+      "sourcePath": "scripts/engine/clips/t2_keynote_ui.js",
+      "sourceSha256": "31c59a08e39f5799e1f59017fafa0c7d07f40a360e27737fcdefa69b2fae5e56",
+      "sourceGitBlob": "2a37bd961b5fed20e62c127294bcf47e3daa4300",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clips/t3_finance_chart.js",
+      "urlPath": "/engine/clips/t3_finance_chart.js",
+      "sha256": "f175d45ea92e0a680fea9e08ce9270a59a63a5b4bb3d00db5a894848e2407b36",
+      "bytes": 21116,
+      "sourcePath": "scripts/engine/clips/t3_finance_chart.js",
+      "sourceSha256": "f175d45ea92e0a680fea9e08ce9270a59a63a5b4bb3d00db5a894848e2407b36",
+      "sourceGitBlob": "67a378620483b762aaee1f31d6ef4383b3b2b782",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clips/y1_kurzgesagt.js",
+      "urlPath": "/engine/clips/y1_kurzgesagt.js",
+      "sha256": "5f507ef90222f335048cb167535f910fda789d7cd2fba1fc8695c0c4a1f4c6b6",
+      "bytes": 20497,
+      "sourcePath": "scripts/engine/clips/y1_kurzgesagt.js",
+      "sourceSha256": "5f507ef90222f335048cb167535f910fda789d7cd2fba1fc8695c0c4a1f4c6b6",
+      "sourceGitBlob": "c9d322f3fe5e4458aecae132b4f96783f9f536e6",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clips/y2_vox.js",
+      "urlPath": "/engine/clips/y2_vox.js",
+      "sha256": "6c00ac3e587595b94732750a191827674a818c5f143d2ecfd328c9e4059bc589",
+      "bytes": 14618,
+      "sourcePath": "scripts/engine/clips/y2_vox.js",
+      "sourceSha256": "6c00ac3e587595b94732750a191827674a818c5f143d2ecfd328c9e4059bc589",
+      "sourceGitBlob": "86c516af2a2fc750187d9edddb0595e06016f26a",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clips/y3_whiteboard.js",
+      "urlPath": "/engine/clips/y3_whiteboard.js",
+      "sha256": "1536d7a276580edd44fab6199b69671aecbae30b39b5f89921d08e43a738ff2d",
+      "bytes": 21759,
+      "sourcePath": "scripts/engine/clips/y3_whiteboard.js",
+      "sourceSha256": "1536d7a276580edd44fab6199b69671aecbae30b39b5f89921d08e43a738ff2d",
+      "sourceGitBlob": "a489f3ad4a69693eb6ce7fceafac307ceaa6f357",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clips/y4_storytime.js",
+      "urlPath": "/engine/clips/y4_storytime.js",
+      "sha256": "2ba8c7a05296c489b948c1b2f050a479dcef5a7a19bb1550aca07478f97e25d6",
+      "bytes": 22039,
+      "sourcePath": "scripts/engine/clips/y4_storytime.js",
+      "sourceSha256": "2ba8c7a05296c489b948c1b2f050a479dcef5a7a19bb1550aca07478f97e25d6",
+      "sourceGitBlob": "4d30c1f2368bc88bbdf66133e97701e57251dc17",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "clips/y5_kinetic_type.js",
+      "urlPath": "/engine/clips/y5_kinetic_type.js",
+      "sha256": "2f46bd3710920d1f3496b6496680116cca8188987c5d82643da9eb1a0c45bbd9",
+      "bytes": 13321,
+      "sourcePath": "scripts/engine/clips/y5_kinetic_type.js",
+      "sourceSha256": "2f46bd3710920d1f3496b6496680116cca8188987c5d82643da9eb1a0c45bbd9",
+      "sourceGitBlob": "23d421c5cbbb432ec87e2864c776e1302009b598",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/camera.js",
+      "urlPath": "/engine/lib/camera.js",
+      "sha256": "53ddc95e972900abfb49bfea704a2b77897b9237836ee653aeed966d39ceeec5",
+      "bytes": 9762,
+      "sourcePath": "scripts/engine/lib/camera.js",
+      "sourceSha256": "53ddc95e972900abfb49bfea704a2b77897b9237836ee653aeed966d39ceeec5",
+      "sourceGitBlob": "7b50c44db598733264c1b7ecd542d7f896d93b47",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/chart.js",
+      "urlPath": "/engine/lib/chart.js",
+      "sha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+      "bytes": 10870,
+      "sourcePath": "scripts/engine/lib/chart.js",
+      "sourceSha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+      "sourceGitBlob": "e18de00ae35ab951117f9547e6b946d4094ee216",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/collage.js",
+      "urlPath": "/engine/lib/collage.js",
+      "sha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+      "bytes": 8972,
+      "sourcePath": "scripts/engine/lib/collage.js",
+      "sourceSha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+      "sourceGitBlob": "f3491e46ac4040ea4951a6215df7ef61e406514a",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/diagram.js",
+      "urlPath": "/engine/lib/diagram.js",
+      "sha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+      "bytes": 20080,
+      "sourcePath": "scripts/engine/lib/diagram.js",
+      "sourceSha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+      "sourceGitBlob": "8baf28f1c084426a886bcffb98225eb13a70d583",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/finish.js",
+      "urlPath": "/engine/lib/finish.js",
+      "sha256": "a391531aaac53edc5b435067a2210e5a473c955c429d1e11206bc0f8173d5e48",
+      "bytes": 5150,
+      "sourcePath": "scripts/engine/lib/finish.js",
+      "sourceSha256": "a391531aaac53edc5b435067a2210e5a473c955c429d1e11206bc0f8173d5e48",
+      "sourceGitBlob": "4d711d6b06f02786bcd17f110a164e4fbb2f0a41",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts.js",
+      "urlPath": "/engine/lib/fonts.js",
+      "sha256": "c073e0afcee6c541f70fd87e9021df15f05fccf5246141cf5d3cd21d6c970f24",
+      "bytes": 755,
+      "sourcePath": "scripts/engine/lib/fonts.js",
+      "sourceSha256": "8d5ac65f41bd6df79a0f913adf7f425d46c847cc5d8ed831eccdc80b1c29531d",
+      "sourceGitBlob": "c96e0f285a9902824a8ff9621db2d6061c00d914",
+      "license": "MIT",
+      "mapping": "source-font-declarations-pruned-to-fonts-consumed-by-selected-clip-grammars"
+    },
+    {
+      "path": "lib/fonts/Inter-var.woff",
+      "urlPath": "/engine/lib/fonts/Inter-var.woff",
+      "sha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+      "bytes": 126688,
+      "sourcePath": "scripts/engine/lib/fonts/Inter-var.woff",
+      "sourceSha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+      "sourceGitBlob": "ace36e8017be19b3c1b1bf347f09d6835466e8e6",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts/LICENSES.md",
+      "urlPath": "/engine/lib/fonts/LICENSES.md",
+      "sha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+      "bytes": 4498,
+      "sourcePath": "scripts/engine/lib/fonts/LICENSES.md",
+      "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+      "sourceGitBlob": "0533deaf8ce621691fbd791c134a4e4bede9154e",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts/LXGWWenKai-500.woff",
+      "urlPath": "/engine/lib/fonts/LXGWWenKai-500.woff",
+      "sha256": "734bd187392579417ac83effe31d37b9de43c7b290bcb400800456511ed79e8f",
+      "bytes": 2098296,
+      "sourcePath": "scripts/engine/lib/fonts/LXGWWenKai-500.woff",
+      "sourceSha256": "734bd187392579417ac83effe31d37b9de43c7b290bcb400800456511ed79e8f",
+      "sourceGitBlob": "4f02c88fd17d3a10936351fef76596440163c805",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts/NotoSansSC-500.woff",
+      "urlPath": "/engine/lib/fonts/NotoSansSC-500.woff",
+      "sha256": "928d841b1ec663ebce82593568cbc19749fe652f88b8ec960723b7d87b551512",
+      "bytes": 1416188,
+      "sourcePath": "scripts/engine/lib/fonts/NotoSansSC-500.woff",
+      "sourceSha256": "928d841b1ec663ebce82593568cbc19749fe652f88b8ec960723b7d87b551512",
+      "sourceGitBlob": "4c7cade7f4d92173af4c3a1b6e3a44919e2636bc",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts/NotoSansSC-700.woff",
+      "urlPath": "/engine/lib/fonts/NotoSansSC-700.woff",
+      "sha256": "dd0d39a9780eb995c499af0c20cca93b1dfdda865da70871a20890b3e406b968",
+      "bytes": 1425340,
+      "sourcePath": "scripts/engine/lib/fonts/NotoSansSC-700.woff",
+      "sourceSha256": "dd0d39a9780eb995c499af0c20cca93b1dfdda865da70871a20890b3e406b968",
+      "sourceGitBlob": "4e5c21514f3c9c69f2571c9889390a779843d4fe",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts/NotoSansSC-800.woff",
+      "urlPath": "/engine/lib/fonts/NotoSansSC-800.woff",
+      "sha256": "b57f9c645b1a4967a3c8914ed41f24d109394a8175e36af08f93e40803e84664",
+      "bytes": 1426988,
+      "sourcePath": "scripts/engine/lib/fonts/NotoSansSC-800.woff",
+      "sourceSha256": "b57f9c645b1a4967a3c8914ed41f24d109394a8175e36af08f93e40803e84664",
+      "sourceGitBlob": "056fba6424656387bd2a4a85efbc9ae3c5db1ef7",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts/NotoSansSC-900.woff",
+      "urlPath": "/engine/lib/fonts/NotoSansSC-900.woff",
+      "sha256": "d2d8a42438b18b65b6577434df4e41bb08c6b5051281757849af00ab743bb58f",
+      "bytes": 1394104,
+      "sourcePath": "scripts/engine/lib/fonts/NotoSansSC-900.woff",
+      "sourceSha256": "d2d8a42438b18b65b6577434df4e41bb08c6b5051281757849af00ab743bb58f",
+      "sourceGitBlob": "664a8d52cc3924e36c85599f8c26405c12797817",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts/OFL.txt",
+      "urlPath": "/engine/lib/fonts/OFL.txt",
+      "sha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "bytes": 4430,
+      "sourcePath": "scripts/engine/lib/fonts/OFL.txt",
+      "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "sourceGitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/fonts/RobotoCondensed-var.woff",
+      "urlPath": "/engine/lib/fonts/RobotoCondensed-var.woff",
+      "sha256": "d149ef1478076ad3f201676de2f58d11de18257590d9faeee2318fa3bc4b90e6",
+      "bytes": 94036,
+      "sourcePath": "scripts/engine/lib/fonts/RobotoCondensed-var.woff",
+      "sourceSha256": "d149ef1478076ad3f201676de2f58d11de18257590d9faeee2318fa3bc4b90e6",
+      "sourceGitBlob": "1196643983d70c8fcfc751c9bd4177981f0a4ddc",
+      "license": "SIL OFL 1.1",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/kit.js",
+      "urlPath": "/engine/lib/kit.js",
+      "sha256": "a066c4d0d4dc7189dd9de7776938b4cbc6025a4bf4a38d2e181a6667744f3024",
+      "bytes": 6639,
+      "sourcePath": "scripts/engine/lib/kit.js",
+      "sourceSha256": "a066c4d0d4dc7189dd9de7776938b4cbc6025a4bf4a38d2e181a6667744f3024",
+      "sourceGitBlob": "e0790d7eeafd1627794d562e81f8ded1dbddf8ef",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/media.js",
+      "urlPath": "/engine/lib/media.js",
+      "sha256": "65a4d0a17ea194e799538d380d49ea59bc9b23d3118ee4a3bb3ba0c4ad8bac03",
+      "bytes": 9419,
+      "sourcePath": "scripts/engine/lib/media.js",
+      "sourceSha256": "65a4d0a17ea194e799538d380d49ea59bc9b23d3118ee4a3bb3ba0c4ad8bac03",
+      "sourceGitBlob": "5e24d18f8d59713ede791f98322f13719d685ec6",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/motion.js",
+      "urlPath": "/engine/lib/motion.js",
+      "sha256": "22762a3691464b7504da562b3761edc70f7c138721618639697df3a5a93c1b97",
+      "bytes": 9402,
+      "sourcePath": "scripts/engine/lib/motion.js",
+      "sourceSha256": "22762a3691464b7504da562b3761edc70f7c138721618639697df3a5a93c1b97",
+      "sourceGitBlob": "6ee9cfa1f9ae84be9f812539f9badec574ec0857",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/paint.js",
+      "urlPath": "/engine/lib/paint.js",
+      "sha256": "95ccd1945a4a19b6e2d89a422d7ea7de96174acdbae1801090ca9ee48131f9a3",
+      "bytes": 15436,
+      "sourcePath": "scripts/engine/lib/paint.js",
+      "sourceSha256": "95ccd1945a4a19b6e2d89a422d7ea7de96174acdbae1801090ca9ee48131f9a3",
+      "sourceGitBlob": "6fc5bedd62c6497755ccd3c7d05fd5f61c2b4828",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/palettes.js",
+      "urlPath": "/engine/lib/palettes.js",
+      "sha256": "934acc426ebdada51f613d6e7b1cb693590d615a01d7a66d5461483bf79ff30a",
+      "bytes": 4876,
+      "sourcePath": "scripts/engine/lib/palettes.js",
+      "sourceSha256": "934acc426ebdada51f613d6e7b1cb693590d615a01d7a66d5461483bf79ff30a",
+      "sourceGitBlob": "172b2a2d9d3c52cb774603d88813189c2f66a1e2",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/toon.js",
+      "urlPath": "/engine/lib/toon.js",
+      "sha256": "54778963a97767742257e5b68890e5b292f2b89ce3fd1a1f9711224573988d8b",
+      "bytes": 16043,
+      "sourcePath": "scripts/engine/lib/toon.js",
+      "sourceSha256": "54778963a97767742257e5b68890e5b292f2b89ce3fd1a1f9711224573988d8b",
+      "sourceGitBlob": "b0eae6595c3382a3afb95b35b56fa83c3118a9aa",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/typo.js",
+      "urlPath": "/engine/lib/typo.js",
+      "sha256": "bfb53350a94bc77c20a5420b694b0ffb7ba913c4a2e3390d86b99cf3fa8c3976",
+      "bytes": 11258,
+      "sourcePath": "scripts/engine/lib/typo.js",
+      "sourceSha256": "bfb53350a94bc77c20a5420b694b0ffb7ba913c4a2e3390d86b99cf3fa8c3976",
+      "sourceGitBlob": "f00d3675480fe0ba302bfdfe1c1894025103abe4",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/ui.js",
+      "urlPath": "/engine/lib/ui.js",
+      "sha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+      "bytes": 10548,
+      "sourcePath": "scripts/engine/lib/ui.js",
+      "sourceSha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+      "sourceGitBlob": "8dbf8f16c41dd60ce3a3adad2d691d38ab776cea",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "lib/util.js",
+      "urlPath": "/engine/lib/util.js",
+      "sha256": "a2092233bbca337a29b00ce261d81a5c7b6baa020c9e301916ebe4a997450b9d",
+      "bytes": 7402,
+      "sourcePath": "scripts/engine/lib/util.js",
+      "sourceSha256": "a2092233bbca337a29b00ce261d81a5c7b6baa020c9e301916ebe4a997450b9d",
+      "sourceGitBlob": "0b3db4299e12072d033b3e6418e9bdf309c2564f",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "LICENSE",
+      "urlPath": "/engine/LICENSE",
+      "sha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+      "bytes": 1086,
+      "sourcePath": "LICENSE",
+      "sourceSha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+      "sourceGitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a",
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    }
+  ]
+}

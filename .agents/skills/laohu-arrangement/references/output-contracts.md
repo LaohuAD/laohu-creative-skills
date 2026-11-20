@@ -13,7 +13,7 @@
 
 只有用户要求的分支才出文件。明确说明可编辑的对象、精度、缺失决定和目标软件；不要靠扩展名推导用户需要了全曲、总谱或混音。
 
-动画/视频的视听声音设计沿用 Motion 的事件 ID、canonical 时钟、锁定轨与现有 `audio-plan.v1`；它不自动变成歌曲、乐谱或独立编曲交付。按[视听声音设计与源音频处理](sound-editing-and-mixing.md)生成的派生源 WAV 与 `laohu.audio-edit-receipt/1` 回执交回 Motion 主线，由 Motion 的 `audio.mjs` 完成唯一整片混音。不要另建电影时间线或第二混音计划。
+动画/视频的视听声音设计沿用 Motion 的共享事件 ID、canonical 时钟、锁定轨与 `audio-plan.v1`；它不自动变成歌曲、乐谱或独立编曲交付。按[视听声音设计与源音频处理](sound-editing-and-mixing.md)生成的派生源 WAV 与 `laohu.audio-edit-receipt/1` 回执交回 Motion 主线。新 Showreel 的成品音源由原生 `audio-plan/1` 薄入口交给既有 plan mixer，生成 `audio/final.wav`；未编辑时由 build 封装，工作区音轨有改动时，最终导出使用该会话的当前混音。既有 Remotion/Film 工程继续沿各自原音频 consumer 兼容维护。Arrangement 不另建电影时间线、计划格式或第二份全片混音。
 
 ## 视听声音设计：派生源 WAV、素材身份与实际后端
 

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"lockTime","type":"string","label":"锁屏时间","default":"08:56"},{"id":"city","type":"string","label":"天气城市","default":"Paris"},{"id":"temperature","type":"string","label":"天气温度","default":"18°"},{"id":"meeting","type":"string","label":"会议文字","default":"Weekly Meeting"},{"id":"birthday","type":"string","label":"生日卡片标题","default":"Till Birthday"},{"id":"birthdayDays","type":"string","label":"生日倒计时","default":"86"},{"id":"song","type":"string","label":"音乐标题","default":"Far closer"},{"id":"artist","type":"string","label":"音乐作者","default":"David E Smith"},{"id":"blue","type":"color","label":"开场蓝色","default":"#176cbe"},{"id":"manufacturer","type":"string","label":"品牌名称","default":"Xiaomi"},{"id":"systemName","type":"string","label":"系统名称","default":"HyperOS"}]'>
+<head>
+<meta charset="utf-8"><title>262 Xiaomi — HyperOS interface motion</title>
+<style>
+@font-face { font-family: HyperInter; src: url('assets/fonts/Inter-variable-latin.woff2') format('woff2'); font-weight:100 900; }
+html,body { margin:0; width:1546px; height:870px; overflow:hidden; background:#fff; }
+#hyper-film { position:relative; width:1546px; height:870px; overflow:hidden; }
+</style>
+<script src="assets/gsap.min.js"></script><script src="assets/hyper-ui.js"></script><script src="assets/hyper-world.js"></script>
+</head>
+<body>
+<main data-hf-id="hf-knqo" id="hyper-film" data-composition-id="hyper-film" data-start="0" data-duration="47.2" data-width="1546" data-height="870" data-fps="30">
+<div data-hf-id="hf-owki" id="hyper-world" class="clip" data-composition-id="hyper-world" data-composition-src="compositions/hyper-world.html" data-start="0" data-duration="47.2" data-track-index="1" data-track-kind="graphics" data-width="1546" data-height="870"></div>
+<audio data-hf-id="hf-3mlr" id="hyper-original-soundtrack" class="clip" data-start="0" data-duration="47.2" data-track-index="2" data-volume="1" src="assets/lfs/original-soundtrack.m4a"></audio>
+</main>
+<script>
+window.__timelines = window.__timelines || {};
+window.__timelines['hyper-film'] = gsap.timeline({ paused:true }).to({ time:0 }, { time:47.2, duration:47.2, ease:'none' });
+</script>
+</body>
+</html>

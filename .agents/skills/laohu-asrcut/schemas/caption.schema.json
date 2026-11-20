@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "laohu.asrcut.caption/1",
+  "title": "laohu-asrcut caption design and compiled manifest",
+  "$comment": "Runtime validation also checks plan/timeline identity, complete retained-speech coverage, translation bindings, and regenerated manifest hashes.",
+  "oneOf": [
+    { "$ref": "#/$defs/captionDesignV1" },
+    { "$ref": "#/$defs/captionDesignV2" },
+    { "$ref": "#/$defs/captionManifestV1" },
+    { "$ref": "#/$defs/captionManifestV2" }
+  ],
+  "$defs": {
+    "languageTag": { "type": "string", "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$" },
+    "range": {
+      "type": "object",
+      "required": ["startSample", "endSample", "sampleRateHz"],
+      "properties": {
+        "startSample": { "type": "integer", "minimum": 0 },
+        "endSample": { "type": "integer", "minimum": 1 },
+        "sampleRateHz": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "captionDisplayWindow": {
+      "type": "object",
+      "required": ["range"],
+      "properties": {
+        "range": { "$ref": "#/$defs/range" },
+        "timingPrecision": { "enum": ["measured", "aligned", "utterance", "estimated"] },
+        "leadSamples": { "type": "integer", "minimum": 0 },
+        "holdSamples": { "type": "integer", "minimum": 0 },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "captionAnchor": {
+      "type": "object",
+      "required": ["occurrenceId"],
+      "properties": {
+        "occurrenceId": { "type": "string", "minLength": 1 },
+        "tokenIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "segmentId": { "type": "string", "minLength": 1 }
+      },
+      "oneOf": [
+        { "required": ["tokenIds"], "not": { "required": ["segmentId"] } },
+        { "required": ["segmentId"], "not": { "required": ["tokenIds"] } }
+      ],
+      "additionalProperties": false
+    },
+    "captionDesignCueBase": {
+      "type": "object",
+      "required": ["id", "occurrenceId", "lines", "displayWindow", "segmentationDecision", "reason"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "occurrenceId": { "type": "string", "minLength": 1 },
+        "tokenIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "segmentId": { "type": "string", "minLength": 1 },
+        "lines": { "type": "array", "minItems": 1, "maxItems": 2, "items": { "type": "string", "minLength": 1 } },
+        "displayWindow": { "$ref": "#/$defs/captionDisplayWindow" },
+        "segmentationDecision": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "punctuationDecision": { "type": "string", "minLength": 1 }
+      },
+      "oneOf": [
+        { "required": ["tokenIds"], "not": { "required": ["segmentId"] } },
+        { "required": ["segmentId"], "not": { "required": ["tokenIds"] } }
+      ]
+    },
+    "captionDesignCueV1": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/captionDesignCueBase" }
+      ],
+      "unevaluatedProperties": false
+    },
+    "captionTranslation": {
+      "type": "object",
+      "required": ["language", "lines", "sourceCueId", "sourceTextSha256", "provenance"],
+      "properties": {
+        "language": { "$ref": "#/$defs/languageTag" },
+        "lines": { "type": "array", "minItems": 1, "maxItems": 2, "items": { "type": "string", "minLength": 1 } },
+        "sourceCueId": { "type": "string", "minLength": 1 },
+        "sourceTextSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "provenance": {
+          "type": "object",
+          "required": ["origin", "status", "revision"],
+          "properties": {
+            "origin": { "enum": ["human-authored", "machine-assisted"] },
+            "status": { "enum": ["draft", "reviewed"] },
+            "revision": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "captionDesignCueV2": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/captionDesignCueBase" },
+        {
+          "type": "object",
+          "properties": { "translations": { "type": "array", "items": { "$ref": "#/$defs/captionTranslation" } } }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "captionDesignBase": {
+      "type": "object",
+      "required": ["projectId", "revision", "planSha256", "timelineSha256", "profile", "coveragePolicy", "cues"],
+      "properties": {
+        "projectId": { "type": "string", "minLength": 1 },
+        "revision": { "type": "integer", "minimum": 1 },
+        "planSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "timelineSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "profile": { "enum": ["zh-caption/1", "zh-caption/2", "verbatim/1"] },
+        "coveragePolicy": { "const": "all-retained-speech/1" },
+        "exclusions": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "captionDesignV1": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/captionDesignBase" },
+        {
+          "type": "object",
+          "required": ["format", "cues"],
+          "properties": {
+            "format": { "const": "laohu.asrcut.caption-design/1" },
+            "cues": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/captionDesignCueV1" } }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "captionDesignV2": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/captionDesignBase" },
+        {
+          "type": "object",
+          "required": ["format", "sourceLanguage", "displayLanguages", "cues"],
+          "properties": {
+            "format": { "const": "laohu.asrcut.caption-design/2" },
+            "sourceLanguage": { "$ref": "#/$defs/languageTag" },
+            "displayLanguages": { "type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/languageTag" } },
+            "cues": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/captionDesignCueV2" } }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "captionManifestCore": {
+      "type": "object",
+      "required": ["project", "editPlan", "timeline", "sourceClock", "sources", "profile", "coverage", "cues", "integrity"],
+      "properties": {
+        "project": { "type": "object", "required": ["id", "revision"], "properties": { "id": { "type": "string" }, "revision": { "type": "integer", "minimum": 1 } }, "additionalProperties": false },
+        "editPlan": { "type": "object", "required": ["format", "planSha256"], "properties": { "format": { "type": "string" }, "planSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false },
+        "timeline": { "type": "object", "required": ["format", "sha256"], "properties": { "format": { "type": "string" }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false },
+        "sourceClock": { "type": "object", "required": ["sampleRateHz"], "properties": { "sampleRateHz": { "type": "integer", "minimum": 1 } }, "additionalProperties": true },
+        "sources": { "type": "array", "items": { "type": "object" } },
+        "profile": { "enum": ["zh-caption/1", "zh-caption/2", "verbatim/1"] },
+        "coverage": { "type": "object", "required": ["policy", "excluded"], "properties": { "policy": { "const": "all-retained-speech/1" }, "excluded": { "type": "array" } }, "additionalProperties": false },
+        "integrity": { "type": "object", "required": ["manifestSha256"], "properties": { "manifestSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }
+      }
+    },
+    "compiledCaptionCueBase": {
+      "type": "object",
+      "required": ["id", "anchors", "rawText", "lexicalText", "sourceTextNormalization", "displayText", "lines", "speechSpan", "displayWindow", "segmentationDecision", "reason", "punctuationDecision", "profile"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "anchors": { "type": "array", "minItems": 1, "maxItems": 1, "items": { "$ref": "#/$defs/captionAnchor" } },
+        "rawText": { "type": "string" },
+        "lexicalText": { "type": "string" },
+        "sourceTextNormalization": { "type": "object" },
+        "correctionProvenance": { "type": "array", "items": { "type": "object" } },
+        "displayText": { "type": "string" },
+        "lines": { "type": "array", "minItems": 1, "maxItems": 2, "items": { "type": "string", "minLength": 1 } },
+        "speechSpan": { "type": "object" },
+        "displayWindow": { "type": "object" },
+        "segmentationDecision": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "punctuationDecision": { "type": ["string", "null"] },
+        "profile": { "enum": ["zh-caption/1", "zh-caption/2", "verbatim/1"] }
+      }
+    },
+    "compiledCaptionCueV1": {
+      "type": "object",
+      "allOf": [ { "$ref": "#/$defs/compiledCaptionCueBase" } ],
+      "unevaluatedProperties": false
+    },
+    "compiledCaptionCueV2": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/compiledCaptionCueBase" },
+        { "type": "object", "required": ["translations"], "properties": { "translations": { "type": "array", "items": { "$ref": "#/$defs/captionTranslation" } } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "captionManifestV1": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/captionManifestCore" },
+        { "type": "object", "required": ["format"], "properties": { "format": { "const": "laohu.asrcut.caption-manifest/1" }, "cues": { "type": "array", "items": { "$ref": "#/$defs/compiledCaptionCueV1" } } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "captionManifestV2": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/captionManifestCore" },
+        { "type": "object", "required": ["format", "sourceLanguage", "displayLanguages"], "properties": { "format": { "const": "laohu.asrcut.caption-manifest/2" }, "sourceLanguage": { "$ref": "#/$defs/languageTag" }, "displayLanguages": { "type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/languageTag" } }, "cues": { "type": "array", "items": { "$ref": "#/$defs/compiledCaptionCueV2" } } } }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

@@ -8,7 +8,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { bindSpeechTimeline, prepareSceneForTimeline } from "../scripts/bind-speech.mjs";
 import { buildAsrcutVoicePlan, renderAudioPlan } from "../scripts/audio.mjs";
-import { authorizeReview, compilePlan, exportAudio, freezePlan, hashPlan, importAsrJson, importSrt, insertPresentationInterval } from "../../laohu-asrcut/scripts/asrcut.mjs";
+import { authorizeReview, compilePlan, exportAudio, freezePlan, hashPlan, importAsrJson, importSrt, insertPresentationInterval, upsertAnnotation } from "../../laohu-asrcut/scripts/asrcut.mjs";
 
 const require = createRequire(import.meta.url);
 const MotionOps = require("../scripts/motion-ops.js");
@@ -17,6 +17,58 @@ const skillDir = path.resolve(testDir, "..");
 const repositoryDir = path.resolve(skillDir, "../../..");
 const ffmpeg = process.env.MOTION_TEST_FFMPEG || process.env.MOTION_FFMPEG || "ffmpeg";
 const ffmpegAvailable = spawnSync(ffmpeg, ["-version"], { encoding: "utf8" }).status === 0;
+async function indexedMusicFixture(assetId, planDirectory) {
+  const indexPath = path.join(skillDir, "assets", "audio", "index.json");
+  const index = JSON.parse(await fs.readFile(indexPath, "utf8"));
+  const source = index.assets.find((asset) => asset.id === assetId);
+  assert.ok(source, `the test must use the registered music source ${assetId}`);
+  const sourcePath = path.join(path.dirname(indexPath), source.file);
+  const sourceBytes = await fs.readFile(sourcePath);
+  assert.equal(createHash("sha256").update(sourceBytes).digest("hex"), source.sha256, "the registered test music source must match its catalog hash");
+  return {
+    id: source.id,
+    file: path.relative(planDirectory, sourcePath),
+    durationSec: source.durationSec,
+    sha256: source.sha256,
+    license: source.license,
+    redistribution: structuredClone(source.redistribution),
+    reviewStatus: source.reviewStatus,
+  };
+}
+function technicalSfxAuthorization(testId, assetId, requestPath) {
+  const instructionExcerpt = "Explicit maintenance-test authorization: generate a test-only SFX tone to verify shared-event PCM placement in the speech-binding evaluation.";
+  const request = {
+    format: "laohu.motion.technical-audio-test-request/1",
+    testOnly: true,
+    testId,
+    purpose: "Verify that a bound shared event moves the actual rendered PCM; this tone is not a work asset or listening-quality sample.",
+    generationAuthorization: {
+      granted: true,
+      scopes: ["sfx"],
+      source: "explicit-user-request",
+      instructionExcerpt,
+    },
+  };
+  const requestBytes = Buffer.from(JSON.stringify(request, null, 2) + "\n");
+  const requestSha256 = createHash("sha256").update(requestBytes).digest("hex");
+  return {
+    requestBytes,
+    audioPolicy: {
+      format: "laohu.motion.audio-policy/1",
+      mode: "explicit-user-authorized-generation",
+      authorizations: [{
+        granted: true,
+        scopes: ["sfx"],
+        source: "explicit-user-request",
+        instructionExcerpt,
+        requestPath: path.basename(requestPath),
+        requestSha256,
+      }],
+      generatedScopesByAsset: [{ assetId, scopes: ["sfx"], authorizationRequestSha256: requestSha256 }],
+      generatedAssetIds: [assetId],
+    },
+  };
+}
 function rawAsrFixture(firstWordStartSec = 0.4) {
   return {
     segments: [{
@@ -233,12 +285,13 @@ test("ASR-cut /2 creates one locked voice asset and source-only conservative mus
       fs.writeFile(editPlanPath, JSON.stringify(frozenPlan)), fs.writeFile(timelinePath, JSON.stringify(timeline)),
       fs.writeFile(receiptPath, JSON.stringify(receipt)),
     ]);
+    const musicAssetId = "freesound.music-explanatory-soft-piano-710546";
+    const indexedMusic = await indexedMusicFixture(musicAssetId, dir);
     const basePlan = {
       schemaVersion: 1, timeUnit: "seconds", timeBasis: "film-global", durationSec: 2.5,
-      sampleRate: 48000, channels: 2, events: [], tracks: [{ id: "music-bed", assetId: "future-music", bus: "music", startSec: 0 }],
+      sampleRate: 48000, channels: 2, events: [], tracks: [{ id: "music-bed", assetId: musicAssetId, bus: "music", startSec: 0 }],
       voiceWindows: [], automation: [], timeMaps: [], assets: [{
-        id: "future-music", file: "not-rendered-in-builder.wav", durationSec: 2.5, sha256: "a".repeat(64),
-        license: "project-generated", redistribution: { status: "project-generated", basis: "synthetic builder fixture" }, reviewStatus: "candidate-unreviewed",
+        ...indexedMusic,
       }], generatedAssets: [],
     };
     const audioPlan = await buildAsrcutVoicePlan({
@@ -248,6 +301,8 @@ test("ASR-cut /2 creates one locked voice asset and source-only conservative mus
     assert.equal(audioPlan.durationSec, 2.5, "the existing film duration is preserved exactly");
     assert.equal(audioPlan.tracks.filter((track) => track.bus === "voice").length, 1, "the single exported WAV is played once, never replayed by source clip");
     assert.deepEqual(audioPlan.tracks.find((track) => track.bus === "voice"), { id: "asrcut-voice-track", assetId: "asrcut-voice", bus: "voice", startSec: 0, locked: true });
+    assert.deepEqual(audioPlan.tracks.find((track) => track.bus === "music"), basePlan.tracks[0], "the existing licensed music bed remains in the base plan");
+    assert.equal(audioPlan.assets.find((asset) => asset.id === musicAssetId).sha256, indexedMusic.sha256, "the registered licensed source identity is retained");
     assert.deepEqual(audioPlan.voiceWindows.map(({ id, startSec, endSec, timingPrecision }) => ({ id, startSec, endSec, timingPrecision })), [
       { id: "asrcut-window-speech-a-occurrence", startSec: 0, endSec: 1, timingPrecision: timeline.units[0].timingPrecision },
       { id: "asrcut-window-speech-b-occurrence", startSec: 1.5, endSec: 2.5, timingPrecision: timeline.units[2].timingPrecision },
@@ -261,7 +316,7 @@ test("ASR-cut /2 creates one locked voice asset and source-only conservative mus
       editPlanPath, timelinePath, receiptPath, voiceAssetId: "other-voice", voiceTrackId: "other-voice-track",
     }), /duration is locked/);
     await assert.rejects(buildAsrcutVoicePlan({
-      basePlan: { ...basePlan, tracks: [...basePlan.tracks, { id: "existing-voice", assetId: "future-music", bus: "voice", startSec: 0 }] },
+      basePlan: { ...basePlan, tracks: [...basePlan.tracks, { id: "existing-voice", assetId: musicAssetId, bus: "voice", startSec: 0 }] },
       editPlan: frozenPlan, timeline, receipt, voiceFile, outputPlanPath,
       editPlanPath, timelinePath, receiptPath, voiceAssetId: "other-voice", voiceTrackId: "other-voice-track",
     }), /already contains voice playback/);
@@ -283,6 +338,104 @@ test("ASR-cut /2 creates one locked voice asset and source-only conservative mus
       assert.equal(manifest.asrcutBinding.project.revision, frozenPlan.project.revision);
       assert.equal(wavReader(await fs.readFile(outputPath)).durationSec, 2.5);
     }
+  } finally {
+    await fs.rm(dir, { recursive: true, force: true });
+  }
+});
+
+test("ASR-cut /1 imports, exports, binds, and mixes source-only voice without accepting mixed versions", async () => {
+  if (!ffmpegAvailable) return;
+  const root = path.join(repositoryDir, ".cache", "tmp", "asrcut-integration", "motion", "tests");
+  await fs.mkdir(root, { recursive: true });
+  const dir = await fs.mkdtemp(path.join(root, "asrcut-v1-source-only-"));
+  try {
+    const sourcePath = path.join(dir, "source-recording.wav");
+    const sourceBytes = pcm16Wav(96000);
+    await fs.writeFile(sourcePath, sourceBytes);
+    const draft = importAsrJson(rawAsrFixture(0.4), {
+      projectId: "asrcut-v1-source-only",
+      sourceId: "source-a",
+      sampleRateHz: 48000,
+      sourceSampleRateHz: 48000,
+      sourceDurationSamples: 96000,
+      mediaPath: sourcePath,
+      mediaSha256: createHash("sha256").update(sourceBytes).digest("hex"),
+      timeUnit: "seconds",
+    });
+    assert.equal(draft.format, "laohu.asrcut.edit-plan/1");
+    draft.authorization.mediaExport = true;
+    draft.integrity.planSha256 = hashPlan(draft);
+    const frozenPlan = freezePlan(draft);
+    const timeline = compilePlan(frozenPlan);
+    assert.equal(timeline.format, "laohu.asrcut.timeline/1");
+    assert.equal(Object.hasOwn(timeline, "units"), false, "source-only import must not gain a presentation timeline");
+
+    const editPlanPath = path.join(dir, "edit-plan.frozen.json");
+    const timelinePath = path.join(dir, "timeline.json");
+    await Promise.all([
+      fs.writeFile(editPlanPath, JSON.stringify(frozenPlan)),
+      fs.writeFile(timelinePath, JSON.stringify(timeline)),
+    ]);
+    const voiceFile = path.join(dir, "voice-cut.wav");
+    const exported = await exportAudio({
+      plan: frozenPlan,
+      timeline,
+      outPath: voiceFile,
+      tmpDir: path.join(dir, "asrcut-tmp"),
+      baseDir: dir,
+      ffmpegPath: process.env.FFMPEG_PATH || ffmpeg,
+      ffprobePath: process.env.FFPROBE_PATH || "ffprobe",
+    });
+    const receiptPath = exported.receipt;
+    const receipt = JSON.parse(await fs.readFile(receiptPath, "utf8"));
+    assert.equal(receipt.format, "laohu.asrcut.audio-artifact/1");
+    assert.equal(receipt.timelineFormat, "laohu.asrcut.timeline/1");
+    assert.equal(receipt.sampleCount, 96000);
+    assert.equal(receipt.auditionStatus, "not_auditioned");
+    assert.equal(Object.hasOwn(receipt, "units"), false, "artifact/1 remains source-only");
+
+    const audioPlanPath = path.join(dir, "audio-plan.json");
+    const audioPlan = await buildAsrcutVoicePlan({
+      editPlan: frozenPlan, timeline, receipt, voiceFile, outputPlanPath: audioPlanPath,
+      editPlanPath, timelinePath, receiptPath,
+      voiceAssetId: "asrcut-v1-voice", voiceTrackId: "asrcut-v1-voice-track",
+    });
+    assert.equal(audioPlan.asrcutBinding.timeline.format, "laohu.asrcut.timeline/1");
+    assert.deepEqual(audioPlan.tracks.filter((track) => track.bus === "voice").map((track) => ({ startSec: track.startSec, locked: track.locked })), [
+      { startSec: 0, locked: true },
+    ]);
+    assert.equal(audioPlan.voiceWindows.length, 1, "the source-only path retains its conservative source window");
+    await fs.writeFile(audioPlanPath, JSON.stringify(audioPlan));
+    const mixedPath = path.join(dir, "final-mix.wav");
+    const manifestPath = path.join(dir, "final-mix.manifest.json");
+    const manifest = await renderAudioPlan({
+      plan: audioPlanPath,
+      assetIndex: path.join(skillDir, "assets", "audio", "index.json"),
+      output: mixedPath,
+      manifest: manifestPath,
+      cacheDir: path.join(dir, "render-cache"),
+      ffmpeg: process.env.MOTION_FFMPEG || ffmpeg,
+      allowCandidate: true,
+    });
+    assert.equal(manifest.asrcutBinding.timeline.format, "laohu.asrcut.timeline/1");
+    assert.equal(manifest.mix.inputCount, 1, "the exported source audio enters the final mix once");
+    assert.equal(wavReader(await fs.readFile(mixedPath)).durationSec, 2);
+
+    await assert.rejects(buildAsrcutVoicePlan({
+      editPlan: frozenPlan,
+      timeline: { ...timeline, format: "laohu.asrcut.timeline/2" },
+      receipt, voiceFile, outputPlanPath: path.join(dir, "bad-timeline-plan.json"),
+      editPlanPath, timelinePath, receiptPath,
+      voiceAssetId: "bad-timeline-voice", voiceTrackId: "bad-timeline-track",
+    }), /plan and timeline versions must match/);
+    await assert.rejects(buildAsrcutVoicePlan({
+      editPlan: frozenPlan,
+      timeline,
+      receipt: { ...receipt, format: "laohu.asrcut.audio-artifact/2", timelineFormat: "laohu.asrcut.timeline/2" },
+      voiceFile, outputPlanPath: path.join(dir, "bad-receipt-plan.json"),
+      editPlanPath, timelinePath, receiptPath,
+      voiceAssetId: "bad-receipt-voice", voiceTrackId: "bad-receipt-track",
+    }), /audio receipt does not identify this frozen plan/);
   } finally {
     await fs.rm(dir, { recursive: true, force: true });
   }
@@ -326,6 +479,77 @@ test("compiled speech anchors drive MotionOps channels and shared event time; mo
   } finally {
     await fs.rm(dir, { recursive: true, force: true });
   }
+});
+
+test("ASR edit-plan Motion annotations compile resolved targets into one custom phase and replace a shared event", async () => {
+  const fixture = compileFixture();
+  const clip = fixture.timeline.clips[0];
+  const segment = clip.transcriptSegments[0];
+  const annotationFor = (tokenId) => ({
+    id: "question-motion",
+    sourceId: "source-a",
+    segmentId: segment.segmentId,
+    occurrenceId: clip.occurrenceId,
+    motionDirection: "Reveal the spoken term from its measured token anchor.",
+    motionBinding: {
+      objects: [], states: [], assets: [], transitions: [],
+      componentCalls: [{ id: "title-call", objectId: "semantic-probe", componentCatalogId: "custom:speech-probe", componentInstanceId: "semantic-probe" }],
+      phases: [{
+        id: "question-reveal",
+        componentCallId: "title-call",
+        anchor: { kind: "point", clipOccurrenceId: clip.occurrenceId, tokenId, edge: "start" },
+        duration: { value: 24000, unit: "samples" },
+        entryState: "the term is hidden",
+        exitCondition: "the term is fully visible",
+        channels: { x: { from: 10, to: 50, curve: "linear" } },
+      }],
+      audioEvents: [{ id: "question-hit", phaseId: "question-reveal" }],
+    },
+  });
+  const tokenA = clip.words[0].tokenId;
+  const tokenB = clip.words[1].tokenId;
+  const planA = upsertAnnotation(fixture.plan, annotationFor(tokenA));
+  const timelineA = compilePlan(planA);
+  const resolved = timelineA.annotations.find((annotation) => annotation.id === "question-motion");
+  assert.equal(resolved.resolution, "resolved");
+  assert.deepEqual(resolved.resolvedTargets.map((target) => target.occurrenceId), [clip.occurrenceId]);
+
+  const scene = {
+    ...baseScene(),
+    timeBasis: "film-global",
+    audioEvents: [{ id: "question-hit", timeSec: 1.5 }],
+  };
+  const boundA = await bindSpeechTimeline(scene, timelineA, null, { plan: planA, preview: true });
+  const phaseA = boundA.scene.objects[0].data.phases.find((phase) => phase.id === "question-reveal");
+  assert.equal(phaseA.startSec, 0.4);
+  assert.deepEqual(boundA.receipt.bindingSource.annotations[0].resolvedTargets, resolved.resolvedTargets);
+  assert.deepEqual(boundA.receipt.bindingSource.componentClock, {
+    timeBasis: "film-global",
+    componentLocalTimeFormula: "MotionCore custom renderer receives the root scene time unchanged; for this whole-scene component, componentLocalSec = filmGlobalSec",
+    segmentTimeRemapping: "not-applied",
+  });
+  const phaseValueA = MotionOps.sampleChannels(0.55, phaseA).channels.x.value;
+  const cueA = MotionOps.mapSceneEvents({ durationSec: 2, events: [{ id: "question-cue-a", eventId: "question-hit" }] }, boundA.scene, new Map())[0];
+  assert.equal(cueA.filmTimeSec, 0.4);
+  assert.equal(cueA.sourceEvent.phaseId, "question-reveal");
+  assert.equal(Object.hasOwn(boundA.scene.audioEvents[0], "timeSec"), false, "semantic rebind removes the separate seconds field from the shared event");
+  assert.equal(boundA.receipt.reboundAudioEvents[0].originalEvent.timeSec, 1.5, "the receipt keeps a reversible snapshot of the replaced legacy event");
+
+  const planB = upsertAnnotation(planA, annotationFor(tokenB));
+  const timelineB = compilePlan(planB);
+  assert.equal(timelineB.planSha256, timelineA.planSha256, "moving a Motion anchor changes annotation provenance, not the approved edit hash");
+  assert.notEqual(timelineB.annotationSha256, timelineA.annotationSha256);
+  const boundB = await bindSpeechTimeline(boundA.scene, timelineB, null, { plan: planB, preview: true });
+  const phaseB = boundB.scene.objects[0].data.phases.find((phase) => phase.id === "question-reveal");
+  assert.equal(phaseB.startSec, 0.7);
+  const phaseValueB = MotionOps.sampleChannels(0.55, phaseB).channels.x.value;
+  const cueB = MotionOps.mapSceneEvents({ durationSec: 2, events: [{ id: "question-cue-b", eventId: "question-hit" }] }, boundB.scene, new Map())[0];
+  assert.equal(phaseValueA, 22);
+  assert.equal(phaseValueB, 10, "the existing custom consumer sees the moved anchor at the same probe time");
+  assert.equal(cueB.filmTimeSec, 0.7, "the exact same annotation anchor moves the shared audio event");
+  assert.equal(boundB.scene.audioEvents.filter((event) => event.id === "question-hit").length, 1);
+  assert.equal(boundB.scene.audioEvents[0].phaseId, "question-reveal");
+  assert.equal(boundB.scene.motionSpeechBinding.reboundAudioEvents[0].originalEvent.timeSec, 1.5, "rebinding restores the original legacy event before applying the new anchor");
 });
 
 test("presentation-boundary anchors drive phases/events without inventing word anchors and require direct-clock review after timeline revision", async () => {
@@ -392,7 +616,7 @@ test("audio renderer consumes bound shared events and places PCM at the moved se
     const fixtureB = compileFixture({ revision: 2, firstWordStartSec: 0.7, mediaPath: fakeSource, mediaSha256: mediaHash });
     const original = await bindSpeechTimeline(baseScene(), fixtureA.timeline, baseSpec(fixtureA.timeline), { plan: fixtureA.plan });
     const moved = await bindSpeechTimeline(baseScene(), fixtureB.timeline, baseSpec(fixtureB.timeline), { plan: fixtureB.plan });
-    const audioPlan = (name) => ({
+    const audioPlan = (name, audioPolicy) => ({
       schemaVersion: 1,
       timeUnit: "seconds",
       timeBasis: "film-global",
@@ -401,6 +625,7 @@ test("audio renderer consumes bound shared events and places PCM at the moved se
       channels: 2,
       events: [{ id: name + "-cue", eventId: "question-hit", assetId: name + "-tone", bus: "sfx", gainDb: -6 }],
       tracks: [],
+      audioPolicy,
       generatedAssets: [{ id: name + "-tone", generator: "ffmpeg-lavfi", recipe: { kind: "tone", durationSec: 0.18, frequencyHz: 880, gainDb: -12 } }],
     });
     const assetIndex = path.join(skillDir, "assets", "audio", "index.json");
@@ -409,8 +634,11 @@ test("audio renderer consumes bound shared events and places PCM at the moved se
       const planPath = path.join(dir, label + ".audio-plan.json");
       const output = path.join(dir, label + ".wav");
       const manifest = path.join(dir, label + ".audio-manifest.json");
+      const requestPath = path.join(dir, label + ".technical-audio-request.json");
+      const authorization = technicalSfxAuthorization("speech-binding-pcm-event-placement", label + "-tone", requestPath);
+      await fs.writeFile(requestPath, authorization.requestBytes);
       await fs.writeFile(scenePath, JSON.stringify(bound.scene, null, 2) + "\n");
-      await fs.writeFile(planPath, JSON.stringify(audioPlan(label), null, 2) + "\n");
+      await fs.writeFile(planPath, JSON.stringify(audioPlan(label, authorization.audioPolicy), null, 2) + "\n");
       const audioManifest = await renderAudioPlan({
         plan: planPath,
         scene: scenePath,

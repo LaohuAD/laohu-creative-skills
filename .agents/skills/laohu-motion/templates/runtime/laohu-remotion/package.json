@@ -1,0 +1,17 @@
+{
+  "name": "laohu-motion-remotion-runtime",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Canonical local Remotion runtime for Laohu Motion and selected companion components.",
+  "dependencies": {
+    "@react-three/fiber": "9.8.2",
+    "@remotion/bundler": "4.0.537",
+    "@remotion/paths": "4.0.537",
+    "@remotion/renderer": "4.0.537",
+    "@remotion/three": "4.0.537",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "remotion": "4.0.537",
+    "three": "0.170.0"
+  }
+}

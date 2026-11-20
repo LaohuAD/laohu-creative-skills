@@ -1,0 +1,19 @@
+<template>
+  <style>
+    #webflow-endcard { position: absolute; inset: 0; overflow: hidden; }
+    #webflow-endcard .endcard-background { position: absolute; inset: 0; background: radial-gradient(ellipse at 85% 18%,#bca8e4,transparent 65%),radial-gradient(ellipse at 15% 90%,#300de7,transparent 65%),#523cf0; }
+    #webflow-wordmark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: white; font: 700 italic 48px InterLocal,sans-serif; letter-spacing: -2px; }
+    #webflow-endcard .optical-ring { position: absolute; width: 720px; height: 720px; left: 280px; top: 0; border: 1px solid #ffffff18; border-radius: 50%; box-shadow: 0 0 7px #ffffff12, inset 0 0 10px #ffffff0a; }
+  </style>
+  <div data-hf-id="hf-0cs1" id="webflow-endcard" data-composition-id="webflow-endcard" data-duration="3.6" data-width="1280" data-height="720">
+    <div data-hf-id="hf-svgi" class="endcard-background"></div>
+    <div data-hf-id="hf-ejc7" class="optical-ring"></div>
+    <div data-hf-id="hf-pypt" id="webflow-wordmark" data-var-text="brand">webflow</div>
+  </div>
+  <script>
+    const timeline = gsap.timeline({ paused: true });
+    timeline.fromTo('#webflow-wordmark', { scale: 0.72, opacity: 0.65 }, { scale: 1, opacity: 1, duration: 0.55, ease: 'power3.out' }, 0);
+    timeline.fromTo('#webflow-endcard .optical-ring', { scale: 0.2, opacity: 0.8 }, { scale: 1.4, opacity: 0, duration: 2.1, ease: 'power2.out' }, 0);
+    window.__timelines['webflow-endcard'] = timeline;
+  </script>
+</template>

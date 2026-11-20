@@ -1,0 +1,380 @@
+{
+  "schema": "laohu.motion.typography-uses/1",
+  "entries": [
+    {
+      "id": "type-use:stable-labels",
+      "name": "并列标签与操作提示",
+      "sourceType": "type-use",
+      "category": "标签与操作",
+      "summary": "让观众对照项目或跟上步骤时，同组文字沿共同的字重、基线和间距摆放，标签贴近实际对象。",
+      "tags": [
+        "标签",
+        "实操",
+        "操作动画",
+        "界面操作",
+        "指针",
+        "参数",
+        "步骤",
+        "工序",
+        "对照",
+        "流程",
+        "按钮",
+        "手机",
+        "数字",
+        "稳定"
+      ],
+      "conditions": "对象、状态或步骤已由画面建立，观众需要迅速找到对应名称。中文先以实际字号比较字腔开口，连续数字再比较等宽数字。",
+      "layout": "同类标签沿相同边或基线排开。用留白或局部强调标出此刻需要读的一项，保留同组身份。",
+      "motion": "标签随所指对象或步骤变化而更新。把指针到达、点击或界面结果用作共同事件；其余标签保持稳定。",
+      "limitations": "并列名称都要能读清；跳动、抢先出现或多个标签同时高亮会改变观看顺序。",
+      "fontIds": [
+        "font:noto-sans-sc-variable",
+        "font:jetbrains-mono-variable"
+      ],
+      "references": [
+        {
+          "path": ".agents/skills/laohu-cover/references/visual-hierarchy.md",
+          "scope": "层级表中同级入口、知识图和真实相邻字重的用法。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:tentative-question",
+      "name": "从说明转为个人设想",
+      "sourceType": "type-use",
+      "category": "语气转折",
+      "summary": "作者把尚未得到答案的设想交给观众时，短句像还在继续的一句话，画面为问题留下展开空间。",
+      "tags": [
+        "条件假设",
+        "设问",
+        "反思",
+        "邀请",
+        "犹豫",
+        "不确定",
+        "思考",
+        "作者口气",
+        "如果",
+        "保留答案",
+        "叙述转折"
+      ],
+      "conditions": "由前后句或录音确认作者在提出可能性。主要画面动作可能已承担危险或不安，文字帮助界定此前发生的是一种设想。",
+      "layout": "先用同族的清楚字重与留白，再比较有明显笔画变化的宋体。用目标显示尺寸和真实背景判断轻重。",
+      "motion": "问题在观众需要知道条件的瞬间整句进入，留给同一画面事件发展；以声音已有的停顿核对可读窗。",
+      "limitations": "拖长、字跟画面一起震动或用哀悼感很强的细宋容易把设问推向警告、感伤或正式落款。",
+      "fontIds": [
+        "font:noto-sans-sc-variable",
+        "font:noto-serif-sc-variable"
+      ],
+      "references": [
+        {
+          "work": "5层蛋糕模型－公众号完整版",
+          "location": "后段由等待风口到条件假设的相邻段",
+          "scope": "对照原稿、brief 和既有绘制所得的设计方向，实际替代效果待制作。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:leave-time-to-compare",
+      "name": "给观众先比较再揭晓",
+      "sourceType": "type-use",
+      "category": "信息揭示",
+      "summary": "两个对象暂时难辨、需要观众先观察时，让字按揭示前后的不同职责出现。",
+      "tags": [
+        "判断",
+        "比较",
+        "悬念",
+        "先猜",
+        "分类",
+        "答案",
+        "样本",
+        "揭晓",
+        "揭示",
+        "技能",
+        "关系"
+      ],
+      "conditions": "对象的可见证据能够支撑比较，源稿或镜头安排在后面才交代判断。",
+      "layout": "揭示前保留两对象对照面积，揭示时用视觉分量相近的短标签对应各自对象，结论另用字级或新位置。",
+      "motion": "两个答案字同时受揭示事件控制，结论等需要的比较证据完整可见再落定。",
+      "limitations": "单侧用破碎字、警告色或提前展示名称会暗示答案，破坏观众亲自判断的过程。",
+      "fontIds": [
+        "font:noto-sans-sc-variable"
+      ],
+      "references": [
+        {
+          "work": "5层蛋糕模型－公众号完整版",
+          "location": "模型层的裂纹与正常纹路对照",
+          "scope": "原片用参照揭示后出现对照标签；据此提取显示次序和条件。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:decision-held-in-motion",
+      "name": "已经作出选择的笃定",
+      "sourceType": "type-use",
+      "category": "语气转折",
+      "summary": "人物已经作出选择、环境还在变化时，让字稳定留在人物一侧，环境带出对照。",
+      "tags": [
+        "站定",
+        "等待",
+        "耐心",
+        "笃定",
+        "作决定",
+        "主见",
+        "周围在动",
+        "稳定",
+        "不催促",
+        "等风口"
+      ],
+      "conditions": "前文已给出准备或决定，后续动作仍在外部发生。此处文字是个人态度，可与人物共享位置。",
+      "layout": "整句能一眼读清，选择扎实但内部空间仍分明的字重。字与人物共享构图轴线或落点。 当人物作出决定并向前行动，可比较得意黑自带的倾角。",
+      "motion": "跟随人物站定整句出现，进入有效阅读窗后保持字块位置。其他对象可以继续通过。",
+      "limitations": "强烈迎面冲入会读成催促，过慢逐字显示会吞掉整句可读时间。",
+      "fontIds": [
+        "font:noto-sans-sc-variable",
+        "font:source-han-sans-cn-bold",
+        "font:smiley-sans-oblique"
+      ],
+      "references": [
+        {
+          "work": "5层蛋糕模型－公众号完整版",
+          "location": "等待风口段",
+          "scope": "据原稿、brief 的等待姿态与约 0.86 秒完整可读窗提取的试排方向。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:closing-line-after-list",
+      "name": "从逐项说明收拢到一句结论",
+      "sourceType": "type-use",
+      "category": "层级与结论",
+      "summary": "列表使用一个稳定的阅读体系，结论换成可一口读完的大字；更换笔画特征和字级，让结论与列举有明显区别。",
+      "tags": [
+        "结论",
+        "收束",
+        "结束",
+        "讲解",
+        "列表",
+        "逐项",
+        "强调",
+        "宋体",
+        "换字体",
+        "对比"
+      ],
+      "conditions": "前文已列出要点，本句确实改变读法或把几项收拢到一个判断。",
+      "layout": "前段列表沿共同起点摆放，结论按意群断行。对比同族字级变化与引入较强笔画对比，按阅读时长取舍。",
+      "motion": "列表节奏结束后结论才夺得注意。结论读清后留一个稳定画面。",
+      "limitations": "材料还在列新观点时不急于给结论字级。在小屏暗底上检查细笔画。",
+      "fontIds": [
+        "font:noto-sans-sc-variable",
+        "font:noto-serif-sc-variable"
+      ],
+      "references": [
+        {
+          "work": "从数据中学习－字",
+          "location": "25.5 秒列表与 29.5 秒收束画面",
+          "scope": "实际输出中前段使用黑体，收束两行切换 Noto Serif SC。原片子集按该片用字生成。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:personal-note-on-material",
+      "name": "视觉材料中的人物笔记",
+      "sourceType": "type-use",
+      "category": "人物与物件",
+      "summary": "同一画面同时有系统说明与人物亲自留下的字时，利用书写笔形、位置和媒介让观众分清人和界面。",
+      "tags": [
+        "手写",
+        "便条",
+        "注解",
+        "批注",
+        "板书",
+        "人物",
+        "手记",
+        "书写",
+        "纸面"
+      ],
+      "conditions": "文字属于具体说话者或某件实物上的笔记；观众能够从位置、材质或动作辨认归属。",
+      "layout": "把笔记与纸面、黑板或物件贴合，保留可读行距。说明文字沿稳定的阅读字体系排。",
+      "motion": "真实书写可与手、笔或落墨时刻同步。已经写好的文字随物件进入或由镜头揭示。",
+      "limitations": "整屏密字与短可读窗优先原句可读。不可把解释者旁白伪装成角色笔记。",
+      "fontIds": [
+        "font:lxgw-wenkai-regular",
+        "font:lxgw-wenkai-medium-subset",
+        "font:noto-sans-sc-variable",
+        "font:long-cang",
+        "font:zhi-mang-xing"
+      ],
+      "references": [
+        {
+          "path": ".agents/skills/laohu-cover/references/visual-hierarchy.md",
+          "scope": "展示字与阅读字分工、手写笔形的使用条件。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:single-family-grid",
+      "name": "用同一字族建立有秩序的对比",
+      "sourceType": "type-use",
+      "category": "层级与结论",
+      "summary": "网格和字级足以表现统一的系统时，靠同字族的实际字重、字号、留白和对齐形成不同层级。",
+      "tags": [
+        "网格",
+        "瑞士编辑",
+        "单字族",
+        "统一风格",
+        "同一字体",
+        "字重",
+        "大标题",
+        "字距",
+        "出版"
+      ],
+      "conditions": "观众需要看出段落共属一种结构，关键区分能由同族现有字重和排版承担。",
+      "layout": "标签小而可辨，主标题明确放大，统一对齐轴。调用来源已给的版式尺度时复核本片画幅和中文原句。",
+      "motion": "字保持来路和落点一致，用镜头切换、层级变化和稳定落点表现结构。",
+      "limitations": "原风格卡里的拉丁字距与屏幕尺度需按中文字符和设备实排；不可把共享字面理解成全片共用同一个字重。",
+      "fontIds": [
+        "font:noto-sans-sc-variable",
+        "font:inter-variable"
+      ],
+      "references": [
+        {
+          "resourceId": "original:swiss-editorial",
+          "scope": "按正文字重、字号、字距和对齐关系实现层级。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:context-ui-and-display",
+      "name": "品牌展示字接到操作界面",
+      "sourceType": "type-use",
+      "category": "标签与操作",
+      "summary": "从品牌或故事开场进入一个可以操作的真实空间，用展示字和界面阅读字区分注意任务。",
+      "tags": [
+        "界面",
+        "品牌",
+        "操作演示",
+        "UI",
+        "提示",
+        "屏幕",
+        "OpenMotion",
+        "输入",
+        "角色分工"
+      ],
+      "conditions": "前段有一句需要作为主视觉的介绍，后段观众需要扫读界面并跟上操作。",
+      "layout": "保留界面内共同基线和可验证文本。少量大字可以留给开场和阶段转换，英文样例的字族换入中文前先查字形与同级信息。 方舟像素体适合镜头里确有点阵屏幕的场景，保持整倍数尺寸并看清菜单文字。",
+      "motion": "展示字退出或退让后，让界面元素与真实动作成为注意入口，状态文字对齐实际点击或出现。",
+      "limitations": "模板的英文视觉样张不能直接外推到中文。原工程源允许的范围与字体 OFL 分别核对。",
+      "fontIds": [
+        "font:noto-serif-sc-variable",
+        "font:noto-sans-sc-variable",
+        "font:jetbrains-mono-variable",
+        "font:ark-pixel-12px-mono-zh-hans"
+      ],
+      "references": [
+        {
+          "resourceId": "openmotion-motion-0ad92fd0-b2fb-4885-957c-b71152df15fd",
+          "scope": "从品牌开场引到输入框操作的观看关系；源码附 EB Garamond 与 Inter。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:variable-weight-on-beat",
+      "name": "让真实字重随同一事件递进",
+      "sourceType": "type-use",
+      "category": "字形动效",
+      "summary": "一个短词承担注意转移且需要观众看出力量或阶段变化时，比较字号、空间与可变字重的递进。",
+      "tags": [
+        "可变字体",
+        "字重",
+        "动态字",
+        "节奏",
+        "变化",
+        "变粗",
+        "分量",
+        "标题",
+        "轴"
+      ],
+      "conditions": "字体文件有真实 wght 轴，当前绘制方式能消费设定；文字是可一次读完的短词。",
+      "layout": "用本片字形或字重变化范围测最宽和最密状态，给出可阅读的稳定落点。",
+      "motion": "字重随已确认时间事件变化。将字重和位移分别试验，确定哪项有具体表达作用。",
+      "limitations": "Motion Prompt 编号 132 的样例自带系统拉丁字。落地中文时应换成本地字体，按实际事件与裁切区验证。",
+      "fontIds": [
+        "font:noto-sans-sc-variable",
+        "font:noto-serif-sc-variable"
+      ],
+      "references": [
+        {
+          "resourceId": "motion-prompt:motion2:132",
+          "scope": "可变字体动画的本地示例，验看其字重变化节奏和系统字体用法。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:expressive-reaction",
+      "name": "用轮廓表现有铺垫的反应",
+      "sourceType": "type-use",
+      "category": "字形动效",
+      "summary": "说话者、拟声或绘画对象真实发生俏皮反应时，轮廓与短动作一起给反应一个清楚的落点。",
+      "tags": [
+        "漫画",
+        "反应",
+        "拟声",
+        "调皮",
+        "反讽",
+        "夸张",
+        "圆面",
+        "展示字",
+        "短词",
+        "停顿"
+      ],
+      "conditions": "前文有能读懂的铺垫，镜头中的人物或事件发生有意义的反应。",
+      "layout": "只在承担反应的短词试有个性的外轮廓或重影，保留笔画识别。连续说明沿全片稳定样式。",
+      "motion": "选择与反应发生同点的短促动作，例如突然出现或稍作挤压，保证下一状态清晰。",
+      "limitations": "单靠可爱或夸张轮廓不能补出不存在的幽默。遇到语气严肃或字形太密时改用已有阅读字。",
+      "fontIds": [
+        "font:zcool-kuaile-regular",
+        "font:bangers-regular",
+        "font:zcool-qingke-huangyou"
+      ],
+      "references": [
+        {
+          "path": ".agents/skills/laohu-motion/templates/runtime/laohu-scenes/comic-pop-reaction",
+          "scope": "漫画反应场景的局部视觉机制与 Bangers 拉丁源文件。"
+        }
+      ]
+    },
+    {
+      "id": "type-use:surface-texture-on-display",
+      "name": "文字作为画面上的印刷或复印材料",
+      "sourceType": "type-use",
+      "category": "字形动效",
+      "summary": "当字本身属于画面的印刷物，可用可辨的磨损、印错位或边缘变化表现材质，利用轮廓和遮罩变化建立短句的存在感。",
+      "tags": [
+        "复印",
+        "印刷",
+        "解构",
+        "粗粝",
+        "材质",
+        "遮罩",
+        "错位",
+        "展示字",
+        "大字"
+      ],
+      "conditions": "片中已有纸面、印刷、扫描、拼贴等可辨依据，字块的材料变化对当前镜头仍有意义。",
+      "layout": "保留一层能读清的关键字笔画，选单行短展示字试验。粗糙边缘和字形遮罩放到足以识别的真实字号比较。",
+      "motion": "让磨损或套印偏移在出现和退场阶段变化。有效阅读窗核对实际字面稳定程度。装饰纹理可由其他画面部件承接。",
+      "limitations": "小尺寸密集说明、姓名、快速掠过的关键字须保障逐字可读。Atlas 方法条目用于取法，具体实现和字体文件在本工程另选。",
+      "fontIds": [
+        "font:noto-sans-sc-variable",
+        "font:noto-serif-sc-variable",
+        "font:zcool-xiaowei"
+      ],
+      "references": [
+        {
+          "resourceId": "atlas:grunge-typography",
+          "scope": "有复印、刮擦、遮罩、裁切和叠印破坏字面的可见方法，适用范围随字的观看职责收放。"
+        }
+      ]
+    }
+  ]
+}

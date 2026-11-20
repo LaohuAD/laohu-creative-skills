@@ -61,6 +61,19 @@
       ]
     },
     {
+      "id": "asrcut-same-blueprint-annotation-review",
+      "type": "behavior",
+      "prompt": "用这个剪后时间线做可审阅的段落说明页；用户备注、Analysis 解释和 Motion 实际执行说明分开显示，不能改写原始识别或另算动画时间。",
+      "input_files": [".cache/validation/motion-foundation/annotation-review/timeline.json"],
+      "expected_behavior": [
+        "以 timeline.annotations[].resolvedTargets 的目标范围把同一 annotation 贴到真实 occurrence/词旁，并保留 annotation、source、segment、token 和 occurrence 身份",
+        "分别标示 userNote、analysisNote、motionDirection；不把用户备注或解释写成 raw ASR、字幕或已核实口播",
+        "Motion 调用从 motionBinding 的实际 componentCalls/phases 和同一 timeline 锚点读取；没有 consumer 时省略动画栏",
+        "保留当前测试数据的技术示意身份；不推断主观成片质量",
+        "使用既有唯一编辑与呈现时间，不生成第二套低保真动画大纲或虚构词级时间"
+      ]
+    },
+    {
       "id": "multiple-deliverables",
       "type": "boundary",
       "prompt": "我既要一个在电脑上看的页面，又要一份能贴进公众号的格式；先告诉我怎么分工。",

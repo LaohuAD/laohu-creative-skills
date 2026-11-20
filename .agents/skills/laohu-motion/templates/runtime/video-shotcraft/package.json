@@ -1,13 +1,7 @@
 {
-  "name": "laohu-video-shotcraft-runtime",
+  "name": "laohu-video-shotcraft-runtime-compat",
   "private": true,
   "version": "1.0.0",
-  "description": "Pinned Remotion runtime for the vendored video-shotcraft source components.",
-  "dependencies": {
-    "@remotion/bundler": "4.0.484",
-    "@remotion/renderer": "4.0.484",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
-    "remotion": "4.0.484"
-  }
+  "description": "Compatibility marker. The canonical Remotion runtime is ../laohu-remotion; do not install dependencies here.",
+  "canonicalRuntime": "../laohu-remotion"
 }

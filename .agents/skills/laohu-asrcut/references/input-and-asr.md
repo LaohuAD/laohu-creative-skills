@@ -1,6 +1,6 @@
 # 输入、原始语音与识别证据
 
-由 laohu-asrcut 在盘点录音、录屏、ASR 或 SRT 输入时读取。它确定源时钟、原始识别和词级证据能支持的精度；读完回到主 Skill 的粗剪步骤继续处理。
+盘点录音、录屏、ASR 或 SRT 时读取。本节确认来源、时钟、原始识别和输入能支持的精度，结果供[剪辑第一阶段](editing.md#1-盘点真实素材与录制尝试)使用。纯修音直接走[口播声音处理](audio-postproduction.md)。
 
 ## 识别输入能够证明什么
 
@@ -20,7 +20,7 @@ ASR 文字修正使用 plan.spokenCorrections，不回写 transcript.segments[].
 
 所有项目输出时间用 edit-plan.clock.sampleRateHz 的项目采样率表达。源区间自身携带 sampleRateHz；将源区间映射到目标时，编译器转换到统一项目时钟，并在 timeline 中记录量化信息。项目输出时钟与源时钟相同也要明确记录，不能依赖默认值。
 
-时间线中的非主音轨偏移写为 track.syncToPrimaryAudio.offsetSeconds。方向固定为：primaryAudioTime = trackLocalTime + offsetSeconds；反算主音轨范围到该轨时用 trackLocalTime = primaryAudioTime - offsetSeconds。主音轨标记 status=primary。若偏移来自估计而非已校准元数据，精度标为 estimated；偏移未知则写 status=unknown，并阻止依赖跨轨同步的导出。画面和系统声的轨道身份不能因为它们与麦克风一同录制就假设已同步。
+非主音轨偏移写为 `track.syncToPrimaryAudio.offsetSeconds`。按 `primaryAudioTime = trackLocalTime + offsetSeconds` 计算。反算轨道本地时间用 `trackLocalTime = primaryAudioTime - offsetSeconds`。主音轨标记 `status=primary`，估计偏移标 `estimated`，未知偏移标 `status=unknown` 并阻止依赖它的导出。同文件中的画面、系统声和麦克风也需核实轨道身份与偏移。
 
 ## 支持的输入形状
 
@@ -28,6 +28,32 @@ ASR 文字修正使用 plan.spokenCorrections，不回写 transcript.segments[].
 
 Cap 导出若为 schema=laohu.cap-asr-transcript/1，且 timeBasis=raw-recording-display-timeline，导入器以每个 utterance/word 的 sourceStartMs/sourceEndMs 作为录制段本地音轨时钟；globalStartMs/globalEndMs 只用于保留原项目时间证据和确定原序。不得将 global 时间作为本地音轨 sourceRange，也不能因为两者数值接近就混用。recordingSegment 是来源身份的一部分；多段导入用 `recordingSegment` 单独选择一个录制段、提供其真实 source id/mediaPath/duration/采样率，再由 `mergePlans` 合并各独立导入结果并传入明确的 `sourceOrder`。缺本地与 global 其中一组明确字段时，拒绝映射并报告准确缺项。
 
-provider 实施只保留调用适配，不承诺识别质量。极速识别调用前先用本机 ffprobe 获取媒体时长：缺失、非有限或非正时长均在联网前拒绝；超过 7200 秒（2 小时）也拒绝，避免依赖服务端报错。上传同时受 100 MiB 与 WAV/MP3/OGG/OPUS 格式限制；时长、大小和格式核验只证明符合本地入口约束，不代表已获授权或满足服务账户开通条件。该限制依据[火山引擎录音文件识别极速版官方文档](https://docs.volcengine.com/docs/doubao-voice/large-model-recording-file-lite-recognition-api?lang=zh)。
+已配置、获准的极速识别先用本机 ffprobe 获取有效正时长，最长 7200 秒（2 小时）。输入还须为不超过 100 MiB 的 WAV、MP3、OGG 或 OPUS。限制在联网前校验。凭据优先读用户级配置，环境变量覆盖，运行摘要不得回显。请求保留原话，关闭 ITN 和 DDC 语义平滑，原始响应使用指定的新路径。识别后才走离线 `import`，后续 `compile` 也在本地执行。[来源及限制](../SOURCES.md)
 
-原始响应保存在调用者指定的新路径中，运行摘要不包含凭据。provider 由 CLI 的显式 transcribe 命令或直接 API 调用执行；import/compile 从不触网。Mock fetch 只证明请求字段、时长拒绝、失败分支与凭据不泄漏，不证明真实 ASR 内容或识别质量。
+CLI 用 `transcribe --file source.wav --out raw-asr.json`。API 为 `loadVolcConfig(options)`、`probeAudioDuration(audioPath,options)`、`transcribeVolcFlash({audioPath,config,fetchImpl,ffprobePath,probeDurationImpl})`。录屏需识别时，先确认上传范围并从已确认音轨提取新的本地音频。Mock HTTP 只覆盖参数、时长拒绝和失败分支，原话准确性仍需按真实录音判断。
+
+### 导入时保留实际输入证据
+
+从仓库根目录调用 `scripts/asrcut.mjs`。按已确认来源传 `import --input raw-asr.json --project-id project-1 --source-id source-1 --out edit-plan.json`。实际媒体已核实时可补 `--source`、`--source-sample-rate`、`--source-duration-samples` 与多流时的 `--audio-stream-index`。项目输出采样率数值由 `--project-sample-rate` 表达，必要时显式给原始字段 `--time-unit`。SRT 使用同一命令。各源或 Cap 段逐一导入后，用 `merge --project-id project-1 --plans mic-a.json,mic-b.json --source-order mic-a,mic-b --out edit-plan.json` 合并；录制段用 `--recording-segment` 选定。
+
+录屏导入用可重复的 `--video-track '流索引,PTS时基,偏移秒数分数,精度'`。用 ffprobe 确定全局流索引和 `time_base`。偏移以双方可对齐的同步事件或已校准时钟为依据，从主音轨上的事件时间减去该画面轨本地事件时间。画面本地时间从选定轨道第一帧量起。匹配容器流与时基由导入器验证，实际偏移的成立依据由编辑者核对。`measured` 或 `estimated` 按证据强度填写。偏移缺证据时填 `--video-track '0,1/15360,unknown'`，先做虚拟剪辑或主音频路线。
+
+例如素材已经核实画面流为 0、时基 `1/15360`、偏移 `-1/25` 秒，音频流为 1，原媒体主音轨确有 5,760,000 个样本，且本轮已授权导出，可在仓库根目录执行以下命令。将文件名、索引、时基、偏移与样本数换成实际证据。
+
+```bash
+ffprobe -v error -show_streams -of json recording.mov
+node .agents/skills/laohu-asrcut/scripts/asrcut.mjs import \
+  --input raw-asr.json --project-id project-1 --source-id source-1 \
+  --source recording.mov --audio-stream-index 1 --source-duration-samples 5760000 \
+  --video-track '0,1/15360,-1/25,measured' --authorize-media-export --out edit-plan.json
+```
+
+导出、重排和重复分别对应独立开关 `--authorize-media-export`、`--authorize-reorder`、`--authorize-repeat`，只在已经获准的范围附上对应开关。当前未知主音轨样本数时，可用下一节的探针先独立测 `source.sampleCount`。多源分别确认权限；合并计划对同一项权限检查全体来源。
+
+## 用波形缩小候选范围
+
+源媒体已核实时运行 `probe-silence --input source.wav --plan edit-plan.json --out silence-map.json`。没有 plan 时可省略它，得到只绑定媒体的候选图。多音轨时用 `--audio-stream-index` 指定 ffprobe 全局音频流索引，同一媒体在 plan 中有多个来源时用 `--source-id`。默认探测参数是 `--noise-db -38` 和 `--min-silence-ms 120`，按录制电平与噪声底调整并保留实际参数。
+
+`silence-map.json` 记录源文件 SHA、轨道、样本率、样本数、项目和探针身份。每个 `silences[]` 带样本范围、时长、`valleySample`、可用的 `nearestZeroCrossingSample`、`minRmsDb` 和 `meanRmsDb`。数字零的负无穷分贝用 JSON `null` 表示。 `gapClassification` 只按时长提示，`onsetDriftWarning` 提示值得回听的可信词锚与持续能量变化。
+
+`roomToneCandidates[]` 是稳定源底声候选，回听后才确认有无轻语、呼吸、提示音或串轨。探针不写源、不修改词边界，也不授权删除。回到[精剪](pause-and-pacing.md#2-用原声底噪与安全谷底接两侧)核对实际功能和剪口。

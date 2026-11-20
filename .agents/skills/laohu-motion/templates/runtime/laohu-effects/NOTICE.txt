@@ -1,0 +1,9 @@
+Laohu Motion local runtime closure
+
+This directory contains selected files from alchaincyf/huashu-art-motion. The code and associated font assets are preserved byte-for-byte from the pinned source commit; only the local file organization and filenames are adapted.
+
+Repository: https://github.com/alchaincyf/huashu-art-motion
+Commit: 8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c
+License: MIT for source code; SIL Open Font License for the listed font files. See LICENSE and licenses/.
+
+This notice records provenance and is not a claim of original authorship for the byte-preserved source modules.

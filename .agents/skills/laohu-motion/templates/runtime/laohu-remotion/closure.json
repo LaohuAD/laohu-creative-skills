@@ -1,0 +1,309 @@
+{
+  "format": "laohu.motion.local-remotion-closure/1",
+  "source": {
+    "id": "video-shotcraft",
+    "repository": "https://github.com/Vincentwei1021/video-shotcraft",
+    "commit": "1266a3ec4831289c4d893d42dd5102723658039a",
+    "vendorRoot": "templates/upstream/video-shotcraft",
+    "license": "Apache-2.0 for repository source; each media/font/video asset remains separately licensed and is not implied by the code license.",
+    "localLicense": {
+      "sourcePath": "templates/upstream/video-shotcraft/LICENSE",
+      "localPath": "templates/runtime/laohu-remotion/LICENSE",
+      "sha256": "b2ce9877a55547ada9b870150664d1468ff777e67cc9888806a73927d31c5771",
+      "license": "Apache-2.0"
+    }
+  },
+  "runtime": {
+    "packageManifestPath": "templates/runtime/laohu-remotion/package.json",
+    "packageLockPath": "templates/runtime/laohu-remotion/package-lock.json",
+    "manifestSha256": "f16fbf406f6ed932d913e94417490c852a6909307fee535562ed26f71d541960",
+    "lockSha256": "d665eb29683e218ab6fa3182642aad53e4f7ebddd780cc29478a7e70d25b41e6",
+    "pinnedDependencies": [
+      {
+        "name": "@remotion/bundler",
+        "version": "4.0.537",
+        "lockLicense": "SEE LICENSE IN LICENSE.md",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": "LICENSE.md inside dependency package",
+        "licenseTextAvailableLocally": false
+      },
+      {
+        "name": "@remotion/renderer",
+        "version": "4.0.537",
+        "lockLicense": "SEE LICENSE IN LICENSE.md",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": "LICENSE.md inside dependency package",
+        "licenseTextAvailableLocally": false
+      },
+      {
+        "name": "react",
+        "version": "19.2.7",
+        "lockLicense": "MIT",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": null,
+        "licenseTextAvailableLocally": false
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.7",
+        "lockLicense": "MIT",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": null,
+        "licenseTextAvailableLocally": false
+      },
+      {
+        "name": "remotion",
+        "version": "4.0.537",
+        "lockLicense": "SEE LICENSE IN LICENSE.md",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": "LICENSE.md inside dependency package",
+        "licenseTextAvailableLocally": false
+      },
+      {
+        "name": "@react-three/fiber",
+        "version": "9.8.2",
+        "lockLicense": "MIT",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": "LICENSE/README in installed package",
+        "licenseTextAvailableLocally": false
+      },
+      {
+        "name": "@remotion/paths",
+        "version": "4.0.537",
+        "lockLicense": "MIT",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": "LICENSE/README in installed package",
+        "licenseTextAvailableLocally": false
+      },
+      {
+        "name": "@remotion/three",
+        "version": "4.0.537",
+        "lockLicense": "MIT",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": "LICENSE/README in installed package",
+        "licenseTextAvailableLocally": false
+      },
+      {
+        "name": "three",
+        "version": "0.170.0",
+        "lockLicense": "MIT",
+        "licenseMetadataSource": "package-lock.json",
+        "licenseTextReference": "LICENSE/README in installed package",
+        "licenseTextAvailableLocally": true
+      }
+    ],
+    "dependencyFilesInstalled": true,
+    "networkUsed": false,
+    "packageLicenseSummary": {
+      "lockfilePackageCount": 239,
+      "remotionPackageVersionCounts": {
+        "4.0.537": 28
+      },
+      "licenseMetadataCounts": {
+        "UNDECLARED": 9,
+        "MIT": 184,
+        "MPL-2.0": 4,
+        "SEE LICENSE IN LICENSE.md": 5,
+        "Remotion License": 2,
+        "Apache-2.0": 4,
+        "BSD-3-Clause": 7,
+        "CC-BY-4.0": 1,
+        "ISC": 14,
+        "BSD-2-Clause": 7,
+        "Unlicense": 2,
+        "0BSD": 1
+      },
+      "licenseTermsStatus": "local package license files are present in the project .cache runtime; exact texts are not copied into the skill bundle"
+    }
+  },
+  "files": [
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/assets/lib/ClipCard.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/clip-card.tsx",
+      "sourceSha256": "3532788285cfe52fef4e836979832054c41885b238f4055fd84b40c8de44670b",
+      "localSha256": "3532788285cfe52fef4e836979832054c41885b238f4055fd84b40c8de44670b",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/assets/lib/FlashCut.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/flash-cut.tsx",
+      "sourceSha256": "2e8d9e6319f99970be839f05bc869467b3d580aaa40809efb04b5dc02dd84c7f",
+      "localSha256": "2e8d9e6319f99970be839f05bc869467b3d580aaa40809efb04b5dc02dd84c7f",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/_fixtures/Brand.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/content-adapter.ts",
+      "sourceSha256": "7c2e412276a860605737952143050f2a316dfc95a5bd6ad4c517ebf52ee5adf4",
+      "localSha256": "37f74c5e691f36ccb7512023a3faca3e2a1dbfae20224b42eb25e5dc8f966ef3",
+      "sourceLicense": "Apache-2.0",
+      "transform": "content adapter retains only source display font family; removes demo identity, SVG mark, wordmark, promo copy and claims"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/_fixtures/Look.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/look.tsx",
+      "sourceSha256": "88b97d49a5489126eaaaff2269d02fd491ccbd7f13f3e1d6df764a592635ae28",
+      "localSha256": "9768f9e47a7072412620ca4717790b60d96d1eb50aacd53bb656c5a8752f1193",
+      "sourceLicense": "Apache-2.0",
+      "transform": "relative import paths only"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/_fixtures/Motion.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/motion.tsx",
+      "sourceSha256": "961a9ce2401e38b5fe22fce7f44d84fc656d76aad0b178082e447feb01494421",
+      "localSha256": "961a9ce2401e38b5fe22fce7f44d84fc656d76aad0b178082e447feb01494421",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/_fixtures/PageCam2D.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/page-camera-2d.tsx",
+      "sourceSha256": "36b3b90680df7e99f0ced02f135181d7037f74c33a4f425cc01f7a110d20f69a",
+      "localSha256": "36b3b90680df7e99f0ced02f135181d7037f74c33a4f425cc01f7a110d20f69a",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/_fixtures/Polish.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/polish.tsx",
+      "sourceSha256": "21dfe2f36325c07ccaa1a619007e24a2b5b3d6a82030d3c1772de902551c2842",
+      "localSha256": "21dfe2f36325c07ccaa1a619007e24a2b5b3d6a82030d3c1772de902551c2842",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/_textures/live-layout.json",
+      "localPath": "templates/adapters/laohu-list-stack-five.tsx",
+      "sourceSha256": "dd99140e7806f0de58c91f98a4a5c2ef0b3e793817b46529e4f9e23b57186869",
+      "localSha256": "ebdfe6f6a8ac608a654b37d4396eed0ccc84e364e67297989f3887129b3c75e3",
+      "sourceLicense": "Apache-2.0",
+      "transform": "method/input adapted in existing local component; caller assets replace demo screenshots/copy/layout"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/outro/grain-dissolve/GrainDissolve.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/grain-dissolve.tsx",
+      "sourceSha256": "bc683a13bf8ee34494dd836dec2feb1533e3d76f18b41f4a6f1891778b61fae7",
+      "localSha256": "94abb17d6fd55fd72810cc76c5cca4a081630006eb7d4225fda46c73db5e9837",
+      "sourceLicense": "Apache-2.0",
+      "transform": "relative imports plus required brandName content adapter and actual text-frame-width rejection"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/typography/paper-title-card/PaperTitleCard.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/paper-title-card-gallery.tsx",
+      "sourceSha256": "2d0fb1fa6533e11e0ae2b86e1af0b5c406f177bdc0d9e078c6ca22c29b3e41fe",
+      "localSha256": "2d0fb1fa6533e11e0ae2b86e1af0b5c406f177bdc0d9e078c6ca22c29b3e41fe",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/demos/ui-entrance/list-stack-press/ListStackPress.tsx",
+      "localPath": "templates/adapters/laohu-list-stack-five.tsx",
+      "sourceSha256": "a08c9a12ebc797f03883b5e87a651e2fcbfab9782f2da7a39f2c12afef4d6556",
+      "localSha256": "ebdfe6f6a8ac608a654b37d4396eed0ccc84e364e67297989f3887129b3c75e3",
+      "sourceLicense": "Apache-2.0",
+      "transform": "method/input adapted in existing local component; caller assets replace demo screenshots/copy/layout"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/template/src/aifl/DigitRoll.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/digit-roll.tsx",
+      "sourceSha256": "5a7764a0d290a4e4da86b757a8a945f5f727d3f3831ee5c0f230e201c73c0081",
+      "localSha256": "5a7764a0d290a4e4da86b757a8a945f5f727d3f3831ee5c0f230e201c73c0081",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/template/src/aifl/PaperTitleCard.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/paper-title-card.tsx",
+      "sourceSha256": "6d7c020fa93e1948ccdb7f744dc210c21346ceff8c35e6c8ba8fdf5a7abcdee0",
+      "localSha256": "21a38b7c9c23f214489f1c3ceb239a7c0816ad68d805418b4cb9ad9e33579828",
+      "sourceLicense": "Apache-2.0",
+      "transform": "relative import paths only"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/template/src/themes/palette-assets.json",
+      "localPath": "templates/runtime/laohu-remotion/themes/palette-assets.json",
+      "sourceSha256": "02590052e2bb374494a2596952d83e8bf62b558537837e99b6ea660dbc0bd1f0",
+      "localSha256": "02590052e2bb374494a2596952d83e8bf62b558537837e99b6ea660dbc0bd1f0",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/template/src/themes/palette-assets.ts",
+      "localPath": "templates/runtime/laohu-remotion/themes/palette-assets.ts",
+      "sourceSha256": "f95e96134e19b15bcd79bcdea22a31ae722bbb51320e4632dd55a48d2f28abb4",
+      "localSha256": "f95e96134e19b15bcd79bcdea22a31ae722bbb51320e4632dd55a48d2f28abb4",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/template/src/themes/palettes.json",
+      "localPath": "templates/runtime/laohu-remotion/themes/palettes.json",
+      "sourceSha256": "c70f6ddbda81f404a794de72ae32b71e23ebd22f5dd30b3eddc1e09c9a2152a7",
+      "localSha256": "c70f6ddbda81f404a794de72ae32b71e23ebd22f5dd30b3eddc1e09c9a2152a7",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/video-shotcraft/template/src/themes/visual-theme.tsx",
+      "localPath": "templates/runtime/laohu-remotion/themes/visual-theme.tsx",
+      "sourceSha256": "7fe8ed2925ae2b03a88a681e8cf219d129f45bfcd96592c77e7da6e3a41eb8cd",
+      "localSha256": "7fe8ed2925ae2b03a88a681e8cf219d129f45bfcd96592c77e7da6e3a41eb8cd",
+      "sourceLicense": "Apache-2.0",
+      "transform": "source bytes preserved"
+    }
+  ],
+  "localImports": {
+    "components/look.tsx": [
+      "components/polish.tsx"
+    ],
+    "components/grain-dissolve.tsx": [
+      "components/motion.tsx",
+      "components/polish.tsx",
+      "components/content-adapter.ts"
+    ],
+    "components/digit-roll.tsx": [
+      "themes/visual-theme.tsx"
+    ],
+    "components/paper-title-card.tsx": [
+      "themes/visual-theme.tsx",
+      "components/digit-roll.tsx"
+    ],
+    "themes/visual-theme.tsx": [
+      "themes/palettes.json",
+      "themes/palette-assets.ts"
+    ],
+    "themes/palette-assets.ts": [
+      "themes/palette-assets.json"
+    ],
+    "adapters/video-shotcraft-entry.tsx": [
+      "core/SceneStack.tsx",
+      "components/transitions/index.tsx"
+    ]
+  },
+  "runtimeAssets": [
+    {
+      "kind": "clip-video",
+      "localPath": "caller-provided local media path",
+      "license": "caller-declared; no demo media bundled"
+    },
+    {
+      "kind": "page-and-card-images",
+      "localPath": "caller-provided local image paths",
+      "license": "caller-declared; no demo textures bundled"
+    },
+    {
+      "kind": "theme-textures",
+      "localPath": "templates/runtime/laohu-remotion/themes/palette-assets.json",
+      "license": "Apache-2.0 source file"
+    }
+  ],
+  "scopeNotes": [
+    "Selected source ListStack and live-layout map to the existing caller-media adaptation; demo screenshots and copy are not bundled.",
+    "GrainDissolve requires caller brandName; source particle/filter/phase/scale behavior remains while demo identity is removed.",
+    "Source pin remains at the catalogued commit; no upstream files or catalog entries changed.",
+    "Direct consumer rewiring remains for the main implementation owner; see validation result.md.",
+    "The canonical package manifest/lock is `templates/runtime/laohu-remotion/`; runtime dependencies install under the selected workRoot .cache. The separate `fy-code-animation-closure.json` records 42 responsibility-organized companion modules and their own source/license map."
+  ]
+}

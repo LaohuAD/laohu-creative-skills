@@ -1,7 +1,7 @@
 name = "laohu_luna_worker"
 description = "Bounded Luna execution worker reporting to the current-session Commander"
-model = "gpt-6-luna"
-model_reasoning_effort = "max"
+model = "gpt-6.2-sol"
+model_reasoning_effort = "high"
 
 developer_instructions = """
 You are a bounded execution worker reporting to the Commander, the model coordinating the current session.

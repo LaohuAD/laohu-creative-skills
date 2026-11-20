@@ -62,9 +62,9 @@ description: 用户明确要求建立作品项目或目录、保存文件或归�
 
 作品目录仍由 `references/categories.json` 管理。长期参考库是另一种容器，由 [参考库布局](references/library-layouts.json) 管理；调用其容器工具不会创建作品类别，也不会改变 `workspace.py` 对 `works/` 的既有路径与接口。
 
-当前 `benchmark` 参考库默认位于当前确认项目根目录的 `benchmark/`。它保存来源身份与出处、按类别归档的方法原子、使用记录和可重建检索索引；`laohu-benchmark` 负责证据判断、方法分析、类别判断及写入。`laohu-archive` 只预览或准备容器，并返回路径。不得将独立的作品分析目录 `works/benchmark/{作品名}/` 当作原子库，也不得把长期库写回已安装 Skill 目录。
+新收录的专业研究路径由 [laohu-benchmark](../laohu-benchmark/SKILL.md#选择研究库)解析为接收 Skill 的同级 `benchmark/`。Archive 的参考库工具供明确要求准备既有项目根库或其他指定容器时使用，只返回路径或准备容器。独立分析作品仍按本 Skill 的 `works/benchmark/{作品名}/` 归档流程处理。
 
-项目内先预览容器路径：
+需要沿用项目根的兼容入口时，先预览容器路径：
 
 ```bash
 python3 "{SKILL_DIR}/scripts/library_workspace.py" --library benchmark --root "{当前项目根}"

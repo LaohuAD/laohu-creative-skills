@@ -51,7 +51,7 @@
 ## 专业方法来源
 
 - 选题角度、读者任务与材料兑现：[angle-development.md](../../laohu-topic/references/angle-development.md)、[materials-and-production.md](../../laohu-topic/references/materials-and-production.md)。
-- 标题人群价值、句面生成与最终复审：[audience-value-and-structure.md](../../laohu-title/references/audience-value-and-structure.md)、[title-structure-generation.md](../../laohu-title/references/title-structure-generation.md)、[title-value-and-review.md](../../laohu-title/references/title-value-and-review.md)。
+- 标题人群价值、句面生成与最终复审：从 [Title 主文](../../laohu-title/SKILL.md) 确认字段。外部发布与搜索定位[读者入口](../../laohu-title/references/entry-psychology-and-platforms.md)，关键表达定位[凝练与修辞](../../laohu-title/references/condensation-and-rhetoric.md)，按需取[语言方法](../../laohu-title/references/language-mechanics.md)及[成品复审](../../laohu-title/references/title-value-and-review.md)。
 - 文章结构与公众号文字分支：[structure-and-argument.md](../../laohu-writing/references/structure-and-argument.md)、[laohu-writing-gzh/SKILL.md](../../laohu-writing/skills/laohu-writing-gzh/SKILL.md)。
 - HTML 文档呈现、公众号组件/结构校验：[presentation.md](../../laohu-htmlshow/references/presentation.md)、[theme-index.md](../../laohu-htmlshow-gzh/references/theme-index.md)、[structure-validation.md](../../laohu-htmlshow-gzh/references/structure-validation.md)。
 - 证据方法和阅读者校准：[exemplar-study.md](../../../../references/exemplar-study.md)、[analysis validation](../../laohu-analysis/references/validation.md)。

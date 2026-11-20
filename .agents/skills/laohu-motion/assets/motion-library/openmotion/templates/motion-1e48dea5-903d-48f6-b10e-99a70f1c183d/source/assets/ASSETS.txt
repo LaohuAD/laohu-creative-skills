@@ -1,0 +1,14 @@
+Three.js
+Copied from pinned installed runtime already used by task220, MIT license in vendor/THREE-LICENSE.txt.
+
+GSAP3.15.0
+Bundled native dependency, standard license in GSAP-LICENSE.txt.
+
+Inter regular and bold
+Local font files, SIL OFL license in fonts/Inter-OFL.txt.
+
+original-audio.m4a
+AAC copied from user-supplied 240_Lark.mp4.
+
+Interface textures, paper plane, curved pages, hand and spatial props
+Editable drawing code in ui.js and magic-share.js, reconstructed from the reference. No source screenshots or reference video frames in runtime.

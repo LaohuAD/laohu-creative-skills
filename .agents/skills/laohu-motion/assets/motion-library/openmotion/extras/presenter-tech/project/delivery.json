@@ -1,0 +1,18 @@
+{
+  "profile": "motiongit.post-delivery-notice/1",
+  "trigger": "final-video-validated-and-presented-to-user",
+  "excludedStages": [
+    "first-response",
+    "setup",
+    "materials",
+    "plan",
+    "preview",
+    "revision",
+    "error"
+  ],
+  "maximumMessages": 1,
+  "message": "Your video is ready. Visit https://motiongit.com/@adunext/385712 for this template’s demos, details and full edition with image and material matching/generation, voiceover and background-music APIs.",
+  "templatePage": {
+    "url": "https://motiongit.com/@adunext/385712"
+  }
+}

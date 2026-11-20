@@ -253,20 +253,195 @@ function validateBindingsSpec(spec, timelineIndex) {
       if (event.anchor != null) validateAnchorShape(event.anchor, eventLabel + ".anchor");
       if (event.anchor?.kind === "presentation" && spec.format !== "laohu.motion.speech-bindings/2") fail(eventLabel + " presentation-boundary anchors require laohu.motion.speech-bindings/2");
       secondsFromUnit(event.offset || { value: 0, unit: "samples" }, eventLabel + ".offset", timelineIndex.sampleRateHz, true);
+      if (event.replaceExisting != null && typeof event.replaceExisting !== "boolean") fail(eventLabel + ".replaceExisting must be boolean when present");
     }
   }
   return { phaseIds, eventIds };
 }
-function directFilmTimeEvents(scene) {
-  const rows = [];
+function sceneAudioEventLocations(scene) {
+  const locations = new Map();
   const collect = (events, owner) => {
-    for (const event of events || []) {
-      if (!isObject(event) || !Number.isFinite(event.filmTimeSec)) continue;
-      rows.push({ id: stableId(event.id, owner + " direct filmTimeSec event id"), filmTimeSec: event.filmTimeSec, owner });
+    if (events == null) return;
+    if (!Array.isArray(events)) fail(owner + " must be an array");
+    for (const [index, event] of events.entries()) {
+      if (!isObject(event) || typeof event.id !== "string" || !event.id.trim()) continue;
+      if (locations.has(event.id)) fail("Duplicate shared audio event ID: " + event.id);
+      locations.set(event.id, { id: event.id, event, events, index, owner });
     }
   };
   collect(scene.audioEvents, "scene.audioEvents");
-  for (const object of scene.objects || []) collect(object && object.data && object.data.audioEvents, "object " + (object && object.id || "(unknown)") + ".data.audioEvents");
+  for (const object of scene.objects || []) {
+    if (object && object.data) collect(object.data.audioEvents, "object " + (object.id || "(unknown)") + ".data.audioEvents");
+  }
+  return locations;
+}
+function motionBindingsFromAnnotations(plan, timeline, scene) {
+  if (!isObject(plan) || !Array.isArray(plan.annotations) || !plan.annotations.some((annotation) => annotation?.motionBinding)) {
+    fail("no speech-bindings spec was supplied and edit plan has no Motion annotations to consume");
+  }
+  if (scene.timeBasis !== "film-global") {
+    fail("annotation-to-custom-renderer binding requires scene.timeBasis=film-global; this direct MotionCore consumer receives scene time without segment remapping");
+  }
+  const timelineIndex = validateTimeline(timeline);
+  const compiledAnnotations = new Map((timeline.annotations || []).map((annotation) => [annotation.id, annotation]));
+  const eventLocations = sceneAudioEventLocations(scene);
+  const generatedBindings = [];
+  const annotationRoutes = [];
+  const phaseRecords = new Map();
+  let usesPresentation = false;
+
+  for (const annotation of plan.annotations.filter((item) => item && item.motionBinding)) {
+    const label = "annotation " + stableId(annotation.id, "annotation.id");
+    const compiled = compiledAnnotations.get(annotation.id);
+    if (!compiled) fail(label + " is missing from the compiled timeline annotations");
+    if (compiled.resolution !== "resolved" || !Array.isArray(compiled.resolvedTargets) || compiled.resolvedTargets.length === 0) {
+      fail(label + " has no compiler-resolved target range; do not infer a time from transcript text");
+    }
+    const motionBinding = annotation.motionBinding;
+    if (!Array.isArray(motionBinding.componentCalls) || !Array.isArray(motionBinding.phases) || !Array.isArray(motionBinding.audioEvents)) {
+      fail(label + " motionBinding must provide componentCalls, phases, and audioEvents arrays");
+    }
+    const calls = new Map();
+    for (const [index, call] of motionBinding.componentCalls.entries()) {
+      const callLabel = label + ".motionBinding.componentCalls[" + index + "]";
+      if (!isObject(call)) fail(callLabel + " must be an object");
+      const callId = stableId(call.id, callLabel + ".id");
+      if (calls.has(callId)) fail(label + " has duplicate componentCall id " + callId);
+      const objectId = stableId(call.objectId, callLabel + ".objectId");
+      const componentCatalogId = stableId(call.componentCatalogId, callLabel + ".componentCatalogId");
+      const componentInstanceId = stableId(call.componentInstanceId, callLabel + ".componentInstanceId");
+      const matches = (scene.objects || []).filter((object) => object && object.id === objectId);
+      if (matches.length !== 1) fail(callLabel + " must resolve to exactly one existing scene object: " + objectId);
+      const object = matches[0];
+      if (typeof object.type !== "string" || !object.type.startsWith("custom:")) fail(callLabel + " must target an existing custom MotionCore renderer object");
+      if (componentCatalogId !== object.type) fail(callLabel + ".componentCatalogId must match the actual scene renderer type " + object.type);
+      if (componentInstanceId !== object.id) fail(callLabel + ".componentInstanceId must match the actual scene object ID " + object.id);
+      calls.set(callId, { id: callId, objectId, componentCatalogId, componentInstanceId, object });
+    }
+
+    const phasesById = new Map();
+    for (const [index, phase] of motionBinding.phases.entries()) {
+      const phaseLabel = label + ".motionBinding.phases[" + index + "]";
+      if (!isObject(phase)) fail(phaseLabel + " must be an object");
+      const phaseId = stableId(phase.id, phaseLabel + ".id");
+      if (phaseRecords.has(phaseId)) fail("duplicate phase ID across edit-plan Motion annotations: " + phaseId);
+      const componentCallId = stableId(phase.componentCallId, phaseLabel + ".componentCallId");
+      const call = calls.get(componentCallId);
+      if (!call) fail(phaseLabel + ".componentCallId must point to a componentCall in the same annotation");
+      validateAnchorShape(phase.anchor, phaseLabel + ".anchor");
+      if (phase.anchor.kind === "presentation") usesPresentation = true;
+      if (!phase.duration) fail(phaseLabel + ".duration is required so the real custom consumer has a bounded phase to sample");
+      const resolved = resolveAnchor(phase.anchor, timelineIndex);
+      if (resolved.presentationId) {
+        if (!timelineIndex.presentations.has(resolved.presentationId)) fail(phaseLabel + " presentation anchor is not in the compiled timeline");
+      } else {
+        const contained = compiled.resolvedTargets.some((target) => {
+          if (target.occurrenceId !== resolved.clipOccurrenceId) return false;
+          const range = target.targetRange;
+          if (!range || range.sampleRateHz !== timelineIndex.sampleRateHz) return false;
+          return resolved.targetSample >= range.startSample && resolved.targetSample <= range.endSample;
+        });
+        if (!contained) fail(phaseLabel + " anchor does not fall inside this annotation's compiler-resolved target range; use a segment annotation or a matching token anchor");
+      }
+      phasesById.set(phaseId, { phase, call });
+      phaseRecords.set(phaseId, { annotationId: annotation.id, componentCallId, objectId: call.objectId, componentCatalogId: call.componentCatalogId, componentInstanceId: call.componentInstanceId });
+    }
+
+    const groupedEvents = new Map();
+    for (const [index, event] of motionBinding.audioEvents.entries()) {
+      const eventLabel = label + ".motionBinding.audioEvents[" + index + "]";
+      if (!isObject(event)) fail(eventLabel + " must be an object");
+      const eventId = stableId(event.id, eventLabel + ".id");
+      const phaseId = stableId(event.phaseId, eventLabel + ".phaseId");
+      const phaseRecord = phasesById.get(phaseId);
+      if (!phaseRecord) fail(eventLabel + ".phaseId must reference a phase in the same annotation");
+      if (event.anchor != null) {
+        validateAnchorShape(event.anchor, eventLabel + ".anchor");
+        const resolved = resolveAnchor(event.anchor, timelineIndex);
+        if (resolved.presentationId) usesPresentation = true;
+        else if (!compiled.resolvedTargets.some((target) => target.occurrenceId === resolved.clipOccurrenceId
+          && resolved.targetSample >= target.targetRange.startSample && resolved.targetSample <= target.targetRange.endSample)) {
+          fail(eventLabel + " anchor does not fall inside this annotation's compiler-resolved target range");
+        }
+      }
+      const row = {
+        id: eventId,
+        phaseId,
+        ...(event.anchor ? { anchor: cloneJson(event.anchor) } : {}),
+        ...(event.offset ? { offset: cloneJson(event.offset) } : {}),
+        replaceExisting: eventLocations.has(eventId),
+      };
+      const callId = phaseRecord.call.id;
+      if (!groupedEvents.has(callId)) groupedEvents.set(callId, []);
+      groupedEvents.get(callId).push(row);
+    }
+
+    const usedCalls = new Set([...phasesById.values()].map(({ call }) => call.id));
+    for (const [callId, call] of calls) {
+      const phases = [...phasesById.entries()].filter(([, record]) => record.call.id === callId).map(([, record]) => record.phase);
+      if (!phases.length) continue;
+      generatedBindings.push({
+        id: annotation.id + ":" + callId,
+        objectId: call.objectId,
+        phases: phases.map((phase) => ({
+          id: phase.id,
+          anchor: cloneJson(phase.anchor),
+          offset: phase.offset == null ? { value: 0, unit: "samples" } : cloneJson(phase.offset),
+          duration: cloneJson(phase.duration),
+          ...(phase.curve != null ? { curve: phase.curve } : {}),
+          ...(phase.channels != null ? { channels: cloneJson(phase.channels) } : {}),
+        })),
+        events: groupedEvents.get(callId) || [],
+      });
+    }
+    annotationRoutes.push({
+      annotationId: annotation.id,
+      resolution: compiled.resolution,
+      resolvedTargets: cloneJson(compiled.resolvedTargets),
+      componentCalls: [...calls.values()].map(({ object, ...call }) => call),
+      boundComponentCallIds: [...usedCalls],
+      phaseIds: [...phasesById.keys()],
+      audioEventIds: motionBinding.audioEvents.map((event) => event.id),
+    });
+  }
+  if (!generatedBindings.length) fail("edit-plan Motion annotations have no phase mapped to a real custom renderer object");
+  return {
+    spec: {
+      format: usesPresentation ? "laohu.motion.speech-bindings/2" : "laohu.motion.speech-bindings/1",
+      project: { id: timelineIndex.projectId, revision: timelineIndex.revision, planSha256: timelineIndex.planSha256 },
+      bindings: generatedBindings,
+    },
+    receipt: {
+      format: "laohu.motion.annotation-consumption/1",
+      annotationSha256: timeline.annotationSha256 || null,
+      annotations: annotationRoutes,
+      componentClock: {
+        timeBasis: "film-global",
+        componentLocalTimeFormula: "MotionCore custom renderer receives the root scene time unchanged; for this whole-scene component, componentLocalSec = filmGlobalSec",
+        segmentTimeRemapping: "not-applied",
+      },
+    },
+  };
+}
+function directFilmTimeEvents(scene) {
+  const rows = [];
+  const normalizeBasis = (value) => typeof value === "string" ? value.trim().toLowerCase().replace(/_/g, "-") : null;
+  const collect = (events, owner, ownerTimeBasis) => {
+    for (const event of events || []) {
+      if (!isObject(event) || event.phaseId != null) continue;
+      const timeField = ["filmTimeSec", "timeSec", "time"].find((key) => Number.isFinite(event[key]));
+      if (!timeField) continue;
+      const basis = normalizeBasis(event.timeBasis)
+        || (timeField === "filmTimeSec" ? "film-global" : null)
+        || normalizeBasis(ownerTimeBasis)
+        || normalizeBasis(scene.timeBasis);
+      if (basis !== "film-global") continue;
+      rows.push({ id: stableId(event.id, owner + " direct film-global event id"), filmTimeSec: event[timeField], timeField, owner });
+    }
+  };
+  collect(scene.audioEvents, "scene.audioEvents", scene.timeBasis);
+  for (const object of scene.objects || []) collect(object && object.data && object.data.audioEvents,
+    "object " + (object && object.id || "(unknown)") + ".data.audioEvents", object && object.data && object.data.timeBasis);
   const ids = new Set();
   for (const row of rows) {
     if (ids.has(row.id)) fail("direct filmTimeSec event IDs must be unique across the scene: " + row.id);
@@ -276,7 +451,9 @@ function directFilmTimeEvents(scene) {
 }
 function reviewDirectFilmTimeEvents(scene, timelineIndex, spec) {
   if (timelineIndex.format !== "laohu.asrcut.timeline/2") return null;
-  const events = directFilmTimeEvents(scene);
+  const explicitlyReboundIds = new Set((spec.bindings || []).flatMap((binding) => (binding.events || [])
+    .filter((event) => event.replaceExisting === true).map((event) => event.id)));
+  const events = directFilmTimeEvents(scene).filter((event) => !explicitlyReboundIds.has(event.id));
   const previous = scene.motionSpeechBinding;
   const previousTimeline = isObject(previous) ? previous.timeline : null;
   const changed = !isObject(previousTimeline)
@@ -292,29 +469,29 @@ function reviewDirectFilmTimeEvents(scene, timelineIndex, spec) {
   for (const entry of decisions) {
     if (!isObject(entry)) fail("directFilmTimeEventReview entries must be objects with eventId, action, and reason");
     const eventId = stableId(entry.eventId, "directFilmTimeEventReview.eventId");
-    if (byId.has(eventId)) fail("duplicate direct filmTimeSec event review: " + eventId);
+    if (byId.has(eventId)) fail("duplicate direct film-global event review: " + eventId);
     if (!["retain-absolute", "remapped"].includes(entry.action)) fail("directFilmTimeEventReview " + eventId + ".action must be retain-absolute or remapped");
     stableId(entry.reason, "directFilmTimeEventReview " + eventId + ".reason");
     byId.set(eventId, entry);
   }
   const missingReview = events.filter((event) => !byId.has(event.id)).map((event) => event.id);
   const extraReview = [...byId.keys()].filter((eventId) => !currentIds.has(eventId));
-  if (missingReview.length || extraReview.length) fail("timeline/2 timing changed; review every current direct filmTimeSec event by ID and remove obsolete review entries (missing: " + missingReview.join(", ") + "; obsolete: " + extraReview.join(", ") + ")");
+  if (missingReview.length || extraReview.length) fail("timeline/2 timing changed; review every current direct filmTimeSec event by ID (including film-global timeSec/time events) and remove obsolete review entries (missing: " + missingReview.join(", ") + "; obsolete: " + extraReview.join(", ") + ")");
   const previousSnapshot = new Map((previous?.directFilmTimeEvents || []).filter((row) => isObject(row) && typeof row.id === "string").map((row) => [row.id, row.filmTimeSec]));
   for (const event of events) {
     const action = byId.get(event.id).action;
     if (action === "retain-absolute" && previousSnapshot.has(event.id) && previousSnapshot.get(event.id) !== event.filmTimeSec) {
-      fail("direct filmTimeSec event " + event.id + " changed but was marked retain-absolute");
+      fail("direct film-global event " + event.id + " changed but was marked retain-absolute");
     }
     if (action === "remapped" && previousSnapshot.has(event.id) && previousSnapshot.get(event.id) === event.filmTimeSec) {
-      fail("direct filmTimeSec event " + event.id + " was marked remapped but still has its previous absolute time; update the event in the input scene first");
+      fail("direct film-global event " + event.id + " was marked remapped but still has its previous absolute time; update the event in the input scene first");
     }
   }
   return {
     status: "explicitly-reviewed-after-timeline-change",
     reviewed: events.map((event) => ({id: event.id, action: byId.get(event.id).action, reason: byId.get(event.id).reason, filmTimeSec: event.filmTimeSec})),
     removedSincePreviousBinding,
-    note: "Direct filmTimeSec values remain absolute and are never shifted by source-timeline recompilation.",
+    note: "Unbound direct film-global event times remain absolute and are never shifted by source-timeline recompilation; events explicitly tied to semantic phases are excluded.",
   };
 }
 function validateAnchorShape(anchor, label) {
@@ -414,6 +591,7 @@ function resolveAnchor(anchor, timelineIndex) {
 function removePreviousGenerated(scene) {
   const previous = scene.motionSpeechBinding;
   if (!isObject(previous) || previous.format !== "laohu.motion.speech-binding-receipt/1") return scene;
+  restorePreviouslyReboundEvents(scene, previous.reboundAudioEvents || []);
   const phaseIds = new Set(Array.isArray(previous.generatedPhaseIds) ? previous.generatedPhaseIds : []);
   const eventIds = new Set(Array.isArray(previous.generatedEventIds) ? previous.generatedEventIds : []);
   if (Array.isArray(scene.phases)) scene.phases = scene.phases.filter((phase) => !phaseIds.has(phase && phase.id));
@@ -424,6 +602,42 @@ function removePreviousGenerated(scene) {
   }
   delete scene.motionSpeechBinding;
   return scene;
+}
+function restorePreviouslyReboundEvents(scene, reboundEvents) {
+  if (!Array.isArray(reboundEvents)) fail("previous speech-binding receipt reboundAudioEvents must be an array");
+  for (const record of reboundEvents) {
+    if (!isObject(record) || !isObject(record.owner) || !isObject(record.originalEvent) || !isObject(record.boundEvent)) {
+      fail("previous speech-binding receipt contains an invalid rebound audio event snapshot");
+    }
+    const eventId = stableId(record.eventId, "previous rebound audio event id");
+    let events;
+    if (record.owner.kind === "scene") {
+      events = scene.audioEvents;
+    } else if (record.owner.kind === "object") {
+      const matches = (scene.objects || []).filter((object) => object && object.id === record.owner.objectId);
+      if (matches.length !== 1) fail("cannot restore rebound audio event " + eventId + ": previous owner object is missing or ambiguous");
+      events = matches[0].data && matches[0].data.audioEvents;
+    } else fail("previous rebound audio event has an unsupported owner");
+    if (!Array.isArray(events)) fail("cannot restore rebound audio event " + eventId + ": owner event array is missing");
+    const matches = events.map((event, index) => ({ event, index })).filter(({ event }) => event && event.id === eventId);
+    if (matches.length !== 1) fail("cannot safely restore rebound audio event " + eventId + ": expected exactly one current event");
+    if (canonical(matches[0].event) !== canonical(record.boundEvent)) {
+      fail("rebound audio event " + eventId + " changed after binding; refusing to overwrite the current scene state");
+    }
+    events[matches[0].index] = cloneJson(record.originalEvent);
+  }
+}
+function locateExistingAudioEvent(scene, eventId) {
+  const rows = [];
+  const collect = (events, owner) => {
+    for (const [index, event] of (events || []).entries()) if (event && event.id === eventId) rows.push({ events, owner, index, event });
+  };
+  collect(scene.audioEvents, { kind: "scene" });
+  for (const object of scene.objects || []) {
+    collect(object && object.data && object.data.audioEvents, { kind: "object", objectId: object && object.id });
+  }
+  if (rows.length > 1) fail("Duplicate shared audio event ID: " + eventId);
+  return rows[0] || null;
 }
 function allExistingIds(scene) {
   const phaseIds = new Set();
@@ -491,9 +705,11 @@ async function bindSpeechTimeline(sceneInput, timeline, spec, options = {}) {
   const timelineIndex = validateTimeline(timeline);
   const timelineDurationSec = timelineIndex.durationSamples / timelineIndex.sampleRateHz;
   if (timeline.state === "draft" && !preview) fail("draft timeline requires explicit preview=true; formal binding requires a frozen timeline");
-  const specIds = validateBindingsSpec(spec, timelineIndex);
   const verification = await verifyPlanAndTimeline(options.plan, timeline, options.planBaseDir || process.cwd());
   const { sourceHashChecks, transcriptEvidenceChecks } = verification;
+  const annotationBinding = spec == null ? motionBindingsFromAnnotations(options.plan, timeline, sceneInput) : null;
+  const bindingSpec = annotationBinding ? annotationBinding.spec : spec;
+  const specIds = validateBindingsSpec(bindingSpec, timelineIndex);
   let prepared;
   if (timeline.format === "laohu.asrcut.timeline/2") {
     prepared = prepareSceneForTimeline(sceneInput, timeline, { lockedFrameCount: options.lockedFrameCount });
@@ -503,18 +719,26 @@ async function bindSpeechTimeline(sceneInput, timeline, spec, options = {}) {
     if (sceneInput.duration + 1e-9 < timelineDurationSec) fail("scene.duration is shorter than the compiled timeline; extend the scene using its native project workflow before binding");
     prepared = { scene: cloneJson(sceneInput), coverage: null };
   }
-  const directTimeEventReview = reviewDirectFilmTimeEvents(sceneInput, timelineIndex, spec);
+  const directTimeEventReview = reviewDirectFilmTimeEvents(sceneInput, timelineIndex, bindingSpec);
   const scene = removePreviousGenerated(prepared.scene);
   const existing = allExistingIds(scene);
   for (const phaseId of specIds.phaseIds) if (existing.phaseIds.has(phaseId)) fail("speech phase id collides with an existing scene phase: " + phaseId);
-  for (const eventId of specIds.eventIds) if (existing.eventIds.has(eventId)) fail("speech event id collides with an existing scene event: " + eventId);
+  const eventSpecsById = new Map((bindingSpec.bindings || []).flatMap((binding) => (binding.events || []).map((event) => [event.id, event])));
+  for (const eventId of specIds.eventIds) {
+    const eventSpec = eventSpecsById.get(eventId);
+    const exists = existing.eventIds.has(eventId);
+    if (exists && eventSpec?.replaceExisting !== true) fail("speech event id collides with an existing scene event; set replaceExisting=true only when this semantic anchor deliberately replaces that shared event: " + eventId);
+    if (!exists && eventSpec?.replaceExisting === true) fail("speech event " + eventId + " requested replaceExisting=true but no shared scene event exists");
+  }
 
   const allGeneratedPhaseIds = [];
   const allGeneratedEventIds = [];
+  const allBoundEventIds = [];
+  const reboundAudioEvents = [];
   const anchorMap = [];
   const localPhases = new Map();
   const pendingEvents = [];
-  for (const binding of spec.bindings) {
+  for (const binding of bindingSpec.bindings) {
     const matches = (scene.objects || []).filter((object) => object && object.id === binding.objectId);
     if (matches.length !== 1) fail("binding objectId must match exactly one scene object: " + binding.objectId);
     const object = matches[0];
@@ -594,13 +818,31 @@ async function bindSpeechTimeline(sceneInput, timeline, spec, options = {}) {
       const eventFilmSec = resolved.filmSec + offsetSec;
       if (eventFilmSec < 0 || eventFilmSec > timelineDurationSec + 1e-9) fail("event " + eventSpec.id + " falls outside the compiled timeline");
       const phaseOffsetSec = eventFilmSec - phaseRecord.phase.startSec;
-      pendingEvents.push({
+      const sharedEvent = {
         id: eventSpec.id,
         phaseId: eventSpec.phaseId,
         phaseOffsetSec,
         timeBasis: "film-global",
-      });
-      allGeneratedEventIds.push(eventSpec.id);
+      };
+      if (eventSpec.replaceExisting === true) {
+        const location = locateExistingAudioEvent(scene, eventSpec.id);
+        if (!location) fail("shared audio event disappeared before semantic rebind: " + eventSpec.id);
+        const originalEvent = cloneJson(location.event);
+        const reboundEvent = { ...cloneJson(location.event) };
+        for (const key of ["filmTimeSec", "timeSec", "time", "phaseId", "phaseOffsetSec"]) delete reboundEvent[key];
+        Object.assign(reboundEvent, sharedEvent);
+        location.events[location.index] = reboundEvent;
+        reboundAudioEvents.push({
+          eventId: eventSpec.id,
+          owner: cloneJson(location.owner),
+          originalEvent,
+          boundEvent: cloneJson(reboundEvent),
+        });
+      } else {
+        pendingEvents.push(sharedEvent);
+        allGeneratedEventIds.push(eventSpec.id);
+      }
+      allBoundEventIds.push(eventSpec.id);
       anchorMap.push({
         bindingId: binding.id,
         eventId: eventSpec.id,
@@ -611,6 +853,7 @@ async function bindSpeechTimeline(sceneInput, timeline, spec, options = {}) {
         anchorFilmSec: resolved.filmSec,
         eventFilmSec,
         timingPrecision: resolved.timingPrecision,
+        replaceExisting: eventSpec.replaceExisting === true,
       });
     }
   }
@@ -618,7 +861,7 @@ async function bindSpeechTimeline(sceneInput, timeline, spec, options = {}) {
   if (!Array.isArray(scene.audioEvents)) fail("scene.audioEvents must be an array to accept semantic speech cues");
   scene.audioEvents.push(...pendingEvents);
   const audioIndex = MotionOps.findSceneAudioEvents(scene);
-  for (const event of pendingEvents) if (!audioIndex.has(event.id)) fail("new speech event was not consumed by MotionOps: " + event.id);
+  for (const eventId of allBoundEventIds) if (!audioIndex.has(eventId)) fail("speech event was not consumed by MotionOps: " + eventId);
 
   const receipt = {
     format: "laohu.motion.speech-binding-receipt/1",
@@ -636,20 +879,24 @@ async function bindSpeechTimeline(sceneInput, timeline, spec, options = {}) {
     ...(prepared.coverage ? { frameCoverage: prepared.coverage } : {}),
     sourceHashChecks,
     transcriptEvidenceChecks,
-    bindingsSha256: sha256(canonical(spec)),
+    bindingSource: annotationBinding ? annotationBinding.receipt : { format: "laohu.motion.speech-bindings-file/1" },
+    bindingsSha256: sha256(canonical(bindingSpec)),
     generatedPhaseIds: allGeneratedPhaseIds,
     generatedEventIds: allGeneratedEventIds,
+    reboundAudioEvents,
     anchorMap,
     evidenceBoundary: "Binding and consumer resolution are technical evidence only; they do not prove animation quality, sound suitability, audition, or approval.",
   };
   if (directTimeEventReview) {
     receipt.directFilmTimeEventReview = directTimeEventReview;
-    receipt.directFilmTimeEvents = directFilmTimeEvents(scene).map(({id: eventId, filmTimeSec, owner}) => ({id: eventId, filmTimeSec, owner}));
+    receipt.directFilmTimeEvents = directFilmTimeEvents(scene).map(({id: eventId, filmTimeSec, timeField, owner}) => ({id: eventId, filmTimeSec, timeField, owner}));
   }
   scene.motionSpeechBinding = receipt;
   MotionCore.assertValidScene(scene);
   return { scene, receipt };
 }
+
+export { motionBindingsFromAnnotations as bindingsFromAnnotations };
 
 function parseArgs(argv) {
   const args = {};
@@ -671,8 +918,8 @@ function parseArgs(argv) {
       args[key] = path.resolve(value);
     }
   }
-  for (const key of ["scene", "timeline", "bindings", "plan", "out"]) if (!args[key]) fail("required option missing: --" + key);
-  if ([args.scene, args.timeline, args.bindings, args.plan].includes(args.out)) fail("--out must not replace any input file");
+  for (const key of ["scene", "timeline", "plan", "out"]) if (!args[key]) fail("required option missing: --" + key);
+  if ([args.scene, args.timeline, args.bindings, args.plan].filter(Boolean).includes(args.out)) fail("--out must not replace any input file");
   return args;
 }
 function transcriptEvidencePath(evidenceRef, planBaseDir) {
@@ -686,7 +933,7 @@ function transcriptEvidencePath(evidenceRef, planBaseDir) {
   return path.isAbsolute(value) ? path.resolve(value) : path.resolve(planBaseDir, value);
 }
 function collectProtectedInputPaths(args, plan, planBaseDir = path.dirname(args.plan)) {
-  const paths = [args.scene, args.timeline, args.bindings, args.plan];
+  const paths = [args.scene, args.timeline, args.bindings, args.plan].filter(Boolean);
   for (const source of plan.sources || []) {
     if (source.mediaPath) paths.push(path.isAbsolute(source.mediaPath) ? source.mediaPath : path.resolve(planBaseDir, source.mediaPath));
     const evidencePath = transcriptEvidencePath(source.transcript && source.transcript.evidenceRef, planBaseDir);
@@ -703,13 +950,15 @@ async function main() {
   const [scene, timeline, spec, plan] = await Promise.all([
     fs.readFile(args.scene, "utf8").then(JSON.parse),
     fs.readFile(args.timeline, "utf8").then(JSON.parse),
-    fs.readFile(args.bindings, "utf8").then(JSON.parse),
+    args.bindings ? fs.readFile(args.bindings, "utf8").then(JSON.parse) : Promise.resolve(null),
     fs.readFile(args.plan, "utf8").then(JSON.parse),
   ]);
   const result = await bindSpeechTimeline(scene, timeline, spec, { plan, planBaseDir: path.dirname(args.plan), preview: args.preview, lockedFrameCount: args.lockedFrameCount });
   const protectedInputs = collectProtectedInputPaths(args, plan, path.dirname(args.plan));
   await writeJsonAtomic(args.out, result.scene, args.overwrite, protectedInputs);
-  process.stdout.write("SCENE " + args.out + "\nBINDINGS " + result.receipt.anchorMap.length + " anchors; " + result.receipt.generatedPhaseIds.length + " phases; " + result.receipt.generatedEventIds.length + " events\n");
+  const newEventCount = result.receipt.generatedEventIds.length;
+  const reboundEventCount = (result.receipt.reboundAudioEvents || []).length;
+  process.stdout.write("SCENE " + args.out + "\nBINDINGS " + result.receipt.anchorMap.length + " anchors; " + result.receipt.generatedPhaseIds.length + " phases; " + (newEventCount + reboundEventCount) + " events (" + newEventCount + " new, " + reboundEventCount + " rebound)\n");
 }
 const invokedPath = process.argv[1] ? path.resolve(process.argv[1]) : "";
 if (invokedPath === fileURLToPath(import.meta.url)) {

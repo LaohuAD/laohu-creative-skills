@@ -1,0 +1,238 @@
+{
+  "schema": "motion-package-v1",
+  "purpose": "style-guidance",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "fps": 30.0,
+  "durationSeconds": 61.0,
+  "timebase": "seconds",
+  "coordinates": "Source pixels; top-left origin; all tracks in absolute canvas space. visualGroup does not inherit transforms.",
+  "sources": [
+    {
+      "id": "video",
+      "type": "video",
+      "sha256": "82cada1c091bda4b6e5d82284dc956df7857acaabaff600ccad14854a4b53361"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/reference-1.jpg",
+      "timeSeconds": 0.0,
+      "frameId": "K0001",
+      "role": "reference-evidence",
+      "status": "measured"
+    },
+    {
+      "path": "assets/reference-2.jpg",
+      "timeSeconds": 8.0,
+      "frameId": "K0027",
+      "role": "reference-evidence",
+      "status": "measured"
+    },
+    {
+      "path": "assets/reference-3.jpg",
+      "timeSeconds": 18.0,
+      "frameId": "K0055",
+      "role": "reference-evidence",
+      "status": "measured"
+    },
+    {
+      "path": "assets/reference-4.jpg",
+      "timeSeconds": 32.0,
+      "frameId": "K0092",
+      "role": "reference-evidence",
+      "status": "measured"
+    },
+    {
+      "path": "assets/reference-5.jpg",
+      "timeSeconds": 46.0,
+      "frameId": "K0124",
+      "role": "reference-evidence",
+      "status": "measured"
+    },
+    {
+      "path": "assets/reference-6.jpg",
+      "timeSeconds": 56.0,
+      "frameId": "K0146",
+      "role": "reference-evidence",
+      "status": "measured"
+    }
+  ],
+  "timings": {
+    "prepareSeconds": 24.315155042000697,
+    "measurementSeconds": 0.927319541999168,
+    "agentPlanningSeconds": null,
+    "renderSeconds": null
+  },
+  "unrecovered": [
+    "演示为重新编写的机制示例，时间与构图为制作参考，不是完整原样复刻。",
+    "具体字体文件、原始缓动及音画同步点未从源工程取得。"
+  ],
+  "stopReason": "completed",
+  "provenance": {
+    "planAndMechanisms": "model-inferred",
+    "numericalTracks": "local algorithms; see each track",
+    "sourceIdentity": {
+      "id": "V379",
+      "sha256": "82cada1c091bda4b6e5d82284dc956df7857acaabaff600ccad14854a4b53361",
+      "sourceUrl": "https://www.linkedin.com/posts/gleanwork_introducing-glean-agents-activity-7295472145118240768-sTRT"
+    },
+    "referenceImplementation": "authored mechanism illustration, not full visual reconstruction",
+    "originalProductionModel": "unknown",
+    "extraction": "Codex visual reasoning + local algorithms"
+  },
+  "files": [
+    {
+      "path": "assets/reference-1.jpg",
+      "bytes": 22243,
+      "sha256": "a341902bbb1013d751392a15a274f53b5ed31482d09b683d2ce22fca0ee7c5eb"
+    },
+    {
+      "path": "assets/reference-2.jpg",
+      "bytes": 42144,
+      "sha256": "250dd4d2b59e6fbac3375e9b8342b9bb641cfcf36208ed23dce1f703333008c0"
+    },
+    {
+      "path": "assets/reference-3.jpg",
+      "bytes": 63549,
+      "sha256": "d9077333577d56db4771dd9d605dd7e36ce38cd438905904bf66e58c63784336"
+    },
+    {
+      "path": "assets/reference-4.jpg",
+      "bytes": 80791,
+      "sha256": "4b9316c14134b19e337d88d8e87d3c116b6383f868b39082ba53015e9a4c3d73"
+    },
+    {
+      "path": "assets/reference-5.jpg",
+      "bytes": 62250,
+      "sha256": "f1e986d6a545247acf71a1aeb82d6ed051d4f4826ac938abc1636f25271e7fc6"
+    },
+    {
+      "path": "assets/reference-6.jpg",
+      "bytes": 78785,
+      "sha256": "fb863b79d696378b2184c6c6f94ad33835d0605dfc7432f24a0554e1c394ce22"
+    },
+    {
+      "path": "demos/bridge.js",
+      "bytes": 1657,
+      "sha256": "b297fdbeb26a4f8658081f0e00920363bf0398d8c9eef1e2ff7c79a141ce243c"
+    },
+    {
+      "path": "demos/clip-2.html",
+      "bytes": 563,
+      "sha256": "59deebded75f723ca7e1741d0a34438b0bd516607098e61299b95a036f458e29"
+    },
+    {
+      "path": "demos/common.js",
+      "bytes": 10431,
+      "sha256": "741221822eba5f80be17482cd421ee8a83e61992e165fe0d3de38a198216edb4"
+    },
+    {
+      "path": "demos/data.js",
+      "bytes": 5270,
+      "sha256": "1df578a4515636a71f3bf01254b9d1a7464f63ee9a83250dd27d59b0ea65dff2"
+    },
+    {
+      "path": "demos/scene.js",
+      "bytes": 2182,
+      "sha256": "6930953e08e2ff3cd5f07052411a54412f1a86cfd9fa7725fd5a250f5054a355"
+    },
+    {
+      "path": "demos/sequence.html",
+      "bytes": 537,
+      "sha256": "917635dab16dbfd87c919e40d6b8d97de0f9ef39692382ac3b15598aa0561488"
+    },
+    {
+      "path": "motion.md",
+      "bytes": 7240,
+      "sha256": "5284665bc65550c04afbed73e366a18ecd93f1a42960f6802f7222b789448c88"
+    },
+    {
+      "path": "preview.html",
+      "bytes": 22723,
+      "sha256": "ccd23f9703ca446d073489171804baa47916d443b06c1ec0fca00b3a1012257e"
+    },
+    {
+      "path": "style.json",
+      "bytes": 2919,
+      "sha256": "6d63ca9611fc8245edc3b69dd3444b249c85ddd00b64fdff2ba6b4749697e913"
+    },
+    {
+      "path": "timeline.json",
+      "bytes": 2440,
+      "sha256": "f7438981552d132eb53364026c2a9c6799f12f8856d1740e3c8718b2d8d41cfb"
+    },
+    {
+      "path": "tracks.json",
+      "bytes": 1951,
+      "sha256": "736fa3de2ebe2b13e3642daa9da016e666e33df923400765f1d93323842a015a"
+    },
+    {
+      "path": "viewer/board.css",
+      "bytes": 12581,
+      "sha256": "9c6ebea34a3b5f4803cb6dcbb619530e44acffabb201361fdb35a833c137a182"
+    },
+    {
+      "path": "viewer/board.js",
+      "bytes": 1407,
+      "sha256": "f2da379b8984ba7ec3838d287f31d844714f94dfb56b6a3e5f638bc520befe53"
+    },
+    {
+      "path": "viewer/guide.css",
+      "bytes": 4904,
+      "sha256": "0614c48b41d6aa4b565565018d8816d8a3da0ce24070bdf937c23c604a748e8a"
+    },
+    {
+      "path": "viewer/guide.js",
+      "bytes": 4315,
+      "sha256": "dd981be273f26282da81a5c957cc078b5e8594b4d1096d93de3ee817b47e90c2"
+    }
+  ],
+  "contentSlots": [
+    {
+      "key": "title",
+      "status": "authored",
+      "default": "Glean Agents"
+    },
+    {
+      "key": "accent",
+      "status": "authored",
+      "default": "#3a2ee9"
+    }
+  ],
+  "implementationFiles": [
+    "preview.html",
+    "demos/sequence.html",
+    "demos/scene.js",
+    "demos/bridge.js",
+    "demos/clip-2.html",
+    "demos/data.js",
+    "demos/common.js",
+    "viewer/guide.css",
+    "viewer/board.js",
+    "viewer/guide.js",
+    "viewer/board.css"
+  ],
+  "visualGuide": {
+    "path": "preview.html",
+    "source": "motion.md",
+    "layout": "specimen-board-v1",
+    "demoCount": 2
+  },
+  "demos": [
+    {
+      "id": "sequence",
+      "src": "demos/sequence.html",
+      "duration": 61.0,
+      "status": "authored"
+    },
+    {
+      "id": "clip-2",
+      "src": "demos/clip-2.html",
+      "duration": 7,
+      "status": "authored"
+    }
+  ]
+}

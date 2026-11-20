@@ -1,0 +1,620 @@
+{
+  "format": "laohu.motion.local-native-html-closure/1",
+  "source": {
+    "id": "motion-code-video-showcase",
+    "repository": "https://github.com/Moessif/code-video-showcase",
+    "commit": "decd75d0aaaf19f81a50b52d0d02e605178916e0",
+    "vendorRoot": "templates/upstream/motion-code-video-showcase",
+    "license": "MIT; preserve Copyright (c) 2026 Moessif and complete LICENSE",
+    "localLicense": {
+      "sourcePath": "templates/upstream/motion-code-video-showcase/LICENSE",
+      "localPath": "templates/runtime/laohu-showcase/LICENSE",
+      "sha256": "1738131869396963de452f16ebe5597c993a1e5c102691e50dbecf26f12a39e1",
+      "license": "MIT"
+    }
+  },
+  "files": [
+    {
+      "sourcePath": "templates/adapters/motion-code-video-showcase/fonts.css",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts.css",
+      "sourceSha256": "9f1e00cb2249a80135ebbc893ab0ceac57c67721aa57f0859929dd863e2e6cb5",
+      "localSha256": "c037bbfc3076383d44f7bf85f88369fd65502021148e497eb2a10c546ae766ea",
+      "sourceLicense": "font references retain individual source licenses",
+      "transform": "font URLs use family-scoped local closure routes; font faces and descriptors are unchanged"
+    },
+    {
+      "sourcePath": "templates/upstream/motion-code-video-showcase/LICENSE",
+      "localPath": "templates/runtime/laohu-showcase/LICENSE",
+      "sourceSha256": "1738131869396963de452f16ebe5597c993a1e5c102691e50dbecf26f12a39e1",
+      "localSha256": "1738131869396963de452f16ebe5597c993a1e5c102691e50dbecf26f12a39e1",
+      "sourceLicense": "MIT",
+      "transform": "byte-identical license copy"
+    },
+    {
+      "sourcePath": "templates/upstream/motion-code-video-showcase/templates/big-card.html",
+      "localPath": "templates/runtime/laohu-showcase/templates/big-card.html",
+      "sourceSha256": "7058c136ef03ae99ab78324740d5c39701da7d52c97186ef0c730ced84cf5f11",
+      "localSha256": "7058c136ef03ae99ab78324740d5c39701da7d52c97186ef0c730ced84cf5f11",
+      "sourceLicense": "MIT",
+      "transform": "byte-identical; source HTML Canvas drawing/renderFrame and common/themes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/motion-code-video-showcase/templates/common.js",
+      "localPath": "templates/runtime/laohu-showcase/templates/common.js",
+      "sourceSha256": "b722ce71ece9b78e33ca40cb09d35f5695b740d3d87e7692ab7317507ee98a63",
+      "localSha256": "b722ce71ece9b78e33ca40cb09d35f5695b740d3d87e7692ab7317507ee98a63",
+      "sourceLicense": "MIT",
+      "transform": "byte-identical; source HTML Canvas drawing/renderFrame and common/themes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/motion-code-video-showcase/templates/segment.html",
+      "localPath": "templates/runtime/laohu-showcase/templates/segment.html",
+      "sourceSha256": "995583029857fcfc2377968a87e1c97773988d2412533a063289f46770d18e05",
+      "localSha256": "995583029857fcfc2377968a87e1c97773988d2412533a063289f46770d18e05",
+      "sourceLicense": "MIT",
+      "transform": "byte-identical; source HTML Canvas drawing/renderFrame and common/themes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/motion-code-video-showcase/templates/themes.js",
+      "localPath": "templates/runtime/laohu-showcase/templates/themes.js",
+      "sourceSha256": "6f48783b5304f89ea82a397e3f0d7d764506fa4e05d134711eb762402c6f574b",
+      "localSha256": "6f48783b5304f89ea82a397e3f0d7d764506fa4e05d134711eb762402c6f574b",
+      "sourceLicense": "MIT",
+      "transform": "byte-identical; source HTML Canvas drawing/renderFrame and common/themes preserved"
+    },
+    {
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/notosanssc/NotoSansSC[wght].ttf",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/noto-sans-sc/NotoSansSC[wght].ttf",
+      "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "localSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "sourceLicense": "SIL Open Font License 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/Inter-var.woff",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/Inter-var.woff",
+      "sourceSha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+      "localSha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/jetbrains-mono-font/fonts/variable/JetBrainsMono[wght].ttf",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/jetbrains-mono/JetBrainsMono[wght].ttf",
+      "sourceSha256": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34",
+      "localSha256": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34",
+      "sourceLicense": "SIL Open Font License 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/orbitron/Orbitron[wght].ttf",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/orbitron/Orbitron[wght].ttf",
+      "sourceSha256": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd",
+      "localSha256": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd",
+      "sourceLicense": "SIL Open Font License 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/zcoolkuaile/ZCOOLKuaiLe-Regular.ttf",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/zcool-kuaile/ZCOOLKuaiLe-Regular.ttf",
+      "sourceSha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+      "localSha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+      "sourceLicense": "SIL Open Font License 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-700.woff",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-700.woff",
+      "sourceSha256": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469",
+      "localSha256": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-700i.woff",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-700i.woff",
+      "sourceSha256": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1",
+      "localSha256": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-400i.woff",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-400i.woff",
+      "sourceSha256": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8",
+      "localSha256": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/NotoSerifSC-sub.woff",
+      "localPath": "templates/runtime/laohu-effects/fonts/NotoSerifSC-sub.woff",
+      "sourceSha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+      "localSha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical source asset; served only through local closure route",
+      "role": "font"
+    },
+    {
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/notosanssc/OFL.txt",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/noto-sans-sc/OFL.txt",
+      "sourceSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "localSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "sourceLicense": "SIL Open Font License 1.1",
+      "transform": "byte-identical license copy or explicitly shared runtime license",
+      "role": "font-license"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/LICENSES.md",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md",
+      "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+      "localSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical license copy or explicitly shared runtime license",
+      "role": "font-license"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/OFL.txt",
+      "localPath": "templates/runtime/laohu-effects/licenses/OFL.txt",
+      "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical license copy or explicitly shared runtime license",
+      "role": "font-license"
+    },
+    {
+      "sourcePath": "templates/upstream/jetbrains-mono-font/OFL.txt",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/jetbrains-mono/OFL.txt",
+      "sourceSha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+      "localSha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+      "sourceLicense": "SIL Open Font License 1.1",
+      "transform": "byte-identical license copy or explicitly shared runtime license",
+      "role": "font-license"
+    },
+    {
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/orbitron/OFL.txt",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/orbitron/OFL.txt",
+      "sourceSha256": "ab609b0e110d622435ff337cdf233288556e011bbf9bd0550be98846c0630819",
+      "localSha256": "ab609b0e110d622435ff337cdf233288556e011bbf9bd0550be98846c0630819",
+      "sourceLicense": "SIL Open Font License 1.1",
+      "transform": "byte-identical license copy or explicitly shared runtime license",
+      "role": "font-license"
+    },
+    {
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/zcoolkuaile/OFL.txt",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/zcool-kuaile/OFL.txt",
+      "sourceSha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d",
+      "localSha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d",
+      "sourceLicense": "SIL Open Font License 1.1",
+      "transform": "byte-identical license copy or explicitly shared runtime license",
+      "role": "font-license"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/LICENSES.md",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/LICENSES.md",
+      "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+      "localSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical family-scoped license copy",
+      "role": "font-license"
+    },
+    {
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/OFL.txt",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/OFL.txt",
+      "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "sourceLicense": "SIL OFL 1.1",
+      "transform": "byte-identical family-scoped license copy",
+      "role": "font-license"
+    }
+  ],
+  "fontAssets": [
+    {
+      "family": "Noto Sans SC",
+      "use": "drawn in both original pages; full CJK variable font",
+      "sourceId": "google-fonts-template-fonts",
+      "sourceCommit": "6157dfaa640ca5738b4d1a7070fe389c3036d7fc",
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/notosanssc/NotoSansSC[wght].ttf",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/noto-sans-sc/NotoSansSC[wght].ttf",
+      "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "localSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "bytes": 17772300,
+      "cssRoute": "/showcase-fonts/noto-sans-sc/NotoSansSC%5Bwght%5D.ttf",
+      "urlVersionParam": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL Open Font License 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/google-fonts-motion/ofl/notosanssc/OFL.txt",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/noto-sans-sc/OFL.txt",
+          "sourceSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+          "localSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+          "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+          "license": "SIL Open Font License 1.1"
+        }
+      ],
+      "handling": "local font file in the Showcase shared/fonts closure",
+      "localFamilyDirectory": "templates/runtime/laohu-showcase/shared/fonts/noto-sans-sc"
+    },
+    {
+      "family": "Inter",
+      "use": "original loadFonts dependency and big-card fallback family",
+      "sourceId": "huashu-art-motion",
+      "sourceCommit": "8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c",
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/Inter-var.woff",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/Inter-var.woff",
+      "sourceSha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+      "localSha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+      "sha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+      "bytes": 126688,
+      "cssRoute": "/showcase-fonts/inter/Inter-var.woff",
+      "urlVersionParam": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL OFL 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/LICENSES.md",
+          "localPath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "localSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "license": "SIL OFL 1.1"
+        },
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/OFL.txt",
+          "localPath": "templates/runtime/laohu-effects/licenses/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "license": "SIL OFL 1.1"
+        }
+      ],
+      "handling": "shared byte-identical runtime font; no duplicate copy",
+      "localFamilyDirectory": null
+    },
+    {
+      "family": "JetBrains Mono",
+      "use": "drawn in both original pages",
+      "sourceId": "jetbrains-mono-font",
+      "sourceCommit": "19371302b95d218af43299bce79ddbddd0bc364d",
+      "sourcePath": "templates/upstream/jetbrains-mono-font/fonts/variable/JetBrainsMono[wght].ttf",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/jetbrains-mono/JetBrainsMono[wght].ttf",
+      "sourceSha256": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34",
+      "localSha256": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34",
+      "sha256": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34",
+      "bytes": 300144,
+      "cssRoute": "/showcase-fonts/jetbrains-mono/JetBrainsMono%5Bwght%5D.ttf",
+      "urlVersionParam": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL Open Font License 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/jetbrains-mono-font/OFL.txt",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/jetbrains-mono/OFL.txt",
+          "sourceSha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+          "localSha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+          "sha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+          "license": "SIL Open Font License 1.1"
+        }
+      ],
+      "handling": "local font file in the Showcase shared/fonts closure",
+      "localFamilyDirectory": "templates/runtime/laohu-showcase/shared/fonts/jetbrains-mono"
+    },
+    {
+      "family": "Orbitron",
+      "use": "big-card original loadFonts dependency; not selected in ctx.font",
+      "sourceId": "google-fonts-template-fonts",
+      "sourceCommit": "6157dfaa640ca5738b4d1a7070fe389c3036d7fc",
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/orbitron/Orbitron[wght].ttf",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/orbitron/Orbitron[wght].ttf",
+      "sourceSha256": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd",
+      "localSha256": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd",
+      "sha256": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd",
+      "bytes": 38576,
+      "cssRoute": "/showcase-fonts/orbitron/Orbitron%5Bwght%5D.ttf",
+      "urlVersionParam": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL Open Font License 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/google-fonts-motion/ofl/orbitron/OFL.txt",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/orbitron/OFL.txt",
+          "sourceSha256": "ab609b0e110d622435ff337cdf233288556e011bbf9bd0550be98846c0630819",
+          "localSha256": "ab609b0e110d622435ff337cdf233288556e011bbf9bd0550be98846c0630819",
+          "sha256": "ab609b0e110d622435ff337cdf233288556e011bbf9bd0550be98846c0630819",
+          "license": "SIL Open Font License 1.1"
+        }
+      ],
+      "handling": "local font file in the Showcase shared/fonts closure",
+      "localFamilyDirectory": "templates/runtime/laohu-showcase/shared/fonts/orbitron"
+    },
+    {
+      "family": "ZCOOL KuaiLe",
+      "use": "segment original loadFonts dependency; not selected in ctx.font",
+      "sourceId": "google-fonts-template-fonts",
+      "sourceCommit": "6157dfaa640ca5738b4d1a7070fe389c3036d7fc",
+      "sourcePath": "templates/upstream/google-fonts-motion/ofl/zcoolkuaile/ZCOOLKuaiLe-Regular.ttf",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/zcool-kuaile/ZCOOLKuaiLe-Regular.ttf",
+      "sourceSha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+      "localSha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+      "sha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+      "bytes": 1514968,
+      "cssRoute": "/showcase-fonts/zcool-kuaile/ZCOOLKuaiLe-Regular.ttf",
+      "urlVersionParam": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL Open Font License 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/google-fonts-motion/ofl/zcoolkuaile/OFL.txt",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/zcool-kuaile/OFL.txt",
+          "sourceSha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d",
+          "localSha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d",
+          "sha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d",
+          "license": "SIL Open Font License 1.1"
+        }
+      ],
+      "handling": "local font file in the Showcase shared/fonts closure",
+      "localFamilyDirectory": "templates/runtime/laohu-showcase/shared/fonts/zcool-kuaile"
+    },
+    {
+      "family": "Playfair Display",
+      "use": "theme metadata face; source pages do not pass theme.type.fonts to ctx.font",
+      "sourceId": "huashu-art-motion",
+      "sourceCommit": "8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c",
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-700.woff",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-700.woff",
+      "sourceSha256": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469",
+      "localSha256": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469",
+      "sha256": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469",
+      "bytes": 55652,
+      "cssRoute": "/showcase-fonts/playfair-display/PlayfairDisplay-700.woff",
+      "urlVersionParam": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL OFL 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/LICENSES.md",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "localSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "license": "SIL OFL 1.1"
+        },
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/OFL.txt",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "license": "SIL OFL 1.1"
+        }
+      ],
+      "handling": "local font file in the Showcase shared/fonts closure",
+      "localFamilyDirectory": "templates/runtime/laohu-showcase/shared/fonts/playfair-display"
+    },
+    {
+      "family": "Playfair Display",
+      "use": "CSS-declared face; source pages do not pass this italic face to ctx.font",
+      "sourceId": "huashu-art-motion",
+      "sourceCommit": "8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c",
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-700i.woff",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-700i.woff",
+      "sourceSha256": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1",
+      "localSha256": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1",
+      "sha256": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1",
+      "bytes": 53612,
+      "cssRoute": "/showcase-fonts/playfair-display/PlayfairDisplay-700i.woff",
+      "urlVersionParam": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL OFL 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/LICENSES.md",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "localSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "license": "SIL OFL 1.1"
+        },
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/OFL.txt",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "license": "SIL OFL 1.1"
+        }
+      ],
+      "handling": "local font file in the Showcase shared/fonts closure",
+      "localFamilyDirectory": "templates/runtime/laohu-showcase/shared/fonts/playfair-display"
+    },
+    {
+      "family": "Playfair Display",
+      "use": "CSS-declared face; source pages do not pass this italic face to ctx.font",
+      "sourceId": "huashu-art-motion",
+      "sourceCommit": "8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c",
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-400i.woff",
+      "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-400i.woff",
+      "sourceSha256": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8",
+      "localSha256": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8",
+      "sha256": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8",
+      "bytes": 50928,
+      "cssRoute": "/showcase-fonts/playfair-display/PlayfairDisplay-400i.woff",
+      "urlVersionParam": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL OFL 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/LICENSES.md",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "localSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "license": "SIL OFL 1.1"
+        },
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/OFL.txt",
+          "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "license": "SIL OFL 1.1"
+        }
+      ],
+      "handling": "local font file in the Showcase shared/fonts closure",
+      "localFamilyDirectory": "templates/runtime/laohu-showcase/shared/fonts/playfair-display"
+    },
+    {
+      "family": "Noto Serif SC",
+      "use": "theme metadata face; source pages do not pass theme.type.fonts to ctx.font",
+      "sourceId": "huashu-art-motion",
+      "sourceCommit": "8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c",
+      "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/NotoSerifSC-sub.woff",
+      "localPath": "templates/runtime/laohu-effects/fonts/NotoSerifSC-sub.woff",
+      "sourceSha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+      "localSha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+      "sha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+      "bytes": 435560,
+      "cssRoute": "/showcase-fonts/noto-serif-sc/NotoSerifSC-sub.woff",
+      "urlVersionParam": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+      "urlVersionParamMatches": "sha256",
+      "license": "SIL OFL 1.1",
+      "licenseFiles": [
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/LICENSES.md",
+          "localPath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "localSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "license": "SIL OFL 1.1"
+        },
+        {
+          "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/OFL.txt",
+          "localPath": "templates/runtime/laohu-effects/licenses/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "license": "SIL OFL 1.1"
+        }
+      ],
+      "handling": "shared byte-identical runtime font; no duplicate copy",
+      "localFamilyDirectory": null
+    }
+  ],
+  "dependencies": [
+    {
+      "kind": "browser-api",
+      "name": "DOM/Canvas/FontFaceSet",
+      "license": "browser platform"
+    },
+    {
+      "kind": "font-serving",
+      "name": "local /showcase-fonts route resolved by closure manifest",
+      "license": "see fontAssets.licenseFiles"
+    }
+  ],
+  "resourceClosure": {
+    "localStylesheetPath": "templates/runtime/laohu-showcase/shared/fonts.css",
+    "sourceHtmlStylesheetHref": "/shared/fonts.css",
+    "fontCssSourceSha256": "9f1e00cb2249a80135ebbc893ab0ceac57c67721aa57f0859929dd863e2e6cb5",
+    "fontCssSha256": "c037bbfc3076383d44f7bf85f88369fd65502021148e497eb2a10c546ae766ea",
+    "fontRoutes": [
+      {
+        "cssRoute": "/showcase-fonts/noto-sans-sc/NotoSansSC%5Bwght%5D.ttf",
+        "sourceId": "google-fonts-template-fonts",
+        "sourcePath": "templates/upstream/google-fonts-motion/ofl/notosanssc/NotoSansSC[wght].ttf",
+        "localPath": "templates/runtime/laohu-showcase/shared/fonts/noto-sans-sc/NotoSansSC[wght].ttf",
+        "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+        "localSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
+      },
+      {
+        "cssRoute": "/showcase-fonts/inter/Inter-var.woff",
+        "sourceId": "huashu-art-motion",
+        "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/Inter-var.woff",
+        "localPath": "templates/runtime/laohu-native-clips/lib/fonts/Inter-var.woff",
+        "sourceSha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+        "localSha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b"
+      },
+      {
+        "cssRoute": "/showcase-fonts/jetbrains-mono/JetBrainsMono%5Bwght%5D.ttf",
+        "sourceId": "jetbrains-mono-font",
+        "sourcePath": "templates/upstream/jetbrains-mono-font/fonts/variable/JetBrainsMono[wght].ttf",
+        "localPath": "templates/runtime/laohu-showcase/shared/fonts/jetbrains-mono/JetBrainsMono[wght].ttf",
+        "sourceSha256": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34",
+        "localSha256": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34"
+      },
+      {
+        "cssRoute": "/showcase-fonts/orbitron/Orbitron%5Bwght%5D.ttf",
+        "sourceId": "google-fonts-template-fonts",
+        "sourcePath": "templates/upstream/google-fonts-motion/ofl/orbitron/Orbitron[wght].ttf",
+        "localPath": "templates/runtime/laohu-showcase/shared/fonts/orbitron/Orbitron[wght].ttf",
+        "sourceSha256": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd",
+        "localSha256": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd"
+      },
+      {
+        "cssRoute": "/showcase-fonts/zcool-kuaile/ZCOOLKuaiLe-Regular.ttf",
+        "sourceId": "google-fonts-template-fonts",
+        "sourcePath": "templates/upstream/google-fonts-motion/ofl/zcoolkuaile/ZCOOLKuaiLe-Regular.ttf",
+        "localPath": "templates/runtime/laohu-showcase/shared/fonts/zcool-kuaile/ZCOOLKuaiLe-Regular.ttf",
+        "sourceSha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+        "localSha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d"
+      },
+      {
+        "cssRoute": "/showcase-fonts/playfair-display/PlayfairDisplay-700.woff",
+        "sourceId": "huashu-art-motion",
+        "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-700.woff",
+        "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-700.woff",
+        "sourceSha256": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469",
+        "localSha256": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469"
+      },
+      {
+        "cssRoute": "/showcase-fonts/playfair-display/PlayfairDisplay-700i.woff",
+        "sourceId": "huashu-art-motion",
+        "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-700i.woff",
+        "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-700i.woff",
+        "sourceSha256": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1",
+        "localSha256": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1"
+      },
+      {
+        "cssRoute": "/showcase-fonts/playfair-display/PlayfairDisplay-400i.woff",
+        "sourceId": "huashu-art-motion",
+        "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/PlayfairDisplay-400i.woff",
+        "localPath": "templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-400i.woff",
+        "sourceSha256": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8",
+        "localSha256": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8"
+      },
+      {
+        "cssRoute": "/showcase-fonts/noto-serif-sc/NotoSerifSC-sub.woff",
+        "sourceId": "huashu-art-motion",
+        "sourcePath": "templates/upstream/huashu-art-motion/scripts/engine/lib/fonts/NotoSerifSC-sub.woff",
+        "localPath": "templates/runtime/laohu-effects/fonts/NotoSerifSC-sub.woff",
+        "sourceSha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+        "localSha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66"
+      }
+    ],
+    "networkRequired": false,
+    "mediaFilesBundled": []
+  },
+  "scopeNotes": [
+    "All four source HTML/JS files are byte-identical to pinned upstream inputs; the original HTML Canvas drawing, renderFrame, common.js, and themes.js are preserved.",
+    "All nine CSS @font-face resources resolve through local closure routes. Seven newly copied font files are organized under family-named shared/fonts directories; Inter and Noto Serif SC reuse same-byte runtime files without moving or duplicating them.",
+    "Each copied font carries its family license in the same family directory. Existing shared Inter and Noto Serif SC retain explicit mappings to their existing runtime license files.",
+    "Original repository paths remain provenance metadata only; source commit pins remain catalogued and upstream originals stay unchanged.",
+    "Static path presence alone does not establish runtime independence; integration remains OBSERVE until the producer verifies and serves these local paths."
+  ],
+  "fontAssetClosureBasis": "All nine URL-backed @font-face entries in the local stylesheet, mapped to local files and licenses.",
+  "productionClosureVerification": {
+    "requirement": "At prepare/render time verify each local file SHA-256 against this closure mapping and the catalog source.files pin (sourceId + source-relative path + fixed source commit). Do not read templates/upstream at production time.",
+    "maintenanceOnly": "Comparing local copies to upstream bytes is a maintenance-time source-baseline audit; it is not a production dependency.",
+    "currentStatus": "OBSERVE: closure files and mappings are statically checked; the consumer has not yet been rewired to load/verify this closure."
+  }
+}

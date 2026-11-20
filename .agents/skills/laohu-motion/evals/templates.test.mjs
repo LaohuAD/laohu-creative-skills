@@ -7,21 +7,24 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { deflateSync } from "node:zlib";
+import { preflightFfmpeg } from "../scripts/laohu-ffmpeg-preflight.mjs";
 
 const evalDir = path.dirname(fileURLToPath(import.meta.url));
 const skillDir = path.resolve(evalDir, "..");
 const repoRoot = path.resolve(skillDir, "../../..");
 const cli = path.join(skillDir, "scripts", "templates.mjs");
 const catalogPath = path.join(skillDir, "templates", "catalog.json");
+const maintenanceLedgerPath = path.join(skillDir, "templates", "maintenance", "source-ledger.json");
 const nodeRequire = createRequire(import.meta.url);
 const MotionOps = nodeRequire(path.join(skillDir, "scripts", "motion-ops.js"));
-const HuashuLocalEffects = nodeRequire(path.join(skillDir, "templates", "adapters", "huashu-effects.js"));
+const HuashuLocalEffects = nodeRequire(path.join(skillDir, "templates", "adapters", "laohu-effects.js"));
 
 function invoke(args, options = {}) {
   return spawnSync(process.execPath, [cli, ...args], {
     cwd: repoRoot,
     encoding: "utf8",
     timeout: options.timeout || 120_000,
+    maxBuffer: 16 * 1024 * 1024,
     env: { ...process.env, ...(options.env || {}) },
   });
 }
@@ -79,49 +82,164 @@ async function browserExecutable() {
   return null;
 }
 
+async function ffprobeExecutable() {
+  const configured = process.env.MOTION_FFPROBE || process.env.LAOHU_FFPROBE || process.env.FFPROBE_PATH;
+  const candidates = [
+    configured,
+    path.join(repoRoot, ".cache", "tmp", "asrcut-media-probe", "ffprobe"),
+    path.join(repoRoot, ".cache", "tmp", "asrcut-media-probe", "ffprobe9.0.2.17", "17"),
+  ].filter(Boolean);
+  for (const candidate of candidates) {
+    try { await fs.access(candidate); return candidate; } catch { /* candidate is not installed */ }
+  }
+  const result = spawnSync("which", ["ffprobe"], { encoding: "utf8" });
+  return result.status === 0 && result.stdout.trim() ? result.stdout.trim() : null;
+}
+
 function assertCliOk(result, label) {
   assert.equal(result.error, undefined, `${label}: ${result.error?.message || "process spawn failed"}`);
   assert.equal(result.status, 0, `${label} failed\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`);
 }
 
-test("catalog routes only callable native clip entries and guards source requirements", async (t) => {
+test("catalog routes callable native entries and guards source requirements", async (t) => {
   const catalog = JSON.parse(await fs.readFile(catalogPath, "utf8"));
+  const maintenanceLedger = JSON.parse(await fs.readFile(maintenanceLedgerPath, "utf8"));
+  const verifiedTemplates = [...catalog.templates, ...maintenanceLedger.sourceOnlyTemplates];
+  const verifiedSources = maintenanceLedger.sources;
+  const verifiedTrees = maintenanceLedger.sourceTreeIndex;
+  const verifiedReferences = maintenanceLedger.referenceCatalog.entries;
+  const fyLocalEntries = catalog.templates.filter((entry) => entry.sourceId === "fy-code-animation");
+  assert.equal(fyLocalEntries.length, 9, "the selected companion source contributes nine local Remotion entries");
+  assert.ok(fyLocalEntries.every((entry) => entry.id.startsWith("laohu-") && entry.productionId.startsWith("laohu-")),
+    "upstream identity stays in sourceId while public template and production IDs are locally named");
+  const verify = invoke(["verify"]);
+  assertCliOk(verify, "dynamic catalog verification");
+  const verifiedCatalog = JSON.parse(verify.stdout);
+  const coverage = verifiedCatalog.catalogCoverage;
+  const countBy = (rows, key) => rows.reduce((counts, row) => {
+    const value = row[key];
+    const label = typeof value === "string" && value.trim() ? value : "(missing)";
+    counts[label] = (counts[label] || 0) + 1;
+    return counts;
+  }, {});
+  assert.equal(coverage.format, "laohu.motion.catalog-computed-coverage/1");
+  assert.deepEqual(coverage.templates.byAvailability, countBy(verifiedTemplates, "availability"));
+  assert.deepEqual(coverage.templates.byRuntimeVerification, countBy(verifiedTemplates, "runtimeVerification"));
+  assert.deepEqual(coverage.templates.sourceOnly, verifiedTemplates.filter((entry) => entry.availability === "source-only").map((entry) => ({
+    id: entry.id, sourceId: entry.sourceId, sourcePath: entry.sourcePath || null, sourceGitBlob: entry.sourceGitBlob || null,
+    gap: entry.limitations || (entry.parameters?.reason ? [entry.parameters.reason] : []), runtimeVerification: entry.runtimeVerification || null,
+  })));
+  assert.deepEqual(coverage.effects.byAvailability, countBy(catalog.effects, "availability"));
+  assert.deepEqual(coverage.effects.byRuntimeVerification, countBy(catalog.effects, "runtimeVerification"));
+  const sourceMethods = catalog.effectLibraries.flatMap((library) => library.functions || []);
+  const effectMethodIds = new Set(catalog.effects.flatMap((effect) => effect.sourceFunctions || []));
+  const uniqueMethodIds = [...new Set(sourceMethods.map((method) => method.id))];
+  assert.equal(coverage.effectLibrariesAndMethods.methodIndexEntries, sourceMethods.length);
+  assert.equal(coverage.effectLibrariesAndMethods.uniqueSourceMethodIds, uniqueMethodIds.length);
+  assert.deepEqual(coverage.effectLibrariesAndMethods.methodsWithoutEffectRecord, uniqueMethodIds.filter((id) => !effectMethodIds.has(id)).sort());
+  assert.deepEqual(coverage.sourceTreeResearchIndex, {
+    treeEntries: verifiedTrees.length,
+    declaredTrackedFiles: verifiedTrees.reduce((sum, tree) => sum + (Number.isInteger(tree.trackedFiles) ? tree.trackedFiles : 0), 0),
+    exactFileRows: verifiedTrees.reduce((sum, tree) => sum + (tree.files?.length || 0), 0),
+    rowsWithGitBlob: verifiedTrees.flatMap((tree) => tree.files || []).filter((row) => typeof row.gitBlob === "string" && row.gitBlob).length,
+    treesWithFileRows: verifiedTrees.filter((tree) => Array.isArray(tree.files) && tree.files.length > 0).length,
+    treesWithoutFileRows: verifiedTrees.filter((tree) => !Array.isArray(tree.files) || tree.files.length === 0).map((tree) => tree.id),
+  });
+  const pinnedFiles = verifiedSources.flatMap((source) => source.files || []);
+  assert.deepEqual(coverage.pinnedSourceFiles, {
+    rows: pinnedFiles.length,
+    rowsWithPath: pinnedFiles.filter((file) => typeof file.path === "string" && file.path).length,
+    rowsWithGitBlob: pinnedFiles.filter((file) => typeof file.gitBlob === "string" && file.gitBlob).length,
+    rowsWithSha256: pinnedFiles.filter((file) => typeof file.sha256 === "string" && file.sha256).length,
+    bySource: verifiedSources.map((source) => ({ id: source.id, repository: source.repository || null, commit: source.commit || null, status: source.status || null, sourceTreeIndexId: source.sourceTreeIndexId || null, fileRows: source.files?.length || 0 })),
+  });
+  assert.deepEqual(coverage.referenceIndex.sourceOnly, verifiedReferences.filter((entry) => entry.availability === "source-only").map((entry) => ({
+    id: entry.id, ...(entry.templateId == null ? {} : { templateId: entry.templateId }), sourceId: entry.sourceId,
+    sourceTreeIndexId: entry.sourceTreeIndexId || null, repository: entry.repository || null,
+    sourcePath: entry.sourcePath || entry.path || null, reason: entry.reason || null,
+    gap: entry.gap || entry.reason || entry.summary || entry.description || null,
+  })));
+  const expectedFontAssets = new Map();
+  for (const entry of verifiedTemplates) for (const font of entry.adapter?.fontAssets || []) expectedFontAssets.set(`${font.sourceId}:${font.path}`, font);
+  for (const effect of catalog.effects) for (const font of effect.fontDependencies || []) expectedFontAssets.set(`${effect.sourceRef.sourceId}:${font.path}`, font);
+  const expectedFontDeclarations = verifiedTemplates.reduce((sum, entry) => sum + (entry.adapter?.fontAssets?.length || 0), 0)
+    + catalog.effects.reduce((sum, effect) => sum + (effect.fontDependencies?.length || 0), 0);
+  assert.equal(coverage.fontDependencies.declarations, expectedFontDeclarations);
+  assert.equal(coverage.fontDependencies.uniqueSourceAssets, expectedFontAssets.size);
+  assert.deepEqual(coverage.fontDependencies.assets.find((font) => font.path === "scripts/engine/lib/fonts/NotoSerifSC-sub.woff")?.effectIds, ["laohu-motion-network-pass"]);
+  assert.equal(catalog.coverage, undefined, "stale static coverage counts must not remain a second source of truth");
+  assert.equal(catalog.coveragePolicy.format, "laohu.motion.catalog-coverage-policy/1");
+  const repeatFailures = catalog.effects.filter((effect) => /repeat-pixel check FAIL/.test(effect.runtimeVerification || ""));
+  assert.ok(repeatFailures.length > 0, "the catalog must retain known repeated-seek failures");
+  assert.deepEqual(coverage.effects.items.filter((effect) => /repeat-pixel check FAIL/.test(effect.runtimeVerification || ""))
+    .map((effect) => [effect.id, effect.runtimeVerification]), repeatFailures.map((effect) => [effect.id, effect.runtimeVerification]));
   const list = invoke(["list", "--json"]);
   assertCliOk(list, "default list");
   const entries = JSON.parse(list.stdout);
-  assert.equal(entries.length, 30, "the callable inventory includes existing native entries, pinned Shotcraft candidates, the local ListStackPress adaptation, and the local Motion operation");
-  assert.equal(entries.filter((entry) => entry.itemType === "effect").length, 6);
-  assert.ok(entries.filter((entry) => entry.itemType === "template").every((entry) => ["native-clip", "native-html-canvas-template", "native-om-template-source", "video-shotcraft-remotion"].includes(entry.renderer)));
-  assert.ok(entries.filter((entry) => entry.itemType === "effect").every((entry) => ["custom:huashu-local-effects", "custom:huashu-local-target", "custom:laohu-motion-operation"].includes(entry.renderer)));
+  assert.equal(entries.length, 73, "the default production inventory excludes the retired duplicate Garden style methods while retaining registered templates, effects, and libraries");
+  const styleConsumer = entries.find((entry) => entry.id === "laohu-style-code-canvas");
+  assert.deepEqual(styleConsumer?.styleIds, ["F1", "F2"], "the F1/F2 consumer remains listed in the callable inventory");
+  assert.equal(catalog.templates.find((entry) => entry.id === "laohu-style-code-canvas")?.sourceId, "laohu-style-library",
+    "the catalog retains the independent style-library source identity");
+  assert.equal(entries.filter((entry) => entry.itemType === "effect").length, 31, "the effect inventory includes 15 registered Garden recipe rows in addition to existing local effects and operations");
+  assert.equal(entries.filter((entry) => entry.itemType === "method").length, 43, "the normal inventory exposes all indexed source methods for retrieval");
+  assert.ok(entries.some((entry) => entry.id === "laohu-motion-network-pass" && entry.itemType === "effect"), "the callable inventory includes the verified source pixel-to-network action group");
+  const effectLibraries = entries.filter((entry) => entry.itemType === "effect-library");
+  assert.deepEqual(effectLibraries.map((entry) => entry.id).sort(), ["laohu-comic-scene-runtime", "laohu-motion-dg", "laohu-motion-toolkit", "laohu-motion-transitions"]);
+  assert.equal(effectLibraries.find((entry) => entry.id === "laohu-motion-toolkit")?.availability, "preloadable-local-classic-scripts");
+  assert.ok(entries.filter((entry) => entry.itemType === "template").every((entry) => ["native-clip", "native-html-canvas-template", "native-om-template-source", "video-shotcraft-remotion", "native-scene", "remotion-scene", "html-canvas-scene"].includes(entry.renderer)));
+  assert.ok(entries.filter((entry) => entry.itemType === "effect").every((entry) => ["custom:laohu-motion-effects", "custom:laohu-motion-target", "custom:laohu-motion-operation", "custom:laohu-motion-transition", "custom:laohu-network-pass", "custom:laohu-motion-recipes", "custom:laohu-motion-postprocess"].includes(entry.renderer)));
   assert.equal(entries.find((entry) => entry.id === "laohu-motion-follow-box")?.operationId, "laohu.motion-follow-box/1");
+  const canonicalLibrary = invoke(["show", "laohu-motion-dg", "--json"]);
+  const legacyLibrary = invoke(["show", "huashu-art-motion-dg", "--json"]);
+  assertCliOk(canonicalLibrary, "canonical effect library show");
+  assertCliOk(legacyLibrary, "legacy effect library alias show");
+  assert.deepEqual(JSON.parse(legacyLibrary.stdout), JSON.parse(canonicalLibrary.stdout), "the legacy library alias resolves to the canonical local ID");
+  const canonicalShow = invoke(["show", "laohu-motion-y3-whiteboard", "--json"]);
+  const legacyShow = invoke(["show", "huashu-y3-whiteboard", "--json"]);
+  assertCliOk(canonicalShow, "canonical show");
+  assertCliOk(legacyShow, "legacy alias show");
+  assert.deepEqual(JSON.parse(legacyShow.stdout), JSON.parse(canonicalShow.stdout), "show resolves the old template ID to the exact canonical catalog record");
   const focusQuery = invoke(["list", "--type", "effect", "--intent", "focus", "--json"]);
   assertCliOk(focusQuery, "stable intent-tag query");
-  assert.deepEqual(JSON.parse(focusQuery.stdout).map((entry) => entry.id).sort(), ["huashu-dg-circumscribe", "huashu-dg-indicate-frame-pulse"]);
-  assert.equal(entries.find((entry) => entry.id === "huashu-y2-vox")?.availability, "available");
+  assert.deepEqual(JSON.parse(focusQuery.stdout).map((entry) => entry.id).sort(), ["laohu-motion-dg-circumscribe", "laohu-motion-dg-indicate-frame-pulse"]);
+  const researchList = invoke(["list", "--all", "--json"]);
+  assertCliOk(researchList, "research-inclusive list");
+  const researchEntries = JSON.parse(researchList.stdout);
+  assert.equal(researchEntries.find((entry) => entry.id === "laohu-motion-y2-vox")?.availability, "available");
   for (const id of ["motion-code-video-showcase-big-card", "motion-code-video-showcase-segment"]) {
-    const entry = entries.find((item) => item.id === id);
+    const entry = researchEntries.find((item) => item.id === id);
     assert.equal(entry?.sourceId, "motion-code-video-showcase");
     assert.equal(entry?.availability, "available");
     assert.equal(entry?.renderer, "native-html-canvas-template");
   }
-  for (const id of ["huashu-motion-finance-chart", "huashu-motion-kinetic-type"]) {
-    const entry = entries.find((item) => item.id === id);
+  for (const id of ["laohu-motion-finance-chart", "laohu-motion-kinetic-type"]) {
+    const entry = researchEntries.find((item) => item.id === id);
     assert.equal(entry?.sourceId, "huashu-motion");
     assert.equal(entry?.availability, "conditional");
     assert.equal(entry?.renderer, "native-om-template-source");
     assert.equal(entry?.runtimeVerification, "native-om-cli-chrome-preview-render-ffprobe-verified");
     assert.ok(entry?.nativeInterface?.runtimeSource.includes("cli/om.js"));
   }
+  for (const id of ["laohu-motion-whiteboard", "laohu-motion-kurzgesagt", "laohu-motion-math-3b1b"]) {
+    const entry = researchEntries.find((item) => item.id === id);
+    assert.equal(entry?.sourceId, "huashu-motion");
+    assert.equal(entry?.availability, "conditional");
+    assert.equal(entry?.renderer, "native-om-template-source");
+    assert.match(entry?.sourcePath || "", /^templates\/(whiteboard|kurzgesagt|math-3b1b)\/index\.html$/);
+    assert.ok(entry?.renderPreconditions?.length >= 3, `${id} declares its original source/runtime/duration inputs`);
+    assert.ok(entry?.parameters?.sourceControls?.some((control) => control.id === "duration"), `${id} exposes its original duration control`);
+  }
 
   const parameterAudit = new Map(catalog.templates.filter((entry) => entry.grammar).map((entry) => [entry.id, entry]));
-  for (const id of ["huashu-t1-3b1b", "huashu-t3-finance-chart", "huashu-y3-whiteboard", "huashu-y4-storytime", "huashu-y5-kinetic-type"]) {
+  for (const id of ["laohu-motion-t1-3b1b", "laohu-motion-t3-finance-chart", "laohu-motion-y3-whiteboard", "laohu-motion-y4-storytime", "laohu-motion-y5-kinetic-type"]) {
     const entry = parameterAudit.get(id);
     assert.ok(entry.sourceSchema.specData.includes("camera"), `${id} keeps the original schema declaration`);
     assert.ok(!entry.parameters.specData.includes("camera"), `${id} does not present camera as a consumed parameter`);
     assert.ok(!entry.trueParameterization.specData.includes("camera"), `${id} actual parameter view excludes camera`);
     assert.equal(entry.parameters.declaredOnlyIgnoredSpecData[0]?.path, "data.camera");
   }
-  for (const id of ["huashu-t2-keynote-ui", "huashu-y1-kurzgesagt", "huashu-y2-vox"]) {
+  for (const id of ["laohu-motion-t2-keynote-ui", "laohu-motion-y1-kurzgesagt", "laohu-motion-y2-vox"]) {
     assert.ok(parameterAudit.get(id).parameters.specData.includes("camera"), `${id} source actually consumes camera`);
   }
   for (const entry of parameterAudit.values()) {
@@ -129,13 +247,13 @@ test("catalog routes only callable native clip entries and guards source require
     assert.match(entry.trueParameterization.cueFieldsScope, /not every field is an active visual control/i);
   }
 
-  const sourceOnly = catalog.templates.find((entry) => entry.availability === "source-only");
-  assert.ok(sourceOnly, "catalog must retain source-only rows");
-  const blocked = invoke(["prepare", sourceOnly.id, "--input", "missing.json", "--output", "out.json"]);
+  const sourceOnly = maintenanceLedger.sourceOnlyTemplates[0];
+  assert.ok(sourceOnly, "maintenance ledger must retain source-only rows");
+  const blocked = invoke(["prepare", sourceOnly.id, "--research", "--input", "missing.json", "--output", "out.json"]);
   assert.notEqual(blocked.status, 0);
   assert.match(blocked.stderr, /source-only|only supports catalog entries/i);
 
-  const t3 = catalog.templates.find((entry) => entry.id === "huashu-t3-finance-chart");
+  const t3 = verifiedTemplates.find((entry) => entry.id === "laohu-motion-t3-finance-chart");
   assert.ok(t3?.sourceSchema?.specNeeds?.includes("data.series"));
   assert.ok(t3.parameters.specData.includes("xAxis"), "t3 exposes its source-consumed xAxis field");
   assert.ok(t3.trueParameterization.specData.includes("xAxis"), "t3 actual parameter view exposes xAxis");
@@ -144,7 +262,7 @@ test("catalog routes only callable native clip entries and guards source require
     ["motiongit-385712-unit-f", "preconfigured d* sequences"],
     ["motiongit-385712-unit-s11", "d596 preview frames"],
   ]) {
-    assert.ok(catalog.templates.find((entry) => entry.id === id)?.assetNotes?.includes(expected), `${id} retains its source-specific media boundary`);
+    assert.ok(verifiedTemplates.find((entry) => entry.id === id)?.assetNotes?.includes(expected), `${id} retains its source-specific media boundary`);
   }
   const cacheRoot = path.join(repoRoot, ".cache", "tmp");
   await fs.mkdir(cacheRoot, { recursive: true });
@@ -168,10 +286,166 @@ test("catalog routes only callable native clip entries and guards source require
   assertCliOk(alignedResult, "frame-aligned duration prepare");
 });
 
+test("fy-code-animation source comparison checks selected files and exact documentation exclusions", async (t) => {
+  const sourceRoot = path.resolve(process.env.MOTION_FY_SOURCE_ROOT || path.join(
+    repoRoot, ".cache", "restore", "animation-foundation-20261111-01", "sources", "animation-foundation", "fy-code-animation",
+  ));
+  try { await fs.access(path.join(sourceRoot, "implementations", "audio-sync", "beat-grid.mjs")); }
+  catch { t.skip("pinned fy-code-animation snapshot is not present in the external project cache"); return; }
+
+  const tempRoot = path.join(repoRoot, ".cache", "tmp");
+  await fs.mkdir(tempRoot, { recursive: true });
+  const runRoot = await fs.mkdtemp(path.join(tempRoot, "fy-source-snapshot-compare-"));
+  t.after(() => fs.rm(runRoot, { recursive: true, force: true }));
+  const copiedRoot = path.join(runRoot, "snapshot");
+  await fs.mkdir(copiedRoot, { recursive: true });
+  await fs.cp(path.join(sourceRoot, "implementations"), path.join(copiedRoot, "implementations"), { recursive: true });
+  await fs.mkdir(path.join(copiedRoot, "scripts"), { recursive: true });
+  await fs.copyFile(path.join(sourceRoot, "scripts", "glyph_outline.py"), path.join(copiedRoot, "scripts", "glyph_outline.py"));
+
+  const compare = () => invoke([
+    "verify", "--source", "fy-code-animation", "--source-root", copiedRoot, "--json",
+  ]);
+  const clean = compare();
+  assertCliOk(clean, "pinned fy-code-animation source comparison");
+  const cleanResult = JSON.parse(clean.stdout);
+  assert.equal(cleanResult.checkedFiles, 54, "42 selected implementation modules, 11 explicit implementation-tree documentation/bootstrap rows, and 1 external helper are hash checked");
+  assert.equal(cleanResult.checkedGitBlobs, 54);
+  assert.deepEqual(cleanResult.sourceSnapshotComparison, {
+    status: "COMPARED", sourceRootRequired: false, comparedSourceCount: 1, comparedFiles: 54,
+  });
+
+  const excludedReadme = path.join(copiedRoot, "implementations", "audio-sync", "README.md");
+  const originalReadme = await fs.readFile(excludedReadme);
+  await fs.appendFile(excludedReadme, "\nchanged after pin\n");
+  const changedExcluded = compare();
+  assert.equal(changedExcluded.status, 1);
+  const changedExcludedResult = JSON.parse(changedExcluded.stdout);
+  assert.ok(changedExcludedResult.issues.some((issue) => issue.path === "audio-sync/README.md" && /sha256 mismatch/.test(issue.error)));
+  await fs.writeFile(excludedReadme, originalReadme);
+
+  const externalHelper = path.join(copiedRoot, "scripts", "glyph_outline.py");
+  const originalHelper = await fs.readFile(externalHelper);
+  await fs.appendFile(externalHelper, "\nchanged after pin\n");
+  const changedHelper = compare();
+  assert.equal(changedHelper.status, 1);
+  const changedHelperResult = JSON.parse(changedHelper.stdout);
+  assert.ok(changedHelperResult.issues.some((issue) => issue.path === "scripts/glyph_outline.py" && /external source snapshot sha256 mismatch/.test(issue.error)));
+  await fs.writeFile(externalHelper, originalHelper);
+
+  await fs.writeFile(path.join(copiedRoot, "implementations", "unindexed-extra.ts"), "export {};\n");
+  const extraFile = compare();
+  assert.equal(extraFile.status, 1);
+  const extraFileResult = JSON.parse(extraFile.stdout);
+  assert.ok(extraFileResult.issues.some((issue) => issue.path === "unindexed-extra.ts" && /not listed as a pinned source file or an explicit snapshot exclusion/.test(issue.error)));
+});
+
+test("native render entrypoints reject an FFmpeg loader failure before starting source rendering", async (t) => {
+  if (process.platform === "win32") {
+    t.skip("uses a small POSIX executable fixture to simulate a dynamic-loader failure");
+    return;
+  }
+  const runRoot = await fs.mkdtemp(path.join(repoRoot, ".cache", "tmp", "motion-ffmpeg-preflight-"));
+  t.after(() => fs.rm(runRoot, { recursive: true, force: true }));
+  const brokenFfmpeg = path.join(runRoot, "ffmpeg-loader-failure");
+  await fs.writeFile(brokenFfmpeg, "#!/bin/sh\nprintf '%s\\n' 'dyld: Library not loaded: fixture/libx265.216.dylib' >&2\nexit 127\n");
+  await fs.chmod(brokenFfmpeg, 0o755);
+  const expectedError = /FFmpeg preflight failed before source rendering[\s\S]*Library not loaded: fixture\/libx265\.216\.dylib/;
+  const env = { TMPDIR: path.join(runRoot, "tmp") };
+  await fs.mkdir(env.TMPDIR, { recursive: true });
+
+  const directWorkRoot = path.join(runRoot, "direct-work");
+  const direct = invoke([
+    "render", "laohu-motion-finance-chart", "--spec", path.join(runRoot, "not-read-before-preflight.json"),
+    "--output", path.join(directWorkRoot, "direct.mp4"), "--work-root", directWorkRoot, "--ffmpeg", brokenFfmpeg,
+  ], { env, timeout: 15_000 });
+  assert.equal(direct.status, 1, direct.stderr || direct.stdout);
+  assert.match(direct.stderr, expectedError);
+  assert.equal(await fs.stat(directWorkRoot).then(() => true).catch(() => false), false,
+    "single-template native render must reject the loader failure before preparing an OM project or launching capture");
+
+  const filmWorkRoot = path.join(runRoot, "film-work");
+  const blueprintPath = path.join(runRoot, "film-blueprint.json");
+  await fs.writeFile(blueprintPath, JSON.stringify({
+    format: "laohu.huashu-film-blueprint/1",
+    width: 1920, height: 1080, fps: 30,
+    clock: { kind: "film-global", durationSec: 2 },
+    segments: [{
+      id: "native-om", renderer: "laohu-native-om-template", templateId: "laohu-motion-finance-chart",
+      variables: { duration: 2, title: "preflight", series: JSON.stringify([{ label: "A", value: 1 }]) },
+      startSec: 0, endSec: 2,
+    }],
+  }, null, 2) + "\n");
+  const runnableFfmpeg = path.join(runRoot, "ffmpeg-valid");
+  await fs.writeFile(runnableFfmpeg, "#!/bin/sh\nprintf '%s\\n' 'ffmpeg version 7.1.5 fixture'\n");
+  await fs.chmod(runnableFfmpeg, 0o755);
+  assert.deepEqual(preflightFfmpeg(runnableFfmpeg, { env }), {
+    executable: runnableFfmpeg,
+    version: "ffmpeg version 7.1.5 fixture",
+  });
+  const film = invoke([
+    "render", "--film-blueprint", blueprintPath, "--output", path.join(runRoot, "film.mp4"),
+    "--work-root", filmWorkRoot, "--manifest", path.join(runRoot, "film-manifest.json"), "--ffmpeg", brokenFfmpeg,
+  ], { env, timeout: 15_000 });
+  assert.equal(film.status, 1, film.stderr || film.stdout);
+  assert.match(film.stderr, expectedError);
+  const workEntries = await fs.readdir(filmWorkRoot).catch(() => []);
+  assert.equal(workEntries.some((name) => name.startsWith("huashu-om-")), false,
+    "Film/1 must reject the loader failure before the original OM source segment begins rendering");
+});
+
+test("raw native clip preparation rejects inactive controls before a successful-looking render", async (t) => {
+  const root = path.join(repoRoot, ".cache", "tmp");
+  await fs.mkdir(root, { recursive: true });
+  const runRoot = await fs.mkdtemp(path.join(root, "native-cue-consumers-"));
+  t.after(() => fs.rm(runRoot, { recursive: true, force: true }));
+  async function prepare(name, id, spec) {
+    const input = path.join(runRoot, name + ".json");
+    await fs.writeFile(input, JSON.stringify(spec));
+    return invoke(["prepare", id, "--input", input, "--output", input + ".prepared.json"]);
+  }
+  const base = { grammar: "y1_kurzgesagt", duration: 8, cues: [{ kind: "point", at: 1, text: "node" }] };
+  const misplaced = await prepare("misplaced", "laohu-motion-y1-kurzgesagt", {
+    ...base, cues: [...base.cues, { kind: "enter", at: 3, data: { index: 0, dur: 4 } }],
+  });
+  assert.notEqual(misplaced.status, 0);
+  assert.match(misplaced.stderr, /data\.dur is not consumed.*put dur beside/);
+  const valid = await prepare("duration", "laohu-motion-y1-kurzgesagt", {
+    ...base, cues: [...base.cues, { kind: "enter", at: 3, dur: 4, data: { index: 0 } }],
+  });
+  assertCliOk(valid, "source-consumed top-level duration");
+  const pace = await prepare("pace", "laohu-motion-y1-kurzgesagt", { ...base, pace: 2 });
+  assert.notEqual(pace.status, 0);
+  assert.match(pace.stderr, /native-clip does not consume pace/);
+  const word = await prepare("word", "laohu-motion-y1-kurzgesagt", {
+    ...base, cues: [{ ...base.cues[0], word: "node" }],
+  });
+  assert.notEqual(word.status, 0);
+  assert.match(word.stderr, /word is not consumed by native-clip/);
+  const camera = await prepare("ignored-camera", "laohu-motion-y5-kinetic-type", {
+    grammar: "y5_kinetic_type", duration: 8, data: { camera: "snap" }, cues: [],
+  });
+  assert.notEqual(camera.status, 0);
+  assert.match(camera.stderr, /does not consume data\.camera/);
+  const missing = await prepare("missing-text", "laohu-motion-y1-kurzgesagt", {
+    ...base, cues: [{ kind: "point", at: 1 }],
+  });
+  assert.notEqual(missing.status, 0);
+  assert.match(missing.stderr, /point requires text/);
+  const tokens = await prepare("alternative-tokens", "laohu-motion-t1-3b1b", {
+    grammar: "t1_3b1b", duration: 8, cues: [{ kind: "equation", at: 1, data: { tokens: ["x", "=", "1"] } }],
+  });
+  assertCliOk(tokens, "source alternative required field");
+  const zero = await prepare("zero-number", "laohu-motion-t2-keynote-ui", {
+    grammar: "t2_keynote_ui", duration: 8, cues: [{ kind: "number", at: 1, data: { value: 0 } }],
+  });
+  assertCliOk(zero, "zero is a provided source number");
+});
+
 test("local-effect catalog, validator, and adapter expose one consumed parameter contract", async () => {
   const catalog = JSON.parse(await fs.readFile(catalogPath, "utf8"));
   assert.equal(catalog.schemaVersion, 2);
-  const huashuEffects = catalog.effects.filter((effect) => !effect.operationId);
+  const huashuEffects = catalog.effects.filter((effect) => ["custom:laohu-motion-effects", "custom:laohu-motion-target"].includes(effect.renderer));
   assert.equal(huashuEffects.length, 5);
   assert.deepEqual(Object.keys(HuashuLocalEffects.DEFINITION).sort(), huashuEffects.map((effect) => effect.id).sort());
   for (const effect of huashuEffects) {
@@ -186,9 +460,9 @@ test("local-effect catalog, validator, and adapter expose one consumed parameter
     assert.deepEqual(geometryNames.sort(), expectedGeometry.sort(), `${effect.id} catalog geometry matches the validator`);
     assert.ok(effect.sourceFunctions.includes(HuashuLocalEffects.DEFINITION[effect.id].sourceFunction), `${effect.id} names the adapter's original source function`);
   }
-  const pulse = catalog.effects.find((effect) => effect.id === "huashu-dg-indicate-frame-pulse");
+  const pulse = catalog.effects.find((effect) => effect.id === "laohu-motion-dg-indicate-frame-pulse");
   assert.ok(pulse.parameters.some((parameter) => parameter.name === "parameters.scale"));
-  assert.ok(!catalog.effects.find((effect) => effect.id === "huashu-dg-circumscribe").parameters.some((parameter) => parameter.name === "parameters.scale"));
+  assert.ok(!catalog.effects.find((effect) => effect.id === "laohu-motion-dg-circumscribe").parameters.some((parameter) => parameter.name === "parameters.scale"));
 
   const followBox = catalog.effects.find((effect) => effect.id === "laohu-motion-follow-box");
   assert.equal(followBox.operationId, "laohu.motion-follow-box/1");
@@ -226,7 +500,7 @@ test("local-effect catalog, validator, and adapter expose one consumed parameter
 
   const invalidScale = structuredClone(scene);
   invalidScale.objects[1].data.motionEffects[0].parameters.scale = 1.2;
-  assert.throws(() => MotionOps.validateLocalEffects(invalidScale), /parameters\.scale is not consumed by huashu-dg-circumscribe/);
+  assert.throws(() => MotionOps.validateLocalEffects(invalidScale), /parameters\.scale is not consumed by laohu-motion-dg-circumscribe/);
   const unboundTarget = structuredClone(scene);
   unboundTarget.objects[1].data.motionEffects[0].targetId = "missing-target";
   assert.throws(() => MotionOps.validateLocalEffects(unboundTarget), /does not identify a scene object/);
@@ -248,7 +522,7 @@ test("local-effect catalog, validator, and adapter expose one consumed parameter
       } },
     ],
   };
-  assert.equal(MotionOps.validateLocalEffects(directTargetScene)[0].effectId, "huashu-mo-staggered-target-reveal");
+  assert.equal(MotionOps.validateLocalEffects(directTargetScene)[0].effectId, "laohu-motion-mo-staggered-target-reveal");
   const missingStagger = structuredClone(directTargetScene);
   delete missingStagger.objects[1].data.motionEffects[0].stagger;
   assert.throws(() => MotionOps.validateLocalEffects(missingStagger), /stagger is required/);
@@ -268,7 +542,7 @@ test("native y2 accepts authored text cues without image assets", async (t) => {
     width: 640,
     height: 360,
     cues: [
-      { at: 0.2, kind: "title", text: "知识讲解" },
+      { at: 0.2, kind: "title", text: "从数据中学习" },
       { at: 1.4, kind: "point", text: "判断与答案的差距会触发参数调整" },
     ],
   };
@@ -349,8 +623,8 @@ test("explicit local Chrome uses stable software capture and preserves cross-dir
   });
 
   const textOnlySpecs = [
-    { grammar: "y2_vox", duration: 4, fps: 24, width: 640, height: 360, cues: [{ at: 0.2, kind: "title", text: "知识讲解" }, { at: 1.5, kind: "point", text: "对象状态变化" }] },
-    { grammar: "y2_vox", duration: 4, fps: 24, width: 640, height: 360, cues: [{ at: 0.2, kind: "title", text: "机器怎样学习" }, { at: 1.5, kind: "point", text: "对象状态变化" }] },
+    { grammar: "y2_vox", duration: 4, fps: 24, width: 640, height: 360, cues: [{ at: 0.2, kind: "title", text: "从数据中学习" }, { at: 1.5, kind: "point", text: "模型作出判断" }] },
+    { grammar: "y2_vox", duration: 4, fps: 24, width: 640, height: 360, cues: [{ at: 0.2, kind: "title", text: "机器怎样学习" }, { at: 1.5, kind: "point", text: "模型作出判断" }] },
   ];
   const textHashes = [];
   for (let index = 0; index < textOnlySpecs.length; index += 1) {
@@ -378,7 +652,7 @@ test("Moessif original HTML templates load local fonts, preserve source bytes, a
     t.skip("requires a local Chrome/Chromium executable and an already-installed Playwright; no dependency is installed by this test");
     return;
   }
-  const cacheRoot = path.join(repoRoot, ".cache", "tmp");
+  const cacheRoot = path.resolve(process.env.MOTION_TEST_TMP || path.join(repoRoot, ".cache", "tmp"));
   await fs.mkdir(cacheRoot, { recursive: true });
   const runRoot = await fs.mkdtemp(path.join(cacheRoot, "laohu-motion-showcase-live-"));
   t.after(() => fs.rm(runRoot, { recursive: true, force: true }));
@@ -411,7 +685,7 @@ test("Moessif original HTML templates load local fonts, preserve source bytes, a
       await fs.writeFile(input, `${JSON.stringify(spec, null, 2)}\n`);
       const prepare = invoke(["prepare", item.id, "--input", input, "--output", prepared]);
       assertCliOk(prepare, `${item.id} ${variant} prepare`);
-      const relativeTmp = `.cache/tmp/motion-template-relative-${item.id}-${variant}`;
+      const relativeTmp = path.join(runRoot, "browser-temp", `${item.id}-${variant}`);
       const preview = invoke(["preview", item.id, "--spec", prepared, "--output", output, "--samples", "0.5,0.7,0.5", "--browser", browser, "--cache-dir", browserCache, "--manifest", manifestPath], {
         env: { TMPDIR: relativeTmp, TMP: relativeTmp, TEMP: relativeTmp },
       });
@@ -465,6 +739,27 @@ test("Moessif original HTML templates load local fonts, preserve source bytes, a
   assert.match(blocked.stderr, /does not consume PLACEHOLDER_SUB/);
 });
 
+test("Showcase prepare resolves its font CSS from the declared templates and skill-root bases", async (t) => {
+  const cacheRoot = path.resolve(process.env.MOTION_TEST_TMP || path.join(repoRoot, ".cache", "tmp"));
+  await fs.mkdir(cacheRoot, { recursive: true });
+  const runRoot = await fs.mkdtemp(path.join(cacheRoot, "showcase-css-prepare-"));
+  t.after(() => fs.rm(runRoot, { recursive: true, force: true }));
+  const entry = JSON.parse(await fs.readFile(path.join(repoRoot, ".agents/skills/laohu-motion/templates/catalog.json"), "utf8"))
+    .templates.find((row) => row.id === "motion-code-video-showcase-big-card");
+  const input = path.join(runRoot, "input.json");
+  const prepared = path.join(runRoot, "prepared.json");
+  await fs.writeFile(input, `${JSON.stringify({templateId:entry.id,duration:1,fps:30,width:1920,height:1080,parameters:{brand:"技术测试"}}, null, 2)}\n`);
+  const result = invoke(["prepare", entry.id, "--input", input, "--output", prepared]);
+  assertCliOk(result, "Showcase big-card prepare");
+  const receipt = JSON.parse(await fs.readFile(`${prepared}.assets.json`, "utf8"));
+  assert.equal(receipt.adapter.fontCssPath, entry.adapter.fontCssPath);
+  const checkedCss = receipt.sourceVerification.checkedFiles.find((row) => row.sourcePath === entry.adapter.fontCssSourcePath);
+  assert.ok(checkedCss, "prepare verifies the manifest CSS row using the local closure");
+  assert.equal(checkedCss.localPath, path.join("templates", entry.adapter.fontCssPath));
+  assert.equal(checkedCss.localSha256, entry.adapter.fontCssSha256);
+  assert.equal(receipt.sourceVerification.adapter.sha256, entry.adapter.fontCssSha256, "the prepared receipt's render binding comes from the loader's verified local CSS record");
+});
+
 test("DG preload initializes the original camera library to the requested non-1920 stage", async (t) => {
   const browser = await browserExecutable();
   const configuredFfmpeg = process.env.MOTION_FFMPEG || process.env.MOTION_TEMPLATE_TEST_FFMPEG;
@@ -510,6 +805,47 @@ window.MOTION_EVIDENCE = { cameraStageProbe: { worldOrigin: [0, 0], screen: cent
   const manifestPath = result.stdout.split(/\r?\n/).find((line) => line.startsWith("MANIFEST "))?.slice("MANIFEST ".length);
   assert.ok(manifestPath, `render did not report its manifest: ${result.stdout}`);
   const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));
-  assert.deepEqual(manifest.templateEffectStage, { requested: { width: 640, height: 360 }, actual: { width: 640, height: 360 } });
+  assert.deepEqual(manifest.templateEffectStage, { requested: { width: 640, height: 360 }, actual: { width: 640, height: 360 }, fontAssets: [] });
   assert.deepEqual(manifest.consumerEvidence.cameraStageProbe, { worldOrigin: [0, 0], screen: [320, 180] });
+});
+
+test("legacy compatibility style render passes the requested frame duration through to rendered media", async (t) => {
+  const browser = await browserExecutable();
+  const ffprobe = await ffprobeExecutable();
+  if (!browser || !ffprobe) {
+    t.skip("requires an available Chrome/Chromium and ffprobe; no dependency is installed by this test");
+    return;
+  }
+  const runRoot = await fs.mkdtemp(path.join(repoRoot, ".cache", "tmp", "motion-style-duration-"));
+  const output = path.join(runRoot, "a2-24-frames.mp4");
+  const manifestPath = path.join(runRoot, "a2-24-frames.manifest.json");
+  try {
+    const result = invoke([
+      "styles", "compatibility", "render", "--query", "A2", "--text", "今天我想讲清一件事",
+      "--output", output, "--duration-frames", "24", "--work-root", repoRoot,
+      "--cache-dir", path.join(runRoot, "render-cache"), "--browser", browser,
+      "--manifest", manifestPath,
+    ], {timeout: 180_000});
+    assertCliOk(result, "A2 24-frame style render");
+    const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));
+    assert.equal(manifest.input.durationInFrames, 24);
+    assert.equal(manifest.runtime.composition.durationInFrames, 24,
+      "Remotion selectComposition must receive the requested duration, not the 90-frame default");
+    const probe = spawnSync(ffprobe, [
+      "-v", "error", "-count_frames", "-select_streams", "v:0",
+      "-show_entries", "stream=nb_frames,nb_read_frames,width,height,avg_frame_rate",
+      "-of", "json", output,
+    ], {encoding: "utf8", timeout: 30_000});
+    assert.equal(probe.error, undefined, `ffprobe did not start: ${probe.error?.message || "unknown error"}`);
+    assert.equal(probe.status, 0, `ffprobe failed: ${probe.stderr}`);
+    const stream = JSON.parse(probe.stdout).streams?.[0];
+    assert.ok(stream, "rendered MP4 must contain a video stream");
+    assert.equal(Number(stream.nb_read_frames ?? stream.nb_frames), 24,
+      "the encoded MP4 must contain the requested 24 frames");
+    assert.equal(stream.width, 1920);
+    assert.equal(stream.height, 1080);
+    assert.equal(stream.avg_frame_rate, "30/1");
+  } finally {
+    await fs.rm(runRoot, {recursive: true, force: true});
+  }
 });

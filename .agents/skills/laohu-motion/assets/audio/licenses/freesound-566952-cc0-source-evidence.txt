@@ -1,0 +1,18 @@
+Freesound individual source-page evidence captured 2026-11-13.
+
+Source page: https://freesound.org/people/code_box/sounds/566952/
+Title: Funky Groove
+Creator: code_box
+Source page category: Music > Multiple instruments; Rock / Pop
+Source page date: April 7, 2021
+Source-page audio facts: WAV, 44.1 kHz, 16 bit, stereo, displayed duration 0:49.156.
+Uploader description: “Do that stank face! Composed and rendered using Ableton Live.”
+Source tags include beat, drums, funk, groove, guitar, jazz, loop, and organ. Tags are uploader claims, not this project's listening findings.
+
+Source page license label: Creative Commons 0 (CC0). The page links to the canonical CC0 1.0 deed.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Individual-page community facts at capture: 18 ratings, 724 downloads, 5 comments. Comments report use in a YouTube Shorts animation, a student stop-motion short, and a stream intro. These are community-use reports, not audio fit or this project's listening review. Freesound search metadata separately showed average rating 4.7 with 18 votes and 725 downloads.
+
+Retrieved file: Freesound high-quality MP3 preview, 1,182,175 bytes; measured duration 49.188571 seconds; SHA-256 1e48cc0f65124bf1bf036e4477ed8df0a446c1682ef5484c6de4a380d6f0f6c5.
+Listening status for this project: UNKNOWN. No human listening review was recorded.

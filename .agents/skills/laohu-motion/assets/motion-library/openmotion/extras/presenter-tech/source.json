@@ -1,0 +1,28 @@
+{
+  "id": "presenter-tech",
+  "displayName": "Presenter Tech",
+  "upstreamName": "Kinetic Tech",
+  "upstreamAuthor": "MotionGit contributors / adunext",
+  "repository": "https://github.com/motiontemplates/385712",
+  "commit": "9dfbe7d7c6a6d4aa03f6f8e2f2285e631099faae",
+  "version": "0.2.7-open-beta",
+  "originalFilename": "kinetic-tech-0.2.7-open-beta-en.motion",
+  "downloadUrl": "https://raw.githubusercontent.com/motiontemplates/385712/9dfbe7d7c6a6d4aa03f6f8e2f2285e631099faae/downloads/kinetic-tech-0.2.7-open-beta-en.motion",
+  "sha256": "533320d081c578cb824dfbc6ce9d4ae3eb1ca190d67ae7185b4a32b02e236255",
+  "bytes": 17594444,
+  "archiveFiles": 331,
+  "integrityCheckedFiles": 330,
+  "license": "MIT",
+  "runtime": "kinetic-user-core/1; included adapter.py runner",
+  "studioNativeImport": false,
+  "personalIdentityIncluded": false,
+  "rootDependenciesChanged": false,
+  "localProject": "project",
+  "archiveAvailability": "upstream",
+  "memberIndex": "../../source-members.json",
+  "preservedUpstreamFiles": {
+    "README.md": "../../objects/archived-source/650047934e55c1e5174be2006e94e5ef5f5ba627660211acae63980edae92738.bytes",
+    "NOTICE.md": "../../objects/archived-source/8e17a0b94428057b0bb855be838d661bb59e2703b154c3470258efb874af7dac.bytes",
+    "source.json": "../../objects/archived-source/3f63515d990bfd925e2d2d022f406132495715244e06f9487eed5384467ea75a.bytes"
+  }
+}

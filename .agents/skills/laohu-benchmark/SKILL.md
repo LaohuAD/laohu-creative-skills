@@ -15,6 +15,8 @@ description: 用户要深入拆解作品或创作素材、积累可迁移方法�
 
 当本轮明确涉及形成完整候选、编写检索卡、记录真实使用反馈时，按所做步骤读取本 Skill 的[原子记录与取用](references/atom-recording-and-reuse.md)；它负责候选写作、完整分析保存、确认及真实使用规则。用户明确要加载/搜索/读取本地库，或调用者已进入具体作品的材料/方法选择时，按需读取[本地资料库的分层检索与回读](references/library-retrieval.md)；它负责只读入口、短查询、typed cards、详情与跨步骤复用。局部解释、概念讨论或纯技术任务不因提到作品就额外加载。主文继续作为来源、分析、证据、专业绑定和写入授权的规则真源。
 
+当实际材料是用户明确认可或要求研究的动画/视频样片，且本轮要拆解具体动效、视觉风格、转场、声画关系或实现方法时，先确认认可范围，再读取[动画样片与动态风格分析](references/animation-analysis.md)；它负责核对视频版本、时钟、连续帧和必要音频，形成有据的局部观察与专业交接。按需结合[视觉分析](references/visual-analysis.md)和[时间与声音分析](references/time-and-sound-analysis.md)，读后回到当前分析/收录/采用主线；只有用户另有完整动画创作要求时，才把可迁移发现交给实际制作入口，不把研究记录当成生产文件。
+
 调用者负责的规则沉淀另回 `laohu-evolution`；用户稿件诊断遵循 `laohu-audit` 或 `laohu-analysis` 的职责和验证协议。链接提供定位，不能替代任务中实际读取这些约定。
 
 ## 什么时候进入
@@ -179,39 +181,49 @@ description: 用户要深入拆解作品或创作素材、积累可迁移方法�
 
 资料不足时，在方案里提出保留为候选或只存可真实填写的来源，获确认后执行；不伪装成熟方法，不编造必填身份信息。`put` 允许 `source`/`sources` 单独提交，也允许省略 `atoms` 或传 `atoms: []`；这种 source-only 写入只产生来源记录，可用 `get-source` 读取，不会因这条来源新建空类别或原子搜索项，也不会新增 usage。`put` 仍按既有流程维护库中已有类别的索引，索引维护失败会单独报告，不影响已提交来源作为真源。显式填写的非法 `atom`/`atoms` 类型或不完整原子仍会报错，不能借 source-only 分支吞掉原子错误。
 
+### 选择研究库
+
+按研究成果将被哪项专业工作接手，定位该 Skill 实际加载、解析链接后的 `SKILL.md`。其同级 `benchmark/` 是新收录的默认位置，跨项目调用也用这个位置。剧本拆解进入 `laohu-script/benchmark/`，动画拆解进入 `laohu-motion/benchmark/`，其他成果用相应专业 Skill 的同级库。按当前研究的主要用途判断归属，只有多个归属会改变实际去向而上下文仍无法确定时才确认这一项。限于本项目的私有材料依已确认的保存位置处理。
+
+同一版本的全片可以产生多种专业成果。把来源记录和获准保存的素材留在一个主库，主库按研究的主要归属或已经核实的既有记录确定。例如全片既交付动画动效方法，又交付独立可采用的剧本处理时，将剧本原子写入剧本库，并以 `source_links` 引用动画库的唯一来源。两库都能查到各自的专业原子和同一来源。某个原子仅可在另一个领域采用时，沿用现有原子与获准的 consumer binding，由接收方按库路径与稳定 ID 回读。
+
+根目录 `benchmark/` 中的旧编号可继续按原绝对路径检索。已经获准迁入专业库的记录，在旧库以轻量引用保留原编号与可检索性，实际来源与原子存一份。其他既有记录沿用核实的原位置。供应方交付、供制作直接调用的原生动效资产归 Motion 的 `assets/motion-library/`；选中并完成拆解的研究按本节收录。独立的分析作品按实际授权进入作品目录。
+
 ### 归类与原子复用
 
 归类只决定原子存放位置，不限制可以观察或收录的方法。每条原子只选一个类别；跨消费者复用通过同一原子的 `consumer_bindings[]` 表达，不复制原子。
 
 1. 用户明确指定类别或已有目录归属时优先沿用。若类别归属、收录授权和库位置均已明确，类别目录尚不存在是首条获准写入时按需创建的正常情况，不额外询问。只有命名无效、与既有归属存在实质冲突，或缺失信息确会改变写入位置/归属时，才澄清对应项。
 2. 用户没有指定时，先只读查看当前类别和记录用途：用 `stats` 看已有类别及数量，再按[分层检索与回读](references/library-retrieval.md)以 `query --kind method` 查相关卡，并通过 `get-atom` 详情视图核对用途。之后按用户明确的主要复用用途选能承接的现有类别；用户没有明确用途时，按原作和被拆单元的工作类型选最贴合的现有类别。
-3. 五组分析 Reference 是观察与适配方法的入口，不是存储类别表。不要因为某原子能用于不同消费者，就为每个消费者各建一类。词面不同本身也不构成新类理由；例如 `lyrics`、`music`、`language`、`article` 等相近叫法应先检查已有类别是否已承接同一主要用途，常规同义命名直接复用已有名称。
+3. 分析 Reference 提供观察与适配方法。按主要用途复用库内类别；同一原子的跨消费者用途用 binding 承接。例如 `lyrics`、`music`、`language`、`article` 等相近叫法应先检查已有类别是否已承接同一主要用途，常规同义命名直接复用已有名称。
 4. 同一处理已有原子时沿用其稳定 `ATM-ID`，不因换消费者复制、搬迁或改类。只有当前授权明确包含修改该既有记录时，才把新消费者 binding 合并进同一原子；先备份实际记录，保留 ID 和已有细读，写后运行 `validate` 并重建对应类别索引。未获准修改就原样复用已有原子，不擅自补写；`put` 拒绝覆盖，不能用它绕过修订边界。
 5. 只有没有现有类别能承接主要用途或工作类型时，才按已有命名习惯提出简短、稳定的小写 slug，并在首条获准原子保存时创建该类；不预建空类别。新发现的处理即使超出当前 Skill、consumer-map 或既有方法词表，也继续作为方法候选分析和收录；缺少现成专业 binding 或类别时，记录具体决定/用途和待接手范围，不得排除该发现。
 6. 若多个合理类别会实质改变未来检索或既有资产组织，而用户没有指定，只澄清类别归属；不暂停原作分析，也不通过重复保存来同时占多个类别。若差别只在消费者名称，则按现有原子与 binding 规则处理，不追问类别。
 
-方案阶段可调用 archive 预览已有或拟用位置；只有本批方案已获确认，或用户明确省略确认且授权写入时，才按下例准备/复用容器并保存。`laohu-archive` 只返回位置，本 Skill 负责语义归类和记录：
+方案阶段先用 `info` 核对归属、实际路径和索引状态。新域库在首次获准的 `put` 时创建。跨领域确有独立成果时，先提交主库来源，再向接收库提交 `source_links` 和对应的 `atoms`。每条引用填写已核实的 `source_id` 和 `owner_root`（主库的绝对路径）；同一技能仓库中的主库以相对于仓库的路径保存。对旧库或已明确指定的其他库，使用 `--library-root` 和实际绝对路径。
 
 ```bash
-python3 "{SKILL_DIR}/../laohu-archive/scripts/library_workspace.py" --library benchmark --root "{PROJECT_ROOT}" --write
-python3 "{SKILL_DIR}/scripts/library.py" --library-root "{返回的 benchmark 路径}" stats
+python3 "{SKILL_DIR}/scripts/library.py" --skill-file "<接收 Skill 的 SKILL.md 绝对路径>" info
+python3 "{SKILL_DIR}/scripts/library.py" --skill-file "<接收 Skill 的 SKILL.md 绝对路径>" put --input "<已确认的 bundle.json>"
+python3 "{SKILL_DIR}/scripts/library.py" --library-root "<既有库的绝对路径>" info
 ```
 
-如果当前项目不在技能仓库内，按 runtime 的项目位置和用户确认规则传入正确项目根或已确认的精确路径，不把已安装 Skill 目录当项目资料目录。工具全部基于 Python 标准库运行；不联网、不安装依赖、不调用付费服务。
+工具基于 Python 标准库运行。写入和回读都沿用已经核实的库位置。引自其他库的来源用 `locate-source` 核对实际主库、JSON 路径与 SHA-256，需要原始素材或分析时继续用 `get-source`。
 
 | 命令 | 用途与写入行为 |
 |---|---|
-| `put --input bundle.json` | 本批方案获确认，或用户明确省略确认并授权写入后，添加来源与一个或多个原子；若当前只有可追溯来源，可省略 `atom(s)` 或提交 `atoms: []`，只保存来源，不因这条来源新建空类别、原子搜索项或 usage。`put` 仍按既有流程维护库中已有类别的索引。仍须提供有效 `source(s)`；显式非法原子类型或字段继续报错。拒绝默认覆盖；相同提交重试幂等，语义重复可返回已有原子。 |
+| `put --input bundle.json` | 按已获授权的方案写入来源或来源引用与相应原子。只写来源时可省略 `atom(s)` 或提交 `atoms: []`。有有效 `source`、`sources` 或 `source_links` 才能提交；原子按原 schema 验证，相同提交可重复执行并返回原有 ID。 |
 | `info` | 只读返回 catalog 状态、清单检查时间、revision 与可可靠统计的库存；`current` 只表示 path/size/mtime_ns 清单相符，不是内容审计。不会建库或修复缓存。 |
 | `query TEXT --kind all|material|method [--for-consumer C] [--registered-only --consumer C] [--consumer C --decision D --stage S] [--category X] [--limit N] [--cursor CURSOR]` | 从全局 `catalog.sqlite3` 只读返回有界 typed cards，并带查询 revision、returned_count、has_more 和 next_cursor；不返回总命中数，不读全文、不自动修复或重建。`--for-consumer` 是软排序偏好；`--registered-only` 需有 consumer；显式 consumer/decision/stage 是须由同一条 binding 满足的严格过滤。详见[分层检索与回读](references/library-retrieval.md)。 |
 | `get-atom ATM-ID [--category …] [--view decision|analysis] [--consumer C --decision D --stage S]` / `get-source SRC-ID [--unit KEY] [--view identity|material|analysis]` | 只读所选 atom/source 或 unit 的详情；不写入。未传视图时保留旧的完整 atom/source 读取行为，指定 unit 时只读所选单元。 |
+| `locate-source SRC-ID` | 定位来源 ID 的主库、实际 JSON 文件与 SHA-256。接收库保存来源引用时自动跟到主记录。 |
 | `search` / `search-sources` | 兼容既有的类别索引 atom 搜索和来源标题/notes 搜索接口；新调用流程使用 `query` 的 typed card 与游标协议。 |
-| `log-usage --input event.json` | 用户明确要求记录真实使用结果时按月追加一条；`consumer`、`decision`、`stage` 精确对应同一条既有 binding，并为本次真实情境填写 `required_context`、`adaptation`、`return`、`check` 及可核对的 `case_ref`/`result_evidence`。默认按提交内容生成稳定事件 ID；完全相同的重试幂等。搜索或推荐不记 usage。 |
+| `log-usage --input event.json` | 获准记录真实使用结果时，在原子主库按月追加一条。引用库可以按相同 ID 提交，并返回实际主库路径。`consumer`、`decision`、`stage` 精确对应同一条 binding，同时填写真实的适用情况、采用动作和可核对的结果。默认按内容生成稳定事件 ID，完全相同的重试幂等。 |
 | `stats` / `validate` | 只读统计真源与使用记录，检查来源关系、证据状态、bindings、待恢复批次和类别索引新鲜度。 |
 | `rebuild-index` | 经明确决定后重建全局 `catalog.sqlite3` 及类别 `category/index.sqlite3` 检索缓存；不修改来源/原子/usage 真源。读命令不触发重建。 |
 | `recover` | 仅在待处理事务存在时显式回滚未完成的新增批次；保护不属于该事务的内容。 |
 
-JSON 来源、原子、按月 JSONL 使用记录是可迁移真源；SQLite 是本地可重建缓存。批次事务与原子替换支持崩溃恢复；来源/原子已提交但索引失败时，工具会如实区分，不能把索引故障说成数据未写。索引及工作区内私有记录按仓库忽略规则默认不发布。所有命令都须显式传入 `--library-root`，防止静默写入安装仓库。
+JSON 来源、原子和跨库引用及按月 JSONL 使用记录是可迁移真源。SQLite 是本地可重建缓存，并检查被引用的主记录是否变化。批次事务与原子替换支持崩溃恢复；记录已提交但索引失败时，另行报告索引状态。索引及私有记录按仓库忽略规则留在本地。每条命令都显式指定 `--skill-file` 或 `--library-root`。
 
 默认 usage ID 由事件内容稳定生成，不含工具自动填充的记录时刻；若两次确实是不同使用事件，应提供不同 `case_ref` 或调用方稳定的 `usage_id`，不要让幂等键把两件事合并。读取命令不隐式 `mkdir`，普通分析没有保存权限。
 
@@ -226,6 +238,7 @@ JSON 来源、原子、按月 JSONL 使用记录是可迁移真源；SQLite 是�
 | 封面、图片、视觉资产身份/连续性、动态画面及版式（不含声音身份） | [视觉分析](references/visual-analysis.md)，检查目标媒介与实际观看尺寸/状态。 |
 | 稳定角色/旁白声音身份（`laohu-assets/voice`） | [时间与声音分析](references/time-and-sound-analysis.md)，只在实际声音可读并获准时把音频当作听觉证据；文字描述不证明实际音色或辨识度。组内声音仅在确有混淆或用户要求时同条件比较。 |
 | 编曲、音画、剪辑、ASR、动作时序 | [时间与声音分析](references/time-and-sound-analysis.md)，没有声音/时钟证据时收窄结论。 |
+| 用户认可或要求研究的动画样片、动效/风格/源码及声画关系 | [动画样片与动态风格分析](references/animation-analysis.md)；按具体观察需要再读[视觉分析](references/visual-analysis.md)或[时间与声音分析](references/time-and-sound-analysis.md)，确认版本与可达范围后把证据交回当前研究或相应生产入口。 |
 | 选题、标题、正文入口、HTML 与公众号呈现 | [选题与呈现分析](references/topic-and-presentation-analysis.md)，让读者承诺回到可兑现材料。 |
 
 完整映射见 [consumer-map.json](consumer-map.json)。`audit`、`analysis`、`evolution` 可以把本 Skill 用作证据查找、方法候选和适用范围材料，仍由相应 Skill 决定判断与验证；`archive`、`update`、`luna` 等操作入口只按自身职责取用位置或交接信息，不套用艺术评价标准。

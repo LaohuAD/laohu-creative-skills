@@ -19,7 +19,9 @@ python3 tools/check_project.py --test
 
 正式 Skill 名称以 `laohu` 开始，按连字符分段计层级，最多三级：`laohu` 为一级，`laohu-script` 为二级，`laohu-script-chekhov` 为三级。四段或更多的正式 Skill 名称无效。`parent` 指最近存在的名称前缀。正式内部子级的 `name` 必须以前缀形式承接所属宿主名，并恰好多一个分段；在二级宿主下，它因此处于三级。名称与目录必须一致。
 
-实际部署由 `deployment` 区分：直接部署在 `.agents/skills/<name>/SKILL.md` 的公开入口可以处于一级、二级或三级，均接受入口检查、安装发现和菜单覆盖；嵌套于宿主目录 `skills/<child-name>/SKILL.md` 的内部配置不作为独立公开入口。名称层级与部署身份不能互相推导。每个正式内部配置目录只允许一个 `SKILL.md`，不含自己的 `references/`、Codex 界面配置或评测文件；正式文件有自己的 `name`、`description` frontmatter，名称与其目录一致。
+实际部署由 `deployment` 区分：直接部署在 `.agents/skills/<name>/SKILL.md` 的公开入口可以处于一级、二级或三级，均接受入口检查、安装发现和菜单覆盖；嵌套于宿主目录 `skills/<child-name>/SKILL.md` 的内部配置不作为独立公开入口。名称层级与部署身份不能互相推导。每个正式内部配置的部署文件只允许一个 `SKILL.md`，不含自己的 `references/`、Codex 界面配置或评测文件；正式文件有自己的 `name`、`description` frontmatter，名称与其目录一致。
+
+各 Skill 可在其入口旁保存本机私有的 `benchmark/` 研究库。公共能力定义检查跳过该库及 Motion 的本地 OpenMotion 官方资料包，分别用研究库核验和资料包成员、哈希与离线读取验收。内部配置其余部署文件仍受原有限制。
 
 **公开目录展示顺序：** `docs/skill-display-order.json` 沿用网站导航的 `items`、`children` 树形字段，只列公开目录正式入口；`/laohu` 固定为根，二级入口按其 `children` 次序展示，三级入口放在所属父入口之下。它只控制浏览顺序，不代表执行步骤、推荐优先级或安装操作顺序；资产等宿主目录里的内部子 Skill 不加入公开目录。发现器仍扫描真实的直接部署 Skill，并继续应用私有标记、预留目录和草案的原有过滤规则。已在文件中登记的入口按树顺序排列；尚未登记的新二级入口仍会被发现并稳定追加到末尾，其后代跟在父入口下，不会因清单未更新而消失或变成无效入口。发布维护时把新正式入口追加到顺序文件末尾，并同步五份 README；不能因一次新发布把新入口插到已有入口前面。预留、私有、草案和宿主内部配置不得登记进展示树。
 

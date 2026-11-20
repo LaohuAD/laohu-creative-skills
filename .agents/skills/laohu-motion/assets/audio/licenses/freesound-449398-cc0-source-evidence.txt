@@ -1,0 +1,16 @@
+Freesound individual source-page evidence captured 2026-11-13.
+
+Source page: https://freesound.org/people/outerandeventhorizon/sounds/449398/
+Title: calm-exit-90bpm.mp3
+Creator: outerandeventhorizon
+Source page date: November 26, 2018
+Uploader description: “Moderate tempo (90 bpm) techno-synth melody in the key of C. Good for an outro.” The page tags include outro, synth, calm, techno, and beat. These are source claims, not this project's listening findings.
+Source-page audio facts: MP3, 44.1 kHz, stereo, displayed duration 2:53.911.
+
+Source page license label: Creative Commons 0 (CC0). The page links to the canonical CC0 1.0 deed.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Individual-page community facts at capture: 23 ratings, about 1.0K downloads, 8 comments. The search receipt captured 32 votes, average rating 4.9, and 1,146 downloads; the page's crawl showed rounded older counts, so both observations are retained without treating them as listening evidence.
+
+Retrieved file: Freesound high-quality MP3 preview, 4,345,492 bytes; measured duration 173.949388 seconds; SHA-256 6d5cd67efd98aad59bc71c6d2b461f973738b2dc99bba85b0a9b7e156c0a6d35.
+Listening status for this project: UNKNOWN. No human listening review was recorded.

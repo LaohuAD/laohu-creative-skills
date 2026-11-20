@@ -9,9 +9,11 @@ import { spawnSync } from "node:child_process";
 
 const skillDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const corePath = path.join(skillDir, "scripts", "motion-core.js");
-const upstreamLib = path.join(skillDir, "templates", "upstream", "huashu-art-motion", "scripts", "engine", "lib");
+const localEffectLib = path.join(skillDir, "templates", "runtime", "laohu-native-clips", "lib");
+const localModuleBySourceName = Object.fromEntries(["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"].map((name) => [name, name]));
 const opsPath = path.join(skillDir, "scripts", "motion-ops.js");
-const effectsAdapterPath = path.join(skillDir, "templates", "adapters", "huashu-effects.js");
+const effectsAdapterPath = path.join(skillDir, "templates", "adapters", "laohu-effects.js");
+const legacyEffectsAdapterPath = path.join(skillDir, "templates", "adapters", "huashu-effects.js");
 const require = createRequire(import.meta.url);
 const MotionCore = require(corePath);
 const MotionOps = require(opsPath);
@@ -60,6 +62,146 @@ after(async () => {
 
 test("open an installed browser and load the real Canvas2D core", async () => {
   assert.equal(await page.evaluate(() => typeof window.MotionCore.drawFrame), "function");
+});
+
+test("the Laohu effects adapter is the single browser implementation", async () => {
+  await fs.access(effectsAdapterPath);
+  await assert.rejects(fs.access(legacyEffectsAdapterPath), { code: "ENOENT" });
+});
+
+test("shared effect modules resolve from the local runtime closure and retain pinned bytes", async () => {
+  const closure = JSON.parse(await fs.readFile(path.join(skillDir, "templates", "runtime", "laohu-effects", "closure.json"), "utf8"));
+  const manifest = new Map(closure.modules.map((row) => [row.sourcePath, row]));
+  for (const sourceName of Object.keys(localModuleBySourceName)) {
+    const sourcePath = `scripts/engine/lib/${sourceName}`;
+    const row = manifest.get(sourcePath);
+    assert.ok(row, `${sourcePath} is mapped by the local effect closure`);
+    assert.equal(row.sharedWith, "laohu-native-clips", `${sourcePath} is a shared single local module`);
+    const bytes = await fs.readFile(path.join(skillDir, "templates", "runtime", row.localPath));
+    assert.equal(createHash("sha256").update(bytes).digest("hex"), row.sha256, `${sourcePath} retains the pinned implementation bytes`);
+  }
+});
+
+test("canonical effects runtime keeps old Huashu browser globals and IDs on the same implementation", async () => {
+  for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) await page.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
+  await page.addScriptTag({ path: opsPath });
+  await page.addScriptTag({ path: effectsAdapterPath });
+  const result = await page.evaluate(() => ({
+    sameProvider: window.HuashuLocalEffects === window.LaohuMotionEffects,
+    canonicalEffect: window.HuashuLocalEffects.DEFINITION["laohu-motion-dg-draw-partial"]?.sourceFunction,
+    oldTargetTypeAccepted: window.HuashuLocalEffects.TARGET_TYPE === "custom:laohu-motion-target",
+  }));
+  assert.deepEqual(result, { sameProvider: true, canonicalEffect: "DG.drawPartial", oldTargetTypeAccepted: true });
+});
+
+test("legacy Huashu IDs execute through the canonical browser implementation", async () => {
+  const legacyPage = await context.newPage();
+  try {
+    await legacyPage.setContent('<canvas id="legacy-stage" width="100" height="100"></canvas>');
+    await legacyPage.addScriptTag({ path: corePath });
+    for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) {
+      await legacyPage.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
+    }
+    await legacyPage.addScriptTag({ path: opsPath });
+    await legacyPage.addScriptTag({ path: effectsAdapterPath });
+
+    const result = await legacyPage.evaluate(() => {
+      const scene = {
+        version: 1,
+        width: 100,
+        height: 100,
+        fps: 10,
+        duration: 1,
+        background: "transparent",
+        phases: [{ id: "phase", startSec: 0, durationSec: 1, timeBasis: "scene-local" }],
+        objects: [
+          { id: "target", type: "rect", space: "screen", x: 40, y: 30, width: 24, height: 24, fill: "#222222" },
+          {
+            id: "legacy-effect",
+            type: "custom:huashu-local-effects",
+            space: "screen",
+            data: { motionEffects: [{
+              id: "legacy-brace",
+              effectId: "huashu-dg-brace",
+              targetId: "target",
+              phaseId: "phase",
+              geometry: { x: 40, y0: 30, y1: 54 },
+              parameters: { color: "#ff3344", lineWidth: 3, depth: 12 },
+            }] },
+          },
+        ],
+        events: [],
+        bindings: [],
+        variables: {},
+      };
+      const registry = window.HuashuLocalEffects.register({});
+      window.MotionCore.drawFrame(document.getElementById("legacy-stage"), scene, 0.6, registry);
+      const pixels = document.getElementById("legacy-stage").getContext("2d").getImageData(0, 0, 100, 100).data;
+      let paintedPixels = 0;
+      for (let offset = 3; offset < pixels.length; offset += 4) if (pixels[offset] !== 0) paintedPixels += 1;
+      const validated = window.MotionOps.validateLocalEffects(scene);
+      return {
+        legacyGlobalIsCanonical: window.HuashuLocalEffects === window.LaohuMotionEffects,
+        oldEffectTypeRegistered: typeof registry["custom:huashu-local-effects"] === "function",
+        canonicalEffectTypeRegistered: typeof registry["custom:laohu-motion-effects"] === "function",
+        effectIdResolved: validated[0]?.effectId,
+        renderedPixels: paintedPixels,
+      };
+    });
+    assert.equal(result.legacyGlobalIsCanonical, true);
+    assert.equal(result.oldEffectTypeRegistered, true);
+    assert.equal(result.canonicalEffectTypeRegistered, true);
+    assert.equal(result.effectIdResolved, "laohu-motion-dg-brace");
+    assert.ok(result.renderedPixels > 0, "the old raw browser path executes the source-backed renderer");
+  } finally {
+    await legacyPage.close();
+  }
+});
+
+test("the canonical raw browser adapter independently cold-loads canonical Laohu IDs", async () => {
+  const canonicalPage = await context.newPage();
+  try {
+    await canonicalPage.setContent('<canvas id="canonical-stage" width="100" height="100"></canvas>');
+    await canonicalPage.addScriptTag({ path: corePath });
+    for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) {
+      await canonicalPage.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
+    }
+    await canonicalPage.addScriptTag({ path: opsPath });
+    await canonicalPage.addScriptTag({ path: effectsAdapterPath });
+    const result = await canonicalPage.evaluate(() => {
+      const phase = { id: "canonical-phase", startSec: 0, durationSec: 1, timeBasis: "scene-local" };
+      const scene = {
+        version: 1, width: 100, height: 100, fps: 10, duration: 1, background: "transparent",
+        phases: [phase],
+        objects: [
+          { id: "target", type: "rect", space: "screen", x: 40, y: 30, width: 24, height: 24, fill: "#222222" },
+          { id: "effects", type: "custom:laohu-motion-effects", space: "screen", data: { motionEffects: [{
+            id: "canonical-brace", effectId: "laohu-motion-dg-brace", targetId: "target", phaseId: phase.id,
+            geometry: { x: 40, y0: 30, y1: 54 }, parameters: { color: "#33aaee", lineWidth: 3, depth: 12 },
+          }] } },
+        ],
+        events: [], bindings: [], variables: {},
+      };
+      const registry = window.LaohuMotionEffects.register({});
+      window.MotionCore.drawFrame(document.getElementById("canonical-stage"), scene, 0.6, registry);
+      const pixels = document.getElementById("canonical-stage").getContext("2d").getImageData(0, 0, 100, 100).data;
+      let paintedPixels = 0;
+      for (let offset = 3; offset < pixels.length; offset += 4) if (pixels[offset] !== 0) paintedPixels += 1;
+      const validated = window.MotionOps.validateLocalEffects(scene);
+      return {
+        canonicalGlobalAvailable: window.LaohuMotionEffects === window.HuashuLocalEffects,
+        canonicalRendererRegistered: typeof registry["custom:laohu-motion-effects"] === "function",
+        canonicalIdResolved: validated[0]?.effectId,
+        renderedPixels: paintedPixels,
+      };
+    });
+    assert.equal(result.canonicalGlobalAvailable, true);
+    assert.equal(result.canonicalRendererRegistered, true);
+    assert.equal(result.canonicalIdResolved, "laohu-motion-dg-brace");
+    assert.ok(result.renderedPixels > 0, "the canonical raw browser path executes the original source-backed renderer");
+  } finally {
+    await canonicalPage.close();
+  }
 });
 
 test("legacy four-argument custom renderers retain their original scene and pixel behavior", async () => {
@@ -530,7 +672,7 @@ test("runner renders a short synthetic technical fixture to MP4 and records even
 
 test("four local effects call the original DG/MO functions, bind shared phases, isolate state, and seek deterministically", async () => {
   for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) {
-    await page.addScriptTag({ path: path.join(upstreamLib, library) });
+    await page.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
   }
   await page.addScriptTag({ path: opsPath });
   await page.addScriptTag({ path: effectsAdapterPath });
@@ -678,7 +820,7 @@ test("four local effects call the original DG/MO functions, bind shared phases, 
 
 test("local effects compose inherited and owner opacity once, including DG.brace source alpha", async () => {
   for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) {
-    await page.addScriptTag({ path: path.join(upstreamLib, library) });
+    await page.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
   }
   await page.addScriptTag({ path: opsPath });
   await page.addScriptTag({ path: effectsAdapterPath });
@@ -785,7 +927,7 @@ test("local effects compose inherited and owner opacity once, including DG.brace
 test("local overlays follow Core-evaluated target visibility and opacity across shuffled seeks", async () => {
   const sourceReady = await page.evaluate(() => Boolean(window.U && window.DG && window.MO && window.MotionOps && window.HuashuLocalEffects));
   if (!sourceReady) {
-    for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) await page.addScriptTag({ path: path.join(upstreamLib, library) });
+    for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) await page.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
     await page.addScriptTag({ path: opsPath });
     await page.addScriptTag({ path: effectsAdapterPath });
   }
@@ -882,6 +1024,8 @@ test("local overlays follow Core-evaluated target visibility and opacity across 
   assert.ok(first.instances["brace-visible-rect"].lastCall.drawn);
   assert.ok(first.instances["indicate-bound-rect"].lastCall.drawn);
   assert.equal(first.instances["circle-fade-rect"].lastCall.targetOpacity, 0.5);
+  assert.equal(hidden.instances["circle-fade-rect"].lastCall.skipReason, "target-opacity-zero", "object opacity zero is distinct from object visibility");
+  assert.equal(hidden.instances["brace-visible-rect"].lastCall.skipReason, "target-visible-false", "resolved target.visible false is reported as visibility");
   assert.ok(first.strokeAlpha.some((alpha) => Math.abs(alpha - 0.2) < 1e-12), "owner 0.5 × caller alpha 0.8 × target opacity 0.5 is applied exactly once");
   assert.ok(first.strokeAlpha.some((alpha) => Math.abs(alpha - 0.15) < 1e-12), "DG.brace keeps its original p×1.5 source factor after target alpha");
   assert.ok(Math.abs(first.fillAlpha[0] - 0.1) < 1e-12, "MO target reveal applies target opacity in Core, then its own progress once");
@@ -987,11 +1131,470 @@ test("local-effect owners reject resolved transform changes while allowing prese
   assert.equal(validate(presentationOnly).length, 1, "opacity, visibility and color presentation state do not move the owner transform");
 });
 
+test("followTarget validates the supported rectangle boundary and keeps static paths intact", async () => {
+  const sourceReady = await page.evaluate(() => Boolean(window.U && window.DG && window.MO && window.MotionOps && window.LaohuMotionEffects));
+  if (!sourceReady) {
+    for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) await page.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
+    await page.addScriptTag({ path: opsPath });
+    await page.addScriptTag({ path: effectsAdapterPath });
+  }
+  const phase = { id: "follow-phase", startSec: 0.1, durationSec: 0.9, timeBasis: "scene-local" };
+  const target = { id: "world-target", type: "rect", layer: "world", x: 10, y: 20, width: 24, height: 18, fill: "#334455" };
+  const makeFollowScene = (targetOverride = {}, instanceOverride = {}) => basicScene({
+    duration: 1,
+    layers: [
+      { id: "world", space: "world" },
+      { id: "overlay", space: "screen", opacity: 1 },
+    ],
+    objects: [
+      { ...target, ...targetOverride },
+      {
+        id: "effects", type: "custom:laohu-motion-effects", layer: "overlay", space: "screen",
+        data: { phases: [phase], motionEffects: [{
+          id: "follow-circle", effectId: "laohu-motion-dg-circumscribe", targetId: target.id,
+          geometryMode: "followTarget", phaseId: phase.id,
+          geometry: { rect: { x: 10, y: 20, width: 24, height: 18 } }, parameters: {},
+          ...instanceOverride,
+        }] },
+      },
+    ],
+  });
+
+  const dynamic = makeFollowScene();
+  const records = MotionOps.validateLocalEffects(dynamic);
+  assert.equal(records[0].geometryMode, "followTarget");
+  assert.equal(records[0].targetId, "world-target");
+
+  const staticScene = basicScene({
+    duration: 1,
+    objects: [
+      { id: "screen-target", type: "rect", space: "screen", x: 10, y: 20, width: 24, height: 18, fill: "none", stroke: "none" },
+      { id: "static-effects", type: "custom:laohu-motion-effects", space: "screen", data: { phases: [phase], motionEffects: [{
+        id: "static-circle", effectId: "laohu-motion-dg-circumscribe", targetId: "screen-target", phaseId: phase.id,
+        geometry: { rect: { x: 10, y: 20, width: 24, height: 18 } }, parameters: {},
+      }] } },
+    ],
+  });
+  assert.equal(MotionOps.validateLocalEffects(staticScene)[0].geometryMode, "static", "omitting geometryMode keeps the original static contract");
+
+  assert.throws(() => MotionOps.validateLocalEffects(makeFollowScene({}, {
+    effectId: "laohu-motion-dg-draw-partial", geometry: { points: [[10, 20], [34, 38]] },
+  })), /not supported by laohu-motion-dg-draw-partial/);
+  assert.throws(() => MotionOps.validateLocalEffects(makeFollowScene({ morph: {} })), /cannot follow a morphing target/);
+  assert.throws(() => MotionOps.validateLocalEffects(makeFollowScene({}, { targetId: "missing" })), /does not identify a scene object/);
+  for (const type of ["text", "image", "path"]) {
+    assert.throws(() => MotionOps.validateLocalEffects(makeFollowScene({ type })), /requires an axis-aligned rectangle target/,
+      `${type} target bounds are not inferred for followTarget`);
+  }
+  const clipped = makeFollowScene();
+  clipped.layers[0].clip = { type: "rect", x: 0, y: 0, width: 80, height: 80 };
+  assert.throws(() => MotionOps.validateLocalEffects(clipped), /cannot follow a target in clipped ancestor layer world/);
+
+  const targetLayerVisibleField = makeFollowScene();
+  targetLayerVisibleField.layers[0].visible = false;
+  assert.deepEqual(MotionCore.validateScene(targetLayerVisibleField), [], "reproduction: Core scene validation accepts a direct unsupported layer.visible field");
+  assert.throws(() => MotionOps.validateLocalEffects(targetLayerVisibleField), /MotionCore does not consume it/,
+    "unsupported target ancestor layer.visible is rejected instead of overriding Core output");
+  const visibleMismatch = await page.evaluate((scene) => {
+    window.U.setStage(scene.width, scene.height);
+    const registry = {};
+    let preflightError = null;
+    let sourceCalls = 0;
+    const originalCircumscribe = window.DG.circumscribe;
+    window.DG.circumscribe = function (...args) { sourceCalls += 1; return originalCircumscribe.apply(this, args); };
+    const preflightCanvas = document.createElement("canvas"); preflightCanvas.width = scene.width; preflightCanvas.height = scene.height;
+    const preflightContext = preflightCanvas.getContext("2d", { willReadFrequently: true });
+    try {
+      const records = window.MotionOps.validateLocalEffects(scene);
+      window.LaohuMotionEffects.register(registry, scene, records);
+      window.MotionCore.drawFrame(preflightCanvas, scene, 0.5, registry);
+    } catch (error) { preflightError = error.message; }
+    const targetOnly = { ...scene, objects: [scene.objects.find((object) => object.id === "world-target")] };
+    const targetCanvas = document.createElement("canvas"); targetCanvas.width = scene.width; targetCanvas.height = scene.height;
+    const targetContext = targetCanvas.getContext("2d", { willReadFrequently: true });
+    window.MotionCore.drawFrame(targetCanvas, targetOnly, 0.5, {});
+    const pixelAlpha = (ctx, x, y) => ctx.getImageData(x, y, 1, 1).data[3];
+    window.DG.circumscribe = originalCircumscribe;
+    return {
+      coreAcceptsScene: window.MotionCore.validateScene(scene).length === 0,
+      preflightError,
+      sourceCalls,
+      preflightPixelAlpha: pixelAlpha(preflightContext, 22, 29),
+      coreTargetPixelAlpha: pixelAlpha(targetContext, 22, 29),
+    };
+  }, targetLayerVisibleField);
+  assert.equal(visibleMismatch.coreAcceptsScene, true);
+  assert.match(visibleMismatch.preflightError, /MotionCore does not consume it/);
+  assert.equal(visibleMismatch.sourceCalls, 0, "followTarget preflight rejects before any source effect call");
+  assert.equal(visibleMismatch.preflightPixelAlpha, 0, "rejected scene never reaches the effect frame draw");
+  assert.ok(visibleMismatch.coreTargetPixelAlpha > 0, "the same direct Core scene visibly draws the target, proving the old layer.visible skip was false");
+  const ownerLayerVisibleField = makeFollowScene();
+  ownerLayerVisibleField.layers[1].visible = false;
+  assert.throws(() => MotionOps.validateLocalEffects(ownerLayerVisibleField), /MotionCore does not consume it/,
+    "unsupported owner ancestor layer.visible is rejected too");
+  const targetLayerVisibleEvent = makeFollowScene();
+  targetLayerVisibleEvent.events.push({ id: "target-layer-visible", target: { kind: "layer", id: "world" }, property: "visible", start: 0.25, duration: 0, from: true, to: false });
+  assert.ok(MotionCore.validateScene(targetLayerVisibleEvent).some((error) => /unsupported animated property layer\.visible/.test(error.message)),
+    "MotionCore's event schema also rejects layer.visible control");
+  assert.throws(() => MotionOps.validateLocalEffects(targetLayerVisibleEvent), /layer.visible events/);
+  const ownerLayerVisibleBinding = makeFollowScene();
+  ownerLayerVisibleBinding.variables.ownerVisible = false;
+  ownerLayerVisibleBinding.bindings.push({ source: "ownerVisible", target: { kind: "layer", id: "overlay", property: "visible" } });
+  assert.deepEqual(MotionCore.validateScene(ownerLayerVisibleBinding), [], "Core accepts the binding shape even though renderLayerGroup ignores layer.visible");
+  assert.throws(() => MotionOps.validateLocalEffects(ownerLayerVisibleBinding), /layer.visible bindings/);
+
+  const layerOpacity = makeFollowScene();
+  layerOpacity.layers[0].opacity = 1;
+  layerOpacity.events.push({ id: "fade-world-layer", target: { kind: "layer", id: "world" }, property: "opacity", start: 0.25, duration: 0.25, from: 1, to: 0 });
+  MotionCore.assertValidScene(layerOpacity);
+  assert.equal(MotionOps.validateLocalEffects(layerOpacity).length, 1, "Core-supported layer.opacity remains available for followTarget");
+  const opacityState = MotionCore.evaluateScene(layerOpacity, 0.5, true);
+  const targetStateAtZeroLayerOpacity = MotionOps.localEffectTargetState(layerOpacity, target.id, 0.5, opacityState, "followTarget");
+  assert.equal(targetStateAtZeroLayerOpacity.visible, false);
+  assert.equal(targetStateAtZeroLayerOpacity.targetLayerOpacity, 0);
+
+  await fs.mkdir(validationRoot, { recursive: true });
+  await fs.writeFile(path.join(validationRoot, "ancestor-layer-visible-rejection.json"), `${JSON.stringify({
+    capture: "Chrome Canvas2D + MotionCore.validateScene + local-effect preflight",
+    reproduction: "Core accepts a target ancestor layer.visible=false field but ignores it during rendering; followTarget preflight now rejects it before draw",
+    result: visibleMismatch,
+  }, null, 2)}\n`);
+
+  const rotated = makeFollowScene();
+  rotated.events.push({ id: "rotate-world-target", target: { kind: "object", id: target.id }, property: "rotation", start: 0.1, duration: 0.8, from: 0, to: 30 });
+  const state = MotionCore.evaluateScene(rotated, 0.5, true);
+  assert.throws(() => MotionOps.localEffectTargetState(rotated, target.id, 0.5, state, "followTarget"), /remain axis-aligned after Core projection/,
+    "a target that becomes non-axis-aligned is rejected at the actual sampled time");
+  const wrongTimeState = MotionCore.evaluateScene(dynamic, 0.4, true);
+  assert.throws(() => MotionOps.localEffectTargetState(dynamic, target.id, 0.5, wrongTimeState, "followTarget"), /matching evaluatedState time/);
+});
+
+test("DG followTarget effects use the same projected frame, absolute phase and real pixels", async () => {
+  const sourceReady = await page.evaluate(() => Boolean(window.U && window.DG && window.MO && window.MotionOps && window.LaohuMotionEffects));
+  if (!sourceReady) {
+    for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) await page.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
+    await page.addScriptTag({ path: opsPath });
+    await page.addScriptTag({ path: effectsAdapterPath });
+  }
+  const phase = { id: "follow-dg-phase", startSec: 0.1, durationSec: 0.9, timeBasis: "scene-local", curve: "linear" };
+  const scene = basicScene({
+    duration: 1,
+    layers: [
+      { id: "world", space: "world", opacity: 0.5, transform: { x: 2 } },
+      { id: "overlay", space: "screen" },
+    ],
+    objects: [
+      { id: "world-target", type: "rect", layer: "world", x: 10, y: 26, width: 30, height: 24, fill: "#334455", opacity: 0.5 },
+      {
+        id: "effects", type: "custom:laohu-motion-effects", layer: "overlay", space: "screen", opacity: 0.5,
+        data: { phases: [phase], motionEffects: [
+          { id: "follow-circle", effectId: "laohu-motion-dg-circumscribe", targetId: "world-target", geometryMode: "followTarget", phaseId: phase.id,
+            geometry: { rect: { x: 10, y: 26, width: 30, height: 24 } }, parameters: { color: "#ff3344", lineWidth: 3 } },
+          { id: "follow-brace", effectId: "laohu-motion-dg-brace", targetId: "world-target", geometryMode: "followTarget", phaseId: phase.id,
+            geometry: { x: 10, y0: 26, y1: 50 }, parameters: { color: "#ff3344", lineWidth: 3, depth: 12 } },
+          { id: "follow-indicate", effectId: "laohu-motion-dg-indicate-frame-pulse", targetId: "world-target", geometryMode: "followTarget", phaseId: phase.id,
+            geometry: { rect: { x: 10, y: 26, width: 30, height: 24 } }, parameters: { color: "#ff3344", lineWidth: 3, scale: 1 } },
+        ] },
+      },
+    ],
+    camera: { x: 60, y: 50, zoom: 1 },
+    events: [
+      { id: "move-target", target: { kind: "object", id: "world-target" }, property: "x", start: 0.1, duration: 0.8, from: 10, to: 50 },
+      { id: "move-world-layer", target: { kind: "layer", id: "world" }, property: "transform.x", start: 0.1, duration: 0.8, from: 2, to: 8 },
+      { id: "pan-camera", target: { kind: "camera", id: "camera" }, property: "x", start: 0.1, duration: 0.8, from: 60, to: 50 },
+      { id: "mute-owner-layer", target: { kind: "layer", id: "overlay" }, property: "opacity", start: 0.4, duration: 0, from: 1, to: 0 },
+      { id: "restore-owner-layer", target: { kind: "layer", id: "overlay" }, property: "opacity", start: 0.5, duration: 0, from: 0, to: 1 },
+      { id: "hide-target", target: { kind: "object", id: "world-target" }, property: "visible", start: 0.7, duration: 0, from: true, to: false },
+      { id: "restore-target", target: { kind: "object", id: "world-target" }, property: "visible", start: 0.8, duration: 0, from: false, to: true },
+      { id: "mute-target-layer", target: { kind: "layer", id: "world" }, property: "opacity", start: 0.82, duration: 0, from: 0.5, to: 0 },
+      { id: "restore-target-layer", target: { kind: "layer", id: "world" }, property: "opacity", start: 0.9, duration: 0, from: 0, to: 0.5 },
+    ],
+  });
+  MotionCore.assertValidScene(scene);
+  const records = MotionOps.validateLocalEffects(scene);
+  assert.equal(records.length, 3);
+
+  const result = await page.evaluate(({ scene, records }) => {
+    window.U.setStage(scene.width, scene.height);
+    const registry = {};
+    window.LaohuMotionEffects.register(registry, scene, records);
+    const rendererKey = "custom:laohu-motion-effects";
+    const sourceRenderer = registry[rendererKey];
+    const dispatchedStates = [];
+    registry[rendererKey] = (...args) => { dispatchedStates.push(args[4]); return sourceRenderer(...args); };
+    const originals = { circumscribe: window.DG.circumscribe, brace: window.DG.brace, indicate: window.DG.indicate, evaluateScene: window.MotionCore.evaluateScene };
+    const logs = [];
+    let evaluateCalls = 0;
+    window.DG.circumscribe = function (ctx, x, y, width, height, progress, options) {
+      logs.push({ source: "DG.circumscribe", x, y, width, height, progress, alpha: ctx.globalAlpha });
+      return originals.circumscribe.apply(this, arguments);
+    };
+    window.DG.brace = function (ctx, x, y0, y1, options) {
+      logs.push({ source: "DG.brace", x, y0, y1, progress: options.p, alpha: ctx.globalAlpha });
+      return originals.brace.apply(this, arguments);
+    };
+    window.DG.indicate = function (progress) {
+      logs.push({ source: "DG.indicate", progress });
+      return originals.indicate.apply(this, arguments);
+    };
+    window.MotionCore.evaluateScene = function (...args) { evaluateCalls += 1; return originals.evaluateScene.apply(this, args); };
+    function redBounds(pixels) {
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (let y = 0; y < scene.height; y += 1) for (let x = 0; x < scene.width; x += 1) {
+        const offset = (y * scene.width + x) * 4;
+        if (pixels[offset] > 180 && pixels[offset + 1] < 100 && pixels[offset + 2] < 120 && pixels[offset + 3] > 0) {
+          minX = Math.min(minX, x); minY = Math.min(minY, y); maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
+        }
+      }
+      return Number.isFinite(minX) ? { minX, minY, maxX, maxY } : null;
+    }
+    const frames = {};
+    try {
+      for (const timeSec of [0.25, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95]) {
+        logs.length = 0;
+        dispatchedStates.length = 0;
+        const canvas = document.createElement("canvas"); canvas.width = scene.width; canvas.height = scene.height;
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        const returnedState = window.MotionCore.drawFrame(canvas, scene, timeSec, registry);
+        const pixels = Array.from(ctx.getImageData(0, 0, scene.width, scene.height).data);
+        const projectedTarget = window.MotionOps.localEffectTargetState(scene, "world-target", timeSec, dispatchedStates[0], "followTarget").projected.screenRect;
+        const targetPixelIndex = (Math.floor(projectedTarget.y + projectedTarget.height / 2) * scene.width
+          + Math.floor(projectedTarget.x + projectedTarget.width / 2)) * 4;
+        let ownerOpacityMatchesTargetOnly = null;
+        if (timeSec === 0.45) {
+          const targetOnly = { ...scene, objects: [scene.objects.find((item) => item.id === "world-target")] };
+          const targetOnlyCanvas = document.createElement("canvas"); targetOnlyCanvas.width = scene.width; targetOnlyCanvas.height = scene.height;
+          const targetOnlyCtx = targetOnlyCanvas.getContext("2d", { willReadFrequently: true });
+          window.MotionCore.drawFrame(targetOnlyCanvas, targetOnly, timeSec, {});
+          const targetOnlyPixels = targetOnlyCtx.getImageData(0, 0, scene.width, scene.height).data;
+          ownerOpacityMatchesTargetOnly = pixels.every((value, index) => value === targetOnlyPixels[index]);
+        }
+        frames[timeSec] = {
+          logs: structuredClone(logs),
+          pixels,
+          redBounds: redBounds(pixels),
+          targetPixelAlpha: pixels[targetPixelIndex + 3],
+          ownerOpacityMatchesTargetOnly,
+          sameEvaluatedState: dispatchedStates.length === 1 && dispatchedStates[0] === returnedState,
+          evidence: structuredClone(window.MOTION_LOCAL_EFFECT_EVIDENCE.instances || {}),
+        };
+      }
+      return { frames, evaluateCalls };
+    } finally {
+      window.DG.circumscribe = originals.circumscribe;
+      window.DG.brace = originals.brace;
+      window.DG.indicate = originals.indicate;
+      window.MotionCore.evaluateScene = originals.evaluateScene;
+    }
+  }, { scene, records });
+
+  const early = result.frames[0.25];
+  const ownerOpacityZero = result.frames[0.45];
+  const ownerOpacityRestored = result.frames[0.55];
+  const middle = result.frames[0.65];
+  const targetVisibleFalse = result.frames[0.75];
+  const targetLayerOpacityZero = result.frames[0.85];
+  const restored = result.frames[0.95];
+  for (const frame of [early, ownerOpacityZero, ownerOpacityRestored, middle, targetVisibleFalse, targetLayerOpacityZero, restored]) {
+    assert.equal(frame.sameEvaluatedState, true, "the adapter receives the exact state returned by that drawFrame");
+  }
+  assert.equal(result.evaluateCalls, 0, "prevalidated draw callbacks consume Core's fifth state without a second evaluateScene call");
+  for (const effectId of ["follow-circle", "follow-brace", "follow-indicate"]) {
+    assert.equal(early.evidence[effectId].lastCall.drawn, true);
+    assert.equal(middle.evidence[effectId].lastCall.drawn, true);
+    assert.equal(targetVisibleFalse.evidence[effectId].lastCall.drawn, false, `${effectId} skips a target with Core-resolved visible=false`);
+    assert.equal(targetLayerOpacityZero.evidence[effectId].lastCall.drawn, false, `${effectId} skips a target with zero Core ancestor opacity`);
+    assert.equal(restored.evidence[effectId].lastCall.drawn, true);
+  }
+  const earlyCircle = early.logs.find((item) => item.source === "DG.circumscribe");
+  const middleCircle = middle.logs.find((item) => item.source === "DG.circumscribe");
+  const earlyBrace = early.logs.find((item) => item.source === "DG.brace");
+  const middleBrace = middle.logs.find((item) => item.source === "DG.brace");
+  const earlyIndicate = early.logs.find((item) => item.source === "DG.indicate");
+  const middleIndicate = middle.logs.find((item) => item.source === "DG.indicate");
+  assert.ok(middleCircle.x > earlyCircle.x + 10 && middleCircle.width === earlyCircle.width, "DG.circumscribe receives the projected moving rectangle at each sample");
+  assert.ok(middleBrace.x > earlyBrace.x + 10 && middleBrace.y0 === earlyBrace.y0 && middleBrace.y1 === earlyBrace.y1, "DG.brace follows the selected vertical edge at each sample");
+  assert.ok(middleIndicate.progress > earlyIndicate.progress, "DG.indicate retains the original absolute-time phase progress");
+  assert.ok(Math.abs(earlyCircle.progress - (0.25 - phase.startSec) / phase.durationSec) < 1e-12, "the source curve begins at the shared phase start, without restarting at target motion");
+  assert.ok(Math.abs(earlyCircle.alpha - 0.125) < 1e-12, "overlay owner opacity × world layer opacity × target opacity are each applied once");
+  assert.ok(early.redBounds && middle.redBounds && middle.redBounds.minX > early.redBounds.minX + 10, "captured red marker pixels move with the target in real Canvas2D output");
+  assert.equal(ownerOpacityZero.evidence["follow-circle"].lastCall.drawn, true, "Core still invokes the source in an opacity-zero owner layer's offscreen group");
+  assert.equal(ownerOpacityZero.logs.length > 0, true);
+  assert.equal(ownerOpacityZero.redBounds, null, "Core applies owner ancestor layer.opacity when compositing the final overlay pixels");
+  assert.equal(ownerOpacityZero.targetPixelAlpha > 0, true, "the target remains visible while only the owner overlay layer is transparent");
+  assert.equal(ownerOpacityZero.ownerOpacityMatchesTargetOnly, true, "zero owner layer opacity yields exactly the target-only Core frame");
+  assert.ok(ownerOpacityRestored.redBounds, "restoring owner layer.opacity restores the screen overlay");
+  assert.equal(targetVisibleFalse.logs.length, 0, "target.visible=false suppresses source DG calls");
+  assert.equal(targetVisibleFalse.evidence["follow-circle"].lastCall.skipReason, "target-visible-false");
+  assert.equal(targetLayerOpacityZero.logs.length, 0, "zero target ancestor layer opacity suppresses source DG calls");
+  assert.equal(targetLayerOpacityZero.evidence["follow-circle"].lastCall.skipReason, "target-layer-opacity-zero");
+  assert.equal(targetLayerOpacityZero.targetPixelAlpha, 0, "Core also composites the target away at layer.opacity=0");
+  assert.equal(targetLayerOpacityZero.redBounds, null);
+  assert.equal(restored.evidence["follow-circle"].lastCall.drawn, true, "restoring target layer.opacity brings the target-bound source effect back");
+
+  await fs.mkdir(validationRoot, { recursive: true });
+  await fs.writeFile(path.join(validationRoot, "follow-target-dg-evidence.json"), `${JSON.stringify({
+    capture: "MotionCore.drawFrame + prevalidated LaohuMotionEffects in software Chrome Canvas2D",
+    scope: "three source DG consumers on one moving world rect; same Core state/camera; object visibility and target/owner ancestor opacity are checked using Core semantics",
+    sampleTimesSec: [0.25, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95],
+    secondEvaluateSceneCalls: result.evaluateCalls,
+    results: Object.fromEntries(Object.entries(result.frames).map(([timeSec, frame]) => [timeSec, {
+      sourceCalls: frame.logs,
+      redPixelBounds: frame.redBounds,
+      targetPixelAlpha: frame.targetPixelAlpha,
+      ownerOpacityMatchesTargetOnly: frame.ownerOpacityMatchesTargetOnly,
+      sameEvaluatedState: frame.sameEvaluatedState,
+      effects: Object.fromEntries(["follow-circle", "follow-brace", "follow-indicate"].map((id) => [id, frame.evidence[id]?.lastCall || null])),
+      rgbaSha256: createHash("sha256").update(Buffer.from(frame.pixels)).digest("hex"),
+    }])),
+    assertions: {
+      movingRectParameters: middleCircle.x > earlyCircle.x,
+      objectVisibleFalseSkips: targetVisibleFalse.logs.length === 0,
+      targetLayerOpacityZeroSkips: targetLayerOpacityZero.logs.length === 0 && targetLayerOpacityZero.targetPixelAlpha === 0,
+      ownerLayerOpacityUsesCoreComposite: ownerOpacityZero.ownerOpacityMatchesTargetOnly,
+      exactCoreStateForwarded: early.sameEvaluatedState && middle.sameEvaluatedState && restored.sameEvaluatedState,
+    },
+  }, null, 2)}\n`);
+});
+
+test("MO.lagged follows a moving local rectangle once while Core owns target opacity", async () => {
+  const sourceReady = await page.evaluate(() => Boolean(window.U && window.DG && window.MO && window.MotionOps && window.LaohuMotionEffects));
+  if (!sourceReady) {
+    for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) await page.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
+    await page.addScriptTag({ path: opsPath });
+    await page.addScriptTag({ path: effectsAdapterPath });
+  }
+  const phase = { id: "follow-mo-phase", startSec: 0.1, durationSec: 0.9, timeBasis: "scene-local", curve: "linear" };
+  const scene = basicScene({
+    duration: 1,
+    layers: [
+      { id: "world", space: "world", opacity: 0.5, transform: { x: 2 } },
+      { id: "overlay", space: "screen" },
+    ],
+    objects: [
+      { id: "follow-target", type: "custom:laohu-motion-target", layer: "world", space: "world", opacity: 0.5,
+        data: { primitive: "rect", geometry: { x: 10, y: 20, width: 20, height: 20 }, fill: "#ff3344" } },
+      { id: "effects", type: "custom:laohu-motion-effects", layer: "overlay", space: "screen", data: { phases: [phase], motionEffects: [{
+        id: "reveal-follow-target", effectId: "laohu-motion-mo-staggered-target-reveal", targetId: "follow-target", geometryMode: "followTarget", phaseId: phase.id,
+        geometry: { rect: { x: 10, y: 20, width: 20, height: 20 } }, parameters: {},
+        stagger: { groupId: "follow-target-group", index: 0, count: 1, ratio: 0.08 },
+      }] } },
+    ],
+    camera: { x: 60, y: 50, zoom: 1 },
+    events: [
+      { id: "move-target", target: { kind: "object", id: "follow-target" }, property: "translateX", start: 0.1, duration: 0.8, from: 0, to: 40 },
+      { id: "move-world-layer", target: { kind: "layer", id: "world" }, property: "transform.x", start: 0.1, duration: 0.8, from: 2, to: 8 },
+      { id: "pan-camera", target: { kind: "camera", id: "camera" }, property: "x", start: 0.1, duration: 0.8, from: 60, to: 50 },
+      { id: "hide-target", target: { kind: "object", id: "follow-target" }, property: "visible", start: 0.7, duration: 0, from: true, to: false },
+      { id: "restore-target", target: { kind: "object", id: "follow-target" }, property: "visible", start: 0.9, duration: 0, from: false, to: true },
+    ],
+  });
+  MotionCore.assertValidScene(scene);
+  const records = MotionOps.validateLocalEffects(scene);
+  assert.equal(records[0].geometryMode, "followTarget");
+
+  const result = await page.evaluate(({ scene, records }) => {
+    window.U.setStage(scene.width, scene.height);
+    const registry = {};
+    window.LaohuMotionEffects.register(registry, scene, records);
+    const dispatchStates = [];
+    for (const type of ["custom:laohu-motion-effects", "custom:laohu-motion-target"]) {
+      const source = registry[type];
+      registry[type] = (...args) => {
+        dispatchStates.push(args[4]);
+        if (args[1]?.id !== "follow-target") return source(...args);
+        const context = args[0];
+        const originalFillRect = context.fillRect;
+        context.fillRect = function (x, y, width, height) {
+          if (x === 10 && y === 20 && width === 20 && height === 20) targetFills.push({ x, y, width, height, alpha: context.globalAlpha });
+          return originalFillRect.call(context, x, y, width, height);
+        };
+        try { return source(...args); } finally { context.fillRect = originalFillRect; }
+      };
+    }
+    const originals = { lagged: window.MO.lagged, evaluateScene: window.MotionCore.evaluateScene };
+    let evaluateCalls = 0;
+    const sourceProgress = [];
+    const targetFills = [];
+    window.MO.lagged = function (...args) {
+      const progress = originals.lagged.apply(this, args);
+      sourceProgress.push({ index: args[0], count: args[1], phaseProgress: args[2], ratio: args[3], progress });
+      return progress;
+    };
+    window.MotionCore.evaluateScene = function (...args) { evaluateCalls += 1; return originals.evaluateScene.apply(this, args); };
+    const frames = {};
+    try {
+      for (const timeSec of [0.25, 0.65, 0.85, 0.95]) {
+        dispatchStates.length = 0;
+        sourceProgress.length = 0;
+        targetFills.length = 0;
+        const canvas = document.createElement("canvas"); canvas.width = scene.width; canvas.height = scene.height;
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        const state = window.MotionCore.drawFrame(canvas, scene, timeSec, registry);
+        const pixels = Array.from(ctx.getImageData(0, 0, scene.width, scene.height).data);
+        const alphaAt = (x, y) => pixels[(y * scene.width + x) * 4 + 3];
+        const latestEvidence = window.MOTION_LOCAL_EFFECT_EVIDENCE.targetObjects["follow-target"] || null;
+        const targetEvidence = latestEvidence?.lastCall?.timeSec === timeSec ? latestEvidence : null;
+        frames[timeSec] = {
+          progressCalls: structuredClone(sourceProgress),
+          targetFills: structuredClone(targetFills),
+          targetEvidence: structuredClone(targetEvidence),
+          outputAlpha: timeSec === 0.25 || timeSec === 0.65
+            ? alphaAt(Math.floor(targetEvidence.lastCall.projectedRect.x + 5), 25)
+            : null,
+          exactStateForwarded: dispatchStates.length > 0 && dispatchStates.every((candidate) => candidate === state),
+          pixels,
+        };
+      }
+      return { frames, evaluateCalls };
+    } finally {
+      window.MO.lagged = originals.lagged;
+      window.MotionCore.evaluateScene = originals.evaluateScene;
+    }
+  }, { scene, records });
+
+  const early = result.frames[0.25];
+  const middle = result.frames[0.65];
+  const hidden = result.frames[0.85];
+  const restored = result.frames[0.95];
+  assert.equal(result.evaluateCalls, 0, "the custom target and effect consume the drawFrame state without re-evaluating");
+  for (const frame of [early, middle, restored]) assert.equal(frame.exactStateForwarded, true);
+  assert.equal(early.targetFills.length, 1, "MO target is drawn once at the early sample");
+  assert.equal(middle.targetFills.length, 1, "MO target is drawn once at the middle sample");
+  assert.equal(hidden.targetFills.length, 0, "a hidden Core target is not copied or drawn by the effect adapter");
+  assert.equal(restored.targetFills.length, 1, "the ordinary target renderer draws the restored target once");
+  assert.ok(middle.targetEvidence.lastCall.projectedRect.x > early.targetEvidence.lastCall.projectedRect.x + 10, "the target's projected rectangle follows its Core transform");
+  assert.ok(middle.targetEvidence.lastCall.phaseProgress > early.targetEvidence.lastCall.phaseProgress, "the shared absolute-time phase continues while the target moves");
+  assert.ok(Math.abs(early.targetFills[0].alpha - 0.5 * early.targetEvidence.lastCall.targetOpacity) < 1e-12,
+    "Core target opacity × original MO.lagged progress are applied once in the target renderer");
+  assert.equal(early.targetEvidence.lastCall.drawn, true);
+  assert.equal(hidden.progressCalls.length, 0, "Core skips the hidden local-target before invoking MO.lagged");
+  assert.equal(hidden.targetEvidence, null, "a hidden custom target has no current draw receipt because Core correctly skips its draw callback");
+  assert.ok(early.outputAlpha > 0 && early.outputAlpha < middle.outputAlpha, "final pixels retain the world-layer opacity and the single target reveal factor");
+
+  await fs.mkdir(validationRoot, { recursive: true });
+  await fs.writeFile(path.join(validationRoot, "follow-target-mo-evidence.json"), `${JSON.stringify({
+    capture: "MotionCore.drawFrame + prevalidated LaohuMotionEffects local-target renderer in software Chrome Canvas2D",
+    scope: "one moving world-space local-target rectangle; source MO.lagged phase, Core target opacity and world-layer opacity stay distinct",
+    sampleTimesSec: [0.25, 0.65, 0.85, 0.95],
+    secondEvaluateSceneCalls: result.evaluateCalls,
+    results: Object.fromEntries(Object.entries(result.frames).map(([timeSec, frame]) => [timeSec, {
+      MOprogress: frame.progressCalls,
+      targetFillCalls: frame.targetFills,
+      targetEvidence: frame.targetEvidence?.lastCall || null,
+      sampledOutputAlpha: frame.outputAlpha,
+      exactStateForwarded: frame.exactStateForwarded,
+      rgbaSha256: createHash("sha256").update(Buffer.from(frame.pixels)).digest("hex"),
+    }])),
+    assertions: { oneTargetDrawPerVisibleFrame: early.targetFills.length === 1 && middle.targetFills.length === 1 && restored.targetFills.length === 1, hiddenTargetNotDrawn: hidden.targetFills.length === 0, movingProjection: middle.targetEvidence.lastCall.projectedRect.x > early.targetEvidence.lastCall.projectedRect.x },
+  }, null, 2)}\n`);
+});
+
 test("MO.lagged changes only named target rectangles and follows a shared visual/audio phase", async () => {
   const sourceReady = await page.evaluate(() => Boolean(window.U && window.DG && window.MO && window.MotionOps && window.HuashuLocalEffects));
   if (!sourceReady) {
     for (const library of ["util.js", "paint.js", "kit.js", "motion.js", "camera.js", "diagram.js"]) {
-      await page.addScriptTag({ path: path.join(upstreamLib, library) });
+      await page.addScriptTag({ path: path.join(localEffectLib, localModuleBySourceName[library]) });
     }
     await page.addScriptTag({ path: opsPath });
     await page.addScriptTag({ path: effectsAdapterPath });

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {AbsoluteFill, Easing, Img, cancelRender, continueRender, delayRender, interpolate, staticFile, useCurrentFrame} from 'remotion';
-import {PageCam2D, CamKey2D} from '../upstream/video-shotcraft/demos/_fixtures/PageCam2D';
-import {FONT, SpeedBlur, bezier, softShadow, velocity} from '../upstream/video-shotcraft/demos/_fixtures/Polish';
+import {PageCam2D, CamKey2D} from '../runtime/laohu-remotion/components/page-camera-2d';
+import {FONT, SpeedBlur, bezier, softShadow, velocity} from '../runtime/laohu-remotion/components/polish';
 
 type Rect = {x: number; y: number; width: number; height: number};
 type Card = {src: string; assetLicense?: string; rect: Rect; highlight: Rect};

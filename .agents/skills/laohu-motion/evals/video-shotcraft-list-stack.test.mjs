@@ -12,14 +12,46 @@ import {__test as Shotcraft} from '../templates/adapters/video-shotcraft-remotio
 
 const skillDir = pathSync.resolve(pathSync.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = pathSync.resolve(skillDir, '../../..');
-const validationRoot = pathSync.join(repoRoot, '.cache/tmp/motion-source-integration/visual');
+const renderRoot = pathSync.join(repoRoot, '.cache/tmp/template-render/motion-source-integration/visual');
 const catalogPath = pathSync.join(skillDir, 'templates/catalog.json');
 const catalog = JSON.parse(await fs.readFile(catalogPath, 'utf8'));
+const sourceLedger = JSON.parse(await fs.readFile(pathSync.join(skillDir, 'templates/maintenance/source-ledger.json'), 'utf8'));
+const sourceRoot = process.env.MOTION_SOURCE_ROOT ? pathSync.resolve(process.env.MOTION_SOURCE_ROOT) : null;
 const template = catalog.templates.find((row) => row.id === 'video-shotcraft-list-stack-five');
-const entry = (id) => catalog.templates.find((row) => row.id === id) || catalog.referenceCatalog.entries.find((row) => row.id === id);
-const runtimeManifest = pathSync.join(skillDir, 'templates/runtime/video-shotcraft/package.json');
-const runtimeLock = pathSync.join(skillDir, 'templates/runtime/video-shotcraft/package-lock.json');
+const entry = (id) => catalog.templates.find((row) => row.id === id)
+  || sourceLedger.sourceOnlyTemplates.find((row) => row.id === id)
+  || sourceLedger.referenceCatalog.entries.find((row) => row.id === id);
+const runtimeManifest = pathSync.join(skillDir, 'templates/runtime/laohu-remotion/package.json');
+const runtimeLock = pathSync.join(skillDir, 'templates/runtime/laohu-remotion/package-lock.json');
 const sha256 = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
+
+function sourcePin(sourceId, relativePath) {
+  const source = sourceLedger.sources.find((row) => row.id === sourceId);
+  const pin = source?.files?.find((row) => row.path === relativePath);
+  assert.ok(source && pin, `maintenance source ledger must pin ${sourceId}/${relativePath}`);
+  return {source, pin};
+}
+
+function sourceSkipReason(sourceId, relativePaths) {
+  if (!sourceRoot) return 'MOTION_SOURCE_ROOT is unset; source-render comparison skipped';
+  const missing = relativePaths.find((relativePath) => !fsSync.existsSync(pathSync.join(sourceRoot, sourceId, relativePath)));
+  return missing ? `MOTION_SOURCE_ROOT is missing ${sourceId}/${missing}; source-render comparison skipped` : false;
+}
+
+function readPinnedSource(sourceId, relativePath) {
+  const {pin} = sourcePin(sourceId, relativePath);
+  const file = pathSync.join(sourceRoot, sourceId, relativePath);
+  const bytes = fsSync.readFileSync(file);
+  assert.equal(sha256(bytes), pin.sha256, `${sourceId}/${relativePath} must match maintenance source-ledger SHA-256`);
+  return bytes;
+}
+
+const contractLayout = {
+  papers: {
+    pageH: 1489,
+    cards: [214, 454.5, 695, 935.5, 1176].map((y) => ({x:408, y, w:1104, h:224.5})),
+  },
+};
 
 function crc32(buffer) {
   let c = 0xffffffff;
@@ -79,11 +111,10 @@ function requireFfmpeg() {
   return found;
 }
 
-async function buildAssets(runRoot) {
+async function buildAssets(runRoot, layout) {
   const assetsRoot = pathSync.join(runRoot, 'assets');
   const mediaDir = pathSync.join(assetsRoot, 'textures/live');
   await fs.mkdir(mediaDir, {recursive:true});
-  const layout = JSON.parse(await fs.readFile(pathSync.join(skillDir, 'templates/upstream/video-shotcraft/demos/_textures/live-layout.json'), 'utf8'));
   const pageHeight = layout.papers.pageH;
   await fs.writeFile(pathSync.join(mediaDir, 'papers-full.png'), solidPng(1920, pageHeight, [250, 247, 242, 255]));
   const colors = [[205, 191, 167, 255], [199, 181, 153, 255], [190, 172, 145, 255], [180, 163, 138, 255], [171, 155, 130, 255]];
@@ -137,9 +168,9 @@ test('ListStackPress source-adapted-local has strict five-card, asset, timing an
   assert.equal(sourceOnly.callable, false);
   assert.equal(sourceOnly.renderer, 'catalog-index');
 
-  const runRoot = pathSync.join(validationRoot, `contract-${process.pid}-${Date.now()}`);
+  const runRoot = pathSync.join(renderRoot, `contract-${process.pid}-${Date.now()}`);
   await fs.mkdir(runRoot, {recursive:true});
-  const fixture = await buildAssets(runRoot);
+  const fixture = await buildAssets(runRoot, contractLayout);
   const safeSpec = JSON.parse(await fs.readFile(fixture.inputPath, 'utf8'));
   const assetRecords = [];
   const validated = await Shotcraft.validateShotcraftSpec(catalog, template, safeSpec, {assetsRoot:fixture.assetsRoot, assetRecords});
@@ -175,7 +206,7 @@ test('ListStackPress source-adapted-local has strict five-card, asset, timing an
 
   await assert.rejects(Shotcraft.validateShotcraftSpec(catalog, template, {...safeSpec, durationInFrames:87}, {assetsRoot:fixture.assetsRoot}), /fixed at exactly 88 frames/);
   await assert.rejects(Shotcraft.validateShotcraftSpec(catalog, template, {...safeSpec, fidelityMode:'exact-baseline'}, {assetsRoot:fixture.assetsRoot}), /source-adapted-local/);
-  await assert.rejects(Shotcraft.validateShotcraftSpec(catalog, template, { ...safeSpec, layers:[{catalogId:template.id,props:{...safeSpec.layers[0].props,contentUse:'new-explanatory-prose'}}] }, {assetsRoot:fixture.assetsRoot}), /already-introduced material/);
+  await assert.rejects(Shotcraft.validateShotcraftSpec(catalog, template, { ...safeSpec, layers:[{catalogId:template.id,props:{...safeSpec.layers[0].props,contentUse:'new-explanatory-prose'}}] }, {assetsRoot:fixture.assetsRoot}), /contentUse must be one of \["already-introduced-materials"\]/);
   await assert.rejects(Shotcraft.validateShotcraftSpec(catalog, template, { ...safeSpec, layers:[{catalogId:template.id,props:{...safeSpec.layers[0].props,cards:safeSpec.layers[0].props.cards.slice(0,4)}}] }, {assetsRoot:fixture.assetsRoot}), /exactly five entries/);
   await assert.rejects(Shotcraft.validateShotcraftSpec(catalog, template, { ...safeSpec, layers:[{catalogId:template.id,props:{...safeSpec.layers[0].props,camera:{cx:960,cy:500,zoom:1}}}] }, {assetsRoot:fixture.assetsRoot}), /camera is not consumed/);
   await assert.rejects(Shotcraft.validateShotcraftSpec(catalog, template, { ...safeSpec, layers:[{catalogId:template.id,props:{...safeSpec.layers[0].props,pageHeight:fixture.pageHeight+1}}] }, {assetsRoot:fixture.assetsRoot}), /pageImage must be 1920/);
@@ -220,19 +251,27 @@ test('ListStackPress source-adapted-local has strict five-card, asset, timing an
   await assert.rejects(Shotcraft.compileFilmV2({...blueprint,segments:[{...segment,layers:[...segment.layers,{catalogId:'video-shotcraft-backdrop',props:{tone:'light'}}]}]},pathSync.join(runRoot,'invalid-film.json'),catalog), /full-scene source route cannot be decomposed|must render its one pinned source component/);
 });
 
-test('ListStackPress source and local adaptation render the same 88-frame fixture sequence', async () => {
+test('ListStackPress source and local adaptation render the same 88-frame fixture sequence', {skip: sourceSkipReason('video-shotcraft', template?.closure || [])}, async () => {
   assert.ok(template, 'catalog entry must be registered before rendering');
   const browser = requireBrowser();
   const ffmpeg = requireFfmpeg();
-  const runRoot = pathSync.join(validationRoot, `render-${process.pid}-${Date.now()}`);
+  const runRoot = pathSync.join(renderRoot, `render-${process.pid}-${Date.now()}`);
   const outputsRoot = pathSync.join(runRoot, 'outputs');
   await fs.mkdir(outputsRoot, {recursive:true});
-  const fixture = await buildAssets(runRoot);
+  const layoutBytes = readPinnedSource('video-shotcraft', 'demos/_textures/live-layout.json');
+  const layout = JSON.parse(layoutBytes.toString('utf8'));
+  for (const relativePath of template.closure || []) readPinnedSource('video-shotcraft', relativePath);
+  const sourceComponentPath = pathSync.join(sourceRoot, 'video-shotcraft', template.component.path);
+  const sourceComponent = readPinnedSource('video-shotcraft', template.component.path);
+  assert.equal(sha256(sourceComponent), template.component.sha256, 'catalog component pin and maintenance ledger must agree');
+  const sourceEntry = pathSync.join(runRoot, 'source-baseline.entry.tsx');
+  await fs.writeFile(sourceEntry, `import React from 'react';\nimport {Composition, registerRoot} from 'remotion';\nimport {ListStackPress} from ${JSON.stringify(sourceComponentPath)};\nconst Root: React.FC = () => <Composition id="ListStackPressSourceBaseline" component={ListStackPress} width={1920} height={1080} fps={30} durationInFrames={88}/>;\nregisterRoot(Root);\n`, {flag:'wx'});
+  const fixture = await buildAssets(runRoot, layout);
   const preparedPath = pathSync.join(runRoot, 'prepared.json');
   const previewPath = pathSync.join(outputsRoot, 'adapted-frame-76.png');
   const adaptedPath = pathSync.join(outputsRoot, 'adapted-88f.mp4');
   const adaptedManifest = pathSync.join(outputsRoot, 'adapted-manifest.json');
-  const cacheRoot = pathSync.join(repoRoot, '.cache/tmp/video-shotcraft/motion-source-integration');
+  const cacheRoot = pathSync.join(repoRoot, '.cache/tmp/template-render/motion-source-integration/cache');
   await fs.mkdir(cacheRoot, {recursive:true});
 
   run(process.execPath, [pathSync.join(skillDir,'scripts/templates.mjs'),'prepare',template.id,'--input',fixture.inputPath,'--output',preparedPath,'--assets-root',fixture.assetsRoot]);
@@ -294,7 +333,7 @@ test('ListStackPress source and local adaptation render the same 88-frame fixtur
   for (let i=1;i<=5;i++) await fs.copyFile(pathSync.join(fixture.assetsRoot,`textures/live/paper${i}.png`),pathSync.join(sourcePublic,`textures/live/paper${i}.png`));
   const bundleDir=pathSync.join(runRoot,'source-bundle');
   const serveUrl=await bundle({
-    entryPoint:pathSync.join(skillDir,'evals/video-shotcraft-list-stack-source-baseline.entry.tsx'),
+    entryPoint:sourceEntry,
     outDir:bundleDir,publicDir:sourcePublic,rootDir:repoRoot,enableCaching:false,
     webpackOverride:(config)=>{
       const require=runtimeRequire;
@@ -304,7 +343,6 @@ test('ListStackPress source and local adaptation render the same 88-frame fixtur
       return config;
     },
   });
-  const sourceComposition=await selectComposition({serveUrl,id:'ListStackPressSourceBaseline',inputProps:{},browserExecutable:browser,logLevel:'error'});
   const sourcePath=pathSync.join(outputsRoot,'source-88f.mp4');
   const tempRoot=pathSync.join(runRoot,'remotion-tmp');
   const cacheDir=pathSync.join(runRoot,'remotion-cache');
@@ -314,6 +352,7 @@ test('ListStackPress source and local adaptation render the same 88-frame fixtur
   const envValues=[tempRoot,tempRoot,tempRoot,cacheDir,pathSync.join(cacheDir,'npm'),pathSync.join(cacheDir,'remotion')];
   envKeys.forEach((key,index)=>process.env[key]=envValues[index]);
   try {
+    const sourceComposition=await selectComposition({serveUrl,id:'ListStackPressSourceBaseline',inputProps:{},browserExecutable:browser,logLevel:'error'});
     await renderMedia({serveUrl,composition:sourceComposition,inputProps:{},outputLocation:sourcePath,codec:'h264',audioCodec:null,muted:true,enforceAudioTrack:false,crf:17,pixelFormat:'yuv420p',browserExecutable:browser,logLevel:'error',overwrite:false});
     for (const frame of [0,6,13,18,26,34,76,87]) {
       await renderStill({serveUrl,composition:sourceComposition,inputProps:{},frame,output:pathSync.join(outputsRoot,`source-frame-${frame}.png`),imageFormat:'png',browserExecutable:browser,logLevel:'error',overwrite:false});

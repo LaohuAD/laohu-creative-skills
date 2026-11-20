@@ -1,0 +1,1891 @@
+{
+  "format": "laohu.motion.native-om-runtime-closure/1",
+  "source": {
+    "id": "huashu-motion",
+    "repository": "https://github.com/alchaincyf/huashu-motion",
+    "commit": "52467f99c602b76ba86d511d37acdfe93fa1e16e",
+    "license": "MIT main source; GSAP Standard no-charge license and per-font SIL Open Font License retained; author likeness routines in runtime/clip/lib/toon.js are not invoked or enabled",
+    "sourceTreeIndexId": "huashu-motion",
+    "sourceFileCount": 95
+  },
+  "localIdentity": "laohu-film-native-runtime",
+  "entrypoints": {
+    "cli": "cli/laohu-film.mjs",
+    "browserProbe": [
+      "cli/lib/capture.js",
+      "cli/lib/sound.js",
+      "cli/lib/composed.js"
+    ],
+    "packageRoot": "templates/runtime/laohu-film-native"
+  },
+  "templates": {
+    "finance-chart": {
+      "sourcePath": "templates/finance-chart/index.html",
+      "templateJsonSourceSha256": "bb7e204148eea582dcae3f163b34551bd6c5063ed33b8763f4643623c4ecd965",
+      "templateJsonLocalSha256": "2861deec82758342f359dff1ea76d3952b862c9dafa8450ebec551def1a0fd1c",
+      "copyMap": [
+        {
+          "sourcePath": "templates/blank/vendor/gsap.min.js",
+          "localPackagePath": "templates/blank/vendor/gsap.min.js",
+          "projectPath": "vendor/gsap.min.js",
+          "sourceSha256": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+          "sourceGitBlob": "fde57af06cc445f47ca2a6fc1232ec04666346d4"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "projectPath": "vendor/GSAP-LICENSE.txt",
+          "sourceSha256": "2e16f4e771c504532e976df3a422dc02d611f4a227bac77131be1fc6c9ab2baf",
+          "sourceGitBlob": "20334cee4465ba5ded800931d590e58a35d8371b"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "projectPath": "vendor/GSAP-LICENSE.html",
+          "sourceSha256": "dee09c66ff27d61c2390da9cac6b558bc0c5c705f59abef900cc3563c81ee8b4",
+          "sourceGitBlob": "fd3d1475e0762831003e3f84290952ab305321b9"
+        },
+        {
+          "sourcePath": "runtime/clip/clip.js",
+          "localPackagePath": "runtime/clip/clip.js",
+          "projectPath": "vendor/clip/clip.js",
+          "sourceSha256": "8a4b67e1cbd5627bc7e2d1a70e154edf4d5d011b1c0e8f6da0af5b1597ce7e1e",
+          "sourceGitBlob": "8df8440a66df6339b78f19de25c0879528e4c73f"
+        },
+        {
+          "sourcePath": "runtime/clip/cues.js",
+          "localPackagePath": "runtime/clip/cues.js",
+          "projectPath": "vendor/clip/cues.js",
+          "sourceSha256": "3f626e4451da257234d5ba3e4e2aa05982d76dae6b268e2569d9b85f9122d362",
+          "sourceGitBlob": "e035edcb9d39f0255cf66d3b8c17679b14285a90"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/camera.js",
+          "localPackagePath": "runtime/clip/lib/camera.js",
+          "projectPath": "vendor/clip/lib/camera.js",
+          "sourceSha256": "cfacc134a963015cc1354621503e5821e971d709b714e0534f518a37a06d8d5a",
+          "sourceGitBlob": "fed99d4ba60cb236282759265c233679ac3d5271"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/chart.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/chart.js",
+          "projectPath": "vendor/clip/lib/chart.js",
+          "sourceSha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+          "sourceGitBlob": "e18de00ae35ab951117f9547e6b946d4094ee216"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/collage.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/collage.js",
+          "projectPath": "vendor/clip/lib/collage.js",
+          "sourceSha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+          "sourceGitBlob": "f3491e46ac4040ea4951a6215df7ef61e406514a"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/diagram.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/diagram.js",
+          "projectPath": "vendor/clip/lib/diagram.js",
+          "sourceSha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+          "sourceGitBlob": "8baf28f1c084426a886bcffb98225eb13a70d583"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/kit.js",
+          "localPackagePath": "runtime/clip/lib/kit.js",
+          "projectPath": "vendor/clip/lib/kit.js",
+          "sourceSha256": "77821ce0ae8278c462b5669449bca473659c95317c3b62fc8b008e2bdf87209f",
+          "sourceGitBlob": "c4de23b17b2386d5c8c68b98cbe5455b44b9dbba"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/motion.js",
+          "localPackagePath": "runtime/clip/lib/motion.js",
+          "projectPath": "vendor/clip/lib/motion.js",
+          "sourceSha256": "7e70b8ef328c7497fe1403d37700fcdfbb2cc9d2175f16ea46ae3e69b49dbe15",
+          "sourceGitBlob": "55e4005bad7587b0267855450b97a17d65deb961"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/paint.js",
+          "localPackagePath": "runtime/clip/lib/paint.js",
+          "projectPath": "vendor/clip/lib/paint.js",
+          "sourceSha256": "aa61a2cb14b0bbd96e072865fb8b24bdd118b4f62aca3ff2c320ca17593aca25",
+          "sourceGitBlob": "897661b4527febfb22ef1f04dfbed15d1567ab1d"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/toon.js",
+          "localPackagePath": "runtime/clip/lib/toon.js",
+          "projectPath": "vendor/clip/lib/toon.js",
+          "sourceSha256": "83a83f6562578646ea0430c25e4a83a98dad77f32d631c869a49bb34a4e0225e",
+          "sourceGitBlob": "606b828bd583832197a3c3f4fc9a4256426b982b"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/typo.js",
+          "localPackagePath": "runtime/clip/lib/typo.js",
+          "projectPath": "vendor/clip/lib/typo.js",
+          "sourceSha256": "30db0cc68145dca22532e487da01aeb3ec97155e8b2c3a0747a009ce6638be8f",
+          "sourceGitBlob": "da397e5c3ff3b809242659ee80fb85b89b1f39ad"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/ui.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/ui.js",
+          "projectPath": "vendor/clip/lib/ui.js",
+          "sourceSha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+          "sourceGitBlob": "8dbf8f16c41dd60ce3a3adad2d691d38ab776cea"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/util.js",
+          "localPackagePath": "runtime/clip/lib/util.js",
+          "projectPath": "vendor/clip/lib/util.js",
+          "sourceSha256": "86045b05656183cd7017e43fb891aa65d1a1e76477885c4dbee81635ee8b7a1d",
+          "sourceGitBlob": "3a7846474d9c75e7daa7ca8ec4bc4378fe5dc37e"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t1_3b1b.js",
+          "localPackagePath": "runtime/clip/grammars/t1_3b1b.js",
+          "projectPath": "vendor/clip/grammars/t1_3b1b.js",
+          "sourceSha256": "c954bd4d4eeb113018ce17df6310b40b8e94286e323202631fa43834f086c278",
+          "sourceGitBlob": "09324633e99f250f4c0c18a96af883faa8c1c07f"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "localPackagePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "projectPath": "vendor/clip/grammars/t2_keynote_ui.js",
+          "sourceSha256": "d8e3b36dbeb9204ef18b9e5a6eb2f3e3f4f512b38de040f18c9732f8c5de983d",
+          "sourceGitBlob": "f34778a1018f50b26eebe5f5fdd76cfa6bbfd0c4"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "localPackagePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "projectPath": "vendor/clip/grammars/t3_finance_chart.js",
+          "sourceSha256": "ab6838b9003cffe332a0c2d5631b8f6f028b93d47ea7366af96db6a4f1190762",
+          "sourceGitBlob": "a26c5fe6f6ac45b50b11d2665bf0fb59ec0e5cc8"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "localPackagePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "projectPath": "vendor/clip/grammars/y1_kurzgesagt.js",
+          "sourceSha256": "c2147e2c950580b11dc42e2d2b6aab7f8920ab8e5f1d88431c91e4e8a4369083",
+          "sourceGitBlob": "3e52f0b32a6def1d383d498d6c40a46098a49e26"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y2_vox.js",
+          "localPackagePath": "runtime/clip/grammars/y2_vox.js",
+          "projectPath": "vendor/clip/grammars/y2_vox.js",
+          "sourceSha256": "7a80ba1176051eb1ce1e5272dae5d5d733eb83cd79461bfa94a973e5c0e42de1",
+          "sourceGitBlob": "12a7a585c339dd4eb9b726bf47cb29afc346216b"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "localPackagePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "projectPath": "vendor/clip/grammars/y3_whiteboard.js",
+          "sourceSha256": "1743ad3473b2892d20b262e3e102e8c017384b1f1bd2e5c69078013dbb6c7a83",
+          "sourceGitBlob": "1b04b770eca9cc20b999b345b15499c23a6c939a"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y4_storytime.js",
+          "localPackagePath": "runtime/clip/grammars/y4_storytime.js",
+          "projectPath": "vendor/clip/grammars/y4_storytime.js",
+          "sourceSha256": "207c8115ab6b10bc2942a27db864488c0d39f06db782e7378607570e8e90f69a",
+          "sourceGitBlob": "df5f9b716790184051835e99f1cd66cb26144624"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "localPackagePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "projectPath": "vendor/clip/grammars/y5_kinetic_type.js",
+          "sourceSha256": "606647df0fe8c3ce701abc44e0d3fabc62f80a0510366094a56c679e7137e92a",
+          "sourceGitBlob": "977c1ddb93c77ffd60ca80627b009dad08d27990"
+        },
+        {
+          "sourcePath": "runtime/clip/LICENSE",
+          "localPackagePath": "templates/runtime/laohu-native-clips/LICENSE",
+          "projectPath": "vendor/clip/LICENSE",
+          "sourceSha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+          "sourceGitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a"
+        },
+        {
+          "sourcePath": "runtime/clip/NOTICE.md",
+          "localPackagePath": "runtime/clip/NOTICE.md",
+          "projectPath": "vendor/clip/NOTICE.md",
+          "sourceSha256": "17de851ebbc87158da3a987cc1294f98ba63cceb8acef9b8fb649877b7e52ee0",
+          "sourceGitBlob": "e5a99c324f729f18a04a5c0d45cfa0379573bf1b"
+        },
+        {
+          "sourcePath": "fonts/NotoSansSC-500.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-500.woff",
+          "projectPath": "assets/fonts/NotoSansSC-500.woff",
+          "sourceSha256": "928d841b1ec663ebce82593568cbc19749fe652f88b8ec960723b7d87b551512",
+          "sourceGitBlob": "4c7cade7f4d92173af4c3a1b6e3a44919e2636bc"
+        },
+        {
+          "sourcePath": "fonts/NotoSansSC-700.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-700.woff",
+          "projectPath": "assets/fonts/NotoSansSC-700.woff",
+          "sourceSha256": "dd0d39a9780eb995c499af0c20cca93b1dfdda865da70871a20890b3e406b968",
+          "sourceGitBlob": "4e5c21514f3c9c69f2571c9889390a779843d4fe"
+        },
+        {
+          "sourcePath": "fonts/RobotoCondensed-var.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/RobotoCondensed-var.woff",
+          "projectPath": "assets/fonts/RobotoCondensed-var.woff",
+          "sourceSha256": "d149ef1478076ad3f201676de2f58d11de18257590d9faeee2318fa3bc4b90e6",
+          "sourceGitBlob": "1196643983d70c8fcfc751c9bd4177981f0a4ddc"
+        },
+        {
+          "sourcePath": "fonts/OFL.txt",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+          "projectPath": "assets/fonts/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sourceGitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20"
+        },
+        {
+          "sourcePath": "fonts/LICENSES.md",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md",
+          "projectPath": "assets/fonts/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sourceGitBlob": "0533deaf8ce621691fbd791c134a4e4bede9154e"
+        }
+      ]
+    },
+    "kinetic-type": {
+      "sourcePath": "templates/kinetic-type/index.html",
+      "templateJsonSourceSha256": "f5819aa9adc7e08d3718ffe88f4708d0f495122f3190b54e60fb616be0372100",
+      "templateJsonLocalSha256": "4a48b8fcd161fae29197c40a781914522f833e817e4198b3b62305eaa3656e90",
+      "copyMap": [
+        {
+          "sourcePath": "templates/blank/vendor/gsap.min.js",
+          "localPackagePath": "templates/blank/vendor/gsap.min.js",
+          "projectPath": "vendor/gsap.min.js",
+          "sourceSha256": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+          "sourceGitBlob": "fde57af06cc445f47ca2a6fc1232ec04666346d4"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "projectPath": "vendor/GSAP-LICENSE.txt",
+          "sourceSha256": "2e16f4e771c504532e976df3a422dc02d611f4a227bac77131be1fc6c9ab2baf",
+          "sourceGitBlob": "20334cee4465ba5ded800931d590e58a35d8371b"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "projectPath": "vendor/GSAP-LICENSE.html",
+          "sourceSha256": "dee09c66ff27d61c2390da9cac6b558bc0c5c705f59abef900cc3563c81ee8b4",
+          "sourceGitBlob": "fd3d1475e0762831003e3f84290952ab305321b9"
+        },
+        {
+          "sourcePath": "runtime/clip/clip.js",
+          "localPackagePath": "runtime/clip/clip.js",
+          "projectPath": "vendor/clip/clip.js",
+          "sourceSha256": "8a4b67e1cbd5627bc7e2d1a70e154edf4d5d011b1c0e8f6da0af5b1597ce7e1e",
+          "sourceGitBlob": "8df8440a66df6339b78f19de25c0879528e4c73f"
+        },
+        {
+          "sourcePath": "runtime/clip/cues.js",
+          "localPackagePath": "runtime/clip/cues.js",
+          "projectPath": "vendor/clip/cues.js",
+          "sourceSha256": "3f626e4451da257234d5ba3e4e2aa05982d76dae6b268e2569d9b85f9122d362",
+          "sourceGitBlob": "e035edcb9d39f0255cf66d3b8c17679b14285a90"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/camera.js",
+          "localPackagePath": "runtime/clip/lib/camera.js",
+          "projectPath": "vendor/clip/lib/camera.js",
+          "sourceSha256": "cfacc134a963015cc1354621503e5821e971d709b714e0534f518a37a06d8d5a",
+          "sourceGitBlob": "fed99d4ba60cb236282759265c233679ac3d5271"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/chart.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/chart.js",
+          "projectPath": "vendor/clip/lib/chart.js",
+          "sourceSha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+          "sourceGitBlob": "e18de00ae35ab951117f9547e6b946d4094ee216"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/collage.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/collage.js",
+          "projectPath": "vendor/clip/lib/collage.js",
+          "sourceSha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+          "sourceGitBlob": "f3491e46ac4040ea4951a6215df7ef61e406514a"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/diagram.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/diagram.js",
+          "projectPath": "vendor/clip/lib/diagram.js",
+          "sourceSha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+          "sourceGitBlob": "8baf28f1c084426a886bcffb98225eb13a70d583"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/kit.js",
+          "localPackagePath": "runtime/clip/lib/kit.js",
+          "projectPath": "vendor/clip/lib/kit.js",
+          "sourceSha256": "77821ce0ae8278c462b5669449bca473659c95317c3b62fc8b008e2bdf87209f",
+          "sourceGitBlob": "c4de23b17b2386d5c8c68b98cbe5455b44b9dbba"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/motion.js",
+          "localPackagePath": "runtime/clip/lib/motion.js",
+          "projectPath": "vendor/clip/lib/motion.js",
+          "sourceSha256": "7e70b8ef328c7497fe1403d37700fcdfbb2cc9d2175f16ea46ae3e69b49dbe15",
+          "sourceGitBlob": "55e4005bad7587b0267855450b97a17d65deb961"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/paint.js",
+          "localPackagePath": "runtime/clip/lib/paint.js",
+          "projectPath": "vendor/clip/lib/paint.js",
+          "sourceSha256": "aa61a2cb14b0bbd96e072865fb8b24bdd118b4f62aca3ff2c320ca17593aca25",
+          "sourceGitBlob": "897661b4527febfb22ef1f04dfbed15d1567ab1d"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/toon.js",
+          "localPackagePath": "runtime/clip/lib/toon.js",
+          "projectPath": "vendor/clip/lib/toon.js",
+          "sourceSha256": "83a83f6562578646ea0430c25e4a83a98dad77f32d631c869a49bb34a4e0225e",
+          "sourceGitBlob": "606b828bd583832197a3c3f4fc9a4256426b982b"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/typo.js",
+          "localPackagePath": "runtime/clip/lib/typo.js",
+          "projectPath": "vendor/clip/lib/typo.js",
+          "sourceSha256": "30db0cc68145dca22532e487da01aeb3ec97155e8b2c3a0747a009ce6638be8f",
+          "sourceGitBlob": "da397e5c3ff3b809242659ee80fb85b89b1f39ad"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/ui.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/ui.js",
+          "projectPath": "vendor/clip/lib/ui.js",
+          "sourceSha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+          "sourceGitBlob": "8dbf8f16c41dd60ce3a3adad2d691d38ab776cea"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/util.js",
+          "localPackagePath": "runtime/clip/lib/util.js",
+          "projectPath": "vendor/clip/lib/util.js",
+          "sourceSha256": "86045b05656183cd7017e43fb891aa65d1a1e76477885c4dbee81635ee8b7a1d",
+          "sourceGitBlob": "3a7846474d9c75e7daa7ca8ec4bc4378fe5dc37e"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t1_3b1b.js",
+          "localPackagePath": "runtime/clip/grammars/t1_3b1b.js",
+          "projectPath": "vendor/clip/grammars/t1_3b1b.js",
+          "sourceSha256": "c954bd4d4eeb113018ce17df6310b40b8e94286e323202631fa43834f086c278",
+          "sourceGitBlob": "09324633e99f250f4c0c18a96af883faa8c1c07f"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "localPackagePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "projectPath": "vendor/clip/grammars/t2_keynote_ui.js",
+          "sourceSha256": "d8e3b36dbeb9204ef18b9e5a6eb2f3e3f4f512b38de040f18c9732f8c5de983d",
+          "sourceGitBlob": "f34778a1018f50b26eebe5f5fdd76cfa6bbfd0c4"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "localPackagePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "projectPath": "vendor/clip/grammars/t3_finance_chart.js",
+          "sourceSha256": "ab6838b9003cffe332a0c2d5631b8f6f028b93d47ea7366af96db6a4f1190762",
+          "sourceGitBlob": "a26c5fe6f6ac45b50b11d2665bf0fb59ec0e5cc8"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "localPackagePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "projectPath": "vendor/clip/grammars/y1_kurzgesagt.js",
+          "sourceSha256": "c2147e2c950580b11dc42e2d2b6aab7f8920ab8e5f1d88431c91e4e8a4369083",
+          "sourceGitBlob": "3e52f0b32a6def1d383d498d6c40a46098a49e26"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y2_vox.js",
+          "localPackagePath": "runtime/clip/grammars/y2_vox.js",
+          "projectPath": "vendor/clip/grammars/y2_vox.js",
+          "sourceSha256": "7a80ba1176051eb1ce1e5272dae5d5d733eb83cd79461bfa94a973e5c0e42de1",
+          "sourceGitBlob": "12a7a585c339dd4eb9b726bf47cb29afc346216b"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "localPackagePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "projectPath": "vendor/clip/grammars/y3_whiteboard.js",
+          "sourceSha256": "1743ad3473b2892d20b262e3e102e8c017384b1f1bd2e5c69078013dbb6c7a83",
+          "sourceGitBlob": "1b04b770eca9cc20b999b345b15499c23a6c939a"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y4_storytime.js",
+          "localPackagePath": "runtime/clip/grammars/y4_storytime.js",
+          "projectPath": "vendor/clip/grammars/y4_storytime.js",
+          "sourceSha256": "207c8115ab6b10bc2942a27db864488c0d39f06db782e7378607570e8e90f69a",
+          "sourceGitBlob": "df5f9b716790184051835e99f1cd66cb26144624"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "localPackagePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "projectPath": "vendor/clip/grammars/y5_kinetic_type.js",
+          "sourceSha256": "606647df0fe8c3ce701abc44e0d3fabc62f80a0510366094a56c679e7137e92a",
+          "sourceGitBlob": "977c1ddb93c77ffd60ca80627b009dad08d27990"
+        },
+        {
+          "sourcePath": "runtime/clip/LICENSE",
+          "localPackagePath": "templates/runtime/laohu-native-clips/LICENSE",
+          "projectPath": "vendor/clip/LICENSE",
+          "sourceSha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+          "sourceGitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a"
+        },
+        {
+          "sourcePath": "runtime/clip/NOTICE.md",
+          "localPackagePath": "runtime/clip/NOTICE.md",
+          "projectPath": "vendor/clip/NOTICE.md",
+          "sourceSha256": "17de851ebbc87158da3a987cc1294f98ba63cceb8acef9b8fb649877b7e52ee0",
+          "sourceGitBlob": "e5a99c324f729f18a04a5c0d45cfa0379573bf1b"
+        },
+        {
+          "sourcePath": "fonts/NotoSansSC-900.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-900.woff",
+          "projectPath": "assets/fonts/NotoSansSC-900.woff",
+          "sourceSha256": "d2d8a42438b18b65b6577434df4e41bb08c6b5051281757849af00ab743bb58f",
+          "sourceGitBlob": "664a8d52cc3924e36c85599f8c26405c12797817"
+        },
+        {
+          "sourcePath": "fonts/NotoSansSC-800.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-800.woff",
+          "projectPath": "assets/fonts/NotoSansSC-800.woff",
+          "sourceSha256": "b57f9c645b1a4967a3c8914ed41f24d109394a8175e36af08f93e40803e84664",
+          "sourceGitBlob": "056fba6424656387bd2a4a85efbc9ae3c5db1ef7"
+        },
+        {
+          "sourcePath": "fonts/NotoSansSC-700.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-700.woff",
+          "projectPath": "assets/fonts/NotoSansSC-700.woff",
+          "sourceSha256": "dd0d39a9780eb995c499af0c20cca93b1dfdda865da70871a20890b3e406b968",
+          "sourceGitBlob": "4e5c21514f3c9c69f2571c9889390a779843d4fe"
+        },
+        {
+          "sourcePath": "fonts/OFL.txt",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+          "projectPath": "assets/fonts/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sourceGitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20"
+        },
+        {
+          "sourcePath": "fonts/LICENSES.md",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md",
+          "projectPath": "assets/fonts/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sourceGitBlob": "0533deaf8ce621691fbd791c134a4e4bede9154e"
+        }
+      ]
+    },
+    "kurzgesagt": {
+      "sourcePath": "templates/kurzgesagt/index.html",
+      "templateJsonSourceSha256": "e2a7efa6768048432e1bb0857b27fa3c255a90835d3b56f0b5f43cba35bed513",
+      "templateJsonLocalSha256": "90c7c51766be81496de3d1d5adfad5f39746d79dd4688b60dd5e203dd9cb79cc",
+      "copyMap": [
+        {
+          "sourcePath": "templates/blank/vendor/gsap.min.js",
+          "localPackagePath": "templates/blank/vendor/gsap.min.js",
+          "projectPath": "vendor/gsap.min.js",
+          "sourceSha256": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+          "sourceGitBlob": "fde57af06cc445f47ca2a6fc1232ec04666346d4"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "projectPath": "vendor/GSAP-LICENSE.txt",
+          "sourceSha256": "2e16f4e771c504532e976df3a422dc02d611f4a227bac77131be1fc6c9ab2baf",
+          "sourceGitBlob": "20334cee4465ba5ded800931d590e58a35d8371b"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "projectPath": "vendor/GSAP-LICENSE.html",
+          "sourceSha256": "dee09c66ff27d61c2390da9cac6b558bc0c5c705f59abef900cc3563c81ee8b4",
+          "sourceGitBlob": "fd3d1475e0762831003e3f84290952ab305321b9"
+        },
+        {
+          "sourcePath": "runtime/clip/clip.js",
+          "localPackagePath": "runtime/clip/clip.js",
+          "projectPath": "vendor/clip/clip.js",
+          "sourceSha256": "8a4b67e1cbd5627bc7e2d1a70e154edf4d5d011b1c0e8f6da0af5b1597ce7e1e",
+          "sourceGitBlob": "8df8440a66df6339b78f19de25c0879528e4c73f"
+        },
+        {
+          "sourcePath": "runtime/clip/cues.js",
+          "localPackagePath": "runtime/clip/cues.js",
+          "projectPath": "vendor/clip/cues.js",
+          "sourceSha256": "3f626e4451da257234d5ba3e4e2aa05982d76dae6b268e2569d9b85f9122d362",
+          "sourceGitBlob": "e035edcb9d39f0255cf66d3b8c17679b14285a90"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/camera.js",
+          "localPackagePath": "runtime/clip/lib/camera.js",
+          "projectPath": "vendor/clip/lib/camera.js",
+          "sourceSha256": "cfacc134a963015cc1354621503e5821e971d709b714e0534f518a37a06d8d5a",
+          "sourceGitBlob": "fed99d4ba60cb236282759265c233679ac3d5271"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/chart.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/chart.js",
+          "projectPath": "vendor/clip/lib/chart.js",
+          "sourceSha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+          "sourceGitBlob": "e18de00ae35ab951117f9547e6b946d4094ee216"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/collage.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/collage.js",
+          "projectPath": "vendor/clip/lib/collage.js",
+          "sourceSha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+          "sourceGitBlob": "f3491e46ac4040ea4951a6215df7ef61e406514a"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/diagram.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/diagram.js",
+          "projectPath": "vendor/clip/lib/diagram.js",
+          "sourceSha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+          "sourceGitBlob": "8baf28f1c084426a886bcffb98225eb13a70d583"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/kit.js",
+          "localPackagePath": "runtime/clip/lib/kit.js",
+          "projectPath": "vendor/clip/lib/kit.js",
+          "sourceSha256": "77821ce0ae8278c462b5669449bca473659c95317c3b62fc8b008e2bdf87209f",
+          "sourceGitBlob": "c4de23b17b2386d5c8c68b98cbe5455b44b9dbba"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/motion.js",
+          "localPackagePath": "runtime/clip/lib/motion.js",
+          "projectPath": "vendor/clip/lib/motion.js",
+          "sourceSha256": "7e70b8ef328c7497fe1403d37700fcdfbb2cc9d2175f16ea46ae3e69b49dbe15",
+          "sourceGitBlob": "55e4005bad7587b0267855450b97a17d65deb961"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/paint.js",
+          "localPackagePath": "runtime/clip/lib/paint.js",
+          "projectPath": "vendor/clip/lib/paint.js",
+          "sourceSha256": "aa61a2cb14b0bbd96e072865fb8b24bdd118b4f62aca3ff2c320ca17593aca25",
+          "sourceGitBlob": "897661b4527febfb22ef1f04dfbed15d1567ab1d"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/toon.js",
+          "localPackagePath": "runtime/clip/lib/toon.js",
+          "projectPath": "vendor/clip/lib/toon.js",
+          "sourceSha256": "83a83f6562578646ea0430c25e4a83a98dad77f32d631c869a49bb34a4e0225e",
+          "sourceGitBlob": "606b828bd583832197a3c3f4fc9a4256426b982b"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/typo.js",
+          "localPackagePath": "runtime/clip/lib/typo.js",
+          "projectPath": "vendor/clip/lib/typo.js",
+          "sourceSha256": "30db0cc68145dca22532e487da01aeb3ec97155e8b2c3a0747a009ce6638be8f",
+          "sourceGitBlob": "da397e5c3ff3b809242659ee80fb85b89b1f39ad"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/ui.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/ui.js",
+          "projectPath": "vendor/clip/lib/ui.js",
+          "sourceSha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+          "sourceGitBlob": "8dbf8f16c41dd60ce3a3adad2d691d38ab776cea"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/util.js",
+          "localPackagePath": "runtime/clip/lib/util.js",
+          "projectPath": "vendor/clip/lib/util.js",
+          "sourceSha256": "86045b05656183cd7017e43fb891aa65d1a1e76477885c4dbee81635ee8b7a1d",
+          "sourceGitBlob": "3a7846474d9c75e7daa7ca8ec4bc4378fe5dc37e"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t1_3b1b.js",
+          "localPackagePath": "runtime/clip/grammars/t1_3b1b.js",
+          "projectPath": "vendor/clip/grammars/t1_3b1b.js",
+          "sourceSha256": "c954bd4d4eeb113018ce17df6310b40b8e94286e323202631fa43834f086c278",
+          "sourceGitBlob": "09324633e99f250f4c0c18a96af883faa8c1c07f"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "localPackagePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "projectPath": "vendor/clip/grammars/t2_keynote_ui.js",
+          "sourceSha256": "d8e3b36dbeb9204ef18b9e5a6eb2f3e3f4f512b38de040f18c9732f8c5de983d",
+          "sourceGitBlob": "f34778a1018f50b26eebe5f5fdd76cfa6bbfd0c4"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "localPackagePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "projectPath": "vendor/clip/grammars/t3_finance_chart.js",
+          "sourceSha256": "ab6838b9003cffe332a0c2d5631b8f6f028b93d47ea7366af96db6a4f1190762",
+          "sourceGitBlob": "a26c5fe6f6ac45b50b11d2665bf0fb59ec0e5cc8"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "localPackagePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "projectPath": "vendor/clip/grammars/y1_kurzgesagt.js",
+          "sourceSha256": "c2147e2c950580b11dc42e2d2b6aab7f8920ab8e5f1d88431c91e4e8a4369083",
+          "sourceGitBlob": "3e52f0b32a6def1d383d498d6c40a46098a49e26"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y2_vox.js",
+          "localPackagePath": "runtime/clip/grammars/y2_vox.js",
+          "projectPath": "vendor/clip/grammars/y2_vox.js",
+          "sourceSha256": "7a80ba1176051eb1ce1e5272dae5d5d733eb83cd79461bfa94a973e5c0e42de1",
+          "sourceGitBlob": "12a7a585c339dd4eb9b726bf47cb29afc346216b"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "localPackagePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "projectPath": "vendor/clip/grammars/y3_whiteboard.js",
+          "sourceSha256": "1743ad3473b2892d20b262e3e102e8c017384b1f1bd2e5c69078013dbb6c7a83",
+          "sourceGitBlob": "1b04b770eca9cc20b999b345b15499c23a6c939a"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y4_storytime.js",
+          "localPackagePath": "runtime/clip/grammars/y4_storytime.js",
+          "projectPath": "vendor/clip/grammars/y4_storytime.js",
+          "sourceSha256": "207c8115ab6b10bc2942a27db864488c0d39f06db782e7378607570e8e90f69a",
+          "sourceGitBlob": "df5f9b716790184051835e99f1cd66cb26144624"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "localPackagePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "projectPath": "vendor/clip/grammars/y5_kinetic_type.js",
+          "sourceSha256": "606647df0fe8c3ce701abc44e0d3fabc62f80a0510366094a56c679e7137e92a",
+          "sourceGitBlob": "977c1ddb93c77ffd60ca80627b009dad08d27990"
+        },
+        {
+          "sourcePath": "runtime/clip/LICENSE",
+          "localPackagePath": "templates/runtime/laohu-native-clips/LICENSE",
+          "projectPath": "vendor/clip/LICENSE",
+          "sourceSha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+          "sourceGitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a"
+        },
+        {
+          "sourcePath": "runtime/clip/NOTICE.md",
+          "localPackagePath": "runtime/clip/NOTICE.md",
+          "projectPath": "vendor/clip/NOTICE.md",
+          "sourceSha256": "17de851ebbc87158da3a987cc1294f98ba63cceb8acef9b8fb649877b7e52ee0",
+          "sourceGitBlob": "e5a99c324f729f18a04a5c0d45cfa0379573bf1b"
+        },
+        {
+          "sourcePath": "fonts/NotoSansSC-800.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-800.woff",
+          "projectPath": "assets/fonts/NotoSansSC-800.woff",
+          "sourceSha256": "b57f9c645b1a4967a3c8914ed41f24d109394a8175e36af08f93e40803e84664",
+          "sourceGitBlob": "056fba6424656387bd2a4a85efbc9ae3c5db1ef7"
+        },
+        {
+          "sourcePath": "fonts/NotoSansSC-500.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-500.woff",
+          "projectPath": "assets/fonts/NotoSansSC-500.woff",
+          "sourceSha256": "928d841b1ec663ebce82593568cbc19749fe652f88b8ec960723b7d87b551512",
+          "sourceGitBlob": "4c7cade7f4d92173af4c3a1b6e3a44919e2636bc"
+        },
+        {
+          "sourcePath": "fonts/OFL.txt",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+          "projectPath": "assets/fonts/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sourceGitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20"
+        },
+        {
+          "sourcePath": "fonts/LICENSES.md",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md",
+          "projectPath": "assets/fonts/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sourceGitBlob": "0533deaf8ce621691fbd791c134a4e4bede9154e"
+        }
+      ]
+    },
+    "math-3b1b": {
+      "sourcePath": "templates/math-3b1b/index.html",
+      "templateJsonSourceSha256": "66dead76d556e18aa769d4744fb29975cd66be6cd67d12bdafa4282c7b0313cd",
+      "templateJsonLocalSha256": "c9f0a697daab7b68e94b039b3a5d6862a95bafedb76bf908e50c086290b8474b",
+      "copyMap": [
+        {
+          "sourcePath": "templates/blank/vendor/gsap.min.js",
+          "localPackagePath": "templates/blank/vendor/gsap.min.js",
+          "projectPath": "vendor/gsap.min.js",
+          "sourceSha256": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+          "sourceGitBlob": "fde57af06cc445f47ca2a6fc1232ec04666346d4"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "projectPath": "vendor/GSAP-LICENSE.txt",
+          "sourceSha256": "2e16f4e771c504532e976df3a422dc02d611f4a227bac77131be1fc6c9ab2baf",
+          "sourceGitBlob": "20334cee4465ba5ded800931d590e58a35d8371b"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "projectPath": "vendor/GSAP-LICENSE.html",
+          "sourceSha256": "dee09c66ff27d61c2390da9cac6b558bc0c5c705f59abef900cc3563c81ee8b4",
+          "sourceGitBlob": "fd3d1475e0762831003e3f84290952ab305321b9"
+        },
+        {
+          "sourcePath": "runtime/clip/clip.js",
+          "localPackagePath": "runtime/clip/clip.js",
+          "projectPath": "vendor/clip/clip.js",
+          "sourceSha256": "8a4b67e1cbd5627bc7e2d1a70e154edf4d5d011b1c0e8f6da0af5b1597ce7e1e",
+          "sourceGitBlob": "8df8440a66df6339b78f19de25c0879528e4c73f"
+        },
+        {
+          "sourcePath": "runtime/clip/cues.js",
+          "localPackagePath": "runtime/clip/cues.js",
+          "projectPath": "vendor/clip/cues.js",
+          "sourceSha256": "3f626e4451da257234d5ba3e4e2aa05982d76dae6b268e2569d9b85f9122d362",
+          "sourceGitBlob": "e035edcb9d39f0255cf66d3b8c17679b14285a90"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/camera.js",
+          "localPackagePath": "runtime/clip/lib/camera.js",
+          "projectPath": "vendor/clip/lib/camera.js",
+          "sourceSha256": "cfacc134a963015cc1354621503e5821e971d709b714e0534f518a37a06d8d5a",
+          "sourceGitBlob": "fed99d4ba60cb236282759265c233679ac3d5271"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/chart.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/chart.js",
+          "projectPath": "vendor/clip/lib/chart.js",
+          "sourceSha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+          "sourceGitBlob": "e18de00ae35ab951117f9547e6b946d4094ee216"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/collage.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/collage.js",
+          "projectPath": "vendor/clip/lib/collage.js",
+          "sourceSha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+          "sourceGitBlob": "f3491e46ac4040ea4951a6215df7ef61e406514a"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/diagram.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/diagram.js",
+          "projectPath": "vendor/clip/lib/diagram.js",
+          "sourceSha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+          "sourceGitBlob": "8baf28f1c084426a886bcffb98225eb13a70d583"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/kit.js",
+          "localPackagePath": "runtime/clip/lib/kit.js",
+          "projectPath": "vendor/clip/lib/kit.js",
+          "sourceSha256": "77821ce0ae8278c462b5669449bca473659c95317c3b62fc8b008e2bdf87209f",
+          "sourceGitBlob": "c4de23b17b2386d5c8c68b98cbe5455b44b9dbba"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/motion.js",
+          "localPackagePath": "runtime/clip/lib/motion.js",
+          "projectPath": "vendor/clip/lib/motion.js",
+          "sourceSha256": "7e70b8ef328c7497fe1403d37700fcdfbb2cc9d2175f16ea46ae3e69b49dbe15",
+          "sourceGitBlob": "55e4005bad7587b0267855450b97a17d65deb961"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/paint.js",
+          "localPackagePath": "runtime/clip/lib/paint.js",
+          "projectPath": "vendor/clip/lib/paint.js",
+          "sourceSha256": "aa61a2cb14b0bbd96e072865fb8b24bdd118b4f62aca3ff2c320ca17593aca25",
+          "sourceGitBlob": "897661b4527febfb22ef1f04dfbed15d1567ab1d"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/toon.js",
+          "localPackagePath": "runtime/clip/lib/toon.js",
+          "projectPath": "vendor/clip/lib/toon.js",
+          "sourceSha256": "83a83f6562578646ea0430c25e4a83a98dad77f32d631c869a49bb34a4e0225e",
+          "sourceGitBlob": "606b828bd583832197a3c3f4fc9a4256426b982b"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/typo.js",
+          "localPackagePath": "runtime/clip/lib/typo.js",
+          "projectPath": "vendor/clip/lib/typo.js",
+          "sourceSha256": "30db0cc68145dca22532e487da01aeb3ec97155e8b2c3a0747a009ce6638be8f",
+          "sourceGitBlob": "da397e5c3ff3b809242659ee80fb85b89b1f39ad"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/ui.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/ui.js",
+          "projectPath": "vendor/clip/lib/ui.js",
+          "sourceSha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+          "sourceGitBlob": "8dbf8f16c41dd60ce3a3adad2d691d38ab776cea"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/util.js",
+          "localPackagePath": "runtime/clip/lib/util.js",
+          "projectPath": "vendor/clip/lib/util.js",
+          "sourceSha256": "86045b05656183cd7017e43fb891aa65d1a1e76477885c4dbee81635ee8b7a1d",
+          "sourceGitBlob": "3a7846474d9c75e7daa7ca8ec4bc4378fe5dc37e"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t1_3b1b.js",
+          "localPackagePath": "runtime/clip/grammars/t1_3b1b.js",
+          "projectPath": "vendor/clip/grammars/t1_3b1b.js",
+          "sourceSha256": "c954bd4d4eeb113018ce17df6310b40b8e94286e323202631fa43834f086c278",
+          "sourceGitBlob": "09324633e99f250f4c0c18a96af883faa8c1c07f"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "localPackagePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "projectPath": "vendor/clip/grammars/t2_keynote_ui.js",
+          "sourceSha256": "d8e3b36dbeb9204ef18b9e5a6eb2f3e3f4f512b38de040f18c9732f8c5de983d",
+          "sourceGitBlob": "f34778a1018f50b26eebe5f5fdd76cfa6bbfd0c4"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "localPackagePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "projectPath": "vendor/clip/grammars/t3_finance_chart.js",
+          "sourceSha256": "ab6838b9003cffe332a0c2d5631b8f6f028b93d47ea7366af96db6a4f1190762",
+          "sourceGitBlob": "a26c5fe6f6ac45b50b11d2665bf0fb59ec0e5cc8"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "localPackagePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "projectPath": "vendor/clip/grammars/y1_kurzgesagt.js",
+          "sourceSha256": "c2147e2c950580b11dc42e2d2b6aab7f8920ab8e5f1d88431c91e4e8a4369083",
+          "sourceGitBlob": "3e52f0b32a6def1d383d498d6c40a46098a49e26"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y2_vox.js",
+          "localPackagePath": "runtime/clip/grammars/y2_vox.js",
+          "projectPath": "vendor/clip/grammars/y2_vox.js",
+          "sourceSha256": "7a80ba1176051eb1ce1e5272dae5d5d733eb83cd79461bfa94a973e5c0e42de1",
+          "sourceGitBlob": "12a7a585c339dd4eb9b726bf47cb29afc346216b"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "localPackagePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "projectPath": "vendor/clip/grammars/y3_whiteboard.js",
+          "sourceSha256": "1743ad3473b2892d20b262e3e102e8c017384b1f1bd2e5c69078013dbb6c7a83",
+          "sourceGitBlob": "1b04b770eca9cc20b999b345b15499c23a6c939a"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y4_storytime.js",
+          "localPackagePath": "runtime/clip/grammars/y4_storytime.js",
+          "projectPath": "vendor/clip/grammars/y4_storytime.js",
+          "sourceSha256": "207c8115ab6b10bc2942a27db864488c0d39f06db782e7378607570e8e90f69a",
+          "sourceGitBlob": "df5f9b716790184051835e99f1cd66cb26144624"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "localPackagePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "projectPath": "vendor/clip/grammars/y5_kinetic_type.js",
+          "sourceSha256": "606647df0fe8c3ce701abc44e0d3fabc62f80a0510366094a56c679e7137e92a",
+          "sourceGitBlob": "977c1ddb93c77ffd60ca80627b009dad08d27990"
+        },
+        {
+          "sourcePath": "runtime/clip/LICENSE",
+          "localPackagePath": "templates/runtime/laohu-native-clips/LICENSE",
+          "projectPath": "vendor/clip/LICENSE",
+          "sourceSha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+          "sourceGitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a"
+        },
+        {
+          "sourcePath": "runtime/clip/NOTICE.md",
+          "localPackagePath": "runtime/clip/NOTICE.md",
+          "projectPath": "vendor/clip/NOTICE.md",
+          "sourceSha256": "17de851ebbc87158da3a987cc1294f98ba63cceb8acef9b8fb649877b7e52ee0",
+          "sourceGitBlob": "e5a99c324f729f18a04a5c0d45cfa0379573bf1b"
+        },
+        {
+          "sourcePath": "fonts/NotoSansSC-500.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-500.woff",
+          "projectPath": "assets/fonts/NotoSansSC-500.woff",
+          "sourceSha256": "928d841b1ec663ebce82593568cbc19749fe652f88b8ec960723b7d87b551512",
+          "sourceGitBlob": "4c7cade7f4d92173af4c3a1b6e3a44919e2636bc"
+        },
+        {
+          "sourcePath": "fonts/OFL.txt",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+          "projectPath": "assets/fonts/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sourceGitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20"
+        },
+        {
+          "sourcePath": "fonts/LICENSES.md",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md",
+          "projectPath": "assets/fonts/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sourceGitBlob": "0533deaf8ce621691fbd791c134a4e4bede9154e"
+        }
+      ]
+    },
+    "whiteboard": {
+      "sourcePath": "templates/whiteboard/index.html",
+      "templateJsonSourceSha256": "afc45fc719432b2f218c7c9ca927c5314193023425699ef4faf6539fbd6a3fab",
+      "templateJsonLocalSha256": "d87790c076ad53c289a6f1abea0863f659be105356eaa37800e6ca4b92430bd6",
+      "copyMap": [
+        {
+          "sourcePath": "templates/blank/vendor/gsap.min.js",
+          "localPackagePath": "templates/blank/vendor/gsap.min.js",
+          "projectPath": "vendor/gsap.min.js",
+          "sourceSha256": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+          "sourceGitBlob": "fde57af06cc445f47ca2a6fc1232ec04666346d4"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+          "projectPath": "vendor/GSAP-LICENSE.txt",
+          "sourceSha256": "2e16f4e771c504532e976df3a422dc02d611f4a227bac77131be1fc6c9ab2baf",
+          "sourceGitBlob": "20334cee4465ba5ded800931d590e58a35d8371b"
+        },
+        {
+          "sourcePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "localPackagePath": "templates/blank/vendor/GSAP-LICENSE.html",
+          "projectPath": "vendor/GSAP-LICENSE.html",
+          "sourceSha256": "dee09c66ff27d61c2390da9cac6b558bc0c5c705f59abef900cc3563c81ee8b4",
+          "sourceGitBlob": "fd3d1475e0762831003e3f84290952ab305321b9"
+        },
+        {
+          "sourcePath": "runtime/clip/clip.js",
+          "localPackagePath": "runtime/clip/clip.js",
+          "projectPath": "vendor/clip/clip.js",
+          "sourceSha256": "8a4b67e1cbd5627bc7e2d1a70e154edf4d5d011b1c0e8f6da0af5b1597ce7e1e",
+          "sourceGitBlob": "8df8440a66df6339b78f19de25c0879528e4c73f"
+        },
+        {
+          "sourcePath": "runtime/clip/cues.js",
+          "localPackagePath": "runtime/clip/cues.js",
+          "projectPath": "vendor/clip/cues.js",
+          "sourceSha256": "3f626e4451da257234d5ba3e4e2aa05982d76dae6b268e2569d9b85f9122d362",
+          "sourceGitBlob": "e035edcb9d39f0255cf66d3b8c17679b14285a90"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/camera.js",
+          "localPackagePath": "runtime/clip/lib/camera.js",
+          "projectPath": "vendor/clip/lib/camera.js",
+          "sourceSha256": "cfacc134a963015cc1354621503e5821e971d709b714e0534f518a37a06d8d5a",
+          "sourceGitBlob": "fed99d4ba60cb236282759265c233679ac3d5271"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/chart.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/chart.js",
+          "projectPath": "vendor/clip/lib/chart.js",
+          "sourceSha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+          "sourceGitBlob": "e18de00ae35ab951117f9547e6b946d4094ee216"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/collage.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/collage.js",
+          "projectPath": "vendor/clip/lib/collage.js",
+          "sourceSha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+          "sourceGitBlob": "f3491e46ac4040ea4951a6215df7ef61e406514a"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/diagram.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/diagram.js",
+          "projectPath": "vendor/clip/lib/diagram.js",
+          "sourceSha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+          "sourceGitBlob": "8baf28f1c084426a886bcffb98225eb13a70d583"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/kit.js",
+          "localPackagePath": "runtime/clip/lib/kit.js",
+          "projectPath": "vendor/clip/lib/kit.js",
+          "sourceSha256": "77821ce0ae8278c462b5669449bca473659c95317c3b62fc8b008e2bdf87209f",
+          "sourceGitBlob": "c4de23b17b2386d5c8c68b98cbe5455b44b9dbba"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/motion.js",
+          "localPackagePath": "runtime/clip/lib/motion.js",
+          "projectPath": "vendor/clip/lib/motion.js",
+          "sourceSha256": "7e70b8ef328c7497fe1403d37700fcdfbb2cc9d2175f16ea46ae3e69b49dbe15",
+          "sourceGitBlob": "55e4005bad7587b0267855450b97a17d65deb961"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/paint.js",
+          "localPackagePath": "runtime/clip/lib/paint.js",
+          "projectPath": "vendor/clip/lib/paint.js",
+          "sourceSha256": "aa61a2cb14b0bbd96e072865fb8b24bdd118b4f62aca3ff2c320ca17593aca25",
+          "sourceGitBlob": "897661b4527febfb22ef1f04dfbed15d1567ab1d"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/toon.js",
+          "localPackagePath": "runtime/clip/lib/toon.js",
+          "projectPath": "vendor/clip/lib/toon.js",
+          "sourceSha256": "83a83f6562578646ea0430c25e4a83a98dad77f32d631c869a49bb34a4e0225e",
+          "sourceGitBlob": "606b828bd583832197a3c3f4fc9a4256426b982b"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/typo.js",
+          "localPackagePath": "runtime/clip/lib/typo.js",
+          "projectPath": "vendor/clip/lib/typo.js",
+          "sourceSha256": "30db0cc68145dca22532e487da01aeb3ec97155e8b2c3a0747a009ce6638be8f",
+          "sourceGitBlob": "da397e5c3ff3b809242659ee80fb85b89b1f39ad"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/ui.js",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/ui.js",
+          "projectPath": "vendor/clip/lib/ui.js",
+          "sourceSha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+          "sourceGitBlob": "8dbf8f16c41dd60ce3a3adad2d691d38ab776cea"
+        },
+        {
+          "sourcePath": "runtime/clip/lib/util.js",
+          "localPackagePath": "runtime/clip/lib/util.js",
+          "projectPath": "vendor/clip/lib/util.js",
+          "sourceSha256": "86045b05656183cd7017e43fb891aa65d1a1e76477885c4dbee81635ee8b7a1d",
+          "sourceGitBlob": "3a7846474d9c75e7daa7ca8ec4bc4378fe5dc37e"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t1_3b1b.js",
+          "localPackagePath": "runtime/clip/grammars/t1_3b1b.js",
+          "projectPath": "vendor/clip/grammars/t1_3b1b.js",
+          "sourceSha256": "c954bd4d4eeb113018ce17df6310b40b8e94286e323202631fa43834f086c278",
+          "sourceGitBlob": "09324633e99f250f4c0c18a96af883faa8c1c07f"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "localPackagePath": "runtime/clip/grammars/t2_keynote_ui.js",
+          "projectPath": "vendor/clip/grammars/t2_keynote_ui.js",
+          "sourceSha256": "d8e3b36dbeb9204ef18b9e5a6eb2f3e3f4f512b38de040f18c9732f8c5de983d",
+          "sourceGitBlob": "f34778a1018f50b26eebe5f5fdd76cfa6bbfd0c4"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "localPackagePath": "runtime/clip/grammars/t3_finance_chart.js",
+          "projectPath": "vendor/clip/grammars/t3_finance_chart.js",
+          "sourceSha256": "ab6838b9003cffe332a0c2d5631b8f6f028b93d47ea7366af96db6a4f1190762",
+          "sourceGitBlob": "a26c5fe6f6ac45b50b11d2665bf0fb59ec0e5cc8"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "localPackagePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+          "projectPath": "vendor/clip/grammars/y1_kurzgesagt.js",
+          "sourceSha256": "c2147e2c950580b11dc42e2d2b6aab7f8920ab8e5f1d88431c91e4e8a4369083",
+          "sourceGitBlob": "3e52f0b32a6def1d383d498d6c40a46098a49e26"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y2_vox.js",
+          "localPackagePath": "runtime/clip/grammars/y2_vox.js",
+          "projectPath": "vendor/clip/grammars/y2_vox.js",
+          "sourceSha256": "7a80ba1176051eb1ce1e5272dae5d5d733eb83cd79461bfa94a973e5c0e42de1",
+          "sourceGitBlob": "12a7a585c339dd4eb9b726bf47cb29afc346216b"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "localPackagePath": "runtime/clip/grammars/y3_whiteboard.js",
+          "projectPath": "vendor/clip/grammars/y3_whiteboard.js",
+          "sourceSha256": "1743ad3473b2892d20b262e3e102e8c017384b1f1bd2e5c69078013dbb6c7a83",
+          "sourceGitBlob": "1b04b770eca9cc20b999b345b15499c23a6c939a"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y4_storytime.js",
+          "localPackagePath": "runtime/clip/grammars/y4_storytime.js",
+          "projectPath": "vendor/clip/grammars/y4_storytime.js",
+          "sourceSha256": "207c8115ab6b10bc2942a27db864488c0d39f06db782e7378607570e8e90f69a",
+          "sourceGitBlob": "df5f9b716790184051835e99f1cd66cb26144624"
+        },
+        {
+          "sourcePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "localPackagePath": "runtime/clip/grammars/y5_kinetic_type.js",
+          "projectPath": "vendor/clip/grammars/y5_kinetic_type.js",
+          "sourceSha256": "606647df0fe8c3ce701abc44e0d3fabc62f80a0510366094a56c679e7137e92a",
+          "sourceGitBlob": "977c1ddb93c77ffd60ca80627b009dad08d27990"
+        },
+        {
+          "sourcePath": "runtime/clip/LICENSE",
+          "localPackagePath": "templates/runtime/laohu-native-clips/LICENSE",
+          "projectPath": "vendor/clip/LICENSE",
+          "sourceSha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+          "sourceGitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a"
+        },
+        {
+          "sourcePath": "runtime/clip/NOTICE.md",
+          "localPackagePath": "runtime/clip/NOTICE.md",
+          "projectPath": "vendor/clip/NOTICE.md",
+          "sourceSha256": "17de851ebbc87158da3a987cc1294f98ba63cceb8acef9b8fb649877b7e52ee0",
+          "sourceGitBlob": "e5a99c324f729f18a04a5c0d45cfa0379573bf1b"
+        },
+        {
+          "sourcePath": "fonts/LXGWWenKai-500.woff",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/LXGWWenKai-500.woff",
+          "projectPath": "assets/fonts/LXGWWenKai-500.woff",
+          "sourceSha256": "734bd187392579417ac83effe31d37b9de43c7b290bcb400800456511ed79e8f",
+          "sourceGitBlob": "4f02c88fd17d3a10936351fef76596440163c805"
+        },
+        {
+          "sourcePath": "fonts/OFL.txt",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+          "projectPath": "assets/fonts/OFL.txt",
+          "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+          "sourceGitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20"
+        },
+        {
+          "sourcePath": "fonts/LICENSES.md",
+          "localPackagePath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md",
+          "projectPath": "assets/fonts/LICENSES.md",
+          "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+          "sourceGitBlob": "0533deaf8ce621691fbd791c134a4e4bede9154e"
+        }
+      ]
+    }
+  },
+  "files": [
+    {
+      "path": "cli/laohu-film.mjs",
+      "sourcePath": "cli/om.js",
+      "sourceSha256": "a1073267e1b05f2487fae26f2780c94c278b88195f3a0e3013d0984058ad5c77",
+      "sourceGitBlob": "3ccb61228cd3e58260041fa350ad62e3484fe9fd",
+      "sha256": "848fabf15eb7b37bdf8b05d2e195ac027139ee4aed76c259ea36c9ec8c674c9a",
+      "bytes": 24663,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/audio.js",
+      "sourcePath": "cli/lib/audio.js",
+      "sourceSha256": "360ecd8f48df354b579278ea1232db7d4427ccea29a50986acb077366078b7c5",
+      "sourceGitBlob": "aa3211cd5e2759a13762cf9c21329c67f5b61fd1",
+      "sha256": "360ecd8f48df354b579278ea1232db7d4427ccea29a50986acb077366078b7c5",
+      "bytes": 5867,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/browser.js",
+      "sourcePath": "cli/lib/browser.js",
+      "sourceSha256": "15b27e4051f32f41261da70479587fd6d04f4f3b868379cf1f5c0c0e01e98981",
+      "sourceGitBlob": "a1aab9ba4c26c8d8017fa63515fbaa2948111fed",
+      "sha256": "15b27e4051f32f41261da70479587fd6d04f4f3b868379cf1f5c0c0e01e98981",
+      "bytes": 1775,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/capture.js",
+      "sourcePath": "cli/lib/capture.js",
+      "sourceSha256": "540a3d8de635a3ce6a550b6487cabae116f3082a8cac35d572c4305977850fb4",
+      "sourceGitBlob": "088163a3b7af0b93e3debe35119666ef26c27a19",
+      "sha256": "540a3d8de635a3ce6a550b6487cabae116f3082a8cac35d572c4305977850fb4",
+      "bytes": 7920,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/cdp.js",
+      "sourcePath": "cli/lib/cdp.js",
+      "sourceSha256": "313d260d1dc50bec7a9b9063292e89bad3a2498046c9328c121eb9a4597d4b97",
+      "sourceGitBlob": "843d4ac5487796f285adc5a94354a5031bd389e5",
+      "sha256": "313d260d1dc50bec7a9b9063292e89bad3a2498046c9328c121eb9a4597d4b97",
+      "bytes": 11413,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/check.js",
+      "sourcePath": "cli/lib/check.js",
+      "sourceSha256": "d112421c8056f07910b78f49aabae286b73a7e87640592eb9d937661992ef606",
+      "sourceGitBlob": "13fbde6f4c82904f54290622fa410a8b1631118b",
+      "sha256": "d112421c8056f07910b78f49aabae286b73a7e87640592eb9d937661992ef606",
+      "bytes": 28187,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/composed.js",
+      "sourcePath": "cli/lib/composed.js",
+      "sourceSha256": "286609045ae111d0979ec27fd2c38356cae3916800b9f0b5cfaaade04319e8ac",
+      "sourceGitBlob": "c4e719ddc1227a85a6032968cbc89f941ad24c82",
+      "sha256": "286609045ae111d0979ec27fd2c38356cae3916800b9f0b5cfaaade04319e8ac",
+      "bytes": 8759,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/composer.js",
+      "sourcePath": "cli/lib/composer.js",
+      "sourceSha256": "c01e42e1f56cd74ec1829e9e37f3052d68500480f1ca0dc3d4bfa3fd8f46e828",
+      "sourceGitBlob": "7e1c9e6538282d17b8f1d2f24eace15fdc30c85f",
+      "sha256": "c01e42e1f56cd74ec1829e9e37f3052d68500480f1ca0dc3d4bfa3fd8f46e828",
+      "bytes": 23997,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/dsp.js",
+      "sourcePath": "cli/lib/dsp.js",
+      "sourceSha256": "2609e6d93ac51667f67345d3ba84d71d83c3b792656de97e95d12da57c6235fa",
+      "sourceGitBlob": "9c1b9f510b4bbde7eeb4b1c0346b9d70a62d0db1",
+      "sha256": "2609e6d93ac51667f67345d3ba84d71d83c3b792656de97e95d12da57c6235fa",
+      "bytes": 12042,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/export.js",
+      "sourcePath": "cli/lib/export.js",
+      "sourceSha256": "81080995d01ea00bd3753f68a52f7fa44b0cf6a36cc97b82166979af5fbdac3a",
+      "sourceGitBlob": "013755183c4c687e678e8e06f2156409dc0667e7",
+      "sha256": "81080995d01ea00bd3753f68a52f7fa44b0cf6a36cc97b82166979af5fbdac3a",
+      "bytes": 25330,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/fonts.js",
+      "sourcePath": "cli/lib/fonts.js",
+      "sourceSha256": "3a3e66633c572dc5b0800a785dba7678eb77f0a245408daea8771958eb4f8bf0",
+      "sourceGitBlob": "44aebafafc93f56ee88e22befc5c67290ea1ff53",
+      "sha256": "3a3e66633c572dc5b0800a785dba7678eb77f0a245408daea8771958eb4f8bf0",
+      "bytes": 2484,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/fork.js",
+      "sourcePath": "cli/lib/fork.js",
+      "sourceSha256": "02a4cbec6531294937f0820874d03b4b5da849a1b28337648ea8be618f77166c",
+      "sourceGitBlob": "083c7e7b4df3d578d3eb6afddb86b8bee1a92cfb",
+      "sha256": "02a4cbec6531294937f0820874d03b4b5da849a1b28337648ea8be618f77166c",
+      "bytes": 4954,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/frames.js",
+      "sourcePath": "cli/lib/frames.js",
+      "sourceSha256": "256eb60fd14db7cf8557c0e0d5bdb05a53bdde2f7389e6567b22cf2f8b025050",
+      "sourceGitBlob": "5bebaec3f2efaba1aa9c4b3a51b07aba2b5d9334",
+      "sha256": "256eb60fd14db7cf8557c0e0d5bdb05a53bdde2f7389e6567b22cf2f8b025050",
+      "bytes": 6696,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/fx.js",
+      "sourcePath": "cli/lib/fx.js",
+      "sourceSha256": "ea7f52c6cc313221b739dbd305419f06becdb0117387fc593ad8a945cc7989d1",
+      "sourceGitBlob": "86ceb4b3e7b397e404e83f0b72ac71935f31b49d",
+      "sha256": "ea7f52c6cc313221b739dbd305419f06becdb0117387fc593ad8a945cc7989d1",
+      "bytes": 19397,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/grab.js",
+      "sourcePath": "cli/lib/grab.js",
+      "sourceSha256": "d53fef60c274580323fda2ccc5b74875131391997acccfe5780339510480e911",
+      "sourceGitBlob": "cf841d17322f6736fdbdbe87440f5d908cb37533",
+      "sha256": "d53fef60c274580323fda2ccc5b74875131391997acccfe5780339510480e911",
+      "bytes": 18277,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/inbox.js",
+      "sourcePath": "cli/lib/inbox.js",
+      "sourceSha256": "d695b93a0333c460202a0e901ab6fd269abc5176f8309d678cd596c90e600ddf",
+      "sourceGitBlob": "8150fc02fae7d81d50672cfed3c3cd573e6d25f5",
+      "sha256": "d695b93a0333c460202a0e901ab6fd269abc5176f8309d678cd596c90e600ddf",
+      "bytes": 3567,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/learn.js",
+      "sourcePath": "cli/lib/learn.js",
+      "sourceSha256": "d3fc7213aefeb90f92e37276eb435e7bcb5cab65bd9bb9416b010c9300cbebcb",
+      "sourceGitBlob": "73630cf3bddddf679b33f210e0f925406f030a91",
+      "sha256": "d3fc7213aefeb90f92e37276eb435e7bcb5cab65bd9bb9416b010c9300cbebcb",
+      "bytes": 8421,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/project.js",
+      "sourcePath": "cli/lib/project.js",
+      "sourceSha256": "d7140a102f421ff76248bc542481636d301f2d55c5bb7b336622eb40193dc4c8",
+      "sourceGitBlob": "cb6f5a3cedd5a42342851146eec9b21fb8045b90",
+      "sha256": "d7140a102f421ff76248bc542481636d301f2d55c5bb7b336622eb40193dc4c8",
+      "bytes": 11368,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/qa.js",
+      "sourcePath": "cli/lib/qa.js",
+      "sourceSha256": "6f3b58646485aae8ccc118f7703f6d7ad3e2073796e59bee685a4676eda49731",
+      "sourceGitBlob": "1514ff2deaa17cc248071745e8cb69c656ee8b4f",
+      "sha256": "6f3b58646485aae8ccc118f7703f6d7ad3e2073796e59bee685a4676eda49731",
+      "bytes": 8211,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/render-om.js",
+      "sourcePath": "cli/lib/render-om.js",
+      "sourceSha256": "e1de8327e81a5c4270b46ec6cd11f4861246fb9678a58dc2f2e2716d32db2710",
+      "sourceGitBlob": "75e5a2afd06c45bf7614b126915cdee0583a7d3f",
+      "sha256": "e1de8327e81a5c4270b46ec6cd11f4861246fb9678a58dc2f2e2716d32db2710",
+      "bytes": 18774,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/render.js",
+      "sourcePath": "cli/lib/render.js",
+      "sourceSha256": "d522b8492cde356136a55b01574ba6cf7897c1d7fb6d52b48468e2a900502801",
+      "sourceGitBlob": "5d9ff44cbd688bed9acbe49204b6f22b87d8ed9d",
+      "sha256": "d522b8492cde356136a55b01574ba6cf7897c1d7fb6d52b48468e2a900502801",
+      "bytes": 6512,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/samples-build.js",
+      "sourcePath": "cli/lib/samples-build.js",
+      "sourceSha256": "65fa21018f49d23ad7f2d2a81f2f43b4edecbf3a7fe3881616c1ba40a8515abc",
+      "sourceGitBlob": "34c834bf40a5fc28be3dd079f3562b36a6a91469",
+      "sha256": "65fa21018f49d23ad7f2d2a81f2f43b4edecbf3a7fe3881616c1ba40a8515abc",
+      "bytes": 27434,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/samples.js",
+      "sourcePath": "cli/lib/samples.js",
+      "sourceSha256": "834a5eaa0f0ed954a64ba75efe6226b4fe9bbf383a46b86767256e09cbd06bd1",
+      "sourceGitBlob": "b86f40534d396b65b4b50e914dda81dff33f9e37",
+      "sha256": "834a5eaa0f0ed954a64ba75efe6226b4fe9bbf383a46b86767256e09cbd06bd1",
+      "bytes": 7645,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/score.js",
+      "sourcePath": "cli/lib/score.js",
+      "sourceSha256": "5e753eb638d4e0aee80cc9e878809bbb8344cfbecc947e2da6cbf4801fbc6215",
+      "sourceGitBlob": "a1f77018c0dad86b04455d72e30cb8f1326a2087",
+      "sha256": "5e753eb638d4e0aee80cc9e878809bbb8344cfbecc947e2da6cbf4801fbc6215",
+      "bytes": 48117,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/server.js",
+      "sourcePath": "cli/lib/server.js",
+      "sourceSha256": "b8b58b0d8ccf4ba725bcca8e20e6d02f3b0cb38ddb32ef47374e44c48abfe27a",
+      "sourceGitBlob": "85b17213bc9770be1a48286d1ddd689396412ced",
+      "sha256": "b8b58b0d8ccf4ba725bcca8e20e6d02f3b0cb38ddb32ef47374e44c48abfe27a",
+      "bytes": 8806,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/share.js",
+      "sourcePath": "cli/lib/share.js",
+      "sourceSha256": "e329a8342014772832952985311a46728b021b8eca4bdadfed3762ea9a3f8a4d",
+      "sourceGitBlob": "abc13f527a7499067d2a0927efa7232d975a62d2",
+      "sha256": "e329a8342014772832952985311a46728b021b8eca4bdadfed3762ea9a3f8a4d",
+      "bytes": 6325,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/sound.js",
+      "sourcePath": "cli/lib/sound.js",
+      "sourceSha256": "2050c684ac0db4f9277be812a8a2bc7b731a29006fca2c0c6c70b71c1fa1eb7b",
+      "sourceGitBlob": "cf60341f07eede2f599f308ebce4ced954b142d5",
+      "sha256": "2050c684ac0db4f9277be812a8a2bc7b731a29006fca2c0c6c70b71c1fa1eb7b",
+      "bytes": 44217,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/soundprint.js",
+      "sourcePath": "cli/lib/soundprint.js",
+      "sourceSha256": "a4e42a7a054b53c9fe32673535dd92c3b911da831958bb4c69822f1b21bc493c",
+      "sourceGitBlob": "0a661b7603dfd896d57f1f8bd6db9cd39834cdd4",
+      "sha256": "a4e42a7a054b53c9fe32673535dd92c3b911da831958bb4c69822f1b21bc493c",
+      "bytes": 4449,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/still.js",
+      "sourcePath": "cli/lib/still.js",
+      "sourceSha256": "13d1dfd39b98e573bdac716c4df6f3015d8045773692f5465bd6b35b01f90293",
+      "sourceGitBlob": "59d79bcb749d330898f0881e1dc163790ae1679c",
+      "sha256": "13d1dfd39b98e573bdac716c4df6f3015d8045773692f5465bd6b35b01f90293",
+      "bytes": 1903,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/swatch.js",
+      "sourcePath": "cli/lib/swatch.js",
+      "sourceSha256": "2d34f18eaa65d27ded6b2a2e08769542f76129ca7ef4100346a5e7ff4e19043a",
+      "sourceGitBlob": "256c7a7ac369d4b4245dae0abe7ef6203eeb1dc6",
+      "sha256": "2d34f18eaa65d27ded6b2a2e08769542f76129ca7ef4100346a5e7ff4e19043a",
+      "bytes": 8171,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "cli/lib/voice.js",
+      "sourcePath": "cli/lib/voice.js",
+      "sourceSha256": "a49b87545e3cacf3f4893d15a6abe0f94410bcfb23f1b5176b35c0176d3d9fc9",
+      "sourceGitBlob": "676da7c255de77c0a18fde979ecdd6783aa0d48f",
+      "sha256": "a49b87545e3cacf3f4893d15a6abe0f94410bcfb23f1b5176b35c0176d3d9fc9",
+      "bytes": 38114,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "LICENSE",
+      "sourcePath": "LICENSE",
+      "sourceSha256": "b8fa8ecfc57cf8339ecdab05e62e811a5d00d1e1f9373ff1de64cc9f261e2d3e",
+      "sourceGitBlob": "1ea2ec32da72b1cb829068e8fee385f79527d665",
+      "sha256": "b8fa8ecfc57cf8339ecdab05e62e811a5d00d1e1f9373ff1de64cc9f261e2d3e",
+      "bytes": 1063,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "package.json",
+      "sourcePath": "package.json",
+      "sha256": "33152c3802b9a17ed1a1224f69c2f004ccfa7be81865c26373faf3dd421e0de9",
+      "bytes": 104,
+      "mapping": "local-package-metadata"
+    },
+    {
+      "path": "runtime/clip/clip.js",
+      "sourcePath": "runtime/clip/clip.js",
+      "sourceSha256": "8a4b67e1cbd5627bc7e2d1a70e154edf4d5d011b1c0e8f6da0af5b1597ce7e1e",
+      "sourceGitBlob": "8df8440a66df6339b78f19de25c0879528e4c73f",
+      "sha256": "8a4b67e1cbd5627bc7e2d1a70e154edf4d5d011b1c0e8f6da0af5b1597ce7e1e",
+      "bytes": 15549,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/cues.js",
+      "sourcePath": "runtime/clip/cues.js",
+      "sourceSha256": "3f626e4451da257234d5ba3e4e2aa05982d76dae6b268e2569d9b85f9122d362",
+      "sourceGitBlob": "e035edcb9d39f0255cf66d3b8c17679b14285a90",
+      "sha256": "3f626e4451da257234d5ba3e4e2aa05982d76dae6b268e2569d9b85f9122d362",
+      "bytes": 3956,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/grammars/t1_3b1b.js",
+      "sourcePath": "runtime/clip/grammars/t1_3b1b.js",
+      "sourceSha256": "c954bd4d4eeb113018ce17df6310b40b8e94286e323202631fa43834f086c278",
+      "sourceGitBlob": "09324633e99f250f4c0c18a96af883faa8c1c07f",
+      "sha256": "c954bd4d4eeb113018ce17df6310b40b8e94286e323202631fa43834f086c278",
+      "bytes": 19308,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/grammars/t2_keynote_ui.js",
+      "sourcePath": "runtime/clip/grammars/t2_keynote_ui.js",
+      "sourceSha256": "d8e3b36dbeb9204ef18b9e5a6eb2f3e3f4f512b38de040f18c9732f8c5de983d",
+      "sourceGitBlob": "f34778a1018f50b26eebe5f5fdd76cfa6bbfd0c4",
+      "sha256": "d8e3b36dbeb9204ef18b9e5a6eb2f3e3f4f512b38de040f18c9732f8c5de983d",
+      "bytes": 27295,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/grammars/t3_finance_chart.js",
+      "sourcePath": "runtime/clip/grammars/t3_finance_chart.js",
+      "sourceSha256": "ab6838b9003cffe332a0c2d5631b8f6f028b93d47ea7366af96db6a4f1190762",
+      "sourceGitBlob": "a26c5fe6f6ac45b50b11d2665bf0fb59ec0e5cc8",
+      "sha256": "ab6838b9003cffe332a0c2d5631b8f6f028b93d47ea7366af96db6a4f1190762",
+      "bytes": 21148,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/grammars/y1_kurzgesagt.js",
+      "sourcePath": "runtime/clip/grammars/y1_kurzgesagt.js",
+      "sourceSha256": "c2147e2c950580b11dc42e2d2b6aab7f8920ab8e5f1d88431c91e4e8a4369083",
+      "sourceGitBlob": "3e52f0b32a6def1d383d498d6c40a46098a49e26",
+      "sha256": "c2147e2c950580b11dc42e2d2b6aab7f8920ab8e5f1d88431c91e4e8a4369083",
+      "bytes": 15230,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/grammars/y2_vox.js",
+      "sourcePath": "runtime/clip/grammars/y2_vox.js",
+      "sourceSha256": "7a80ba1176051eb1ce1e5272dae5d5d733eb83cd79461bfa94a973e5c0e42de1",
+      "sourceGitBlob": "12a7a585c339dd4eb9b726bf47cb29afc346216b",
+      "sha256": "7a80ba1176051eb1ce1e5272dae5d5d733eb83cd79461bfa94a973e5c0e42de1",
+      "bytes": 14569,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/grammars/y3_whiteboard.js",
+      "sourcePath": "runtime/clip/grammars/y3_whiteboard.js",
+      "sourceSha256": "1743ad3473b2892d20b262e3e102e8c017384b1f1bd2e5c69078013dbb6c7a83",
+      "sourceGitBlob": "1b04b770eca9cc20b999b345b15499c23a6c939a",
+      "sha256": "1743ad3473b2892d20b262e3e102e8c017384b1f1bd2e5c69078013dbb6c7a83",
+      "bytes": 22588,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/grammars/y4_storytime.js",
+      "sourcePath": "runtime/clip/grammars/y4_storytime.js",
+      "sourceSha256": "207c8115ab6b10bc2942a27db864488c0d39f06db782e7378607570e8e90f69a",
+      "sourceGitBlob": "df5f9b716790184051835e99f1cd66cb26144624",
+      "sha256": "207c8115ab6b10bc2942a27db864488c0d39f06db782e7378607570e8e90f69a",
+      "bytes": 19715,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/grammars/y5_kinetic_type.js",
+      "sourcePath": "runtime/clip/grammars/y5_kinetic_type.js",
+      "sourceSha256": "606647df0fe8c3ce701abc44e0d3fabc62f80a0510366094a56c679e7137e92a",
+      "sourceGitBlob": "977c1ddb93c77ffd60ca80627b009dad08d27990",
+      "sha256": "606647df0fe8c3ce701abc44e0d3fabc62f80a0510366094a56c679e7137e92a",
+      "bytes": 13373,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/lib/camera.js",
+      "sourcePath": "runtime/clip/lib/camera.js",
+      "sourceSha256": "cfacc134a963015cc1354621503e5821e971d709b714e0534f518a37a06d8d5a",
+      "sourceGitBlob": "fed99d4ba60cb236282759265c233679ac3d5271",
+      "sha256": "cfacc134a963015cc1354621503e5821e971d709b714e0534f518a37a06d8d5a",
+      "bytes": 5391,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/lib/kit.js",
+      "sourcePath": "runtime/clip/lib/kit.js",
+      "sourceSha256": "77821ce0ae8278c462b5669449bca473659c95317c3b62fc8b008e2bdf87209f",
+      "sourceGitBlob": "c4de23b17b2386d5c8c68b98cbe5455b44b9dbba",
+      "sha256": "77821ce0ae8278c462b5669449bca473659c95317c3b62fc8b008e2bdf87209f",
+      "bytes": 6542,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/lib/motion.js",
+      "sourcePath": "runtime/clip/lib/motion.js",
+      "sourceSha256": "7e70b8ef328c7497fe1403d37700fcdfbb2cc9d2175f16ea46ae3e69b49dbe15",
+      "sourceGitBlob": "55e4005bad7587b0267855450b97a17d65deb961",
+      "sha256": "7e70b8ef328c7497fe1403d37700fcdfbb2cc9d2175f16ea46ae3e69b49dbe15",
+      "bytes": 7891,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/lib/paint.js",
+      "sourcePath": "runtime/clip/lib/paint.js",
+      "sourceSha256": "aa61a2cb14b0bbd96e072865fb8b24bdd118b4f62aca3ff2c320ca17593aca25",
+      "sourceGitBlob": "897661b4527febfb22ef1f04dfbed15d1567ab1d",
+      "sha256": "aa61a2cb14b0bbd96e072865fb8b24bdd118b4f62aca3ff2c320ca17593aca25",
+      "bytes": 15339,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/lib/toon.js",
+      "sourcePath": "runtime/clip/lib/toon.js",
+      "sourceSha256": "83a83f6562578646ea0430c25e4a83a98dad77f32d631c869a49bb34a4e0225e",
+      "sourceGitBlob": "606b828bd583832197a3c3f4fc9a4256426b982b",
+      "sha256": "83a83f6562578646ea0430c25e4a83a98dad77f32d631c869a49bb34a4e0225e",
+      "bytes": 13188,
+      "license": "MIT engine code; embedded bean author-likeness routines are excluded from use",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/lib/typo.js",
+      "sourcePath": "runtime/clip/lib/typo.js",
+      "sourceSha256": "30db0cc68145dca22532e487da01aeb3ec97155e8b2c3a0747a009ce6638be8f",
+      "sourceGitBlob": "da397e5c3ff3b809242659ee80fb85b89b1f39ad",
+      "sha256": "30db0cc68145dca22532e487da01aeb3ec97155e8b2c3a0747a009ce6638be8f",
+      "bytes": 9998,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/lib/util.js",
+      "sourcePath": "runtime/clip/lib/util.js",
+      "sourceSha256": "86045b05656183cd7017e43fb891aa65d1a1e76477885c4dbee81635ee8b7a1d",
+      "sourceGitBlob": "3a7846474d9c75e7daa7ca8ec4bc4378fe5dc37e",
+      "sha256": "86045b05656183cd7017e43fb891aa65d1a1e76477885c4dbee81635ee8b7a1d",
+      "bytes": 6416,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/clip/NOTICE.md",
+      "sourcePath": "runtime/clip/NOTICE.md",
+      "sourceSha256": "17de851ebbc87158da3a987cc1294f98ba63cceb8acef9b8fb649877b7e52ee0",
+      "sourceGitBlob": "e5a99c324f729f18a04a5c0d45cfa0379573bf1b",
+      "sha256": "17de851ebbc87158da3a987cc1294f98ba63cceb8acef9b8fb649877b7e52ee0",
+      "bytes": 2524,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/om-engine.js",
+      "sourcePath": "runtime/om-engine.js",
+      "sourceSha256": "59d41ca9e6f1e35a1e2b8c9bbb3f7b665822b137939282cce8f6113aeb6873ce",
+      "sourceGitBlob": "ce10cd04591c2398aed0e1dfd9296e8be02d5643",
+      "sha256": "59d41ca9e6f1e35a1e2b8c9bbb3f7b665822b137939282cce8f6113aeb6873ce",
+      "bytes": 25602,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "runtime/om.js",
+      "sourcePath": "runtime/om.js",
+      "sourceSha256": "be8b8fc0033c022f6c9f33607df001edd1096b0b6814061a62ea030028ca77f5",
+      "sourceGitBlob": "f1096f7286b747e8e1b0215b8d26896cfcc28799",
+      "sha256": "be8b8fc0033c022f6c9f33607df001edd1096b0b6814061a62ea030028ca77f5",
+      "bytes": 20691,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/blank/index.html",
+      "sourcePath": "templates/blank/index.html",
+      "sourceSha256": "7964d82c915b508866731be902c53925d87b27ba1fa119fa689d5a8753341e61",
+      "sourceGitBlob": "d54efe49af9b9104c6ab87b878b5548a66db4180",
+      "sha256": "7964d82c915b508866731be902c53925d87b27ba1fa119fa689d5a8753341e61",
+      "bytes": 5992,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/blank/template.json",
+      "sourcePath": "templates/blank/template.json",
+      "sourceSha256": "aadb80c902741871841c9daa35beb5cb2cc0d081db839d8a0464cb99b1eebef5",
+      "sourceGitBlob": "929b901e46d0c84add4b015b110ee7a03ba46b05",
+      "sha256": "aadb80c902741871841c9daa35beb5cb2cc0d081db839d8a0464cb99b1eebef5",
+      "bytes": 258,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/blank/vendor/GSAP-LICENSE.html",
+      "sourcePath": "templates/blank/vendor/GSAP-LICENSE.html",
+      "sourceSha256": "dee09c66ff27d61c2390da9cac6b558bc0c5c705f59abef900cc3563c81ee8b4",
+      "sourceGitBlob": "fd3d1475e0762831003e3f84290952ab305321b9",
+      "sha256": "dee09c66ff27d61c2390da9cac6b558bc0c5c705f59abef900cc3563c81ee8b4",
+      "bytes": 76456,
+      "license": "GSAP Standard no-charge license; retain adjacent original license files",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/blank/vendor/GSAP-LICENSE.txt",
+      "sourcePath": "templates/blank/vendor/GSAP-LICENSE.txt",
+      "sourceSha256": "2e16f4e771c504532e976df3a422dc02d611f4a227bac77131be1fc6c9ab2baf",
+      "sourceGitBlob": "20334cee4465ba5ded800931d590e58a35d8371b",
+      "sha256": "2e16f4e771c504532e976df3a422dc02d611f4a227bac77131be1fc6c9ab2baf",
+      "bytes": 153,
+      "license": "GSAP Standard no-charge license; retain adjacent original license files",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/blank/vendor/gsap.min.js",
+      "sourcePath": "templates/blank/vendor/gsap.min.js",
+      "sourceSha256": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+      "sourceGitBlob": "fde57af06cc445f47ca2a6fc1232ec04666346d4",
+      "sha256": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+      "bytes": 72779,
+      "license": "GSAP Standard no-charge license; retain adjacent original license files",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/finance-chart/index.html",
+      "sourcePath": "templates/finance-chart/index.html",
+      "sourceSha256": "2d7c7b0fec9294604d9ff472ee65c41100931b55173254fad930956effccdbc5",
+      "sourceGitBlob": "4d68c824fda5895a1fd9192e19102069163ef7fd",
+      "sha256": "2d7c7b0fec9294604d9ff472ee65c41100931b55173254fad930956effccdbc5",
+      "bytes": 6985,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/finance-chart/template.json",
+      "sourcePath": "templates/finance-chart/template.json",
+      "sourceSha256": "bb7e204148eea582dcae3f163b34551bd6c5063ed33b8763f4643623c4ecd965",
+      "sourceGitBlob": "2202217e0c53f33d301cb095ebb40fea24f9576a",
+      "sha256": "2861deec82758342f359dff1ea76d3952b862c9dafa8450ebec551def1a0fd1c",
+      "bytes": 2806,
+      "mapping": "copy-map-adapted"
+    },
+    {
+      "path": "templates/kinetic-type/index.html",
+      "sourcePath": "templates/kinetic-type/index.html",
+      "sourceSha256": "94d8cce670eee999ae9027a0b37fb68db4e50a5c80277a410169b42b695ffb98",
+      "sourceGitBlob": "34575dc59c741063f39ee285f7b3b92d7797b4fd",
+      "sha256": "94d8cce670eee999ae9027a0b37fb68db4e50a5c80277a410169b42b695ffb98",
+      "bytes": 6329,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/kinetic-type/template.json",
+      "sourcePath": "templates/kinetic-type/template.json",
+      "sourceSha256": "f5819aa9adc7e08d3718ffe88f4708d0f495122f3190b54e60fb616be0372100",
+      "sourceGitBlob": "85a4c086562ebdc11d279288535faa4fa4b5e656",
+      "sha256": "4a48b8fcd161fae29197c40a781914522f833e817e4198b3b62305eaa3656e90",
+      "bytes": 2844,
+      "mapping": "copy-map-adapted"
+    },
+    {
+      "path": "templates/kurzgesagt/index.html",
+      "sourcePath": "templates/kurzgesagt/index.html",
+      "sourceSha256": "1b390a8624a764f29a304438f7f43692c5bcab7e35def5e6e2c3c967ebe3e048",
+      "sourceGitBlob": "9ce87797603017ddfb7f5ad73a99680407df646e",
+      "sha256": "1b390a8624a764f29a304438f7f43692c5bcab7e35def5e6e2c3c967ebe3e048",
+      "bytes": 6479,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/kurzgesagt/template.json",
+      "sourcePath": "templates/kurzgesagt/template.json",
+      "sourceSha256": "e2a7efa6768048432e1bb0857b27fa3c255a90835d3b56f0b5f43cba35bed513",
+      "sourceGitBlob": "f163d617f41d44c08385d2ca63cd6bf7049e0e74",
+      "sha256": "90c7c51766be81496de3d1d5adfad5f39746d79dd4688b60dd5e203dd9cb79cc",
+      "bytes": 2703,
+      "mapping": "copy-map-adapted"
+    },
+    {
+      "path": "templates/math-3b1b/index.html",
+      "sourcePath": "templates/math-3b1b/index.html",
+      "sourceSha256": "7d887a87b50e3c96ee6a2e2cfadc5d92f6a3af60cd713ff520733ceeead1199c",
+      "sourceGitBlob": "fab9dd81a5bef6b059f0b113996d950a5f4d2de9",
+      "sha256": "7d887a87b50e3c96ee6a2e2cfadc5d92f6a3af60cd713ff520733ceeead1199c",
+      "bytes": 8086,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/math-3b1b/template.json",
+      "sourcePath": "templates/math-3b1b/template.json",
+      "sourceSha256": "66dead76d556e18aa769d4744fb29975cd66be6cd67d12bdafa4282c7b0313cd",
+      "sourceGitBlob": "fc97c693c30a02c591d03e98124d9952022090c1",
+      "sha256": "c9f0a697daab7b68e94b039b3a5d6862a95bafedb76bf908e50c086290b8474b",
+      "bytes": 2622,
+      "mapping": "copy-map-adapted"
+    },
+    {
+      "path": "templates/whiteboard/index.html",
+      "sourcePath": "templates/whiteboard/index.html",
+      "sourceSha256": "5c74c5b6cdb48d26d3daccdc22ca0607ccfe4f63a3715752f9f8bb44ec5960e1",
+      "sourceGitBlob": "e1e88b65b1f8c3275aab5e75a422f439a193b6b4",
+      "sha256": "5c74c5b6cdb48d26d3daccdc22ca0607ccfe4f63a3715752f9f8bb44ec5960e1",
+      "bytes": 7203,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    },
+    {
+      "path": "templates/whiteboard/template.json",
+      "sourcePath": "templates/whiteboard/template.json",
+      "sourceSha256": "afc45fc719432b2f218c7c9ca927c5314193023425699ef4faf6539fbd6a3fab",
+      "sourceGitBlob": "b1b2b041659b58af708127cafe406ef955db0b1b",
+      "sha256": "d87790c076ad53c289a6f1abea0863f659be105356eaa37800e6ca4b92430bd6",
+      "bytes": 2594,
+      "mapping": "copy-map-adapted"
+    },
+    {
+      "path": "THIRD_PARTY.md",
+      "sourcePath": "THIRD_PARTY.md",
+      "sourceSha256": "e629438fc82bfe85b1e22422cbd8802954165db1d3a702fbbbd0ec7a2005b927",
+      "sourceGitBlob": "4b643f38dd204d9973d2558cfd3f1993d8cf3175",
+      "sha256": "e629438fc82bfe85b1e22422cbd8802954165db1d3a702fbbbd0ec7a2005b927",
+      "bytes": 1772,
+      "license": "MIT",
+      "mapping": "source-byte-copy"
+    }
+  ],
+  "sharedExactByteModules": [
+    {
+      "sourcePath": "fonts/LICENSES.md",
+      "sourceSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+      "sourceGitBlob": "0533deaf8ce621691fbd791c134a4e4bede9154e",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md"
+    },
+    {
+      "sourcePath": "fonts/NotoSansSC-500.woff",
+      "sourceSha256": "928d841b1ec663ebce82593568cbc19749fe652f88b8ec960723b7d87b551512",
+      "sourceGitBlob": "4c7cade7f4d92173af4c3a1b6e3a44919e2636bc",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-500.woff"
+    },
+    {
+      "sourcePath": "fonts/NotoSansSC-700.woff",
+      "sourceSha256": "dd0d39a9780eb995c499af0c20cca93b1dfdda865da70871a20890b3e406b968",
+      "sourceGitBlob": "4e5c21514f3c9c69f2571c9889390a779843d4fe",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-700.woff"
+    },
+    {
+      "sourcePath": "fonts/NotoSansSC-800.woff",
+      "sourceSha256": "b57f9c645b1a4967a3c8914ed41f24d109394a8175e36af08f93e40803e84664",
+      "sourceGitBlob": "056fba6424656387bd2a4a85efbc9ae3c5db1ef7",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-800.woff"
+    },
+    {
+      "sourcePath": "fonts/NotoSansSC-900.woff",
+      "sourceSha256": "d2d8a42438b18b65b6577434df4e41bb08c6b5051281757849af00ab743bb58f",
+      "sourceGitBlob": "664a8d52cc3924e36c85599f8c26405c12797817",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-900.woff"
+    },
+    {
+      "sourcePath": "fonts/LXGWWenKai-500.woff",
+      "sourceSha256": "734bd187392579417ac83effe31d37b9de43c7b290bcb400800456511ed79e8f",
+      "sourceGitBlob": "4f02c88fd17d3a10936351fef76596440163c805",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/LXGWWenKai-500.woff"
+    },
+    {
+      "sourcePath": "fonts/OFL.txt",
+      "sourceSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "sourceGitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/OFL.txt"
+    },
+    {
+      "sourcePath": "fonts/RobotoCondensed-var.woff",
+      "sourceSha256": "d149ef1478076ad3f201676de2f58d11de18257590d9faeee2318fa3bc4b90e6",
+      "sourceGitBlob": "1196643983d70c8fcfc751c9bd4177981f0a4ddc",
+      "localPath": "templates/runtime/laohu-native-clips/lib/fonts/RobotoCondensed-var.woff"
+    },
+    {
+      "sourcePath": "runtime/clip/LICENSE",
+      "sourceSha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+      "sourceGitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a",
+      "localPath": "templates/runtime/laohu-native-clips/LICENSE"
+    },
+    {
+      "sourcePath": "runtime/clip/lib/chart.js",
+      "sourceSha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+      "sourceGitBlob": "e18de00ae35ab951117f9547e6b946d4094ee216",
+      "localPath": "templates/runtime/laohu-native-clips/lib/chart.js"
+    },
+    {
+      "sourcePath": "runtime/clip/lib/collage.js",
+      "sourceSha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+      "sourceGitBlob": "f3491e46ac4040ea4951a6215df7ef61e406514a",
+      "localPath": "templates/runtime/laohu-native-clips/lib/collage.js"
+    },
+    {
+      "sourcePath": "runtime/clip/lib/diagram.js",
+      "sourceSha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+      "sourceGitBlob": "8baf28f1c084426a886bcffb98225eb13a70d583",
+      "localPath": "templates/runtime/laohu-native-clips/lib/diagram.js"
+    },
+    {
+      "sourcePath": "runtime/clip/lib/ui.js",
+      "sourceSha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+      "sourceGitBlob": "8dbf8f16c41dd60ce3a3adad2d691d38ab776cea",
+      "localPath": "templates/runtime/laohu-native-clips/lib/ui.js"
+    }
+  ],
+  "scope": {
+    "selected": [
+      "finance-chart",
+      "kinetic-type",
+      "kurzgesagt",
+      "math-3b1b",
+      "whiteboard"
+    ],
+    "sourceOnly": [
+      "blank",
+      "keynote-ui",
+      "object-3d",
+      "storytime",
+      "talking-head",
+      "ui-space",
+      "vox-collage"
+    ],
+    "excluded": "No full project tree, studio, examples, media or unrelated package assets; only CLI import closure and declared template/runtime dependency closure."
+  }
+}

@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-analysis | 老胡问题分析与方案设计"
-  short_description: "调查原因、给出材料局部改后对照，比较路径或设计完整能力方案。"
-  default_prompt: "使用 $laohu-analysis，根据材料查明关键原因；确认具体差距后，在报告中给出同材料局部改后对照，或比较路径、设计完整能力方案。"
+  short_description: "查明问题原因与执行断点，比较方案取舍，设计可复用能力及创作前置方案。"
+  default_prompt: "使用 $laohu-analysis，依据实际材料查明关键关系与断点、比较取舍，或形成能力设计与决策级变更规格。承接动画、写作、剧本或小说的前置设计委托时，按对应专项方法工作。"

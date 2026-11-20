@@ -6,18 +6,28 @@ import { createReadStream } from "node:fs";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { loadMotionPackage } from "./laohu-motion-runtime.mjs";
 
 const skillDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const corePath = path.join(skillDir, "scripts", "motion-core.js");
 const opsPath = path.join(skillDir, "scripts", "motion-ops.js");
 const templateCatalogPath = path.join(skillDir, "templates", "catalog.json");
-const localEffectsAdapterPath = path.join(skillDir, "templates", "adapters", "huashu-effects.js");
+const localEffectsAdapterPath = path.join(skillDir, "templates", "adapters", "laohu-effects.js");
+const transitionsAdapterPath = path.join(skillDir, "templates", "adapters", "laohu-transitions.js");
+const motionRecipesAdapterPath = path.join(skillDir, "templates", "adapters", "laohu-motion-recipes.js");
+const MAX_MOTION_RECIPE_FRAME_BYTES = 128 * 1024 * 1024;
+const MAX_MOTION_RECIPE_SEQUENCE_ENCODED_BYTES = 64 * 1024 * 1024;
+const MAX_MOTION_RECIPE_SEQUENCE_TOTAL_ENCODED_BYTES = 128 * 1024 * 1024;
+const MAX_MOTION_RECIPE_SEQUENCE_FRAME_RGBA_BYTES = 64 * 1024 * 1024;
+const MAX_MOTION_RECIPE_SEQUENCE_FRAMES = 900;
+const PLAYWRIGHT_VERSION = "1.55.0";
+const localDgEffectSourceFunctions = ["DG.drawPartial", "DG.circumscribe", "DG.brace", "DG.indicate", "DG.cum", "MO.lagged", "MO.thereAndBack"];
 const require = createRequire(import.meta.url);
 
 function usage() {
   return [
     "Usage: node scripts/render.mjs --scene /absolute/scene.json --output /absolute/output.mp4 --cache-dir /absolute/project/.cache/tmp/motion-run",
-    "       [--browser /absolute/browser] [--ffmpeg /absolute/ffmpeg] [--draw-module /absolute/draw.js] [--template-effects huashu-art-motion-dg] [--samples 0,1.5] [--overwrite]",
+    "       [--browser /absolute/browser] [--ffmpeg /absolute/ffmpeg] [--draw-module /absolute/draw.js] [--template-effects laohu-motion-dg] [--samples 0,1.5] [--overwrite]",
     "       [--require-layout-evidence] [--require-motion-evidence] [--check-text-visibility]",
   ].join("\n");
 }
@@ -373,7 +383,7 @@ async function sameExistingFile(left, right) {
 }
 
 async function preflightOutput(args) {
-  const inputs = [args.scene, args.drawModule, corePath, opsPath].filter(Boolean);
+  const inputs = [args.scene, args.drawModule, corePath, opsPath, motionRecipesAdapterPath, transitionsAdapterPath].filter(Boolean);
   const output = await realPathForComparison(args.output);
   const realInputs = [];
   for (const input of inputs) {
@@ -433,6 +443,120 @@ async function sha256File(filename) {
 async function fingerprintFile(role, filename) {
   const bytes = await fs.readFile(filename);
   return { role, status: "present", path: path.resolve(filename), sha256: crypto.createHash("sha256").update(bytes).digest("hex"), bytes: bytes.length };
+}
+
+async function resolveMotionRecipeFrameAssets(records, scene, scenePath) {
+  const sceneDirectory = await fs.realpath(path.dirname(scenePath));
+  const browserAssets = {};
+  const evidence = [];
+  let allSequenceEncodedBytes = 0;
+  const resolveSceneAsset = async (relativePath, label) => {
+    if (path.isAbsolute(relativePath) || relativePath.includes("\\")
+        || relativePath.split("/").some((part) => !part || part === "." || part === "..")) {
+      throw new Error(`${label} must be a project-local relative path with no dot, parent, or backslash components`);
+    }
+    const requested = path.resolve(sceneDirectory, relativePath);
+    const actual = await fs.realpath(requested);
+    const relative = path.relative(sceneDirectory, actual);
+    if (!relative || relative === ".." || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+      throw new Error(`${label} resolves outside the scene directory`);
+    }
+    return {actual, relative: relative.split(path.sep).join("/")};
+  };
+  const readPngAsset = async (relativePath, label) => {
+    if (!/\.png$/i.test(relativePath)) throw new Error(`${label} must be a PNG frame`);
+    const {actual, relative} = await resolveSceneAsset(relativePath, label);
+    const bytes = await fs.readFile(actual);
+    if (bytes.length < 24 || bytes.length > MAX_MOTION_RECIPE_FRAME_BYTES) throw new Error(`${label} PNG must be 24 bytes–128 MiB`);
+    if (!bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) || bytes.toString("ascii", 12, 16) !== "IHDR") {
+      throw new Error(`${label} must point to a PNG frame asset`);
+    }
+    const width = bytes.readUInt32BE(16), height = bytes.readUInt32BE(20);
+    if (width !== scene.width || height !== scene.height) throw new Error(`${label} PNG is ${width}x${height}; the Motion stage is ${scene.width}x${scene.height}`);
+    return {path: relative, sha256: crypto.createHash("sha256").update(bytes).digest("hex"), bytes: bytes.length, width, height,
+      dataUrl: `data:image/png;base64,${bytes.toString("base64")}`};
+  };
+  for (const record of records) {
+    for (const side of ["from", "to"]) {
+      const panel = record.parameters?.[side];
+      if (panel?.type === "source-frame-sequence") {
+        const {actual: manifestFile, relative: manifestPath} = await resolveSceneAsset(panel.path, `${record.id}.${side}.path`);
+        const manifestBytes = await fs.readFile(manifestFile);
+        if (manifestBytes.length > 256 * 1024) throw new Error(`${record.id}.${side} source-frame sequence manifest must not exceed 256 KiB`);
+        let manifest;
+        try { manifest = JSON.parse(manifestBytes.toString("utf8")); }
+        catch (error) { throw new Error(`${record.id}.${side} source-frame sequence manifest is not valid JSON: ${error.message}`); }
+        if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)
+            || manifest.format !== "laohu.motion.source-frame-sequence/1") {
+          throw new Error(`${record.id}.${side} sequence manifest must use laohu.motion.source-frame-sequence/1`);
+        }
+        const keys = Object.keys(manifest).sort();
+        if (JSON.stringify(keys) !== JSON.stringify(["format", "fps", "frames", "height", "width"])) throw new Error(`${record.id}.${side} sequence manifest has unsupported or missing fields`);
+        if (manifest.width !== scene.width || manifest.height !== scene.height) throw new Error(`${record.id}.${side} sequence dimensions must match the Motion stage ${scene.width}x${scene.height}`);
+        if (typeof manifest.fps !== "number" || !Number.isFinite(manifest.fps) || manifest.fps <= 0 || manifest.fps > 120) throw new Error(`${record.id}.${side} sequence fps must be in (0, 120]`);
+        if (!Array.isArray(manifest.frames) || manifest.frames.length < 2 || manifest.frames.length > MAX_MOTION_RECIPE_SEQUENCE_FRAMES) {
+          throw new Error(`${record.id}.${side} sequence must contain 2–${MAX_MOTION_RECIPE_SEQUENCE_FRAMES} ordered PNG frames`);
+        }
+        const frames = [];
+        let totalEncodedBytes = 0;
+        const decodedFrameBytes = scene.width * scene.height * 4;
+        if (!Number.isSafeInteger(decodedFrameBytes) || decodedFrameBytes > MAX_MOTION_RECIPE_SEQUENCE_FRAME_RGBA_BYTES) {
+          throw new Error(`${record.id}.${side} one decoded source frame would use ${decodedFrameBytes} RGBA bytes; the per-frame LRU cache budget is 64 MiB`);
+        }
+        for (const [index, framePath] of manifest.frames.entries()) {
+          if (typeof framePath !== "string" || framePath.startsWith("/") || framePath.includes("\\")
+              || framePath.split("/").some((part) => !part || part === "." || part === "..")) {
+            throw new Error(`${record.id}.${side}.frames[${index}] must be a relative PNG path with no dot, parent, or backslash components`);
+          }
+          const frame = await readPngAsset(path.posix.join(path.posix.dirname(manifestPath), framePath), `${record.id}.${side}.frames[${index}]`);
+          totalEncodedBytes += frame.bytes;
+          if (totalEncodedBytes > MAX_MOTION_RECIPE_SEQUENCE_ENCODED_BYTES) throw new Error(`${record.id}.${side} encoded PNG sequence exceeds the 64 MiB input-file budget`);
+          allSequenceEncodedBytes += frame.bytes;
+          if (allSequenceEncodedBytes > MAX_MOTION_RECIPE_SEQUENCE_TOTAL_ENCODED_BYTES) throw new Error(`Garden source-frame PNG inputs exceed the 128 MiB scene-wide encoded-file budget`);
+          frames.push(frame);
+        }
+        const manifestSha256 = crypto.createHash("sha256").update(manifestBytes).digest("hex");
+        browserAssets[record.id] ||= {};
+        browserAssets[record.id][side] = {type: "source-frame-sequence", path: panel.path, manifestSha256,
+          fps: manifest.fps, frameCount: frames.length, width: scene.width, height: scene.height,
+          decodedFrameBytes, decodedCacheBudgetBytes: MAX_MOTION_RECIPE_SEQUENCE_FRAME_RGBA_BYTES, totalEncodedBytes, frames};
+        evidence.push({type: "source-frame-sequence", recipeId: record.recipeId, instanceId: record.id, side, path: manifestPath,
+          manifestSha256, fps: manifest.fps, frameCount: frames.length, totalEncodedBytes,
+          decodedFrameBytes, decodedCacheBudgetBytes: MAX_MOTION_RECIPE_SEQUENCE_FRAME_RGBA_BYTES,
+          frames: frames.map(({path, sha256, bytes}) => ({path, sha256, bytes})), width: scene.width, height: scene.height});
+        continue;
+      }
+      if (panel?.type !== "source-frame") continue;
+      if (path.isAbsolute(panel.path) || panel.path.includes("\\")) throw new Error(`${record.id}.${side}.path must be project-local and relative to the scene JSON`);
+      const requested = path.resolve(sceneDirectory, panel.path);
+      const actual = await fs.realpath(requested);
+      const relative = path.relative(sceneDirectory, actual);
+      if (!relative || relative === ".." || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+        throw new Error(`${record.id}.${side}.path resolves outside the scene directory`);
+      }
+      const bytes = await fs.readFile(actual);
+      if (bytes.length < 24 || bytes.length > MAX_MOTION_RECIPE_FRAME_BYTES) throw new Error(`${record.id}.${side} PNG must be 24 bytes–128 MiB`);
+      if (!bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) || bytes.toString("ascii", 12, 16) !== "IHDR") {
+        throw new Error(`${record.id}.${side}.path must point to a PNG frame asset`);
+      }
+      const width = bytes.readUInt32BE(16), height = bytes.readUInt32BE(20);
+      if (width !== scene.width || height !== scene.height) throw new Error(`${record.id}.${side} PNG is ${width}x${height}; the Motion stage is ${scene.width}x${scene.height}`);
+      const sha256 = crypto.createHash("sha256").update(bytes).digest("hex");
+      const relativePath = relative.split(path.sep).join("/");
+      browserAssets[record.id] ||= {};
+      browserAssets[record.id][side] = {
+        path: panel.path,
+        resolvedRelativePath: relativePath,
+        sha256,
+        bytes: bytes.length,
+        width,
+        height,
+        dataUrl: `data:image/png;base64,${bytes.toString("base64")}`,
+      };
+      evidence.push({ recipeId: record.recipeId, instanceId: record.id, side, path: relativePath, sha256, bytes: bytes.length, width, height });
+    }
+  }
+  return { browserAssets, evidence };
 }
 
 function absentInputFingerprint(role) {
@@ -758,7 +882,11 @@ async function captureTextVisibilityProbe(page, probe, scene) {
       result.reason = "the independent unmasked reference produced no ink pixels for the declared source glyph";
       return result;
     }
+    if (window.LAOHU_MOTION_PREPARE_FRAME) await window.LAOHU_MOTION_PREPARE_FRAME(scene, probe.timeSec);
     window.MotionCore.drawFrame(stage, scene, probe.timeSec, window.MOTION_RENDERERS || {}, true);
+    if (window.LAOHU_MOTION_POSTPROCESS && scene.motionPostProcessing?.length) {
+      window.LAOHU_MOTION_POSTPROCESS(stage, scene, probe.timeSec);
+    }
     const repeated = frameCtx.getImageData(0, 0, stage.width, stage.height).data;
     let deterministic = true;
     for (let index = 0; index < repeated.length; index += 1) {
@@ -779,42 +907,123 @@ async function captureTextVisibilityProbe(page, probe, scene) {
   }, { probe, scene });
 }
 
-async function prepareTemplateEffects(effectId) {
+async function prepareTemplateEffects(effectId, scene) {
   const catalog = JSON.parse(await fs.readFile(templateCatalogPath, "utf8"));
+  if (!Array.isArray(catalog.sources)) throw new Error("Motion production catalog has no minimal source pins for local effect verification");
   if (![1, 2].includes(catalog.schemaVersion)) throw new Error(`Unsupported template catalog schema ${catalog.schemaVersion}; render.mjs supports schema versions 1 and 2`);
   if (catalog.schemaVersion === 2 && !Array.isArray(catalog.effects)) throw new Error("Template catalog schema 2 requires an effects array");
-  const effect = catalog.effectLibraries?.find((item) => item.id === effectId);
+  const effect = catalog.effectLibraries?.find((item) => item.id === effectId || (item.aliases || []).includes(effectId));
   if (!effect) throw new Error(`Unknown or unsupported --template-effects ${effectId}; available: ${(catalog.effectLibraries || []).map((item) => item.id).join(", ") || "none"}`);
   if (effect.renderer !== "classic-global-library" || !Array.isArray(effect.loadOrder) || !Array.isArray(effect.functions)) {
     throw new Error(`Effect library ${effectId} has no supported classic-global preload contract`);
   }
   const source = catalog.sources.find((item) => item.id === effect.sourceId);
-  if (!source?.vendorRoot || !Array.isArray(source.files)) throw new Error(`Effect library source ${effect.sourceId} has no local pinned vendor`);
-  const upstreamRoot = path.resolve(skillDir, "templates", "upstream");
-  const sourceRoot = path.resolve(skillDir, source.vendorRoot);
-  const vendorRelative = path.relative(upstreamRoot, sourceRoot);
-  if (!vendorRelative || vendorRelative === ".." || vendorRelative.startsWith(`..${path.sep}`) || path.isAbsolute(vendorRelative)) {
-    throw new Error(`Effect source vendorRoot must stay below templates/upstream: ${source.vendorRoot}`);
+  if (!source || !Array.isArray(source.files) || !effect.localRuntime) throw new Error(`Effect library ${effectId} has no local runtime closure or source ledger`);
+  const runtimePath = path.resolve(skillDir, effect.localRuntime);
+  const runtimeRoot = path.resolve(skillDir, "templates", "runtime");
+  const runtimeRelative = path.relative(runtimeRoot, runtimePath);
+  if (!runtimeRelative || runtimeRelative === ".." || runtimeRelative.startsWith(`..${path.sep}`) || path.isAbsolute(runtimeRelative)) {
+    throw new Error(`Effect localRuntime must stay below templates/runtime: ${effect.localRuntime}`);
+  }
+  const manifestBytes = await fs.readFile(runtimePath);
+  const manifestSha256 = crypto.createHash("sha256").update(manifestBytes).digest("hex");
+  if (effect.localRuntimeManifestSha256 && manifestSha256 !== effect.localRuntimeManifestSha256) {
+    throw new Error(`Effect local runtime manifest SHA-256 differs from catalog for ${effectId}`);
+  }
+  const manifest = JSON.parse(manifestBytes.toString("utf8"));
+  if (manifest.schemaVersion !== 1 || manifest.source?.id !== source.id || manifest.source?.commit !== source.commit) {
+    throw new Error(`Effect local runtime closure identity mismatch for ${effectId}`);
+  }
+  const libraryClosure = manifest.libraries?.[effect.id];
+  if (!Array.isArray(libraryClosure?.loadOrder)
+      || JSON.stringify(libraryClosure.loadOrder.map((row) => row.sourcePath)) !== JSON.stringify(effect.loadOrder)) {
+    throw new Error(`Effect local runtime load order does not match the catalogued source order for ${effectId}`);
   }
   const sourceFiles = new Map(source.files.map((file) => [file.path, file]));
-  const files = [];
-  for (const filePath of effect.loadOrder) {
-    const pinned = sourceFiles.get(filePath);
-    if (!pinned) throw new Error(`Effect closure file ${filePath} is absent from source ledger ${source.id}`);
-    const absolutePath = path.resolve(sourceRoot, filePath);
-    const relative = path.relative(sourceRoot, absolutePath);
-    if (!relative || relative === ".." || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) throw new Error(`Effect closure path escapes vendorRoot: ${filePath}`);
+  const localModules = new Map((manifest.modules || []).map((file) => [file.sourcePath, file]));
+  const localFonts = new Map((manifest.fontAssets || []).map((file) => [file.sourcePath, file]));
+  const verifyLocalAsset = async (row, pinned, label) => {
+    if (!row?.localPath || row.sha256 !== pinned?.sha256 || (pinned?.gitBlob && row.gitBlob !== pinned.gitBlob)) {
+      throw new Error(`${label} source identity is absent from the pinned source ledger`);
+    }
+    const absolutePath = path.resolve(runtimeRoot, row.localPath);
+    const relative = path.relative(runtimeRoot, absolutePath);
+    if (!relative || relative === ".." || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+      throw new Error(`${label} local path escapes templates/runtime: ${row.localPath}`);
+    }
     const bytes = await fs.readFile(absolutePath);
     const actualSha = crypto.createHash("sha256").update(bytes).digest("hex");
     const actualBlob = crypto.createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex");
-    if (actualSha !== pinned.sha256 || (pinned.gitBlob && actualBlob !== pinned.gitBlob)) throw new Error(`Pinned source check failed for ${source.id}/${filePath}`);
-    files.push({ path: filePath, absolutePath, sha256: actualSha, gitBlob: actualBlob, bytes: bytes.length });
+    if (actualSha !== row.localSha256 || actualSha !== row.sha256 || (row.bytes !== bytes.length)
+        || (row.gitBlob && actualBlob !== row.gitBlob)) {
+      throw new Error(`${label} local copy does not match the pinned source bytes`);
+    }
+    return { absolutePath, bytes, sha256: actualSha, gitBlob: actualBlob };
+  };
+  const files = [];
+  for (const { sourcePath: filePath } of libraryClosure.loadOrder) {
+    const pinned = sourceFiles.get(filePath);
+    if (!pinned) throw new Error(`Effect closure file ${filePath} is absent from source ledger ${source.id}`);
+    const local = localModules.get(filePath);
+    if (!local || local.localPath !== libraryClosure.loadOrder.find((item) => item.sourcePath === filePath)?.localPath) {
+      throw new Error(`Effect closure file ${filePath} has no matching local module mapping`);
+    }
+    const verified = await verifyLocalAsset(local, pinned, `Effect closure ${source.id}/${filePath}`);
+    files.push({ path: filePath, localPath: local.localPath, absolutePath: verified.absolutePath, sha256: verified.sha256, gitBlob: verified.gitBlob, bytes: verified.bytes.length });
   }
-  return { effect, source, files };
+  const requestedFonts = new Map();
+  const addFontDependency = async (font, allowedPaths, label) => {
+    if (requestedFonts.has(font.family)) throw new Error(`Multiple local effect entries declare font family ${font.family}; use one pinned source asset per family`);
+    const pinned = sourceFiles.get(font.path);
+    if (!pinned || !allowedPaths.includes(font.path)) throw new Error(`Font dependency ${font.family} at ${font.path} is absent from its pinned source ledger entry`);
+    const localFont = localFonts.get(font.path);
+    if (!localFont || !(localFont.families || []).includes(font.family)) throw new Error(`Font dependency ${font.family} has no exact local asset mapping`);
+    const verified = await verifyLocalAsset(localFont, pinned, label);
+    requestedFonts.set(font.family, {
+      family: font.family,
+      path: font.path,
+      localPath: localFont.localPath,
+      sha256: verified.sha256,
+      gitBlob: verified.gitBlob,
+      bytes: verified.bytes.length,
+      weight: font.weight,
+      style: font.style,
+      base64: verified.bytes.toString("base64"),
+    });
+  };
+  for (const font of effect.fontDependencies || []) {
+    await addFontDependency(font, effect.sourceRef?.files || [], `Font dependency ${source.id}/${font.path}`);
+  }
+  const usedRendererTypes = new Set((scene?.objects || []).map((object) => object?.type).filter((type) => typeof type === "string"));
+  for (const localEffect of catalog.effects || []) {
+    if (!usedRendererTypes.has(localEffect.renderer) || !Array.isArray(localEffect.fontDependencies)) continue;
+    if (localEffect.sourceRef?.sourceId !== source.id) throw new Error(`Font dependency source ${localEffect.sourceRef?.sourceId} does not match selected effect library source ${source.id}`);
+    for (const font of localEffect.fontDependencies) {
+      await addFontDependency(font, localEffect.sourceRef.files || [], `Font dependency ${source.id}/${font.path}`);
+    }
+  }
+  return { effect, source, localRuntime: path.relative(skillDir, runtimePath).split(path.sep).join("/"), files, fontAssets: [...requestedFonts.values()] };
+}
+
+function supportsLocalDgEffects(effect) {
+  if (effect?.id === "laohu-motion-dg") return true;
+  if (effect?.id !== "laohu-motion-toolkit" || effect.sourceId !== "huashu-art-motion") return false;
+  const loadOrder = new Set(effect.loadOrder || []);
+  const functions = new Set((effect.functions || []).map((row) => row.id));
+  return loadOrder.has("scripts/engine/lib/diagram.js")
+    && loadOrder.has("scripts/engine/lib/motion.js")
+    && localDgEffectSourceFunctions.every((id) => functions.has(id));
 }
 
 async function main() {
-  const args = parseArgs(process.argv.slice(2));
+  const argv = process.argv.slice(2);
+  if (argv.length === 1 && ["--help", "-h", "help"].includes(argv[0])) {
+    process.stdout.write(`${usage()}\n`);
+    return;
+  }
+  const args = parseArgs(argv);
+  const playwrightRuntime = loadMotionPackage("playwright", { expectedVersions: { playwright: PLAYWRIGHT_VERSION } });
+  const { chromium } = playwrightRuntime.value;
   if (!args.output.toLowerCase().endsWith(".mp4")) throw new Error("--output must end in .mp4");
   await preflightOutput(args);
   if (!args.browser) {
@@ -833,10 +1042,14 @@ async function main() {
   args.ffmpeg = await requireExecutable(args.ffmpeg, "FFmpeg");
   const core = require(corePath);
   const ops = require(opsPath);
+  const motionRecipes = require(motionRecipesAdapterPath);
   const sceneBytes = await fs.readFile(args.scene);
   const scene = JSON.parse(sceneBytes.toString("utf8"));
   core.assertValidScene(scene);
   const motionOperationRecords = ops.validateMotionOperations(scene);
+  const motionRecipeRecords = motionRecipes.validateScene(scene);
+  const motionRecipeNeedsSourceIris = motionRecipeRecords.some((record) => record.recipeId === "canonical-beat-reveal");
+  const motionRecipeFrameAssetBundle = await resolveMotionRecipeFrameAssets(motionRecipeRecords, scene, args.scene);
   const catalogBytes = await fs.readFile(templateCatalogPath);
   const providerCatalog = JSON.parse(catalogBytes.toString("utf8"));
   const providerCatalogEntries = [...new Set(motionOperationRecords.map((record) => record.operationId))].map((operationId) => {
@@ -847,23 +1060,66 @@ async function main() {
     }
     return { catalogId: entry.id, operationId, sha256: crypto.createHash("sha256").update(JSON.stringify(entry)).digest("hex") };
   });
+  const motionProviderRecords = motionRecipeRecords.map((record) => {
+    const expectedId = `laohu-motion-recipe-${record.recipeId}`;
+    const entry = (providerCatalog.effects || []).find((item) => item.id === expectedId);
+    if (!entry || !["available", "conditional"].includes(entry.availability)
+      || entry.renderer !== record.renderer || entry.adapter?.path !== "templates/adapters/laohu-motion-recipes.js"
+      || entry.sourceRef?.sourceId !== motionRecipes.SOURCE_ID || entry.sourceRef?.commit !== motionRecipes.SOURCE_COMMIT) {
+      throw new Error(`Garden recipe ${record.recipeId} has no consumer-linked pinned catalog row ${expectedId}`);
+    }
+    if (entry.availability === "conditional" && !(entry.conditions || []).length) throw new Error(`Garden recipe ${record.recipeId} is conditional without a declared input condition`);
+    return { catalogId: entry.id, recipeId: record.recipeId, instanceId: record.id, ownerId: record.ownerId, renderer: record.renderer,
+      sha256: crypto.createHash("sha256").update(JSON.stringify(entry)).digest("hex") };
+  });
   const inputFingerprints = {
     scene: { role: "scene-json", status: "present", path: args.scene, sha256: crypto.createHash("sha256").update(sceneBytes).digest("hex"), bytes: sceneBytes.length },
     drawModule: args.drawModule ? await fingerprintFile("draw-module", args.drawModule) : absentInputFingerprint("draw-module"),
     motionCore: await fingerprintFile("motion-core", corePath),
     motionOps: await fingerprintFile("motion-ops-provider", opsPath),
+    motionRecipeAdapter: motionRecipeRecords.length ? await fingerprintFile("laohu-motion-recipes-adapter", motionRecipesAdapterPath) : absentInputFingerprint("laohu-motion-recipes-adapter"),
+    sourceTransitionAdapter: motionRecipeNeedsSourceIris ? await fingerprintFile("laohu-motion-transitions-adapter", transitionsAdapterPath) : absentInputFingerprint("laohu-motion-transitions-adapter"),
+    motionRecipeFrameAssets: {
+      role: "explicit-motion-recipe-source-frame-inputs",
+      status: motionRecipeFrameAssetBundle.evidence.length ? "present" : "not-provided",
+      assets: motionRecipeFrameAssetBundle.evidence,
+      sha256: crypto.createHash("sha256").update(JSON.stringify(motionRecipeFrameAssetBundle.evidence)).digest("hex"),
+    },
     providerCatalog: {
       role: "motion-operation-catalog", status: "present", path: templateCatalogPath,
       sha256: crypto.createHash("sha256").update(catalogBytes).digest("hex"), bytes: catalogBytes.length,
-      entries: providerCatalogEntries,
+      entries: [...providerCatalogEntries, ...motionProviderRecords],
     },
   };
   const localEffectRecords = ops.validateLocalEffects(scene);
-  const requestedEffectLibrary = args.templateEffects || (localEffectRecords.length ? "huashu-art-motion-dg" : null);
-  if (localEffectRecords.length && requestedEffectLibrary !== "huashu-art-motion-dg") {
-    throw new Error("custom:huashu-local-effects requires the pinned --template-effects huashu-art-motion-dg source closure");
+  const transitionObjects = (scene.objects || []).filter((object) => object?.type === "custom:laohu-motion-transition");
+  const sourceTransitionsRequired = transitionObjects.length > 0 || motionRecipeNeedsSourceIris;
+  if (sourceTransitionsRequired) {
+    if (localEffectRecords.length) throw new Error("A single Motion scene cannot preload both local DG effects and source transitions; place the source iris reveal in a separate transition scene");
   }
-  const templateEffects = requestedEffectLibrary ? await prepareTemplateEffects(requestedEffectLibrary) : null;
+  if (transitionObjects.length) {
+    for (const object of transitionObjects) {
+      const data = object.data || {};
+      const entry = (providerCatalog.effects || []).find((row) => row.id === data.groupId);
+      if (!entry || entry.renderer !== "custom:laohu-motion-transition" || !entry.sourceFunctions?.includes(`TRANSITIONS.${data.method}`)) {
+        throw new Error(`transition ${String(data.instanceId || object.id)} must resolve a canonical available catalog group and source method`);
+      }
+    }
+    if (args.drawModule && path.resolve(args.drawModule) !== path.resolve(transitionsAdapterPath)) {
+      throw new Error("custom:laohu-motion-transition is bound to templates/adapters/laohu-transitions.js; do not replace its source-function adapter");
+    }
+    args.drawModule = transitionsAdapterPath;
+    inputFingerprints.drawModule = await fingerprintFile("draw-module", args.drawModule);
+  }
+  const requestedEffectLibrary = args.templateEffects || (localEffectRecords.length ? "laohu-motion-dg" : sourceTransitionsRequired ? "laohu-motion-transitions" : null);
+  const localEffectLibrary = requestedEffectLibrary ? await prepareTemplateEffects(requestedEffectLibrary, scene) : null;
+  if (localEffectRecords.length && !supportsLocalDgEffects(localEffectLibrary?.effect)) {
+    throw new Error("custom:laohu-motion-effects requires the pinned laohu-motion-dg closure or laohu-motion-toolkit with its original DG/MO source functions");
+  }
+  if (sourceTransitionsRequired && localEffectLibrary?.effect.id !== "laohu-motion-transitions") {
+    throw new Error("canonical beat reveal and custom:laohu-motion-transition require the pinned laohu-motion-transitions source closure");
+  }
+  const templateEffects = localEffectLibrary;
   const frameCount = Math.round(scene.duration * scene.fps);
   const requiredLayout = args.requireLayoutEvidence ? validateLayoutRequirements(scene, frameCount) : null;
   const requiredMotion = args.requireMotionEvidence
@@ -898,15 +1154,19 @@ async function main() {
   let context;
   let readiness;
   let consumerEvidence = null;
+  let sourceInvocationEvidence = null;
+  let speechBindingConsumption = null;
+  let speechConsumerTrace = null;
   let templateEffectEvidence = null;
   let templateEffectStage = null;
   let localEffectEvidence = null;
+  let transitionEvidence = null;
+  let motionRecipeEvidence = null;
   let textVisibilityEvidence = [];
   let resourceEvidence = null;
   const browserResourceCapturePromises = [];
   const samples = [];
   try {
-    const { chromium } = require("playwright");
     context = await chromium.launchPersistentContext(profileDirectory, {
       executablePath: args.browser,
       headless: true,
@@ -923,26 +1183,62 @@ async function main() {
     await page.setContent(`<canvas id="stage" width="${scene.width}" height="${scene.height}"></canvas>`);
     await page.addScriptTag({ path: corePath });
     await page.addScriptTag({ path: opsPath });
+    if (motionRecipeRecords.length) await page.addScriptTag({ path: motionRecipesAdapterPath });
     if (templateEffects) {
+      if ((templateEffects.effect.initializeGlobals || []).length) {
+        await page.evaluate((globals) => {
+          for (const name of globals) {
+            if (name !== "SCENES") throw new Error(`Unsupported source global initializer ${String(name)}`);
+            window.SCENES ||= {};
+          }
+          return globals;
+        }, templateEffects.effect.initializeGlobals);
+      }
       for (const file of templateEffects.files) await page.addScriptTag({ path: file.absolutePath });
       templateEffectStage = await page.evaluate(({ width, height }) => {
         if (!window.U || typeof window.U.setStage !== "function") throw new Error("Pinned template effect closure did not expose U.setStage");
         window.U.setStage(width, height);
         return { requested: { width, height }, actual: { width: window.STAGE.W, height: window.STAGE.H } };
       }, { width: scene.width, height: scene.height });
+      if (templateEffects.fontAssets?.length) {
+        const loadedFonts = await page.evaluate(async (assets) => {
+          const loaded = [];
+          for (const asset of assets) {
+            const fontFace = new FontFace(asset.family, `url(data:font/woff;base64,${asset.base64})`, { weight: asset.weight, style: asset.style });
+            await fontFace.load();
+            document.fonts.add(fontFace);
+            loaded.push({ family: asset.family, status: fontFace.status, check: document.fonts.check(`16px "${asset.family}"`) });
+          }
+          await document.fonts.ready;
+          window.MOTION_SOURCE_FONT_FACES = assets.map((asset) => ({
+            family: asset.family,
+            url: `data:font/woff;base64,${asset.base64}`,
+            desc: { weight: asset.weight, style: asset.style },
+          }));
+          return loaded;
+        }, templateEffects.fontAssets);
+        if (loadedFonts.some((font) => font.status !== "loaded" || !font.check)) throw new Error(`Pinned source font did not register: ${JSON.stringify(loadedFonts)}`);
+        templateEffectStage.fontAssets = templateEffects.fontAssets.map(({ family, path: fontPath, localPath, sha256, gitBlob, bytes, weight, style }) => ({ family, path: fontPath, localPath, sha256, gitBlob, bytes, weight, style, status: "loaded" }));
+      } else {
+        templateEffectStage.fontAssets = [];
+      }
       await page.evaluate((payload) => {
         const calls = Object.fromEntries(payload.effect.functions.map((item) => [item.id, 0]));
         window.MOTION_TEMPLATE_EFFECTS = {
           id: payload.effect.id,
           sourceId: payload.source.id,
           sourceCommit: payload.source.commit,
-          sourceFiles: payload.files.map(({ path, sha256, gitBlob, bytes }) => ({ path, sha256, gitBlob, bytes })),
+          localRuntime: payload.localRuntime,
+          sourceFiles: payload.files.map(({ path, localPath, sha256, gitBlob, bytes }) => ({ path, localPath, sha256, gitBlob, bytes })),
+          fontAssets: payload.fontAssets.map(({ family, path, localPath, sha256, gitBlob, bytes, weight, style }) => ({ family, path, localPath, sha256, gitBlob, bytes, weight, style, status: "loaded" })),
           calls,
           invocationInstrumentation: "Each original global function is wrapped with a pass-through counter; its body, receiver, arguments, and return value are unchanged.",
         };
         for (const item of payload.effect.functions) {
-          const [globalName, methodName] = item.id.split(".");
-          const namespace = window[globalName];
+          const parts = item.id.split(".");
+          const methodName = parts.pop();
+          let namespace = window;
+          for (const part of parts) namespace = namespace && namespace[part];
           if (!namespace || typeof namespace[methodName] !== "function") throw new Error(`Original source function ${item.id} was not loaded`);
           const original = namespace[methodName];
           namespace[methodName] = function(...args) {
@@ -950,9 +1246,134 @@ async function main() {
             return Reflect.apply(original, this, args);
           };
         }
-      }, { effect: templateEffects.effect, source: templateEffects.source, files: templateEffects.files });
+      }, { effect: templateEffects.effect, source: templateEffects.source, localRuntime: templateEffects.localRuntime, files: templateEffects.files, fontAssets: templateEffects.fontAssets });
     }
+    await page.evaluate(() => {
+      const namespaceNames = ["U", "MO", "CAM", "TY", "CH", "MD", "UI", "CL", "DG", "TRANSITIONS"];
+      const tracker = {
+        schema: "motion-source-invocation-tracking/1",
+        scope: "Own callable methods on the listed loaded source namespaces are pass-through wrapped after source closure setup and before the draw module; calls are counted by render phase. This does not inspect lexical/local functions, inherited methods, direct canvas operations, or source syntax outside those namespaces. A not-loaded or untracked method is not reported as never called.",
+        namespaces: {},
+        methods: {},
+      };
+      for (const namespaceName of namespaceNames) {
+        const namespace = window[namespaceName];
+        if (!namespace || (typeof namespace !== "object" && typeof namespace !== "function")) {
+          tracker.namespaces[namespaceName] = { status: "not-loaded", methodCount: 0, trackedMethodCount: 0, untrackedMethods: [] };
+          continue;
+        }
+        const descriptors = Object.getOwnPropertyDescriptors(namespace);
+        const callableNames = Object.keys(descriptors).filter((name) => typeof descriptors[name]?.value === "function");
+        const untrackedMethods = [];
+        let trackedMethodCount = 0;
+        for (const methodName of callableNames) {
+          const id = `${namespaceName}.${methodName}`;
+          const descriptor = descriptors[methodName];
+          const row = tracker.methods[id] = { id, loaded: true, tracked: false, status: "loaded-untracked", calls: {} };
+          const original = descriptor.value;
+          const wrapped = function(...args) {
+            const phase = window.MOTION_SOURCE_CALL_PHASE || "setup";
+            row.calls[phase] = (row.calls[phase] || 0) + 1;
+            return Reflect.apply(original, this, args);
+          };
+          try {
+            Object.defineProperty(namespace, methodName, { ...descriptor, value: wrapped });
+            row.tracked = namespace[methodName] === wrapped;
+          } catch {}
+          if (!row.tracked) {
+            try { namespace[methodName] = wrapped; row.tracked = namespace[methodName] === wrapped; } catch {}
+          }
+          if (row.tracked) row.status = "tracked-not-invoked-within-run";
+          if (row.tracked) trackedMethodCount += 1;
+          else untrackedMethods.push(id);
+        }
+        tracker.namespaces[namespaceName] = {
+          status: "loaded",
+          methodCount: callableNames.length,
+          trackedMethodCount,
+          untrackedMethods,
+        };
+      }
+      window.MOTION_SOURCE_INVOCATION_TRACKING = tracker;
+      window.MOTION_SOURCE_CALL_PHASE = "setup";
+
+      const ops = window.MotionOps;
+      if (!ops || typeof ops.samplePhase !== "function" || typeof ops.sampleChannels !== "function") {
+        throw new Error("MotionOps phase consumers cannot be instrumented for speech binding evidence");
+      }
+      const consumerTrace = { schema: "motion-speech-consumer-trace/1", calls: {} };
+      const recordPhaseUse = (method, timeSec, phase, result, context) => {
+        if (!context || !phase || !phase.speechAnchor || typeof phase.id !== "string") return;
+        const key = `${phase.id}\u0000${context.objectId}\u0000${method}`;
+        const row = consumerTrace.calls[key] ||= {
+          phaseId: phase.id,
+          objectId: context.objectId,
+          rendererType: context.rendererType,
+          method,
+          calls: 0,
+          firstComponentLocalSec: timeSec,
+          lastComponentLocalSec: timeSec,
+          firstFilmGlobalSec: context.timeSec,
+          lastFilmGlobalSec: context.timeSec,
+          phaseProgress: [],
+          channelValues: [],
+        };
+        row.calls += 1;
+        row.lastComponentLocalSec = timeSec;
+        row.lastFilmGlobalSec = context.timeSec;
+        const sampledPhase = result?.phase || result;
+        if (Number.isFinite(sampledPhase?.progress)) {
+          if (row.phaseProgress.length < 2) row.phaseProgress.push(sampledPhase.progress);
+          else row.phaseProgress[1] = sampledPhase.progress;
+        }
+        if (result?.channels && row.channelValues.length < 1) {
+          row.channelValues.push(Object.fromEntries(Object.entries(result.channels).map(([name, channel]) => [name, channel?.value])));
+        } else if (result?.channels && row.channelValues.length === 1) {
+          row.channelValues.push(Object.fromEntries(Object.entries(result.channels).map(([name, channel]) => [name, channel?.value])));
+        } else if (result?.channels && row.channelValues.length > 1) {
+          row.channelValues[1] = Object.fromEntries(Object.entries(result.channels).map(([name, channel]) => [name, channel?.value]));
+        }
+      };
+      const originalSamplePhase = ops.samplePhase;
+      const tracedSamplePhase = function(timeSec, phase) {
+        const result = Reflect.apply(originalSamplePhase, ops, arguments);
+        recordPhaseUse("MotionOps.samplePhase", timeSec, phase, result, window.MOTION_CURRENT_CUSTOM_DRAW);
+        return result;
+      };
+      const originalSampleChannels = ops.sampleChannels;
+      const tracedSampleChannels = function(timeSec, phase) {
+        const result = Reflect.apply(originalSampleChannels, ops, arguments);
+        recordPhaseUse("MotionOps.sampleChannels", timeSec, phase, result, window.MOTION_CURRENT_CUSTOM_DRAW);
+        return result;
+      };
+      // MotionOps is intentionally frozen. Copy its public shape onto a frozen
+      // facade and shadow only the two phase-sampling methods for this render.
+      const tracedDescriptors = Object.getOwnPropertyDescriptors(ops);
+      tracedDescriptors.samplePhase.value = tracedSamplePhase;
+      tracedDescriptors.sampleChannels.value = tracedSampleChannels;
+      const tracedOps = Object.create(Object.getPrototypeOf(ops));
+      Object.defineProperties(tracedOps, tracedDescriptors);
+      Object.freeze(tracedOps);
+      window.MotionOps = tracedOps;
+      window.MOTION_SPEECH_CONSUMER_TRACE = consumerTrace;
+    });
     if (args.drawModule) await page.addScriptTag({ path: args.drawModule });
+    if (motionRecipeRecords.length) {
+      await page.evaluate(({ records, sourceFrames }) => {
+        const registry = window.MOTION_RENDERERS || {};
+        window.LaohuMotionRecipes.register(registry);
+        window.MOTION_RENDERERS = registry;
+        window.MOTION_RECIPE_RECORDS = records;
+        window.MOTION_RECIPE_SOURCE_FRAMES = sourceFrames.browserAssets;
+        window.MOTION_RECIPE_EVIDENCE = {
+          sourceId: "garden-motion-showreel",
+          sourceCommit: "2b9a89340b70f632d31c0f1c69fce94a7912423e",
+          validatedInstances: records.map(({ ownerId, id, recipeId, renderer }) => ({ ownerId, id, recipeId, renderer })),
+          sourceFrameAssets: sourceFrames.evidence,
+          calls: {},
+        };
+      }, { records: motionRecipeRecords, sourceFrames: motionRecipeFrameAssetBundle });
+    }
     if (motionOperationRecords.length) {
       await page.evaluate((records) => {
         const renderers = window.MOTION_RENDERERS || {};
@@ -969,17 +1390,46 @@ async function main() {
     if (localEffectRecords.length) {
       const adapterBytes = await fs.readFile(localEffectsAdapterPath);
       await page.addScriptTag({ path: localEffectsAdapterPath });
-      await page.evaluate(() => {
+      await page.evaluate((scene) => { window.MOTION_SCENE = scene; }, scene);
+      await page.evaluate((records) => {
         window.MOTION_RENDERERS ||= {};
-        window.HuashuLocalEffects.register(window.MOTION_RENDERERS);
-      });
+        window.LaohuMotionEffects.register(window.MOTION_RENDERERS, window.MOTION_SCENE, records);
+      }, localEffectRecords);
       templateEffectStage.adapter = {
         path: path.relative(skillDir, localEffectsAdapterPath).split(path.sep).join("/"),
         sha256: crypto.createHash("sha256").update(adapterBytes).digest("hex"),
         bytes: adapterBytes.length,
       };
     }
-    await page.evaluate((value) => { window.MOTION_SCENE = value; }, scene);
+    if (sourceTransitionsRequired) {
+      if (!args.drawModule || path.resolve(args.drawModule) !== path.resolve(transitionsAdapterPath)) {
+        await page.addScriptTag({ path: transitionsAdapterPath });
+      }
+      await page.evaluate(() => {
+        if (!window.LaohuMotionTransitions || typeof window.LaohuMotionTransitions.register !== "function") {
+          throw new Error("Laohu transition adapter did not register its original source methods");
+        }
+        window.LaohuMotionTransitions.register(window.MOTION_RENDERERS || {});
+      });
+    }
+    if (!localEffectRecords.length) await page.evaluate((value) => { window.MOTION_SCENE = value; }, scene);
+    await page.evaluate(() => {
+      const registry = window.MOTION_RENDERERS || {};
+      for (const [rendererType, renderer] of Object.entries(registry)) {
+        if (typeof renderer !== "function" || !rendererType.startsWith("custom:")) continue;
+        registry[rendererType] = function(ctx, object, timeSec, scene, evaluatedState) {
+          const previous = window.MOTION_CURRENT_CUSTOM_DRAW;
+          window.MOTION_CURRENT_CUSTOM_DRAW = {
+            objectId: object && object.id || "(unknown)",
+            rendererType: object && object.type || rendererType,
+            timeSec,
+          };
+          try { return Reflect.apply(renderer, this, arguments); }
+          finally { window.MOTION_CURRENT_CUSTOM_DRAW = previous; }
+        };
+      }
+      window.MOTION_SOURCE_CALL_PHASE = "readiness";
+    });
     readiness = await page.evaluate(async () => {
       await document.fonts.ready;
       if (window.MOTION_READY != null) {
@@ -998,13 +1448,20 @@ async function main() {
     const batchSize = 8;
     for (let first = 0; first < frameCount; first += batchSize) {
       const times = Array.from({ length: Math.min(batchSize, frameCount - first) }, (_, offset) => (first + offset) / scene.fps);
-      const renderedFrames = await page.evaluate(({ times, first, probeFrameIndices, motionEnabled }) => {
+      const renderedFrames = await page.evaluate(async ({ times, first, probeFrameIndices, motionEnabled }) => {
         const canvas = document.getElementById("stage");
         const probeFrames = new Set(probeFrameIndices);
-        return times.map((time, offset) => {
+        const frames = [];
+        for (let offset = 0; offset < times.length; offset += 1) {
+          const time = times[offset];
           const frameIndex = first + offset;
+          if (window.LAOHU_MOTION_PREPARE_FRAME) await window.LAOHU_MOTION_PREPARE_FRAME(window.MOTION_SCENE, time);
+          window.MOTION_SOURCE_CALL_PHASE = "encoded-frame";
           if (motionEnabled) window.MotionOps.beginMotionFrame(frameIndex, time, window.MOTION_SCENE, canvas);
           window.MotionCore.drawFrame(canvas, window.MOTION_SCENE, time, window.MOTION_RENDERERS || {}, true);
+          if (window.LAOHU_MOTION_POSTPROCESS && window.MOTION_SCENE.motionPostProcessing?.length) {
+            window.LAOHU_MOTION_POSTPROCESS(canvas, window.MOTION_SCENE, time);
+          }
           const evidence = window.MOTION_EVIDENCE;
           let layoutSnapshot = null;
           if (evidence && typeof evidence.layoutFrame === "function") {
@@ -1025,8 +1482,9 @@ async function main() {
             window.__MOTION_TEXT_PROBE_FRAME_DATA ||= new Map();
             window.__MOTION_TEXT_PROBE_FRAME_DATA.set(frameIndex, canvas.getContext("2d", { willReadFrequently: true }).getImageData(0, 0, canvas.width, canvas.height));
           }
-          return { image: canvas.toDataURL("image/png"), layoutSnapshot, motionFrame };
-        });
+          frames.push({ image: canvas.toDataURL("image/png"), layoutSnapshot, motionFrame });
+        }
+        return frames;
       }, { times, first, probeFrameIndices: args.checkTextVisibility ? textVisibilityProbes.map((probe) => probe.frameIndex) : [], motionEnabled: motionOperationRecords.length > 0 });
       for (let offset = 0; offset < renderedFrames.length; offset += 1) {
         const index = first + offset;
@@ -1045,9 +1503,14 @@ async function main() {
 
     for (let index = 0; index < sampleTimes.length; index += 1) {
       const time = sampleTimes[index];
-      const preview = await page.evaluate(({ time }) => {
+      const preview = await page.evaluate(async ({ time }) => {
         const canvas = document.getElementById("stage");
+        window.MOTION_SOURCE_CALL_PHASE = "preview-frame";
+        if (window.LAOHU_MOTION_PREPARE_FRAME) await window.LAOHU_MOTION_PREPARE_FRAME(window.MOTION_SCENE, time);
         window.MotionCore.drawFrame(canvas, window.MOTION_SCENE, time, window.MOTION_RENDERERS || {}, true);
+        if (window.LAOHU_MOTION_POSTPROCESS && window.MOTION_SCENE.motionPostProcessing?.length) {
+          window.LAOHU_MOTION_POSTPROCESS(canvas, window.MOTION_SCENE, time);
+        }
         const evidence = window.MOTION_EVIDENCE;
         let layoutSnapshot = null;
         if (evidence && typeof evidence.layoutFrame === "function") {
@@ -1086,8 +1549,30 @@ async function main() {
     consumerEvidence = await page.evaluate(() => window.MOTION_EVIDENCE == null
       ? null
       : JSON.parse(JSON.stringify(window.MOTION_EVIDENCE)));
+    sourceInvocationEvidence = await page.evaluate(() => JSON.parse(JSON.stringify(window.MOTION_SOURCE_INVOCATION_TRACKING || null)));
+    speechConsumerTrace = await page.evaluate(() => JSON.parse(JSON.stringify(window.MOTION_SPEECH_CONSUMER_TRACE || null)));
+    if (motionRecipeRecords.length) {
+      motionRecipeEvidence = await page.evaluate(() => JSON.parse(JSON.stringify(window.MOTION_RECIPE_EVIDENCE || null)));
+      const missing = motionRecipeRecords.filter((record) => !(motionRecipeEvidence?.calls?.[record.id] > 0));
+      if (missing.length) throw new Error(`Validated Garden recipe instances had no actual encoded/preview draw calls: ${missing.map((row) => row.id).join(", ")}`);
+      motionRecipeEvidence.catalogProviders = motionProviderRecords;
+      motionRecipeEvidence.adapter = inputFingerprints.motionRecipeAdapter;
+      motionRecipeEvidence.sourceFrameAssetFingerprint = inputFingerprints.motionRecipeFrameAssets;
+      const hasSourceFrames = motionRecipeFrameAssetBundle.evidence.length > 0;
+      const hasSvgStroke = motionRecipeRecords.some((record) => record.recipeId === "svg-stroke");
+      const hasPostProcessing = (scene.motionPostProcessing || []).length > 0;
+      motionRecipeEvidence.captureBoundary = [
+        ...(hasSourceFrames ? ["explicit scene-relative PNG frame preparation"] : []),
+        ...(hasSvgStroke ? ["async source-SVG preparation"] : []),
+        "MotionCore.drawFrame",
+        ...(hasPostProcessing ? ["selected WebGL2 pass on separate output canvas", "copy back to stage"] : ["2D stage capture"]),
+        "dataURL capture",
+      ].join(" → ");
+      motionRecipeEvidence.clock = "scene-local seconds supplied by render.mjs; no recipe-local schedule or second timeline";
+    }
     if (templateEffects) templateEffectEvidence = await page.evaluate(() => JSON.parse(JSON.stringify(window.MOTION_TEMPLATE_EFFECTS)));
     if (localEffectRecords.length) localEffectEvidence = await page.evaluate(() => JSON.parse(JSON.stringify(window.MOTION_LOCAL_EFFECT_EVIDENCE)));
+    if (sourceTransitionsRequired) transitionEvidence = await page.evaluate(() => JSON.parse(JSON.stringify(window.MOTION_TRANSITION_EVIDENCE)));
     const observedResources = await Promise.all(browserResourceCapturePromises);
     resourceEvidence = {
       status: "partial-browser-request-observation",
@@ -1097,6 +1582,87 @@ async function main() {
     };
   } finally {
     if (context) await context.close();
+  }
+
+  if (sourceInvocationEvidence) {
+    const methodRows = Object.values(sourceInvocationEvidence.methods || {});
+    for (const method of methodRows) {
+      const calls = Object.values(method.calls || {}).reduce((sum, count) => sum + count, 0);
+      method.invocationCount = calls;
+      if (!method.tracked) method.status = "loaded-untracked";
+      else if (calls > 0) method.status = "tracked-invoked";
+      else method.status = "tracked-not-invoked-within-run";
+    }
+    sourceInvocationEvidence.summary = {
+      loadedNamespaces: Object.values(sourceInvocationEvidence.namespaces || {}).filter((row) => row.status === "loaded").length,
+      notLoadedNamespaces: Object.entries(sourceInvocationEvidence.namespaces || {}).filter(([, row]) => row.status === "not-loaded").map(([id]) => id),
+      loadedMethods: methodRows.length,
+      trackedMethods: methodRows.filter((row) => row.tracked).length,
+      invokedMethods: methodRows.filter((row) => row.status === "tracked-invoked").length,
+      loadedUntrackedMethods: methodRows.filter((row) => row.status === "loaded-untracked").map((row) => row.id),
+      claimBoundary: "Observed calls only prove that an instrumented source API method was invoked in this run. They do not prove wholesale reuse of a mature source grammar, uninstrumented local-function use, canvas output quality, or that loaded/hash-matched code was consumed.",
+    };
+  }
+  const bindingReceipt = scene.motionSpeechBinding && typeof scene.motionSpeechBinding === "object" ? scene.motionSpeechBinding : null;
+  if (!bindingReceipt) {
+    const hasCustomRenderer = (scene.objects || []).some((object) => typeof object?.type === "string" && object.type.startsWith("custom:"));
+    speechBindingConsumption = {
+      status: hasCustomRenderer ? "custom-renderers-unbound-to-speech-receipt" : "no-speech-binding-receipt",
+      expectedPhases: [],
+      observedConsumers: Object.values(speechConsumerTrace?.calls || {}),
+      sharedAudioEvents: [],
+      warnings: hasCustomRenderer
+        ? ["Custom renderer objects have no speech-binding receipt. ASR timing, canvas actions, and audioEvents are not demonstrated as sharing one clock; event names or hard-coded seconds do not establish synchronization."]
+        : [],
+      evidenceBoundary: "Global source API invocation counts and direct time constants do not establish speech-phase consumption by a custom renderer.",
+    };
+  } else {
+    const expectedPhases = (bindingReceipt.anchorMap || []).filter((entry) => entry && entry.phaseId && entry.objectId && !entry.eventId);
+    const tracedCalls = Object.values(speechConsumerTrace?.calls || {});
+    const phaseConsumers = expectedPhases.map((expected) => {
+      const calls = tracedCalls.filter((call) => call.phaseId === expected.phaseId && call.objectId === expected.objectId);
+      return {
+        phaseId: expected.phaseId,
+        objectId: expected.objectId,
+        status: calls.length ? "tracked-motionops-phase-use-observed" : "no-tracked-motionops-phase-use-observed",
+        calls,
+      };
+    });
+    let sharedEvents = new Map();
+    let sharedEventResolutionError = null;
+    try { sharedEvents = ops.findSceneAudioEvents(scene); }
+    catch (error) { sharedEventResolutionError = error.message; }
+    const audioEvents = (bindingReceipt.anchorMap || []).filter((entry) => entry && entry.eventId).map((expected) => {
+      const resolved = sharedEvents.get(expected.eventId);
+      return {
+        eventId: expected.eventId,
+        expectedPhaseId: expected.phaseId,
+        status: resolved ? (resolved.phaseId === expected.phaseId ? "resolved-through-shared-phase" : "resolved-but-phase-mismatch") : "not-resolved-by-MotionOps",
+        ...(resolved ? { timeSec: resolved.timeSec, timeBasis: resolved.timeBasis, owner: resolved.owner, resolvedPhaseId: resolved.phaseId } : {}),
+        ...(sharedEventResolutionError ? { resolutionError: sharedEventResolutionError } : {}),
+        audioPlanOrPcmConsumption: "not-observed-by-render.mjs; use scripts/audio.mjs with an audio plan referring to this shared event ID to prove rendered sound timing",
+      };
+    });
+    const missingPhaseConsumers = phaseConsumers.filter((row) => row.status !== "tracked-motionops-phase-use-observed");
+    const unresolvedAudio = audioEvents.filter((row) => row.status !== "resolved-through-shared-phase");
+    speechBindingConsumption = {
+      status: expectedPhases.length && missingPhaseConsumers.length === 0 && audioEvents.length && unresolvedAudio.length === 0
+        ? "tracked-phase-consumers-and-shared-events-observed"
+        : expectedPhases.length && missingPhaseConsumers.length === 0 && audioEvents.length === 0
+          ? "tracked-phase-consumers-observed-no-bound-audio-events"
+          : "binding-metadata-only-or-partially-consumed",
+      bindingSource: bindingReceipt.bindingSource || null,
+      timeline: bindingReceipt.timeline || null,
+      expectedPhases: phaseConsumers,
+      observedConsumers: tracedCalls,
+      sharedAudioEvents: audioEvents,
+      warnings: [
+        ...(missingPhaseConsumers.length ? ["Bound phase metadata exists, but no tracked MotionOps.samplePhase/sampleChannels read was observed for: " + missingPhaseConsumers.map((row) => row.phaseId + " on " + row.objectId).join(", ") + ". Direct seconds, TY.charsIn calls, or event names do not establish visual phase consumption."] : []),
+        ...(unresolvedAudio.length ? ["Some bound event IDs did not resolve through MotionOps.findSceneAudioEvents; see sharedAudioEvents."] : []),
+        ...(audioEvents.length ? ["This render receipt resolves shared event timing only; it does not prove an audio plan rendered that event or establish audible quality."] : []),
+      ],
+      evidenceBoundary: "Tracked MotionOps calls show a custom renderer sampled a bound phase at recorded scene/component times. They do not independently prove sampled values changed pixels. Shared event resolution does not prove audio plan/PCM consumption.",
+    };
   }
 
   const requiredLayoutEvidence = requiredLayoutTracker ? requiredLayoutTracker.report() : null;
@@ -1117,8 +1683,15 @@ async function main() {
     const current = await sha256File(fingerprint.path);
     if (current !== fingerprint.sha256) throw new Error(`Render input ${fingerprint.role} changed during the run; output was not committed`);
   };
-  for (const fingerprint of [inputFingerprints.drawModule, inputFingerprints.motionCore, inputFingerprints.motionOps, inputFingerprints.providerCatalog]) {
+  for (const fingerprint of [inputFingerprints.drawModule, inputFingerprints.motionCore, inputFingerprints.motionOps, inputFingerprints.motionRecipeAdapter, inputFingerprints.providerCatalog]) {
     await recheckFingerprint(fingerprint);
+  }
+  if (motionRecipeFrameAssetBundle.evidence.length) {
+    const currentFrames = await resolveMotionRecipeFrameAssets(motionRecipeRecords, scene, args.scene);
+    if (currentFrames.evidence.length !== motionRecipeFrameAssetBundle.evidence.length
+        || crypto.createHash("sha256").update(JSON.stringify(currentFrames.evidence)).digest("hex") !== inputFingerprints.motionRecipeFrameAssets.sha256) {
+      throw new Error("Motion recipe source-frame PNG changed during the run; output was not committed");
+    }
   }
   if (await sha256File(args.scene) !== inputFingerprints.scene.sha256) throw new Error("Scene JSON changed during the run; output was not committed");
 
@@ -1202,6 +1775,14 @@ async function main() {
     note: "Machine output confirms frame generation and recorded property states only; it does not certify explanation completeness, taste, pacing quality, or audience response.",
     scene: args.scene,
     output: args.output,
+    runtime: {
+      playwright: {
+        packages: playwrightRuntime.packages,
+        expectedVersion: PLAYWRIGHT_VERSION,
+        resolutionSource: playwrightRuntime.resolutionSource,
+        nodeModulesPath: playwrightRuntime.nodeModulesPath,
+      },
+    },
     outputSha256,
     frameDirectory,
     frameCount,
@@ -1210,11 +1791,15 @@ async function main() {
     render: { width: scene.width, height: scene.height, fps: scene.fps, duration: scene.duration },
     readiness,
     consumerEvidence,
+    sourceInvocationEvidence,
+    speechBindingConsumption,
     motionEvidence,
+    motionRecipes: motionRecipeEvidence,
     motionOperations: motionOperationRecords.map(({ ownerId, instanceId, entityId, operationId, targetId, phaseId, startSec, endSec, fromLineWidthPx, toLineWidthPx }) => ({
       ownerId, instanceId, entityId, operationId, targetId, phaseId, startSec, endSec, fromLineWidthPx, toLineWidthPx,
     })),
     templateEffects: templateEffectEvidence,
+    transitions: transitionEvidence,
     localEffects: localEffectRecords.length ? { validatedInstances: localEffectRecords, runtimeEvidence: localEffectEvidence, adapter: templateEffectStage?.adapter || null } : null,
     templateEffectStage,
     layoutDiagnostics: layoutTracker.report(),

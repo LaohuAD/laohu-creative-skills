@@ -1,0 +1,42 @@
+{
+  "title": "3Blue1Brown-style explainer (t1)",
+  "summary": "Black board, one idea on screen at a time: a title is written, an equation transforms into the next, a curve morphs, points are written and one gets boxed.",
+  "best_for": [
+    "how a mechanism turns into the next step",
+    "math, ML and algorithm explainers",
+    "formulas whose symbols match colours on screen"
+  ],
+  "aspect": "16:9",
+  "grammar": "t1_3b1b",
+  "copy": {
+    "templates/blank/vendor/gsap.min.js": "vendor/gsap.min.js",
+    "templates/blank/vendor/GSAP-LICENSE.txt": "vendor/GSAP-LICENSE.txt",
+    "templates/blank/vendor/GSAP-LICENSE.html": "vendor/GSAP-LICENSE.html",
+    "runtime/clip/clip.js": "vendor/clip/clip.js",
+    "runtime/clip/cues.js": "vendor/clip/cues.js",
+    "runtime/clip/lib/camera.js": "vendor/clip/lib/camera.js",
+    "templates/runtime/laohu-native-clips/lib/chart.js": "vendor/clip/lib/chart.js",
+    "templates/runtime/laohu-native-clips/lib/collage.js": "vendor/clip/lib/collage.js",
+    "templates/runtime/laohu-native-clips/lib/diagram.js": "vendor/clip/lib/diagram.js",
+    "runtime/clip/lib/kit.js": "vendor/clip/lib/kit.js",
+    "runtime/clip/lib/motion.js": "vendor/clip/lib/motion.js",
+    "runtime/clip/lib/paint.js": "vendor/clip/lib/paint.js",
+    "runtime/clip/lib/toon.js": "vendor/clip/lib/toon.js",
+    "runtime/clip/lib/typo.js": "vendor/clip/lib/typo.js",
+    "templates/runtime/laohu-native-clips/lib/ui.js": "vendor/clip/lib/ui.js",
+    "runtime/clip/lib/util.js": "vendor/clip/lib/util.js",
+    "runtime/clip/grammars/t1_3b1b.js": "vendor/clip/grammars/t1_3b1b.js",
+    "runtime/clip/grammars/t2_keynote_ui.js": "vendor/clip/grammars/t2_keynote_ui.js",
+    "runtime/clip/grammars/t3_finance_chart.js": "vendor/clip/grammars/t3_finance_chart.js",
+    "runtime/clip/grammars/y1_kurzgesagt.js": "vendor/clip/grammars/y1_kurzgesagt.js",
+    "runtime/clip/grammars/y2_vox.js": "vendor/clip/grammars/y2_vox.js",
+    "runtime/clip/grammars/y3_whiteboard.js": "vendor/clip/grammars/y3_whiteboard.js",
+    "runtime/clip/grammars/y4_storytime.js": "vendor/clip/grammars/y4_storytime.js",
+    "runtime/clip/grammars/y5_kinetic_type.js": "vendor/clip/grammars/y5_kinetic_type.js",
+    "templates/runtime/laohu-native-clips/LICENSE": "vendor/clip/LICENSE",
+    "runtime/clip/NOTICE.md": "vendor/clip/NOTICE.md",
+    "templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-500.woff": "assets/fonts/NotoSansSC-500.woff",
+    "templates/runtime/laohu-native-clips/lib/fonts/OFL.txt": "assets/fonts/OFL.txt",
+    "templates/runtime/laohu-native-clips/lib/fonts/LICENSES.md": "assets/fonts/LICENSES.md"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "mashanzheng/MaShanZheng-Regular.ttf": {
+    "id": "font:ma-shan-zheng",
+    "label": "马善政毛笔字",
+    "category": "中文书写",
+    "aliases": [
+      "毛笔",
+      "楷书",
+      "榜书",
+      "题签",
+      "楹联",
+      "庄重"
+    ],
+    "summary": "厚重的起收笔让题字有分量。可试门联、匾额或郑重落款，让整句停稳。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/mashanzheng/MaShanZheng-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/mashanzheng/OFL.txt",
+    "sha256": "6d2546bb189c732a8ca29af9e22457b152387d158aa459e4ac2ce1e51788b7fb",
+    "licenseSha256": "d7bdb1cee215b689e23c2f95672a6084c790542170648267a55114103d756a08"
+  },
+  "zhimangxing/ZhiMangXing-Regular.ttf": {
+    "id": "font:zhi-mang-xing",
+    "label": "钟齐志莽行书",
+    "category": "中文书写",
+    "aliases": [
+      "毛笔",
+      "行书",
+      "连笔",
+      "手札",
+      "落款",
+      "书信"
+    ],
+    "summary": "同一字内笔势相连，字与字之间仍留有间隔。适合试亲笔寄语或署名，留时间看清连笔。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/zhimangxing/ZhiMangXing-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/zhimangxing/OFL.txt",
+    "sha256": "644e0cae9b40f0b10ab729a01bd32032e3973bac22be3dccae01bf6ae7fde969",
+    "licenseSha256": "10947328199e369a3e6b4a67e8e5507ed99d5bbb264a1f156415aa9b665e4d15"
+  },
+  "liujianmaocao/LiuJianMaoCao-Regular.ttf": {
+    "id": "font:liu-jian-mao-cao",
+    "label": "钟齐流江毛笔草体",
+    "category": "中文书写",
+    "aliases": [
+      "毛笔",
+      "草书",
+      "草体",
+      "题字",
+      "抒情",
+      "挥毫"
+    ],
+    "summary": "草书省笔、牵连明显，可把情绪放在一个短题或转折词上。人名、日期等须逐字辨清时另选。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/liujianmaocao/LiuJianMaoCao-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/liujianmaocao/OFL.txt",
+    "sha256": "cab396b91a5b7c0b4005a35891180d06e6751f5ac261fe680aec65c1ae209033",
+    "licenseSha256": "ff56684b0212481e7c3886c26d5a655de9b211c8119e5ccc756138a97b066acc"
+  },
+  "longcang/LongCang-Regular.ttf": {
+    "id": "font:long-cang",
+    "label": "有字库龙藏体",
+    "category": "中文书写",
+    "aliases": [
+      "手写",
+      "手记",
+      "便笺",
+      "私人",
+      "笔记",
+      "粗粝"
+    ],
+    "summary": "笔画带些粗糙，收笔有手写痕迹。把原句放回便笺或人物手记里，看是否像这个人会留下的字。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/longcang/LongCang-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/longcang/OFL.txt",
+    "sha256": "e5bf2c3f24ef2327c6f136d8f73e2f9dfdf44896fdbeb35a9515f44777bb91bc",
+    "licenseSha256": "603546b7219a94bb59bf8294458194a5010119486354092b66a09a3fd61aeacc"
+  },
+  "zcoolqingkehuangyou/ZCOOLQingKeHuangYou-Regular.ttf": {
+    "id": "font:zcool-qingke-huangyou",
+    "label": "站酷庆科黄油体",
+    "category": "中文展示",
+    "aliases": [
+      "美术字",
+      "艺术字",
+      "圆角",
+      "海报",
+      "招贴",
+      "活泼"
+    ],
+    "summary": "圆角与部件切口让短标题有招贴感。适合活动口号或包装上的几个大字，缩小后要看切口是否粘连。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/zcoolqingkehuangyou/ZCOOLQingKeHuangYou-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/zcoolqingkehuangyou/OFL.txt",
+    "sha256": "54f0c0df4308cd74cd0f2fd3494ae054dbc4a1fd6fa7d71f4807eb4cdd8b4136",
+    "licenseSha256": "f1bce31b817dee01c1e4ef8bc45d8ecb95f01f4abbf0a985007cb3cd0fd8123d"
+  },
+  "zcoolxiaowei/ZCOOLXiaoWei-Regular.ttf": {
+    "id": "font:zcool-xiaowei",
+    "label": "站酷小薇体",
+    "category": "中文展示",
+    "aliases": [
+      "美术字",
+      "艺术字",
+      "文艺",
+      "刊头",
+      "片名",
+      "书封"
+    ],
+    "summary": "笔画带装饰性的尖端和粗细变化，适合试文艺片名、书封或刊头。给细节留出足够的字号和停留时间。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/zcoolxiaowei/ZCOOLXiaoWei-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/zcoolxiaowei/OFL.txt",
+    "sha256": "a42b620140f493db42f741351dfbf343c0936d58588ee8004b8b2a218d997ff1",
+    "licenseSha256": "a094514ca57cf8f9c5e8d8d1adab5d8cd3a377297ff016f9df2c05b3ecd77f0a"
+  },
+  "smiley-sans/SmileySans-Oblique.ttf.woff2": {
+    "id": "font:smiley-sans-oblique",
+    "label": "得意黑",
+    "category": "中文展示",
+    "aliases": [
+      "倾斜",
+      "斜黑",
+      "速度",
+      "运动",
+      "起跑",
+      "前进"
+    ],
+    "summary": "窄长字面自带倾角。可在起跑、推进的动词上试静止落字，先看字形自己的方向感，再决定位移。",
+    "upstream": "https://github.com/atelier-anchor/smiley-sans/releases/tag/v2.0.1",
+    "licenseSource": "https://github.com/atelier-anchor/smiley-sans/blob/67e3821f4b06cbd7155fa6fa69daff4b6f311b76/LICENSE",
+    "archive": "https://github.com/atelier-anchor/smiley-sans/releases/download/v2.0.1/smiley-sans-v2.0.1.zip",
+    "archiveSha256": "299c0be6c960ae37361762eca76f7d0cd516615435bb96c0d4b98a1e70178a07",
+    "archiveMember": "SmileySans-Oblique.ttf.woff2",
+    "sha256": "731f22973349404b15a88a99ef3b5dd4104c0965c23b7e485c1f11e84fea99e2",
+    "licenseSha256": "9401f4050f1b66c26b6ccdc8b0e14a3c1cc37aac122eda84386f25854a9bec72"
+  },
+  "open-huninn/jf-openhuninn-2.1.ttf": {
+    "id": "font:jf-open-huninn",
+    "label": "jf open 粉圓",
+    "category": "中文圆体",
+    "aliases": [
+      "粉圆",
+      "圆体",
+      "圓體",
+      "圆润",
+      "温和",
+      "亲切",
+      "提醒"
+    ],
+    "summary": "圆润的端点会减轻短提示的命令感。适合有人情味的提醒，采用台湾常用字形，简繁混排先按原句核字。",
+    "upstream": "https://github.com/justfont/open-huninn-font/blob/98d53b3dac1730889edf548359c326c53624fa80/font/jf-openhuninn-2.1.ttf",
+    "licenseSource": "https://github.com/justfont/open-huninn-font/blob/98d53b3dac1730889edf548359c326c53624fa80/LICENSE",
+    "upstreamLicenseSha256": "5df6de36ba2fe26119ac161edbed97c62a9da3c1493f6930b9d9af7f5c93004b",
+    "supplementalLicenseSource": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "sha256": "9d5bf4932d31fe94c18cd8cfddc98bc1b14ce10f4e354c682179db290a99c825",
+    "licenseSha256": "3784f5b2323bb3dc4bde27b6c24b3ce99fcd35cec823161d9ba71d2cc47d0b35"
+  },
+  "ark-pixel/ark-pixel-12px-monospaced-zh_hans.ttf.woff2": {
+    "id": "font:ark-pixel-12px-mono-zh-hans",
+    "label": "方舟像素体",
+    "category": "中文像素",
+    "aliases": [
+      "像素",
+      "复古",
+      "游戏",
+      "点阵",
+      "掌机",
+      "终端"
+    ],
+    "summary": "12 像素等宽简中版。适合旧掌机、游戏菜单或低分辨率屏幕中的文字，优先试 12 像素的整倍数并检查输出缩放。",
+    "upstream": "https://github.com/TakWolf/ark-pixel-font/releases/tag/2026.11.10",
+    "licenseSource": "https://github.com/TakWolf/ark-pixel-font/releases/download/2026.11.10/ark-pixel-font-12px-monospaced-ttf.woff2-v2026.11.10.zip#OFL.txt",
+    "archive": "https://github.com/TakWolf/ark-pixel-font/releases/download/2026.11.10/ark-pixel-font-12px-monospaced-ttf.woff2-v2026.11.10.zip",
+    "archiveSha256": "74f54a9d9fecf6fa74eebcc6ff6dbabf32b0daec1017535b22cac60f455cf03a",
+    "archiveMember": "ark-pixel-12px-monospaced-zh_hans.ttf.woff2",
+    "sha256": "0b34f129fa0897fd11c4f9e83cbe86ad89e2f22039eaaac3c92d6e1c4a922e16",
+    "licenseSha256": "3ab41567e68e3988ba1ef16dd2644eca95ca5648ea12e7d46e6287fc0bbe5aee"
+  }
+}

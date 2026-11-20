@@ -1,0 +1,351 @@
+{
+  "schemaVersion": 1,
+  "id": "laohu-motion-effect-runtime",
+  "source": {
+    "id": "huashu-art-motion",
+    "repository": "https://github.com/alchaincyf/huashu-art-motion",
+    "commit": "8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c",
+    "tree": "7ca1ca96927cb86e689cf0e7cfe8f99bd836d128",
+    "license": "MIT source and SIL Open Font License files; current raw clip runtime has no Three/GSAP dependency"
+  },
+  "licenseFiles": [
+    {
+      "sourcePath": "LICENSE",
+      "localPath": "laohu-effects/LICENSE",
+      "sha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
+      "gitBlob": "ed67368a2a79ed7be97b2a4852330cdac5b8b12a",
+      "bytes": 1086,
+      "localSha256": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/fonts/LICENSES.md",
+      "localPath": "laohu-effects/licenses/FONT-LICENSES.md",
+      "sha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd",
+      "gitBlob": "0533deaf8ce621691fbd791c134a4e4bede9154e",
+      "bytes": 4498,
+      "localSha256": "00b5f86c4d5162e6fee6d600b527c052933eb2884a61a5fab0f89fa4d4656ecd"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/fonts/OFL.txt",
+      "localPath": "laohu-effects/licenses/OFL.txt",
+      "sha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "gitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20",
+      "bytes": 4430,
+      "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/fonts/OFL.txt",
+      "localPath": "laohu-scenes/comic-pop-reaction/fonts/OFL.txt",
+      "sha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822",
+      "gitBlob": "a4670b02de28ecdaa5cafd2356b4a41b629a2e20",
+      "bytes": 4430,
+      "localSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+    }
+  ],
+  "modules": [
+    {
+      "sourcePath": "scripts/engine/lib/util.js",
+      "localPath": "laohu-native-clips/lib/util.js",
+      "sha256": "a2092233bbca337a29b00ce261d81a5c7b6baa020c9e301916ebe4a997450b9d",
+      "gitBlob": "0b3db4299e12072d033b3e6418e9bdf309c2564f",
+      "bytes": 7402,
+      "localSha256": "a2092233bbca337a29b00ce261d81a5c7b6baa020c9e301916ebe4a997450b9d",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/paint.js",
+      "localPath": "laohu-native-clips/lib/paint.js",
+      "sha256": "95ccd1945a4a19b6e2d89a422d7ea7de96174acdbae1801090ca9ee48131f9a3",
+      "gitBlob": "6fc5bedd62c6497755ccd3c7d05fd5f61c2b4828",
+      "bytes": 15436,
+      "localSha256": "95ccd1945a4a19b6e2d89a422d7ea7de96174acdbae1801090ca9ee48131f9a3",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/kit.js",
+      "localPath": "laohu-native-clips/lib/kit.js",
+      "sha256": "a066c4d0d4dc7189dd9de7776938b4cbc6025a4bf4a38d2e181a6667744f3024",
+      "gitBlob": "e0790d7eeafd1627794d562e81f8ded1dbddf8ef",
+      "bytes": 6639,
+      "localSha256": "a066c4d0d4dc7189dd9de7776938b4cbc6025a4bf4a38d2e181a6667744f3024",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/motion.js",
+      "localPath": "laohu-native-clips/lib/motion.js",
+      "sha256": "22762a3691464b7504da562b3761edc70f7c138721618639697df3a5a93c1b97",
+      "gitBlob": "6ee9cfa1f9ae84be9f812539f9badec574ec0857",
+      "bytes": 9402,
+      "localSha256": "22762a3691464b7504da562b3761edc70f7c138721618639697df3a5a93c1b97",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/camera.js",
+      "localPath": "laohu-native-clips/lib/camera.js",
+      "sha256": "53ddc95e972900abfb49bfea704a2b77897b9237836ee653aeed966d39ceeec5",
+      "gitBlob": "7b50c44db598733264c1b7ecd542d7f896d93b47",
+      "bytes": 9762,
+      "localSha256": "53ddc95e972900abfb49bfea704a2b77897b9237836ee653aeed966d39ceeec5",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/diagram.js",
+      "localPath": "laohu-native-clips/lib/diagram.js",
+      "sha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+      "gitBlob": "8baf28f1c084426a886bcffb98225eb13a70d583",
+      "bytes": 20080,
+      "localSha256": "98b15ba5f883dd95eca2ff52ba1d768c10a5bea7862bd13aee6d84b875e2b8c5",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/rig.js",
+      "localPath": "laohu-effects/core/rig.js",
+      "sha256": "62580706e14438c6b57289ce203d040c91d8a427e356f44084a65dfc53a13bbf",
+      "gitBlob": "01db1550076afef96981f89009534c801213c0f2",
+      "bytes": 34246,
+      "localSha256": "62580706e14438c6b57289ce203d040c91d8a427e356f44084a65dfc53a13bbf"
+    },
+    {
+      "sourcePath": "scripts/engine/transitions.js",
+      "localPath": "laohu-effects/transitions/transitions.js",
+      "sha256": "c4bd441cf765db346933e5d18270f532d4c9782c9303b0bcda1ba59a2124b618",
+      "gitBlob": "b3b2520f059815ebbb8084f6ea2da2ba3a14be56",
+      "bytes": 69549,
+      "localSha256": "c4bd441cf765db346933e5d18270f532d4c9782c9303b0bcda1ba59a2124b618"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/typo.js",
+      "localPath": "laohu-native-clips/lib/typo.js",
+      "sha256": "bfb53350a94bc77c20a5420b694b0ffb7ba913c4a2e3390d86b99cf3fa8c3976",
+      "gitBlob": "f00d3675480fe0ba302bfdfe1c1894025103abe4",
+      "bytes": 11258,
+      "localSha256": "bfb53350a94bc77c20a5420b694b0ffb7ba913c4a2e3390d86b99cf3fa8c3976",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/chart.js",
+      "localPath": "laohu-native-clips/lib/chart.js",
+      "sha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+      "gitBlob": "e18de00ae35ab951117f9547e6b946d4094ee216",
+      "bytes": 10870,
+      "localSha256": "93d3605cba7d7cf0bdda2c2dd8f9797734dd06c1f64fa18ef7a492f8755a8d27",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/ui.js",
+      "localPath": "laohu-native-clips/lib/ui.js",
+      "sha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+      "gitBlob": "8dbf8f16c41dd60ce3a3adad2d691d38ab776cea",
+      "bytes": 10548,
+      "localSha256": "2608da0a38bfd429a9fe41c1a93a5d080d54c5fcccea80e7fea764e6ca3a97bf",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/collage.js",
+      "localPath": "laohu-native-clips/lib/collage.js",
+      "sha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+      "gitBlob": "f3491e46ac4040ea4951a6215df7ef61e406514a",
+      "bytes": 8972,
+      "localSha256": "4dcd3d15f8895dc6e3d4f2e4d82766782a4e77876fb863ded9480320b8959d93",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/media.js",
+      "localPath": "laohu-native-clips/lib/media.js",
+      "sha256": "65a4d0a17ea194e799538d380d49ea59bc9b23d3118ee4a3bb3ba0c4ad8bac03",
+      "gitBlob": "5e24d18f8d59713ede791f98322f13719d685ec6",
+      "bytes": 9419,
+      "localSha256": "65a4d0a17ea194e799538d380d49ea59bc9b23d3118ee4a3bb3ba0c4ad8bac03",
+      "sharedWith": "laohu-native-clips"
+    },
+    {
+      "sourcePath": "scripts/engine/scenes/13_pop.js",
+      "localPath": "laohu-scenes/comic-pop-reaction/scene.js",
+      "sha256": "80a893a23dc2d0a6350323b0b63a0cf4929e48908391f796422c402aa272935c",
+      "gitBlob": "04c1fc844a9cb533a3ddb3066923ab674927e499",
+      "bytes": 24647,
+      "localSha256": "80a893a23dc2d0a6350323b0b63a0cf4929e48908391f796422c402aa272935c"
+    }
+  ],
+  "fontAssets": [
+    {
+      "sourcePath": "scripts/engine/lib/fonts/cmunrm.woff",
+      "localPath": "laohu-effects/fonts/cmunrm.woff",
+      "sha256": "32115abbbfb231586813333bfa5a234f4dc7f28b27df7260f42f81146ccd9097",
+      "gitBlob": "9efca1264afa69d5f0cd016b8c9f48f5144446f8",
+      "bytes": 123340,
+      "localSha256": "32115abbbfb231586813333bfa5a234f4dc7f28b27df7260f42f81146ccd9097",
+      "families": [
+        "CMU-rm"
+      ],
+      "license": "SIL OFL 1.1"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/fonts/NotoSerifSC-sub.woff",
+      "localPath": "laohu-effects/fonts/NotoSerifSC-sub.woff",
+      "sha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+      "gitBlob": "62d4bee4dc6e53794846689996fcad1c9b8b33a2",
+      "bytes": 435560,
+      "localSha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+      "families": [
+        "NotoSerifSC"
+      ],
+      "license": "SIL OFL 1.1"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/fonts/Bangers-400.woff",
+      "localPath": "laohu-scenes/comic-pop-reaction/fonts/Bangers-400.woff",
+      "sha256": "62f0a30b1d48cc21bb35b084ae5d17ad22135df5dc4c18f3f591fc5443eddf39",
+      "gitBlob": "46c888483959b08f93521c80a18112b8e6e38358",
+      "bytes": 43808,
+      "localSha256": "62f0a30b1d48cc21bb35b084ae5d17ad22135df5dc4c18f3f591fc5443eddf39",
+      "families": [
+        "Bangers-400"
+      ],
+      "license": "SIL OFL 1.1"
+    },
+    {
+      "sourcePath": "scripts/engine/lib/fonts/NotoSansSC-900.woff",
+      "localPath": "laohu-native-clips/lib/fonts/NotoSansSC-900.woff",
+      "sha256": "d2d8a42438b18b65b6577434df4e41bb08c6b5051281757849af00ab743bb58f",
+      "gitBlob": "664a8d52cc3924e36c85599f8c26405c12797817",
+      "bytes": 1394104,
+      "localSha256": "d2d8a42438b18b65b6577434df4e41bb08c6b5051281757849af00ab743bb58f",
+      "families": [
+        "NotoSansSC-900"
+      ],
+      "license": "SIL OFL 1.1",
+      "sharedWith": "laohu-native-clips"
+    }
+  ],
+  "libraries": {
+    "laohu-motion-dg": {
+      "loadOrder": [
+        {
+          "sourcePath": "scripts/engine/lib/util.js",
+          "localPath": "laohu-native-clips/lib/util.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/paint.js",
+          "localPath": "laohu-native-clips/lib/paint.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/kit.js",
+          "localPath": "laohu-native-clips/lib/kit.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/motion.js",
+          "localPath": "laohu-native-clips/lib/motion.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/camera.js",
+          "localPath": "laohu-native-clips/lib/camera.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/diagram.js",
+          "localPath": "laohu-native-clips/lib/diagram.js"
+        }
+      ]
+    },
+    "laohu-motion-transitions": {
+      "loadOrder": [
+        {
+          "sourcePath": "scripts/engine/lib/util.js",
+          "localPath": "laohu-native-clips/lib/util.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/paint.js",
+          "localPath": "laohu-native-clips/lib/paint.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/kit.js",
+          "localPath": "laohu-native-clips/lib/kit.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/motion.js",
+          "localPath": "laohu-native-clips/lib/motion.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/camera.js",
+          "localPath": "laohu-native-clips/lib/camera.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/rig.js",
+          "localPath": "laohu-effects/core/rig.js"
+        },
+        {
+          "sourcePath": "scripts/engine/transitions.js",
+          "localPath": "laohu-effects/transitions/transitions.js"
+        }
+      ]
+    },
+    "laohu-motion-toolkit": {
+      "loadOrder": [
+        {
+          "sourcePath": "scripts/engine/lib/util.js",
+          "localPath": "laohu-native-clips/lib/util.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/paint.js",
+          "localPath": "laohu-native-clips/lib/paint.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/kit.js",
+          "localPath": "laohu-native-clips/lib/kit.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/motion.js",
+          "localPath": "laohu-native-clips/lib/motion.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/camera.js",
+          "localPath": "laohu-native-clips/lib/camera.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/diagram.js",
+          "localPath": "laohu-native-clips/lib/diagram.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/typo.js",
+          "localPath": "laohu-native-clips/lib/typo.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/chart.js",
+          "localPath": "laohu-native-clips/lib/chart.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/ui.js",
+          "localPath": "laohu-native-clips/lib/ui.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/collage.js",
+          "localPath": "laohu-native-clips/lib/collage.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/media.js",
+          "localPath": "laohu-native-clips/lib/media.js"
+        }
+      ]
+    },
+    "laohu-comic-scene-runtime": {
+      "loadOrder": [
+        {
+          "sourcePath": "scripts/engine/lib/util.js",
+          "localPath": "laohu-native-clips/lib/util.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/paint.js",
+          "localPath": "laohu-native-clips/lib/paint.js"
+        },
+        {
+          "sourcePath": "scripts/engine/lib/rig.js",
+          "localPath": "laohu-effects/core/rig.js"
+        },
+        {
+          "sourcePath": "scripts/engine/scenes/13_pop.js",
+          "localPath": "laohu-scenes/comic-pop-reaction/scene.js"
+        }
+      ]
+    }
+  }
+}

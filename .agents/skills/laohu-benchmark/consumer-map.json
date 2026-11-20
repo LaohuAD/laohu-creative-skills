@@ -151,8 +151,10 @@
       "adapter_file": ".agents/skills/laohu-benchmark/references/topic-and-presentation-analysis.md",
       "adapter_section": "消费者真实的专业决定",
       "source_method_paths": [
-        ".agents/skills/laohu-title/references/audience-value-and-structure.md",
-        ".agents/skills/laohu-title/references/title-structure-generation.md",
+        ".agents/skills/laohu-title/SKILL.md",
+        ".agents/skills/laohu-title/references/entry-psychology-and-platforms.md",
+        ".agents/skills/laohu-title/references/language-mechanics.md",
+        ".agents/skills/laohu-title/references/condensation-and-rhetoric.md",
         ".agents/skills/laohu-title/references/title-value-and-review.md"
       ],
       "media": [
@@ -160,7 +162,7 @@
         "full article/song when delivery claims depend on context",
         "real field/render only for placement claims"
       ],
-      "return_stage": "Title entry/structure generation, then final-wording review in its real position"
+      "return_stage": "Title chooses the method for the requested field and reviews the final wording in its real position"
     },
     {
       "consumer": "laohu-cover",
@@ -254,22 +256,26 @@
     },
     {
       "consumer": "laohu-motion",
-      "branch": "motion design using only selected relevant internal modules",
-      "decision": "Choose which object/state relation changes over time, how the viewer reads the change, and which sound/visual events must synchronize.",
-      "adapter_file": ".agents/skills/laohu-benchmark/references/visual-analysis.md",
-      "adapter_section": "不同视觉消费者各自看什么",
+      "branch": "Motion native animation design and implementation resources selected for the actual work",
+      "decision": "Choose whether an accepted reference contributes a recurring visual style, a coupled local motion recipe, a source-verified implementation, a sound/visual relation, or only a whole-work structure reference; preserve the evidence scope and user-selected intent.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/animation-analysis.md",
+      "adapter_section": "按真正可迁移的单元决定交接",
       "source_method_paths": [
         ".agents/skills/laohu-motion/SKILL.md",
-        ".agents/skills/laohu-motion/skills/laohu-motion-relations/SKILL.md",
-        ".agents/skills/laohu-motion/skills/laohu-motion-typography/SKILL.md",
-        ".agents/skills/laohu-arrangement/skills/laohu-arrangement-sfx/SKILL.md"
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/craft.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/recipes.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/sound.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/styles/_template.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/brief-template.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/assets/starter/motion.js",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/scripts/render.mjs"
       ],
       "media": [
-        "layered design/source assets",
-        "timeline and audio",
-        "actual rendered frames for motion claims"
+        "user-recognized source video, including adjacent context and its available frame/time/audio evidence",
+        "source implementation and dependencies only when actually supplied and readable",
+        "production brief, local runtime resources and rendered frames when checking a current Motion result"
       ],
-      "return_stage": "Motion content/reading path, then selected visual/time module and render review"
+      "return_stage": "Return bounded findings to Motion's existing local style/recipe/source/runtime consumer; for a complete new animation, hand the selected evidence to Analysis's single brief.md, then review Motion's actual rendered result. The private research library is not a production dependency."
     },
     {
       "consumer": "laohu-topic",
@@ -374,6 +380,25 @@
         "receiving artifact or outcome when validating"
       ],
       "return_stage": "Analysis evidence selection and hypothesis design; analysis owns validation and claim level"
+    },
+    {
+      "consumer": "laohu-analysis/motion",
+      "branch": "evidence and method candidates for the complete animation brief",
+      "decision": "Provide source-grounded visual and motion findings so Analysis can decide whether and how to integrate them into the one complete animation brief.",
+      "adapter_file": ".agents/skills/laohu-benchmark/references/animation-analysis.md",
+      "adapter_section": "整片节奏/结构",
+      "source_method_paths": [
+        ".agents/skills/laohu-analysis/SKILL.md",
+        ".agents/skills/laohu-analysis/references/motion-design.md",
+        ".agents/skills/laohu-analysis/references/validation.md",
+        "references/exemplar-study.md"
+      ],
+      "media": [
+        "actual user request and selected creative goal",
+        "versioned reference-video range with available normal-speed, frame-sequence and audio evidence",
+        "the project brief.md and resulting Motion artifact when validating transfer"
+      ],
+      "return_stage": "Return source findings as bounded input to Analysis's only brief.md (original XML brief structure plus specific natural-language design); Analysis owns the new work's decisions and claim level, Motion owns local implementation, and neither the research atom nor the reference video substitutes for a project brief or rendered result."
     },
     {
       "consumer": "laohu-evolution",

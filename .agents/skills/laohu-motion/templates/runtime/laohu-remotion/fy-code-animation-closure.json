@@ -1,0 +1,798 @@
+{
+  "format": "laohu.motion.local-remotion-closure/1",
+  "source": {
+    "id": "fy-code-animation",
+    "repository": "https://github.com/Akillll-DuoHe/fy-code-animation",
+    "commit": "d9a545afa393b2ffab4f36e87371691daf8e502c",
+    "termsPath": "LICENSE.md",
+    "termsSha256": "18dceb8581694720001a6a1ec41bc956652de942c2267d721ad02783fb9c5df2",
+    "termsStatus": "free use and free sharing; do not package source author’s original/curated content as paid courses, paid skills or other paid materials; third-party components retain their original licenses; local use only this turn"
+  },
+  "licenseRecords": [
+    {
+      "sourcePath": "LICENSES/CharlieHills-MIT.txt",
+      "localPath": "templates/runtime/laohu-remotion/licenses/fy-code-animation/LICENSES/CharlieHills-MIT.txt",
+      "sha256": "ed17713237d18555a34c208bf0cb1ce347faa937731d509e265ce91be660e218"
+    },
+    {
+      "sourcePath": "LICENSES/HeyGen-Apache-2.0.txt",
+      "localPath": "templates/runtime/laohu-remotion/licenses/fy-code-animation/LICENSES/HeyGen-Apache-2.0.txt",
+      "sha256": "4259155fb06f127687ee7b0a8a3682d45132db0f2da26cbc0b7a2d1e796436b8"
+    },
+    {
+      "sourcePath": "LICENSE.md",
+      "localPath": "templates/runtime/laohu-remotion/licenses/fy-code-animation/LICENSE.md",
+      "sha256": "18dceb8581694720001a6a1ec41bc956652de942c2267d721ad02783fb9c5df2"
+    },
+    {
+      "sourcePath": "LICENSES/LottieFiles-MIT.txt",
+      "localPath": "templates/runtime/laohu-remotion/licenses/fy-code-animation/LICENSES/LottieFiles-MIT.txt",
+      "sha256": "9fc2e8685daa09e28d54b6afa8a38f168417c5735a3cd676c80c159785e93a80"
+    },
+    {
+      "sourcePath": "LICENSES/README.md",
+      "localPath": "templates/runtime/laohu-remotion/licenses/fy-code-animation/LICENSES/README.md",
+      "sha256": "f2376cfa3e6313a70031eedd180549abda76ad3d43f9e357508b95e70c3e70db"
+    },
+    {
+      "sourcePath": "LICENSES/klsoen-MIT.txt",
+      "localPath": "templates/runtime/laohu-remotion/licenses/fy-code-animation/LICENSES/klsoen-MIT.txt",
+      "sha256": "89cf1ba7c5b1d790181293b893030795242b5f2189ddf2e878f5be2eead2272c"
+    },
+    {
+      "sourcePath": "LICENSES/renoise-MIT.txt",
+      "localPath": "templates/runtime/laohu-remotion/licenses/fy-code-animation/LICENSES/renoise-MIT.txt",
+      "sha256": "52b4e68019291524bade20b85ff56dd5812094fbc1b765f9749fd8396affd2b7"
+    },
+    {
+      "sourcePath": "LICENSES/selected-sources.json",
+      "localPath": "templates/runtime/laohu-remotion/licenses/fy-code-animation/LICENSES/selected-sources.json",
+      "sha256": "fb2eac20ee0dc7704f89a81de0a3b5b9090b0640428d9148ef3131391afd607b"
+    }
+  ],
+  "files": [
+    {
+      "sourcePath": "implementations/audio-sync/beat-grid.mjs",
+      "localPath": "templates/runtime/laohu-remotion/core/audio/beat-grid.mjs",
+      "sourceSha256": "f1ce56c3b542297e9e9b689f95e4e500ccfc976cfd3a8f6870d115fdf0dfc5f2",
+      "localSha256": "f1ce56c3b542297e9e9b689f95e4e500ccfc976cfd3a8f6870d115fdf0dfc5f2",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/backgrounds/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/backgrounds/index.tsx",
+      "sourceSha256": "b21079ba82c3e66db40229f469f7e3a2af9c1d53dbc4fe5e8318d495c49ccf4c",
+      "localSha256": "e97d9d4bdf9d2b583e62b28159a6c0158dd840f58b56457d8bae58f1788478b5",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    },
+    {
+      "sourcePath": "implementations/camera/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/camera/index.tsx",
+      "sourceSha256": "998cf16d0f0b92ca2e45ad401bd61a921f6f59fa5e959f332ebfa45f1da352d8",
+      "localSha256": "03b5cb5748a15bb81c784fa6a8c66839ab2204b18b9df9ea4afa76017f844af3",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    },
+    {
+      "sourcePath": "implementations/canvas-contract.mjs",
+      "localPath": "templates/runtime/laohu-remotion/core/canvas-contract.mjs",
+      "sourceSha256": "1604385eb3c2f82322e1b981ca99e9816a5a9ff83baafd13b75f98a0b0bf81e5",
+      "localSha256": "1604385eb3c2f82322e1b981ca99e9816a5a9ff83baafd13b75f98a0b0bf81e5",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/character/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/character/index.tsx",
+      "sourceSha256": "b057ea6103bf0e962c95f85fcf8cbae9407cdc832faba3355a7e0170b278e394",
+      "localSha256": "0ba0cfb5b860d69f6ad60c83034b28c8ac3c30d051dabd733cea50baac4ae33a",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/handdrawn/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/materials/handdrawn/index.tsx",
+      "sourceSha256": "6eba65f4efc9db62c866541ab04204a10647fbbcd74802b5791acd35efaf7c26",
+      "localSha256": "46cc00051b8be26c9bb37b23abe3f75c9fdfd5e27aede9c23c5447e020c2eff2",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/handdrawn/index.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/craft/lineart/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/materials/lineart/index.tsx",
+      "sourceSha256": "071c7b933598d9a2b56d60e530fd564a03fd32fc4ea33a3aa8c13aa0847d7d83",
+      "localSha256": "071c7b933598d9a2b56d60e530fd564a03fd32fc4ea33a3aa8c13aa0847d7d83",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/lineart/index.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "bounded path cache; empty chain and zero duration fail explicitly; negative-time periodic seed"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/motion.ts",
+      "localPath": "templates/runtime/laohu-remotion/components/materials/motion.ts",
+      "sourceSha256": "cba396f81cf31f86b2be169ce41e0335bb10d86e1912311a699b65e0418653b2",
+      "localSha256": "cba396f81cf31f86b2be169ce41e0335bb10d86e1912311a699b65e0418653b2",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/pixel/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/materials/pixel/index.tsx",
+      "sourceSha256": "a4638e10fc01c92395c95dd2c0dc189e8348c211dc18dea626ea3b3da14cdd0d",
+      "localSha256": "a4638e10fc01c92395c95dd2c0dc189e8348c211dc18dea626ea3b3da14cdd0d",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/pixel/index.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "integer scale/dimension contract; empty/ragged sprite reject; missing CJK glyph throws instead of question-mark substitution; empty palette reject"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/type/Decode.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/craft/Decode.tsx",
+      "sourceSha256": "521ea821c689de9d3e9d647059108d62b2bd568c3bf4d97852832c8519b122b2",
+      "localSha256": "521ea821c689de9d3e9d647059108d62b2bd568c3bf4d97852832c8519b122b2",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/type/Decode.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "v2.1：中文候选字集alphabet、可传seed与输入约束；保留原Decode算法与许可。"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/type/HandReveal.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/craft/HandReveal.tsx",
+      "sourceSha256": "6ada771c2f37b02148d26733de1c69ae27e603dcd38e60eb54c409e874837819",
+      "localSha256": "cc1dea94603f36c186f774337a373c8fc1c3cbb171ab56a307d7c3f55750b2fc",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/type/HandReveal.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "remove hard-coded 30fps; reject nonpositive cps"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/type/OutlineFill.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/craft/OutlineFill.tsx",
+      "sourceSha256": "cccae95dbbbb53861e097a637a43ba098125e3ed4015183bb0c0fc5d5aa72fdc",
+      "localSha256": "5b29df086f7db6d425696e9fff4add23527353ee1e7a20c6e8e7b87d87e1822b",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/type/OutlineFill.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "unique clip ID; validate duration"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/type/TrackIn.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/craft/TrackIn.tsx",
+      "sourceSha256": "781564195b91e5259e9c9c5a8cc202654a28bef0fdf12952401d439bcf81dce9",
+      "localSha256": "5e8f34ab569e193208c2abd2bc0304cd880ff9db9f4aa0beb9b2716dc54c42bd",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/type/TrackIn.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/craft/type/VarType.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/craft/VarType.tsx",
+      "sourceSha256": "de8d63af60c6358472f04324ebb6e7f994542529e51e9c5adba5c6341703c2a3",
+      "localSha256": "749a770facdbc6c94c64ab801671298c021f93ad09a04efdb7b446cc3ca32364",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/type/VarType.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "CJK-safe neutral tracking; validate timing"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/type/fonts.ts",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/craft/fonts.ts",
+      "sourceSha256": "150879f61450e26ee9639f8055f943c338ede586db1050417679ff30e5588743",
+      "localSha256": "150879f61450e26ee9639f8055f943c338ede586db1050417679ff30e5588743",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/type/fonts.ts",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "HTTP and requested-font absence fail; caller must keep ids stable and verify cmap"
+      ]
+    },
+    {
+      "sourcePath": "implementations/craft/type/index.ts",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/craft/index.ts",
+      "sourceSha256": "03eacdb2aed7791e3d4fee1d47a3f36a46e78f7b9f77cc4838983423e5388913",
+      "localSha256": "03eacdb2aed7791e3d4fee1d47a3f36a46e78f7b9f77cc4838983423e5388913",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/typography/index.ts",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/craft/type/tokens.ts",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/craft/tokens.ts",
+      "sourceSha256": "dc301f4346291f3c3d856cc4bc8c84ebb4331ea56ce57498ab07acf5cd913d3d",
+      "localSha256": "dc301f4346291f3c3d856cc4bc8c84ebb4331ea56ce57498ab07acf5cd913d3d",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/type/tokens.ts",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/data-ui/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/data-ui/index.tsx",
+      "sourceSha256": "717d71b097e04ab47f1afc9c4ecb944d3386bac765cdbc4de04f65aa0a466127",
+      "localSha256": "30f1bea46d4e25165f4da9751e8f65d49c7e5c09e5015b9c44ecff3b8bbe02ca",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    },
+    {
+      "sourcePath": "implementations/motion-core.d.mts",
+      "localPath": "templates/runtime/laohu-remotion/core/motion-core.d.mts",
+      "sourceSha256": "e42f984d7b40183fc65e6ab98240c8228e1111cca574adf7ed777e901b93425e",
+      "localSha256": "e42f984d7b40183fc65e6ab98240c8228e1111cca574adf7ed777e901b93425e",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/motion-core.mjs",
+      "localPath": "templates/runtime/laohu-remotion/core/motion-core.mjs",
+      "sourceSha256": "f07b6f064630c7e1bd6cfef088f13ab9740ca37e12ad8f42d68060a7edae9fb7",
+      "localSha256": "f07b6f064630c7e1bd6cfef088f13ab9740ca37e12ad8f42d68060a7edae9fb7",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/remotion-kit/Scene.tsx",
+      "localPath": "templates/runtime/laohu-remotion/core/Scene.tsx",
+      "sourceSha256": "11b02965d4b5e29941061b33ff47ce61f4c07039edf34818e71f373b034877e3",
+      "localSha256": "e7623e2c8dd84b5bc2b37b04c2efe90950ba72e729c4283f0bcc431ed57e79b7",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    },
+    {
+      "sourcePath": "implementations/remotion-kit/SceneStack.tsx",
+      "localPath": "templates/runtime/laohu-remotion/core/SceneStack.tsx",
+      "sourceSha256": "1154ef837907ced8820956a0fd4f2d14fb6d03933c005b0a402c3f0531e5da28",
+      "localSha256": "7b02ae59bf900bf75283173a8a4a2587adc6e887f1aaebb7a757b71963b2af3c",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    },
+    {
+      "sourcePath": "implementations/remotion-kit/audio.tsx",
+      "localPath": "templates/runtime/laohu-remotion/core/audio.tsx",
+      "sourceSha256": "a8f97cc64fa7f01e6df46efee00ba27bfb8016538ad86ad6c4d5514ecbedd3ed",
+      "localSha256": "a8f97cc64fa7f01e6df46efee00ba27bfb8016538ad86ad6c4d5514ecbedd3ed",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/remotion-kit/captions.tsx",
+      "localPath": "templates/runtime/laohu-remotion/core/captions.tsx",
+      "sourceSha256": "94473427860f8286f2784199dcc260be91e3afbe14a814268ab7f85b782a478f",
+      "localSha256": "94473427860f8286f2784199dcc260be91e3afbe14a814268ab7f85b782a478f",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/remotion-kit/fonts.ts",
+      "localPath": "templates/runtime/laohu-remotion/core/fonts.ts",
+      "sourceSha256": "18a37f7403ee6b935425ee7f1b513fcc2bd991b222964b2ea26e1b915e2c50cd",
+      "localSha256": "18a37f7403ee6b935425ee7f1b513fcc2bd991b222964b2ea26e1b915e2c50cd",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/remotion-kit/random.ts",
+      "localPath": "templates/runtime/laohu-remotion/core/random.ts",
+      "sourceSha256": "b2cbcbf8aa3fc907a46eebde6fdf7011da8dab4f554e170e03a99b11b85c9c3a",
+      "localSha256": "75b8493299013b3cb9a34a19066a86fd74a1f7c23a40c6729a9a2efc5f5449d0",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    },
+    {
+      "sourcePath": "implementations/remotion-kit/time.ts",
+      "localPath": "templates/runtime/laohu-remotion/core/time.ts",
+      "sourceSha256": "589dc8a6369e945fd8562bbfc9e03698dd1ae8b882012eb68e974ff0ab5cbffe",
+      "localSha256": "589dc8a6369e945fd8562bbfc9e03698dd1ae8b882012eb68e974ff0ab5cbffe",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/remotion-kit/timeline.ts",
+      "localPath": "templates/runtime/laohu-remotion/core/timeline.ts",
+      "sourceSha256": "4c630f2e18ce421af5c13a9f1fdb5af522a953908ed5987b514f14c615fff318",
+      "localSha256": "4c630f2e18ce421af5c13a9f1fdb5af522a953908ed5987b514f14c615fff318",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "source bytes preserved"
+      ]
+    },
+    {
+      "sourcePath": "implementations/specimen/BounceGraph.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/BounceGraph.tsx",
+      "sourceSha256": "7f7df5c41efada5301a6cc2b78e55b34971fc901b08f9bd35c39db9c1977bcea",
+      "localSha256": "7f7df5c41efada5301a6cc2b78e55b34971fc901b08f9bd35c39db9c1977bcea",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/BounceGraph.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/specimen/CubeStage.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/CubeStage.tsx",
+      "sourceSha256": "ed79b6a7b68e04e17d4dc5e192b5bd09330465fac96d9c0f7ed381eeb600a66d",
+      "localSha256": "ed79b6a7b68e04e17d4dc5e192b5bd09330465fac96d9c0f7ed381eeb600a66d",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/CubeStage.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/specimen/GlyphAnatomy.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/GlyphAnatomy.tsx",
+      "sourceSha256": "c6b05b64089bdfd3c9996b62a5eba87aa7bd8789113e4bf32cb577a1305a26e1",
+      "localSha256": "c6b05b64089bdfd3c9996b62a5eba87aa7bd8789113e4bf32cb577a1305a26e1",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/GlyphAnatomy.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "多实例SVG ID隔离；放大镜中心重合时避免除零"
+      ]
+    },
+    {
+      "sourcePath": "implementations/specimen/ParticleField.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/ParticleField.tsx",
+      "sourceSha256": "ab39cd783a5357eb51138953de7418d0ef28170d162ce96dc28db55d50a6e497",
+      "localSha256": "ab39cd783a5357eb51138953de7418d0ef28170d162ce96dc28db55d50a6e497",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/ParticleField.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "资源加载异常cancelRender；空目标报错；空辅色回退；设置跨域请求；修复GLSL反向smoothstep未定义边界"
+      ]
+    },
+    {
+      "sourcePath": "implementations/specimen/SpecimenCanvas.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/SpecimenCanvas.tsx",
+      "sourceSha256": "38456a360ea92306ab220195174a5105e6d4c51bcc1d6c53be96c05e92137570",
+      "localSha256": "38456a360ea92306ab220195174a5105e6d4c51bcc1d6c53be96c05e92137570",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/SpecimenCanvas.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/specimen/SpecimenHud.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/SpecimenHud.tsx",
+      "sourceSha256": "0760a221d2470d78576decee3e7ef17d041b72215fdc85d5564dd9f5e4c78bc8",
+      "localSha256": "0760a221d2470d78576decee3e7ef17d041b72215fdc85d5564dd9f5e4c78bc8",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/SpecimenHud.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/specimen/StrokeDraw.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/StrokeDraw.tsx",
+      "sourceSha256": "72906abf3789b5c93e57033882f6f0133aeb9619f881aa2875b257599218671d",
+      "localSha256": "72906abf3789b5c93e57033882f6f0133aeb9619f881aa2875b257599218671d",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/StrokeDraw.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "移除特定品牌标志和vibe手写路径；保留任意路径描线与笔尖能力"
+      ]
+    },
+    {
+      "sourcePath": "implementations/specimen/StudioEnv.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/StudioEnv.tsx",
+      "sourceSha256": "9dc08e97733fe24dd89ffdb1bbe19c49658c117a6619af5aa02ea0cab6654645",
+      "localSha256": "9dc08e97733fe24dd89ffdb1bbe19c49658c117a6619af5aa02ea0cab6654645",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/Logo3D.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "只取所需环境光函数；恢复旧环境并释放RoomEnvironment及PMREM目标"
+      ]
+    },
+    {
+      "sourcePath": "implementations/specimen/VolumeScene.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/VolumeScene.tsx",
+      "sourceSha256": "e681d35fe48864eb10328345a724993fc475719af6254ad46a7926ad99cf3aa5",
+      "localSha256": "e681d35fe48864eb10328345a724993fc475719af6254ad46a7926ad99cf3aa5",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/VolumeScene.tsx",
+      "originLicense": "MIT",
+      "originAdaptation": [
+        "将唯一环境光依赖拆为StudioEnv，避免牵入整套品牌场景和后期包"
+      ]
+    },
+    {
+      "sourcePath": "implementations/specimen/index.ts",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/index.ts",
+      "sourceSha256": "d56829ec418b9b1fb296d94e8e1ec242d515dd7de897fd0ab2f1cb46e2ea7196",
+      "localSha256": "d56829ec418b9b1fb296d94e8e1ec242d515dd7de897fd0ab2f1cb46e2ea7196",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/index.ts",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/specimen/specimens.ts",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/specimens.ts",
+      "sourceSha256": "a7b7fd75cc72d382581f799f22f98b29a3486b1330f9591d8fc8094df06c495c",
+      "localSha256": "a7b7fd75cc72d382581f799f22f98b29a3486b1330f9591d8fc8094df06c495c",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/specimens.ts",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/specimen/theme.ts",
+      "localPath": "templates/runtime/laohu-remotion/components/three/specimen/theme.ts",
+      "sourceSha256": "56e426f6110b9d35bf682618cc096da62654b4ba535cdbf047bd1651710c2fa2",
+      "localSha256": "56e426f6110b9d35bf682618cc096da62654b4ba535cdbf047bd1651710c2fa2",
+      "licenseId": "RENOISE-MIT",
+      "transform": [
+        "source bytes preserved"
+      ],
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/templates/remotion/src/cinematic/specimen/theme.ts",
+      "originLicense": "MIT",
+      "originAdaptation": []
+    },
+    {
+      "sourcePath": "implementations/transitions/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/transitions/index.tsx",
+      "sourceSha256": "32c612db7dc5e1a68f422e7d6581de0bd0341d3991832152eb8448e17cd905bf",
+      "localSha256": "d7d0b196adaf04aaa729ca5850e879e1d60f985961a94dadcf292c2ec1eb1bac",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    },
+    {
+      "sourcePath": "implementations/type-cn/index.tsx",
+      "localPath": "templates/runtime/laohu-remotion/components/typography/index.tsx",
+      "sourceSha256": "55469b69ac0849ec4ef5470cb2de6680ffdb6ebb224b3f2fcd02421910e3cfe7",
+      "localSha256": "9da55cb5aad2418be45bc9d8bfe4bc4dd3bbffa675451eff89777059b0cb3db4",
+      "licenseId": "FY-CODE-ANIMATION-LOCAL-TERMS",
+      "transform": [
+        "relative import paths moved from repository collection to local core/components ownership directories"
+      ]
+    }
+  ],
+  "runtimeDependencies": {
+    "remotion": "4.0.537",
+    "@remotion/bundler": "4.0.537",
+    "@remotion/renderer": "4.0.537",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "@remotion/three": "4.0.537",
+    "@remotion/paths": "4.0.537",
+    "@react-three/fiber": "9.8.2",
+    "three": "0.170.0"
+  },
+  "integration": {
+    "canonicalRoot": "templates/runtime/laohu-remotion",
+    "ownership": {
+      "core": [
+        "core/motion-core.mjs",
+        "core/time.ts",
+        "core/timeline.ts",
+        "core/Scene.tsx",
+        "core/SceneStack.tsx",
+        "core/audio.tsx",
+        "core/captions.tsx",
+        "core/fonts.ts"
+      ],
+      "components": [
+        "components/camera",
+        "components/transitions",
+        "components/typography",
+        "components/backgrounds",
+        "components/character",
+        "components/data-ui",
+        "components/materials",
+        "components/three"
+      ],
+      "shots": "templates/adapters/video-shotcraft-entry.tsx",
+      "themes": "themes/"
+    },
+    "defaultFilmClock": "ASRcut sampled clock -> Film absolute frame clock -> Sequence-local frame clock; only final audio.mjs mixes final audio",
+    "excluded": [
+      "Root.example.tsx (non-production side-effecting bootstrap; exact source path/hash recorded in excludedExamples)",
+      "10 implementation README documents (their runtime/API rules are merged to mergedSourceDocumentation)",
+      "unselected files/assets outside the 53-file implementations source set (not included in the selected local implementation closure)"
+    ],
+    "sourceSelection": {
+      "consideredSourceFiles": 54,
+      "selectedImplementationFiles": 42,
+      "mergedReadmeFiles": 10,
+      "nonProductionExamples": 1,
+      "countsExplainDifference": "53 files are the source implementations tree (42 selected implementation modules, 10 README contracts merged to local References, and 1 non-production Root.example bootstrap); the separately pinned scripts/glyph_outline.py support file is mapped to the local font-gated GlyphAnatomy preparation CLI.",
+      "additionalSupportFiles": 1
+    },
+    "mergedSourceDocumentation": [
+      {
+        "sourcePath": "implementations/audio-sync/README.md",
+        "sourceSha256": "a2be2542836ea06203825715171bbd181e61103ab141fadd71f01840b7551cc4",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/sound-design.md#remotion-beat-grid"
+        ]
+      },
+      {
+        "sourcePath": "implementations/backgrounds/README.md",
+        "sourceSha256": "9b6cd57cb85f0f88f808f8e24e7648c200441017f35f368d4920c0be49746a4a",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/visual-design.md#remotion-procedural-backgrounds"
+        ]
+      },
+      {
+        "sourcePath": "implementations/camera/README.md",
+        "sourceSha256": "efebca7bd3562b5397b75d6babe412065719565aa1d026cda2f117ac756cc3bb",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/visual-design.md#remotion-camera-and-parallax"
+        ]
+      },
+      {
+        "sourcePath": "implementations/character/README.md",
+        "sourceSha256": "532691526842b0c4240631c3e429784d2597e02c742bbb4acb87f1239417d5c2",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/visual-design.md#remotion-character-rigs"
+        ]
+      },
+      {
+        "sourcePath": "implementations/craft/README.md",
+        "sourceSha256": "4c7a7ab65cc3635836b16351b6afe13e46be800ec6374e1f7b610937c4cd40b7",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/typography-and-legibility.md#remotion-craft-type",
+          "references/toolchain-render-and-check.md#remotion-craft-materials"
+        ]
+      },
+      {
+        "sourcePath": "implementations/data-ui/README.md",
+        "sourceSha256": "883a0a060fc272ee6152ec32a859253a4c1298eb828a70aa5ddac370f7431a42",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/toolchain-render-and-check.md#remotion-data-ui-media"
+        ]
+      },
+      {
+        "sourcePath": "implementations/remotion-kit/README.md",
+        "sourceSha256": "0d8d5c0855c46c7d9da145d81dc332d7b26da96e1bf67d76e00430e60da911cc",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/toolchain-render-and-check.md#remotion-root-composition",
+          "references/toolchain-render-and-check.md#remotion-timeline-caption-audio-contract"
+        ]
+      },
+      {
+        "sourcePath": "implementations/specimen/README.md",
+        "sourceSha256": "7b6b97803c00e066398779010965525caee157361fe3c7d1ebed8dde55ee83a3",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/visual-design.md#remotion-specimen-scenes"
+        ]
+      },
+      {
+        "sourcePath": "implementations/transitions/README.md",
+        "sourceSha256": "6a572e4ba7740f21a1f2c286975f842352083135d4374620847a129191f73cab",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/video-shotcraft-integration.md#remotion-transition-components"
+        ]
+      },
+      {
+        "sourcePath": "implementations/type-cn/README.md",
+        "sourceSha256": "1726de965da810c4d3776632410f0c7f905e5a9a1229a55fe431b674980d45e0",
+        "disposition": "method and API contracts merged into existing local References; source README is not a production dependency",
+        "mergedTo": [
+          "references/typography-and-legibility.md#remotion-chinese-motion-type"
+        ]
+      }
+    ],
+    "excludedExamples": [
+      {
+        "sourcePath": "implementations/remotion-kit/Root.example.tsx",
+        "sourceSha256": "821808d9850d96d835f933c63d2029bd9a28ba0ee4bbd9431d6da9af06bdbddf",
+        "reason": "non-production Composition/registerRoot example; canonical production root is templates/adapters/video-shotcraft-entry.tsx",
+        "reference": "references/toolchain-render-and-check.md#remotion-root-composition"
+      }
+    ]
+  },
+  "localConsumers": [
+    {
+      "localPath": ".agents/skills/laohu-motion/templates/runtime/laohu-remotion/components/shots/foundation-layer.tsx",
+      "sha256": "bc28cd8a202f54112b8d61130a0678fb7780598dde4fb5a5cef557edf31344ac",
+      "role": "shotcraft layer consumer"
+    },
+    {
+      "localPath": ".agents/skills/laohu-motion/templates/runtime/laohu-remotion/components/shots/registry.tsx",
+      "sha256": "27592616bbbe17af3a6c0d5b31e3609922af674863c4783218b33cf10a941743",
+      "role": "local authored shot registry"
+    },
+    {
+      "localPath": ".agents/skills/laohu-motion/templates/runtime/laohu-remotion/components/shots/index.ts",
+      "sha256": "e9d2c6beca2a9d1977cc3004a777e76fd987bc19c75282195715486a7d0b76fd",
+      "role": "full local authoring API barrel"
+    },
+    {
+      "localPath": ".agents/skills/laohu-motion/templates/adapters/video-shotcraft-entry.tsx",
+      "sha256": "6ea4f9b18bc8a3a6362f6e61964107ad8a62b00549d373ce944a31fa42ba306f",
+      "role": "Remotion composition route"
+    }
+  ],
+  "externalFiles": [
+    {
+      "sourcePath": "scripts/glyph_outline.py",
+      "localPath": "scripts/laohu-glyph-outline.py",
+      "sourceSha256": "4f17ea14cff9b697d09a37a8b64b9a601efa6ab1383158de4f6f8b1a0e805f6a",
+      "sourceGitBlob": "1c5ed254a814cb18d84723ce6d5f9581cea03b0b",
+      "localSha256": "d76929dd89386e6406443f02a12809fece3ba952a12bd978012a81bedce9dd4d",
+      "licenseId": "RENOISE-MIT",
+      "originRepository": "renoise-ai/renoise-skills",
+      "originCommit": "3d82d8df22a4e4d942c317fb13264d4a8eb046a6",
+      "originPath": "skills/promo-video/scripts/glyph_outline.py",
+      "originSourceSha256": "5769423d2cd8fa3c52395288c420d50216eb53d3990f7908cf41669fb59cd6f1",
+      "transform": [
+        "retain glyph outline and contour export method; add explicit local font/license paths, variable-axis selection, dependency setup in work cache, and input/output validation"
+      ],
+      "consumer": "components/three/specimen/GlyphAnatomy.tsx"
+    }
+  ]
+}

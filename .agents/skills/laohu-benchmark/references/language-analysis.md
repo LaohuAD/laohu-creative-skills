@@ -54,6 +54,6 @@
 - 写作结构、论证和段落：[structure-and-argument.md](../../laohu-writing/references/structure-and-argument.md)；表达密度：[expression-and-density.md](../../laohu-writing/references/expression-and-density.md)；口播听觉组织：[spoken-explanation.md](../../laohu-writing/references/spoken-explanation.md)。
 - 歌词表达目的与声韵：[expression-and-purpose.md](../../laohu-lyrics/references/expression-and-purpose.md)、[language-and-sound.md](../../laohu-lyrics/references/language-and-sound.md)、[benchmark-method.md](../../laohu-lyrics/references/benchmark-method.md)。
 - 编曲的词曲交接、乐句和节奏：[composition.md](../../laohu-arrangement/references/composition.md)、[orchestration-groove.md](../../laohu-arrangement/references/orchestration-groove.md)。
-- 标题的读者入口、句面生成与最终复审：[audience-value-and-structure.md](../../laohu-title/references/audience-value-and-structure.md)、[title-structure-generation.md](../../laohu-title/references/title-structure-generation.md)、[title-value-and-review.md](../../laohu-title/references/title-value-and-review.md)。
+- 标题的读者入口、句面生成与最终复审：从 [Title 主文](../../laohu-title/SKILL.md) 确认字段。外部发布与搜索定位[读者入口](../../laohu-title/references/entry-psychology-and-platforms.md)，关键表达定位[凝练与修辞](../../laohu-title/references/condensation-and-rhetoric.md)，按需取[语言方法](../../laohu-title/references/language-mechanics.md)及[成品复审](../../laohu-title/references/title-value-and-review.md)。
 
 标题读者需求与传播表现的边界仍由 laohu-title 和 laohu-topic 负责；本文件不从文辞分析推断真实传播效果。

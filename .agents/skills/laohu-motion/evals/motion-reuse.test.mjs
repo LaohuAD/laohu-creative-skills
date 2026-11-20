@@ -10,11 +10,14 @@ import {
   buildAudioGraph,
   clipForEvent,
   findSceneAudioEvents,
+  inspectGeneratedWave,
   mapLocalTimeToFilm,
+  mappedVoiceWindowsForTrack,
   mapSceneEvents,
   renderAudioPlan,
   secondsToSamples,
   validateAssetUse,
+  validateAssetVoiceDuckProcessing,
   validatePlan,
 } from "../scripts/audio.mjs";
 
@@ -76,6 +79,76 @@ test("motion operations reuse MotionCore and map film-local time deterministical
   assert.equal(ops.filmToLocalTime(5, { filmStartSec: 4, filmEndSec: 8, localStartSec: 10, localEndSec: 18 }), 12);
   assert.equal(ops.filmToLocalTime(0, { filmStartSec: 4, filmEndSec: 8, localStartSec: 10, localEndSec: 18 }), 10);
   assert.equal(ops.filmToLocalTime(0, { filmStartSec: 4, filmEndSec: 8, localStartSec: 10, localEndSec: 18, clamp: false }), 2);
+});
+
+test("audio-plan consumption blocks rejected source bytes across copied asset IDs and candidate overrides", async () => {
+  const cacheRoot = path.join(repositoryDir, ".cache", "tmp", "direction-music-upgrade", "music", "negative-feedback-consumer-tests");
+  await fs.mkdir(cacheRoot, { recursive: true });
+  const directory = await fs.mkdtemp(path.join(cacheRoot, "audio-consumer-"));
+  try {
+    const bundledIndex = JSON.parse(await fs.readFile(path.join(skillDir, "assets", "audio", "index.json"), "utf8"));
+    const original = structuredClone(bundledIndex.assets.find((asset) => asset.id === "freesound.rhythm-upbeat-bed-512340"));
+    assert.ok(original, "the fixture uses an actual indexed music file");
+    original.reviewStatus = "ready";
+    original.reviewRecord = {
+      fileSha256: original.sha256, reviewerType: "human", listeningConfirmed: true,
+      conclusion: "pass", applicableScope: "full track review", sourceRange: { inSec: 0, outSec: original.durationSec },
+    };
+    original.applicabilityExclusions = [{
+      fileSha256: original.sha256,
+      sourceRange: { inSec: 12, outSec: 18 },
+      useCase: "lively-explanation",
+      conclusion: "fail",
+      reason: "human review: this phrase masks the narration",
+      reviewer: "reviewer-42", reviewerType: "human",
+      recordedAtUtc: "2026-11-13T00:00:00Z",
+    }];
+    const projectIndexDir = path.join(directory, "project", "assets", "audio");
+    const musicDir = path.join(projectIndexDir, "freesound-music");
+    await fs.mkdir(musicDir, { recursive: true });
+    const bytes = await fs.readFile(path.join(skillDir, "assets", "audio", original.file));
+    await fs.writeFile(path.join(musicDir, path.basename(original.file)), bytes);
+    const alias = {
+      ...structuredClone(original),
+      id: "project.copied-music-asset-id",
+      file: path.join("freesound-music", path.basename(original.file)),
+      reviewStatus: "candidate-unreviewed",
+    };
+    delete alias.applicabilityExclusions;
+    const indexFile = path.join(projectIndexDir, "index.json");
+    await fs.writeFile(indexFile, JSON.stringify({ schemaVersion: 1, assets: [original, alias] }));
+
+    const planFile = path.join(directory, "rejected-audio-plan.json");
+    const basePlan = {
+      schemaVersion: 1, timeUnit: "seconds", timeBasis: "film-global", durationSec: 8,
+      sampleRate: 48000, channels: 2, events: [],
+      tracks: [{ id: "music-bed", assetId: alias.id, bus: "music", startSec: 0,
+        sourceInSec: 12, sourceOutSec: 18, useCase: "lively-explanation" }],
+    };
+    await fs.writeFile(planFile, JSON.stringify(basePlan));
+    const rejectedArgs = {
+      plan: planFile, assetIndex: indexFile,
+      output: path.join(directory, "preview.wav"), manifest: path.join(directory, "preview.manifest.json"),
+      cacheDir: path.join(directory, "cache"), ffmpeg: path.join(directory, "ffmpeg-must-not-run"),
+      allowCandidate: true,
+    };
+    await assert.rejects(
+      renderAudioPlan(rejectedArgs),
+      /project\.copied-music-asset-id is rejected for useCase lively-explanation/,
+      "--allow-candidate and a different assetId cannot override a hash/range/use-case rejection",
+    );
+
+    const ambiguousPlan = structuredClone(basePlan);
+    delete ambiguousPlan.tracks[0].useCase;
+    await fs.writeFile(planFile, JSON.stringify(ambiguousPlan));
+    await assert.rejects(
+      renderAudioPlan(rejectedArgs),
+      /overlaps a human rejection for useCase lively-explanation; add a canonical track\.useCase/,
+      "omitting the context cannot make a rejected source range available",
+    );
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
 });
 
 test("dynamic follow-box consumes the exact evaluated target, parent layers and scene camera", () => {
@@ -691,7 +764,7 @@ test("composed label geometry carries text, a numbered plate, and clearance exac
 });
 
 test("the documented group bridge uses placed geometry for drawing and refuses missing targets or unresolved positions", async () => {
-  const toolchain = await fs.readFile(path.join(skillDir, "references", "toolchain-render-and-check.md"), "utf8");
+  const toolchain = await fs.readFile(path.join(skillDir, "references", "legacy", "toolchain-render-and-check.md"), "utf8");
   const section = toolchain.slice(toolchain.indexOf("#### 完整标注组的布局结果进入绘制"));
   const example = section.match(/```js\n([\s\S]*?)\n```/);
   assert.ok(example, "the executable call bridge remains present in the toolchain reference");
@@ -754,7 +827,7 @@ test("real Canvas text and font changes alter the composed group that is drawn a
     : path.join(repositoryDir, ".cache", "tmp", "motion-visibility-sound", "2026-10-30", "real-canvas-group", runId);
   await fs.mkdir(validationRoot, { recursive: true });
   await fs.mkdir(tempRoot, { recursive: true });
-  const toolchain = await fs.readFile(path.join(skillDir, "references", "toolchain-render-and-check.md"), "utf8");
+  const toolchain = await fs.readFile(path.join(skillDir, "references", "legacy", "toolchain-render-and-check.md"), "utf8");
   const section = toolchain.slice(toolchain.indexOf("#### 完整标注组的布局结果进入绘制"));
   const example = section.match(/```js\n([\s\S]*?)\n```/);
   assert.ok(example, "the actual Canvas renderer test consumes the documented bridge source");
@@ -1186,6 +1259,74 @@ test("audio plan rejects unit mistakes, duplicate cues, and locked-track transfo
   }));
 });
 
+test("audio envelopes reject silently ignored fade fields while music automation accepts them", () => {
+  const base = { schemaVersion: 1, timeUnit: "seconds", timeBasis: "film-global", durationSec: 4, sampleRate: 48000, channels: 2 };
+  assert.doesNotThrow(() => validatePlan({
+    ...base,
+    tracks: [{ id: "music", assetId: "music-asset", bus: "music", startSec: 0, envelope: { attackSec: 0.4, releaseSec: 0.8 } }],
+    automation: [{ id: "music-fade", bus: "music", startSec: 0, endSec: 4, gainDb: -12, fadeInSec: 0.6, fadeOutSec: 0.9 }],
+  }));
+  for (const envelope of [{ fadeInSec: 0.4 }, { fadeOutSec: 0.5 }, { attackSec: 0.2, curve: "ease" }, []]) {
+    assert.throws(
+      () => validatePlan({ ...base, tracks: [{ id: "music", assetId: "music-asset", bus: "music", startSec: 0, envelope }] }),
+      /envelope\..*is not implemented by audio-plan\/1|envelope must be an object/,
+      `unsupported envelope must fail instead of silently changing the intended automation: ${JSON.stringify(envelope)}`,
+    );
+  }
+});
+
+test("source duck receipt maps film voice windows into the selected asset's source clock", () => {
+  const voiceWindows = [
+    { id: "head", startSec: 9.5, endSec: 10.1 },
+    { id: "inside", startSec: 10.25, endSec: 10.75 },
+    { id: "tail", startSec: 11.75, endSec: 12.25 },
+  ];
+  const twoX = mappedVoiceWindowsForTrack(voiceWindows, {
+    sourceIn: 4, sourceOut: 8, speed: 2, startFilmSec: 10,
+  });
+  assert.deepEqual(twoX.map((window) => ({ start: Number(window.start.toFixed(6)), end: Number(window.end.toFixed(6)) })), [
+    { start: 4, end: 4.2 },
+    { start: 4.5, end: 5.5 },
+    { start: 7.5, end: 8 },
+  ], "2x playback maps against the source span and adds sourceIn once");
+  const halfX = mappedVoiceWindowsForTrack([
+    { id: "slow", startSec: 4, endSec: 6 },
+    { id: "last", startSec: 10, endSec: 12 },
+  ], { sourceIn: 2, sourceOut: 6, speed: 0.5, startFilmSec: 3 });
+  assert.deepEqual(halfX.map((window) => ({ start: Number(window.start.toFixed(6)), end: Number(window.end.toFixed(6)) })), [
+    { start: 2.5, end: 3.5 },
+    { start: 5.5, end: 6 },
+  ], "0.5x playback intersects the non-full source interval before mapping");
+
+  const plan = { voiceWindows, ducking: null };
+  const track = { id: "selected-music", bus: "music", locked: false };
+  const clip = { sourceIn: 4, sourceOut: 8, speed: 2, startFilmSec: 10 };
+  const asset = { id: "selected-source", source: { voiceDuckProcessing: {
+    applied: true, processor: "original sound.duck source fragment",
+    wordWindows: twoX,
+    voiceWindowsSha256: "source-test-hash",
+  } } };
+  const canonicalWindows = JSON.stringify(voiceWindows.map((row) => ({ endSec: row.endSec, id: row.id, startSec: row.startSec })));
+  const hash = createRequire(import.meta.url)("node:crypto").createHash("sha256").update(canonicalWindows).digest("hex");
+  asset.source.voiceDuckProcessing.voiceWindowsSha256 = hash;
+  assert.equal(validateAssetVoiceDuckProcessing({ plan, track, asset, clip }).verified, true);
+  assert.throws(() => validateAssetVoiceDuckProcessing({
+    plan: { ...plan, ducking: { targetGainDb: -12, attackSec: 0, releaseSec: 0 } }, track, asset, clip,
+  }), /would be applied twice/);
+  const delegatedAsset = structuredClone(asset);
+  delegatedAsset.source.voiceDuckProcessing = {
+    ...delegatedAsset.source.voiceDuckProcessing,
+    applied: false, processor: "audio-plan final mixer", wordWindows: [], requestedWordWindows: twoX,
+  };
+  const delegatedPlan = { ...plan, ducking: { targetGainDb: -12, attackSec: 0.05, releaseSec: 0.1 } };
+  assert.equal(validateAssetVoiceDuckProcessing({ plan: delegatedPlan, track, asset: delegatedAsset, clip }).finalMixerDuckRequested, true,
+    "explicit audio-plan ducking remains the sole owner when source processing defers");
+  assert.throws(() => validateAssetVoiceDuckProcessing({ plan, track, asset: delegatedAsset, clip }), /no matching active final-mixer duck/);
+  const wrongAsset = structuredClone(asset);
+  wrongAsset.source.voiceDuckProcessing.wordWindows[1].start += 0.1;
+  assert.throws(() => validateAssetVoiceDuckProcessing({ plan, track, asset: wrongAsset, clip }), /mapped voiceWindows/);
+});
+
 test("mix graph keeps the film sample domain and applies voice-window ducking only to music", () => {
   const plan = {
     durationSec: 2,
@@ -1223,6 +1364,7 @@ function readFloatWav(buffer) {
   let channels = 0;
   let sampleRate = 0;
   let format = 0;
+  let ieeeFloat = false;
   let dataOffset = -1;
   let dataLength = 0;
   while (offset + 8 <= buffer.length) {
@@ -1232,6 +1374,14 @@ function readFloatWav(buffer) {
       format = buffer.readUInt16LE(offset + 8);
       channels = buffer.readUInt16LE(offset + 10);
       sampleRate = buffer.readUInt32LE(offset + 12);
+      ieeeFloat = format === 3;
+      if (format === 0xfffe && size >= 40) {
+        const extensionSize = buffer.readUInt16LE(offset + 24);
+        const validBitsPerSample = buffer.readUInt16LE(offset + 26);
+        const ieeeFloatSubformat = Buffer.from("0300000000001000800000aa00389b71", "hex");
+        ieeeFloat = extensionSize >= 22 && validBitsPerSample === 32
+          && buffer.subarray(offset + 32, offset + 48).equals(ieeeFloatSubformat);
+      }
     } else if (name === "data") {
       dataOffset = offset + 8;
       dataLength = size;
@@ -1239,7 +1389,7 @@ function readFloatWav(buffer) {
     }
     offset += 8 + size + (size & 1);
   }
-  assert.equal(format, 3, "output is IEEE float PCM");
+  assert.ok(ieeeFloat, `output is IEEE float PCM (WAVE format tag ${format})`);
   assert.equal(sampleRate, 48000);
   assert.equal(channels, 2);
   function rms(startSec, endSec) {
@@ -1256,6 +1406,47 @@ function readFloatWav(buffer) {
   }
   return { sampleRate, channels, durationSec: dataLength / (sampleRate * channels * 4), rms };
 }
+
+function generatedWaveFixture({ format = 3, subtype = 3, channels = 2, validBits = 32, extensionSize = 22, fmtSize, truncateFmt = false } = {}) {
+  const payloadSize = format === 3 ? 16 : 40;
+  const declaredFmtSize = fmtSize ?? payloadSize;
+  const fmt = Buffer.alloc(payloadSize);
+  fmt.writeUInt16LE(format, 0);
+  fmt.writeUInt16LE(channels, 2);
+  fmt.writeUInt32LE(48000, 4);
+  fmt.writeUInt32LE(48000 * channels * 4, 8);
+  fmt.writeUInt16LE(channels * 4, 12);
+  fmt.writeUInt16LE(32, 14);
+  if (format === 0xfffe) {
+    fmt.writeUInt16LE(extensionSize, 16);
+    fmt.writeUInt16LE(validBits, 18);
+    fmt.writeUInt32LE(channels === 2 ? 3 : 4, 20);
+    const subtypeGuid = Buffer.from(`${String(subtype).padStart(2, "0")}00000000001000800000aa00389b71`, "hex");
+    subtypeGuid.copy(fmt, 24);
+  }
+  const fmtHeader = Buffer.alloc(8); fmtHeader.write("fmt "); fmtHeader.writeUInt32LE(declaredFmtSize, 4);
+  const dataHeader = Buffer.alloc(8); dataHeader.write("data"); dataHeader.writeUInt32LE(48, 4);
+  const data = Buffer.alloc(48);
+  const fmtPayload = truncateFmt ? fmt.subarray(0, fmt.length - 1) : fmt.subarray(0, declaredFmtSize);
+  const padding = !truncateFmt && fmtPayload.length % 2 ? Buffer.alloc(1) : Buffer.alloc(0);
+  const content = Buffer.concat([fmtHeader, fmtPayload, padding,
+    ...(truncateFmt ? [] : [dataHeader, data])]);
+  const header = Buffer.alloc(12); header.write("RIFF"); header.writeUInt32LE(4 + content.length, 4); header.write("WAVE", 8);
+  return Buffer.concat([header, content]);
+}
+
+test("generated float WAV validation accepts tag 3 and only complete valid IEEE-float extensible WAV", () => {
+  const expected = { frames: 6, sampleRate: 48000, channels: 2 };
+  assert.deepEqual(inspectGeneratedWave(generatedWaveFixture(), 6 / 48000), expected);
+  assert.deepEqual(inspectGeneratedWave(generatedWaveFixture({ format: 0xfffe }), 6 / 48000), expected);
+  assert.throws(() => inspectGeneratedWave(generatedWaveFixture({ format: 0xfffe, subtype: 1 }), 6 / 48000), /float PCM/);
+  assert.throws(() => inspectGeneratedWave(generatedWaveFixture({ format: 0xfffe, validBits: 24 }), 6 / 48000), /float PCM/);
+  assert.throws(() => inspectGeneratedWave(generatedWaveFixture({ format: 0xfffe, channels: 1 }), 6 / 48000), /float PCM/);
+  assert.throws(() => inspectGeneratedWave(generatedWaveFixture({ format: 0xfffe, extensionSize: 23 }), 6 / 48000), /float PCM/);
+  assert.throws(() => inspectGeneratedWave(generatedWaveFixture({ format: 0xfffe, fmtSize: 39 }), 6 / 48000), /float PCM/);
+  assert.throws(() => inspectGeneratedWave(generatedWaveFixture({ format: 3, fmtSize: 15 }), 6 / 48000), /float PCM/);
+  assert.throws(() => inspectGeneratedWave(generatedWaveFixture({ format: 0xfffe, truncateFmt: true }), 6 / 48000), /truncated WAV chunk/);
+});
 
 test("FFmpeg mix aligns ducking to film time after a nonzero track start", { skip: !integrationFfmpeg }, async () => {
   const cacheRoot = path.join(repositoryDir, ".cache", "tmp", "motion-visibility-sound", "2026-10-30", "tests");
@@ -2079,6 +2270,67 @@ test("audio mux refuses audio-bearing or short pictures and a shorter film-globa
       output: path.join(directory, "scene-mix.wav"), manifest: path.join(directory, "scene-mix.json"),
       cacheDir: path.join(directory, "scene-cache"), scene: sceneFile, ffmpeg: integrationFfmpeg,
     }), /film-global scene duration is shorter than the audio plan/);
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});
+
+test("audio mux accepts the exact rational duration of a 502-frame picture without rounding it short", { skip: !integrationFfmpeg }, async () => {
+  const cacheRoot = path.join(repositoryDir, ".cache", "tmp", "motion-visibility-sound", "2026-10-30", "tests");
+  await fs.mkdir(cacheRoot, { recursive: true });
+  const directory = await fs.mkdtemp(path.join(cacheRoot, "rational-video-duration-"));
+  try {
+    const ffprobe = path.join(path.dirname(integrationFfmpeg), "ffprobe");
+    const video = path.join(directory, "picture-502-frames.mp4");
+    const made = spawnSync(integrationFfmpeg, [
+      "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "color=c=black:s=64x64:r=30",
+      "-frames:v", "502", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-video_track_timescale", "15360", video,
+    ], { encoding: "utf8" });
+    assert.equal(made.status, 0, made.stderr || made.error?.message);
+    const rawProbe = spawnSync(ffprobe, [
+      "-v", "error", "-show_entries", "stream=codec_type,duration,duration_ts,time_base,nb_frames,avg_frame_rate", "-of", "json", video,
+    ], { encoding: "utf8" });
+    assert.equal(rawProbe.status, 0, rawProbe.stderr || rawProbe.error?.message);
+    const sourceVideo = JSON.parse(rawProbe.stdout).streams.find((stream) => stream.codec_type === "video");
+    assert.equal(sourceVideo.time_base, "1/15360");
+    assert.equal(String(sourceVideo.duration_ts), "257024");
+    assert.equal(String(sourceVideo.duration), "16.733333", "ffprobe's decimal field intentionally rounds below the exact stream clock");
+    assert.equal(String(sourceVideo.nb_frames), "502");
+
+    const durationSec = 257024 / 15360;
+    const planFile = path.join(directory, "plan.json");
+    await fs.writeFile(planFile, JSON.stringify({
+      schemaVersion: 1, timeUnit: "seconds", timeBasis: "film-global", durationSec,
+      sampleRate: 48000, channels: 2, events: [], tracks: [],
+    }));
+    const output = path.join(directory, "mix.wav");
+    const finalOutput = path.join(directory, "final.mp4");
+    const manifest = await renderAudioPlan({
+      plan: planFile, assetIndex: path.join(skillDir, "assets", "audio", "index.json"),
+      output, manifest: path.join(directory, "manifest.json"), cacheDir: path.join(directory, "cache"),
+      video, finalOutput, ffmpeg: integrationFfmpeg,
+    });
+    assert.equal(manifest.videoProbe.frameCount, 502);
+    assert.deepEqual(manifest.videoProbe.videoDurationClock, {
+      durationSec,
+      basis: "stream.duration_ts × stream.time_base",
+      durationTs: "257024",
+      timeBase: "1/15360",
+    }, "the manifest exposes the rational preflight clock instead of only ffprobe's rounded decimal");
+    assert.equal(manifest.mux.videoStreamDurationSec, durationSec);
+    assert.deepEqual(manifest.mux.videoStreamDurationClock, {
+      durationSec,
+      basis: "stream.duration_ts × stream.time_base",
+      durationTs: "257024",
+      timeBase: "1/15360",
+    });
+    const finalProbe = spawnSync(ffprobe, [
+      "-v", "error", "-show_entries", "stream=codec_type,duration,duration_ts,time_base,nb_frames", "-of", "json", finalOutput,
+    ], { encoding: "utf8" });
+    assert.equal(finalProbe.status, 0, finalProbe.stderr || finalProbe.error?.message);
+    const finalVideo = JSON.parse(finalProbe.stdout).streams.find((stream) => stream.codec_type === "video");
+    assert.equal(String(finalVideo.duration_ts), "257024", "final remux retains the full source presentation duration");
+    assert.equal(String(finalVideo.nb_frames), "502", "final remux retains every source picture frame");
   } finally {
     await fs.rm(directory, { recursive: true, force: true });
   }

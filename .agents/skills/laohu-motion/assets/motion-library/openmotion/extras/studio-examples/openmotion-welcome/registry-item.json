@@ -1,0 +1,94 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "openmotion-welcome",
+  "type": "hyperframes:example",
+  "title": "OpenMotion Welcome",
+  "description": "Editable official welcome film with typography, motion gallery and a rounded 3D brand mark.",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 37.3,
+  "files": [
+    {
+      "path": "NOTICE.md",
+      "target": "NOTICE.md",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "TEMPLATE.md",
+      "target": "TEMPLATE.md",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/artwork.js",
+      "target": "assets/artwork.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/cube.js",
+      "target": "assets/cube.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/film.css",
+      "target": "assets/film.css",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/horizon.webp",
+      "target": "assets/horizon.webp",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/sky.webp",
+      "target": "assets/sky.webp",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/soundtrack.m4a",
+      "target": "assets/soundtrack.m4a",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "compositions/choice.html",
+      "target": "compositions/choice.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "compositions/editor.html",
+      "target": "compositions/editor.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "compositions/gallery.html",
+      "target": "compositions/gallery.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "compositions/intro.html",
+      "target": "compositions/intro.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "compositions/outro.html",
+      "target": "compositions/outro.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "compositions/reel.html",
+      "target": "compositions/reel.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "compositions/statement.html",
+      "target": "compositions/statement.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "index.html",
+      "target": "index.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

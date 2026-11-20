@@ -4,21 +4,10 @@
 works/**
 !works/.gitkeep
 
-# Keep all accumulated content under the project-root library local; only its public guide may be tracked.
-# This covers future exports, manifests, databases, media and unknown subdirectories as well as canonical records.
+# Private research records and caches in legacy and receiving-Skill libraries.
 /benchmark/**
 !/benchmark/README.md
-
-# Narrow record/cache patterns document current formats and remain compatible with older checkouts.
-/benchmark/sources/
-/benchmark/*/atoms/
-/benchmark/*/usage/
-/benchmark/*/index.sqlite3*
-/benchmark/*/.index.sqlite3.*.tmp
-/benchmark/.transactions/
-/benchmark/.library.lock/
-/benchmark/.library.lock.stale-*/
-/benchmark/.*.tmp
+/.agents/skills/**/benchmark/
 
 # Local runtime and temporary files
 .tmp/
@@ -42,6 +31,11 @@ node_modules/
 coverage/
 dist/
 build/
+
+# These packaged runtime dependencies are required to play the official examples.
+!/.agents/skills/laohu-motion/assets/motion-library/openmotion/remix/vendor/*/dist/
+!/.agents/skills/laohu-motion/assets/motion-library/openmotion/extras/studio-examples/*/vendor/*/dist/
+!/.agents/skills/laohu-motion/assets/motion-library/openmotion/remix/vendor/*/build/
 
 # Editor and operating-system files
 .vscode/

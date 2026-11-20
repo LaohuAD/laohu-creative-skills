@@ -1,0 +1,203 @@
+Title: Micro-Edits: Computational Support for Fine-Scale Edits in Film
+Source: https://microedits.github.io/pdf/micro_edits_final.pdf
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+Retrieved: 2026-11-17
+Representation: Complete PDF text extraction, not an original PDF or facsimile.
+Changes: Extracted text from every PDF page using pdftotext; inserted page-break markers. Figures/images are not reproduced. Text captions and original author/license notices retained. Mathematical/layout fidelity may be imperfect.
+Exclusions: All video frames are explicitly copyright EditStock. All embedded images, including these frames, are excluded.
+Source PDF SHA256: 690c030bd69477b75b458712e4b0e774e04654c4dea6ab4fd49431141fe8e730
+
+--- BEGIN COMPLETE EXTRACTED TEXT ---
+
+3
+
+Background and Formative Study
+
+We conducted a formative study with six experienced editors (5–15
+years experience) to understand how and why they adjust rough
+cuts. Full details of our study are included as supplemental material,
+and we summarize our findings below.
+
+
+
+[Page break]
+
+Micro-Edits: Computational Support for Fine-Scale Edits in Film
+
+3.1
+
+Background
+
+Our study design incorporates additional background related to
+how editors often discuss cuts, which represent transitions on a
+timeline (video, audio, or both) from one piece of source media to
+another. Note that the term “cut” has two meanings in editing: it can
+refer to a transition point between clips, or to a version of the edit
+(as in “rough cut” or “final cut”). Here we discuss cuts as transition
+points. Editors classify most cuts into one of three categories:
+• Straight cuts happen when video and audio transition together.
+• L-cuts happen when video transitions before audio.
+• J-cuts happen when audio transitions before video.
+Additionally, the term “split cut” is sometimes used to describe
+any cut that is not a straight cut. Implicit in these categories is an
+assumption that both audio and video transition between corresponding source media. While not always true, this describes most
+cuts found outside specific genres like music videos.
+Macro-editing is often limited to straight cuts, and previous
+computational tools have made this an explicit assumption when
+formulating rough cut assembly [19, 20, 51]. This points to L- and
+J-cuts as offering some insight into how editors think about microediting, which we leverage in our formative study design.
+
+3.2
+
+Study Design
+
+Each participant was given rough cuts of two scripted scenes (each
+approximately one-minute long) and tasked with editing each scene
+in an NLE of their choice under four conditions. In one condition,
+participants were unrestricted. For each of the remaining three
+conditions, we asked participants to limit edits to different cut
+types: straight cuts, L-cuts, or J-cuts. Participants were recorded
+and asked to explain their reasoning aloud while editing, and after
+completing their tasks, each participant filled out a survey.
+
+3.3
+
+Formative Findings
+
+F1) Every Frame Matters: Our study reinforced the common claim
+that skilled editors often make decisions at the scale of individual
+frames [14, 27]. While making micro-edits, participants described
+“going frame by frame, removing one frame here, adding a few there”
+(P5) or “adding 3 or 4 more frames” (P1) to get transitions to feel
+just right. This process also involved repeatedly re-watching parts
+of video to compare the feel of different choices.
+F2) Contextual Information is Important: Editing decisions
+often depend on local context. For example, editors generally place
+audio cuts in silent parts of a clip. On the other hand, they often
+adjust visual cuts based on narrative goals (e.g., cutting to see a
+particular character’s reaction during a dramatic moment), or following the “cut on action” principle [8, 14], where visuals before and
+after a cut should show the continuity of some visible action (e.g.,
+a gesture, blink, or gaze turn). This type of higher-level reasoning
+helps editors narrow their choice of edit.
+F3) Control Over Rhythm & Pacing: Editors often start with
+edits meant to control the precise rhythm or pacing of a scene—
+usually by inserting or removing time at the ends of adjacent clips.
+We call this type of adjustment a rhythm edit. Rhythm edits change
+
+UIST ’26, November 02–05, 2026, Detroit, MI, USA
+
+how events are distributed on the timeline; for example, in dialogueheavy scenes, they can be used to control the length of pauses in
+conversation. Half of our participants described focusing exclusively on the timing of dialogue while making such edits, with one
+(P6) describing this process as starting with a “radio edit”, and another (P4) saying “I’m going to close my eyes and listen ... this lets me
+really focus on the flow and not be interrupted by some video breaks.”
+Rhythm edits require shifting a clip along the output timeline, often
+in addition to adjusting the duration of a clip.
+F4) Control Over Visual Attention: Later edits often focus on
+controlling visual attention. We can think of these edits, which
+we call view edits, as controlling the viewpoint of the audience
+without changing the timeline of events that are happening. View
+edits are where participants tended to make L-cuts and J-cuts. More
+specifically, L-cuts were mostly used to make visual transitions
+happen sooner, while J-cuts were used to make them happen later.
+In both cases, this was usually done without changing the audio
+track. To quote one participant (P1), “I already changed the timing
+of the audio... so I don’t wanna, like, mess with that.”
+F5) Inserting New Cuts For Reactions & Cutaways: In our study,
+most edits involved adjusting existing cuts. The main exception to
+this happened when editors wanted to add a reaction or cutaway
+shot, where visuals transition away from the speaker or current
+source of audio. Two reasons were given for such edits: first, to
+direct visual attention; and second, to mask jump cuts (created when
+trimming pauses within dialogue). Also, editors often repurpose
+visuals from other parts of a scene to create reaction shots. This
+points to conditions where reordering clips in a scene is acceptable.
+
+3.4
+
+Design Insights
+
+F1 and F2 reflect that micro-editing does not have a unique solution,
+and precise user control is important, though evaluating contextual
+and semantic information may help automate some decisions.
+F3 and F4 suggest that editors treat rhythm and views separately;
+thus, controls for these aspects should be independent. This separation reflects how editors exploit audio-visual synchrony, as one
+participant (P1) articulated: “What you hear and what you see are two
+different systems... if you introduce the hearing as one sense and then
+introduce the sight, it’s a different feeling than if you introduce both
+at the same time.” Our tools are designed to help users focus on each
+type of control separately. F5 suggests that showing only speakers
+means audiences miss half of the story—character reactions—so
+editors spend significant time scrubbing through takes to find them.
+A tool that surfaces candidates would help.
+
+5.1
+
+Editing Windows
+
+𝑖 −1 to an
+At each cut 𝑋𝑖 , we transition from an outgoing clip 𝑥𝑚
+𝑖 . Each clip’s source footage usually extends beyond
+incoming clip 𝑥𝑚
+
+
+
+[Page break]
+
+UIST ’26, November 02–05, 2026, Detroit, MI, USA
+
+Nhan (Nathan) Tran, Hijung Valentina Shin, Abe Davis, and Mackenzie Leake
+
+what is currently visible: the outgoing clip has unused post-roll,
+and the incoming clip has unused pre-roll. Adjusting a cut reveals
+footage from these regions. We define an editing window 𝑊 =
+[−Δ − , +Δ+ ] (Figure 1, bottom left), where negative values reveal
+incoming pre-roll and positive values reveal outgoing post-roll:
+• Rhythm edits use 𝑊 r : adjustments refine pacing while keeping
+spoken content unchanged. Δ − extends until the incoming clip’s
+pre-roll would reveal additional speech; Δ+ extends until the
+outgoing clip’s post-roll would reveal additional speech.
+𝑖 −1 , 𝑡) =
+• View edits use𝑊 v : Δ+ extends to the first frame where 𝜎 (𝑥𝑚
+−
+𝑖
+1 in post-roll; Δ extends to where 𝜎 (𝑥𝑚 , 𝑡) = 1 in pre-roll.
+
+For dialogue scenes, these constraints often align: speakers are silent
+between turns, and silent speakers have low synchrony. However,
+the distinction matters when lips continue moving after the last
+word, or when non-speech sounds create synchrony without words.
+
+7.3
+
+Limitations and Future Work
+
+Model Dependencies: Our system relies on off-the-shelf models for synchrony estimation (LR-ASD, AVID-CMA), blink detection (MediaPipe), and a VLM (Gemini 3.0 Flash) for coarse scene
+analysis and cut-on-action suggestions via numbered mosaics, and
+is bounded by their current capabilities. Current VLMs lack finegrained temporal understanding [37]. Synchrony models can also
+struggle with multiple simultaneous speakers or overlapping dialogue, and we assume a single mixed audio track. These models are
+pluggable components in our formalization rather than contributions of their own, so improvements to any of them would improve
+the system directly, without changing the interaction design.
+Scope and Generalization: Our implementation and evaluation
+focus on dialogue scenes. Scene types where synchrony plays a
+smaller role (voiceovers, music-driven scenes, or action scenes without dialogue) would require new definitions of synchrony and
+rhythm, which we leave to future work. The value of micro-editing
+also depends on the starting rough cut, and there is no single groundtruth final cut: editing styles varied widely even among our participants (Figure 8, Table 2). Finally, our formalization treats each
+
+
+
+[Page break]
+
+Micro-Edits: Computational Support for Fine-Scale Edits in Film
+
+micro-edit as a local decision, but editors may want consistency
+across cuts, such as cutting consistently early or late on speaker
+changes. Conditioning suggestions on an editor’s prior decisions is
+another direction for future work.
+Informing Agentic and Generative Video Tools: Current generative video models produce tightly synchronized audio-video
+outputs with no mechanism for the audiovisual decoupling that
+professional editors rely on to control pacing and attention. Our formalization of the micro-edit space provides a structure for future AI
+systems. By applying these synchrony bounds, both agentic editing
+tools and video models could produce outputs with explicit rhythm
+and view control, bridging micro-editing and macro-editing.
+
