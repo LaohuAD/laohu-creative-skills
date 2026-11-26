@@ -1,4 +1,4 @@
 interface:
-  display_name: "laohu-update | 老胡项目更新与发布"
-  short_description: "安装完整仓库、管理全局入口并更新项目；直接调用时还会准备版本并对外发布。"
-  default_prompt: "使用 $laohu-update 更新完整项目，保留我的本地资产，将已完成的可发布改动准备成版本并推送到已核验的官方远端；遇到冲突或检查失败时停下说明。"
+  display_name: "laohu-update | 老胡项目更新"
+  short_description: "安装完整仓库、管理全局入口并按权限更新项目，保留本地修改。"
+  default_prompt: "使用 $laohu-update 更新到我可以使用的最新版本，保留本地资产并同步已登记入口。遇到冲突时先说明并给合并方案。"
