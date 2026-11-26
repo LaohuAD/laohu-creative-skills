@@ -2,11 +2,14 @@
 
 import {createHash, randomBytes} from 'node:crypto';
 import {createReadStream} from 'node:fs';
-import {lstat, mkdir, open, readFile, realpath, rename, rm, stat, unlink} from 'node:fs/promises';
+import {link, lstat, mkdir, open, readFile, realpath, rename, rm, stat, unlink} from 'node:fs/promises';
 import {basename, dirname, join, relative, resolve} from 'node:path';
 import {execFile as execFileCallback} from 'node:child_process';
 import {promisify} from 'node:util';
 import {fileURLToPath} from 'node:url';
+import {CAPTION_DESIGN_FORMAT, CAPTION_DESIGN_FORMAT_V2, CAPTION_MANIFEST_FORMAT, CAPTION_MANIFEST_FORMAT_V2, captionManifestToSrt, compileCaptionManifest, verifyCaptionManifest} from './caption-manifest.mjs';
+import {applyEdits, containsRange, editorialMetadataErrors, sourceSpeechGaps} from './edit-operations.mjs';
+import {compileAnimationHandoff, timelineSeams, verifyAnimationHandoff} from './animation-handoff.mjs';
 
 export const EDIT_PLAN_FORMAT = 'laohu.asrcut.edit-plan/1';
 export const EDIT_PLAN_V2_FORMAT = 'laohu.asrcut.edit-plan/2';
@@ -32,6 +35,10 @@ async function hashFile(path) {
 function transcriptEvidencePaths(plan, baseDir = process.cwd()) {
   return plan.sources.map((source) => source.transcript?.evidenceRef)
     .filter(Boolean).map((reference) => resolve(baseDir, reference));
+}
+
+function mediaPaths(plan, baseDir) {
+  return plan.sources.map((source) => source.mediaPath).filter(Boolean).map((path) => resolve(baseDir, path));
 }
 
 function rebasePlanEvidenceRefs(plan, sourceBaseDir, destinationBaseDir) {
@@ -69,12 +76,28 @@ function planForHash(plan) {
   const copy = deepClone(plan);
   delete copy.review;
   delete copy.state;
-  if (copy.integrity) delete copy.integrity.planSha256;
+  delete copy.annotations;
+  if (copy.integrity) {
+    delete copy.integrity.planSha256;
+    delete copy.integrity.annotationSha256;
+  }
   return stableValue(copy);
 }
 
 export function hashPlan(plan) {
   return sha256(JSON.stringify(planForHash(plan)));
+}
+
+export {CAPTION_DESIGN_FORMAT, CAPTION_DESIGN_FORMAT_V2, CAPTION_MANIFEST_FORMAT, CAPTION_MANIFEST_FORMAT_V2, captionManifestToSrt, compileCaptionManifest, verifyCaptionManifest};
+export {applyEdits, compileAnimationHandoff, timelineSeams, verifyAnimationHandoff};
+
+export function hashAnnotations(annotations = []) {
+  return sha256(JSON.stringify(stableValue(annotations)));
+}
+
+function updateAnnotationHash(plan) {
+  plan.integrity.annotationSha256 = hashAnnotations(plan.annotations ?? []);
+  return plan;
 }
 
 function interval(startSample, endSample, sampleRateHz) {
@@ -215,7 +238,17 @@ function normalizeRows(payload, rows, options, sourceId, sampleRateHz, cap = fal
     const globalHasEnd = cap && row.globalEndMs !== undefined && row.globalEndMs !== null && Number.isFinite(Number(row.globalEndMs));
     const globalStartMs = globalHasStart ? Number(row.globalStartMs) : null;
     const globalEndMs = globalHasEnd ? Number(row.globalEndMs) : null;
-    const tokens = wordRows(row).map((word, wordIndex) => {
+    const rawWordList = wordRows(row).filter((word) => {
+      const text = String(word?.text ?? word?.word ?? word?.token ?? '');
+      // 过滤火山大模型等引擎在英文词前后插入的负时间戳空白占位词（如 text: " ", start_time: -1）
+      if (!text.trim()) {
+        const sVal = word?.start_time ?? word?.startMs ?? word?.start_ms ?? word?.start;
+        const eVal = word?.end_time ?? word?.endMs ?? word?.end_ms ?? word?.end;
+        if (sVal !== undefined && eVal !== undefined && (Number(sVal) < 0 || Number(eVal) <= Number(sVal))) return false;
+      }
+      return true;
+    });
+    const tokens = rawWordList.map((word, wordIndex) => {
       const wordStart = rowTimeEvidence(word, 'start', {...options, capLocal: cap}, true);
       const wordEnd = rowTimeEvidence(word, 'end', {...options, capLocal: cap}, true);
       const rawText = String(word?.text ?? word?.word ?? word?.token ?? '');
@@ -264,7 +297,20 @@ function normalizeRows(payload, rows, options, sourceId, sampleRateHz, cap = fal
   return normalized;
 }
 
-function sourceTemplate({id, order, sampleRateHz, durationSamples, mediaPath, mediaSha256, transcriptKind, transcriptSha256, evidenceRef = null, evidenceHashMode, timeBasis, segments, recordingSegment = null, audioStreamIndex = null}) {
+function sourceTemplate({id, order, sampleRateHz, durationSamples, mediaPath, mediaSha256, transcriptKind, transcriptSha256, evidenceRef = null, evidenceHashMode, timeBasis, segments, recordingSegment = null, audioStreamIndex = null, videoTracks = []}) {
+  if (!Array.isArray(videoTracks) || (videoTracks.length && (!mediaPath || !/^[a-f0-9]{64}$/.test(mediaSha256 ?? '')))) fail('video-track-media-required', 'Declared video tracks require the linked, hashed media source');
+  const streamIndices = new Set(Number.isInteger(audioStreamIndex) ? [audioStreamIndex] : []);
+  const video = videoTracks.map(({streamIndex, timebase, syncToPrimaryAudio}) => {
+    if (!safeInteger(streamIndex) || streamIndex < 0 || streamIndices.has(streamIndex)) fail('invalid-video-track-declaration', 'Declared video tracks require distinct non-negative global stream indices');
+    if (!safeInteger(timebase?.numerator) || timebase.numerator <= 0 || !safeInteger(timebase?.denominator) || timebase.denominator <= 0) fail('invalid-video-track-declaration', 'Declared video tracks require an exact positive PTS timebase');
+    const offset = syncToPrimaryAudio?.offsetSeconds;
+    const unknown = syncToPrimaryAudio?.status === 'unknown' && Object.keys(syncToPrimaryAudio).length === 1;
+    const known = syncToPrimaryAudio?.status === undefined && ['measured', 'estimated'].includes(syncToPrimaryAudio?.precision)
+      && safeInteger(offset?.numerator) && safeInteger(offset?.denominator) && offset.denominator > 0;
+    if (!unknown && !known) fail('invalid-video-track-declaration', 'A video track requires a signed rational offset and its precision or explicit unknown synchronization');
+    streamIndices.add(streamIndex);
+    return {id: `${id}-video-${streamIndex}`, kind: 'video', streamIndex, clock: {unit: 'pts', timebase: deepClone(timebase)}, syncToPrimaryAudio: deepClone(syncToPrimaryAudio)};
+  });
   return {
     id,
     order,
@@ -279,7 +325,7 @@ function sourceTemplate({id, order, sampleRateHz, durationSamples, mediaPath, me
       ...(Number.isInteger(audioStreamIndex) ? {streamIndex: audioStreamIndex} : {}),
       clock: {unit: 'sample', sampleRateHz},
       syncToPrimaryAudio: {status: 'primary'},
-    }] : [],
+    }, ...video] : [],
     transcript: {kind: transcriptKind, sha256: transcriptSha256, evidenceRef, evidenceHashMode, timeBasis, segments},
   };
 }
@@ -339,8 +385,10 @@ function makePlan({projectId, sampleRateHz, sources, mediaDurationSamples, autho
     questions,
     spokenCorrections: [],
     displayText: [],
-    integrity: {planSha256: null},
+    annotations: [],
+    integrity: {planSha256: null, annotationSha256: null},
   };
+  updateAnnotationHash(plan);
   plan.integrity.planSha256 = hashPlan(plan);
   return plan;
 }
@@ -387,6 +435,7 @@ export function importSrt(text, options = {}) {
     timeBasis: 'srt-milliseconds',
     segments,
     audioStreamIndex: options.audioStreamIndex,
+    videoTracks: options.videoTracks,
   });
   const questions = [];
   if (!options.mediaPath) questions.push(maybeQuestion({id: 'media-source-not-provided', sourceId, question: 'No source media was provided; the timeline is virtual and cannot be auditioned or exported as audio.', blocks: ['mediaExport']}));
@@ -421,6 +470,7 @@ export function importAsrJson(raw, options = {}) {
       mediaPath: options.mediaPath, mediaSha256: mediaHash, transcriptKind: kind,
       transcriptSha256: transcriptHash, evidenceRef: options.evidenceRef ?? null, evidenceHashMode, timeBasis: basis, segments,
       audioStreamIndex: options.audioStreamIndex,
+      videoTracks: options.videoTracks,
     });
     const questions = [];
     if (!options.mediaPath) questions.push(maybeQuestion({id: 'media-source-not-provided', sourceId, question: 'No source media was provided; the timeline is virtual and cannot be auditioned or exported as audio.', blocks: ['mediaExport']}));
@@ -447,6 +497,7 @@ export function importAsrJson(raw, options = {}) {
     rows: groupRows,
     globalStartMs: Math.min(...groupRows.map((row) => Number(row.globalStartMs))),
   })).sort((a, b) => a.globalStartMs - b.globalStartMs || a.recordingSegment - b.recordingSegment);
+  if (options.videoTracks?.length && recordingGroups.length > 1) fail('video-track-cap-segment-required', 'Select one Cap recording segment and its actual media before declaring video tracks');
   const sources = recordingGroups.map((group, order) => {
     const id = options.recordingSegment === undefined ? `${sourceId}-recording-${group.recordingSegment}` : sourceId;
     const segments = normalizeRows(payload, group.rows, rowOptions, id, sourceSampleRateHz, true);
@@ -459,6 +510,7 @@ export function importAsrJson(raw, options = {}) {
       transcriptSha256: transcriptHash, evidenceRef: options.evidenceRef ?? null, evidenceHashMode, timeBasis: basis, segments,
       recordingSegment: group.recordingSegment,
       audioStreamIndex: options.audioStreamIndex,
+      videoTracks: options.videoTracks,
     });
   });
   const questions = [];
@@ -521,6 +573,12 @@ export function mergePlans(plans, options = {}) {
   }
   const authorization = Object.fromEntries(['reorder', 'repeat', 'mediaExport', ...(outputV2 ? ['presentationTiming'] : [])].map((key) => [key, plans.every((plan) => plan.authorization[key] === true)]));
   const displayText = plans.flatMap((plan) => deepClone(plan.displayText ?? []));
+  const annotations = plans.flatMap((plan) => deepClone(plan.annotations ?? []));
+  if (new Set(annotations.map((annotation) => annotation.id)).size !== annotations.length) {
+    fail('merge-annotation-id', 'Annotation ids must be unique across merged plans');
+  }
+  const pacingProfiles = [...new Set(plans.map((plan) => plan.pacingProfile).filter(Boolean))];
+  if (pacingProfiles.length > 1) fail('merge-pacing-profile-conflict', 'Merged plans have different editorial pacing profiles');
   const merged = {
     format: outputV2 ? EDIT_PLAN_V2_FORMAT : EDIT_PLAN_FORMAT,
     project: {id: projectId, revision: options.revision ?? Math.max(...plans.map((plan) => plan.project.revision))},
@@ -535,8 +593,14 @@ export function mergePlans(plans, options = {}) {
     questions,
     spokenCorrections,
     displayText,
-    integrity: {planSha256: null},
+    annotations,
+    ...(pacingProfiles.length ? {pacingProfile: pacingProfiles[0]} : {}),
+    ...(plans.some((plan) => plan.pauseWindows) ? {pauseWindows: plans.flatMap((plan) => deepClone(plan.pauseWindows ?? []))} : {}),
+    ...(plans.some((plan) => plan.narrativeBeats) ? {narrativeBeats: plans.flatMap((plan) => deepClone(plan.narrativeBeats ?? []))} : {}),
+    ...(plans.some((plan) => plan.visualCues) ? {visualCues: plans.flatMap((plan) => deepClone(plan.visualCues ?? []))} : {}),
+    integrity: {planSha256: null, annotationSha256: null},
   };
+  updateAnnotationHash(merged);
   merged.integrity.planSha256 = hashPlan(merged);
   const validation = inspectPlan(merged);
   if (validation.errors.length) fail('merge-invalid-result', 'Merged plan failed validation', validation.errors);
@@ -572,6 +636,7 @@ function inspectPlan(plan) {
   if (!Array.isArray(plan?.decisions)) errors.push('decisions must be an array');
   if (!Array.isArray(plan?.questions)) errors.push('questions must be an array');
   if (!Array.isArray(plan?.spokenCorrections)) errors.push('spokenCorrections must be an array; raw ASR cannot be overwritten');
+  if (plan && plan.annotations !== undefined && !Array.isArray(plan.annotations)) errors.push('annotations must be an array; notes stay separate from raw transcript evidence');
   const authKeys = ['reorder', 'repeat', 'mediaExport', ...(isEditPlanV2(plan) ? ['presentationTiming'] : [])];
   if (!plan?.authorization || !authKeys.every((key) => typeof plan.authorization[key] === 'boolean')) errors.push(`authorization must explicitly declare ${authKeys.join(', ')} booleans`);
   if (plan && Object.hasOwn(plan, 'operations')) errors.push('unsupported operation declaration; only equal-speed trim, concatenate, repeat, and authorized reorder are represented by coverage and sequence');
@@ -675,6 +740,10 @@ function inspectPlan(plan) {
       errors.push(`spoken correction ${correction.id} has invalid listening/alignment evidence status`);
     }
     if (verification?.sourceRange) validateRange(verification.sourceRange, `spoken correction ${correction.id} evidence`, errors);
+    if (verification && (Object.hasOwn(verification, 'reviewedBy') || Object.hasOwn(verification, 'sourceSha256'))
+      && (correction.status !== 'confirmed' || typeof verification.reviewedBy !== 'string' || !verification.reviewedBy.trim() || verification.sourceSha256 !== segmentRef.source.sha256)) {
+      errors.push(`spoken correction ${correction.id} reviewer and source checksum must bind the confirmation to its linked audio`);
+    }
     if (correction.status === 'confirmed') {
       if (verification?.method !== 'audio-listening' || verification?.listeningStatus !== 'listened') errors.push(`confirmed spoken correction ${correction.id} requires declared audio listening`);
       if (!segmentRef.source.mediaPath || !segmentRef.source.sha256) errors.push(`confirmed spoken correction ${correction.id} requires a linked, hashed audio source`);
@@ -802,10 +871,6 @@ function inspectPlan(plan) {
       if (!nonEmpty(item.decisionId) || !nonEmpty(item.reason) || !nonEmpty(item.sceneId)) errors.push(`presentation ${item.id ?? '(unknown)'} requires decisionId, reason, and sceneId`);
       if (!item.visualHandoff || !nonEmpty(item.visualHandoff.focus) || !nonEmpty(item.visualHandoff.entryState) || !nonEmpty(item.visualHandoff.exitCondition)) errors.push(`presentation ${item.id ?? '(unknown)'} requires visual focus, entryState, and exitCondition`);
       if (!item.audioHandoff || !['continue-bed', 'bed-duck', 'sound-effect', 'quiet', 'none'].includes(item.audioHandoff.role) || !nonEmpty(item.audioHandoff.rationale)) errors.push(`presentation ${item.id ?? '(unknown)'} requires an audio handoff role and rationale`);
-      const priorSource = [...plan.sequence.slice(0, sequenceIndex)].reverse().find((entry) => sequenceKind(plan, entry) === 'source');
-      const nextSource = plan.sequence.slice(sequenceIndex + 1).find((entry) => sequenceKind(plan, entry) === 'source');
-      if (!priorSource) errors.push(`presentation ${item.id ?? '(unknown)'} must follow a retained source occurrence`);
-      if (!nextSource) errors.push(`presentation ${item.id ?? '(unknown)'} must fall between retained source occurrences, not after the final source`);
       if (!item.decisionId || !decisionsById.has(item.decisionId)) errors.push(`presentation ${item.id ?? '(unknown)'} has no matching decision record`);
       else {
         const decision = decisionsById.get(item.decisionId);
@@ -833,12 +898,84 @@ function inspectPlan(plan) {
   }
   if (isEditPlanV2(plan)) {
     if (plan.authorization.presentationTiming !== true && presentationById.size > 0) errors.push('presentation timing is present without explicit presentationTiming authorization');
+    if (presentationById.size && sequenceSourceItems.length === 0) errors.push('presentation timing requires at least one retained real source occurrence');
     for (const decision of plan.decisions.filter((item) => item.action === 'presentation')) {
       const ids = Array.isArray(decision.presentationIds) ? decision.presentationIds : [];
       if (ids.length !== 1 || !presentationById.has(ids[0]) || presentationById.get(ids[0]).decisionId !== decision.id) errors.push(`presentation decision ${decision.id} must map to exactly one sequence presentation`);
     }
     if (presentationDecisionIds.size !== presentationById.size) errors.push('every presentation must have exactly one decision record');
   }
+  const annotationIds = new Set();
+  for (const annotation of plan.annotations ?? []) {
+    const label = `annotation ${annotation?.id ?? '(unknown)'}`;
+    if (!annotation || typeof annotation !== 'object' || Array.isArray(annotation)) {
+      errors.push('annotation entries must be objects');
+      continue;
+    }
+    if (typeof annotation.id !== 'string' || !annotation.id.trim() || annotationIds.has(annotation.id)) errors.push(`${label} requires a unique non-empty id`);
+    annotationIds.add(annotation.id);
+    for (const key of ['userNote', 'analysisNote', 'motionDirection']) {
+      if (annotation[key] != null && (typeof annotation[key] !== 'string' || !annotation[key].trim())) errors.push(`${label} ${key} must be non-empty text when present`);
+    }
+    if (!annotation.userNote && !annotation.analysisNote && !annotation.motionDirection) errors.push(`${label} requires a userNote, analysisNote, or motionDirection`);
+    const source = sources.get(annotation.sourceId);
+    const segmentRef = segmentById.get(annotation.segmentId);
+    if (!source || !segmentRef || segmentRef.source.id !== annotation.sourceId) {
+      errors.push(`${label} must reference a real sourceId and segmentId; transcript.rawText remains unchanged`);
+      continue;
+    }
+    if (annotation.tokenId != null) {
+      const tokenRef = tokenById.get(annotation.tokenId);
+      if (!tokenRef || tokenRef.source.id !== annotation.sourceId || tokenRef.segment.id !== annotation.segmentId) {
+        errors.push(`${label} tokenId must identify a real token in its source segment`);
+      }
+    }
+    if (annotation.occurrenceId != null && !occurrenceById.has(annotation.occurrenceId)) {
+      errors.push(`${label} occurrenceId must identify a retained sequence occurrence`);
+    }
+    if (annotation.motionBinding != null) {
+      const binding = annotation.motionBinding;
+      if (!annotation.motionDirection) errors.push(`${label} motionBinding requires a motionDirection`);
+      if (!binding || typeof binding !== 'object' || Array.isArray(binding)) errors.push(`${label} motionBinding must be a structured object`);
+      else {
+        if (!Array.isArray(binding.objects) || !Array.isArray(binding.states) || !Array.isArray(binding.assets)
+          || !Array.isArray(binding.componentCalls) || !Array.isArray(binding.phases)
+          || !Array.isArray(binding.transitions) || !Array.isArray(binding.audioEvents)) {
+          errors.push(`${label} motionBinding requires objects, states, assets, componentCalls, phases, transitions, and audioEvents arrays`);
+        }
+        for (const phase of binding.phases ?? []) {
+          const anchor = phase?.anchor;
+          if (!anchor || !['point', 'segment', 'presentation'].includes(anchor.kind)) {
+            errors.push(`${label} phase ${phase?.id ?? '(unknown)'} requires a real point, segment, or presentation anchor`);
+            continue;
+          }
+          if (anchor.kind === 'presentation') {
+            if (!presentationById.has(anchor.presentationId) || !['start', 'end'].includes(anchor.edge)) errors.push(`${label} phase ${phase.id} references a missing presentation or invalid edge`);
+          } else {
+            const occurrence = occurrenceById.get(anchor.clipOccurrenceId);
+            if (!occurrence) errors.push(`${label} phase ${phase.id} references a missing retained occurrence`);
+            else {
+              const coverage = coverageById.get(occurrence.coverageId);
+              if (coverage?.sourceId !== annotation.sourceId) errors.push(`${label} phase ${phase.id} occurrence belongs to another source`);
+              if (anchor.kind === 'point') {
+                const tokenRef = tokenById.get(anchor.tokenId);
+                if (!tokenRef || tokenRef.source.id !== annotation.sourceId || tokenRef.segment.id !== annotation.segmentId || !['start', 'end'].includes(anchor.edge)) errors.push(`${label} phase ${phase.id} point must resolve to a retained token in the annotation segment`);
+              } else if (anchor.segmentId !== annotation.segmentId || !['start', 'end'].includes(anchor.edge)) {
+                errors.push(`${label} phase ${phase.id} segment anchor must resolve to the annotation segment`);
+              }
+            }
+          }
+          if (typeof phase.id !== 'string' || !phase.id.trim() || typeof phase.entryState !== 'string' || !phase.entryState.trim()
+            || typeof phase.exitCondition !== 'string' || !phase.exitCondition.trim()) errors.push(`${label} phase needs id, entryState, and exitCondition`);
+        }
+      }
+    }
+  }
+  if (plan.integrity?.annotationSha256 !== undefined
+      && plan.integrity.annotationSha256 !== hashAnnotations(plan.annotations ?? [])) {
+    errors.push('annotation hash is stale; recompile the explanatory notes and Motion binding layer');
+  }
+
   for (const item of plan.coverage) {
     const occurrences = sequenceByCoverage.get(item.id) ?? [];
     if (item.disposition === 'retain' && occurrences.length === 0) errors.push(`retained coverage ${item.id} is missing from output sequence`);
@@ -851,8 +988,46 @@ function inspectPlan(plan) {
   }
   for (const item of plan.coverage.filter((entry) => entry.disposition === 'delete')) {
     const decision = decisionsById.get(item.decisionId);
-    if (!decision || decision.action !== 'delete' || !decision.coverageIds.includes(item.id)) errors.push(`deleted coverage ${item.id} has no deletion decision mapping`);
-    if (decision?.relation === 'repeated-content' && (!decision.keptOccurrenceIds?.length || decision.keptOccurrenceIds.some((id) => !occurrenceById.has(id)))) errors.push(`repeated deletion ${item.id} must point to a retained occurrence`);
+    if (!decision || decision.action !== 'delete' || !decision.coverageIds.includes(item.id)) {
+      errors.push(`deleted coverage ${item.id} has no deletion decision mapping`);
+      continue;
+    }
+    if (decision.relation !== 'repeated-content') continue;
+    const keptOccurrences = decision.keptOccurrenceIds;
+    if (!Array.isArray(keptOccurrences) || keptOccurrences.length === 0) {
+      errors.push(`repeated deletion ${item.id} must point to a retained occurrence`);
+      continue;
+    }
+    const declaredTokens = decision.tokenIds ?? [];
+    if (!Array.isArray(declaredTokens)) {
+      errors.push(`repeated deletion ${item.id} tokenIds must be an array`);
+      continue;
+    }
+    const unmatchedTokens = new Set(declaredTokens);
+    for (const keptId of keptOccurrences) {
+      const retained = coverageById.get(occurrenceById.get(keptId)?.coverageId);
+      if (retained?.disposition !== 'retain') {
+        errors.push(`repeated deletion ${item.id} must point to a retained occurrence; invalid occurrence ${keptId}`);
+        continue;
+      }
+      const retainedTokens = new Set(Array.isArray(retained.tokenIds) ? retained.tokenIds : []);
+      const matchedTokens = declaredTokens.filter((tokenId) => retainedTokens.has(tokenId));
+      for (const tokenId of matchedTokens) unmatchedTokens.delete(tokenId);
+      if (matchedTokens.length > 0) continue;
+      if ([...retainedTokens].some((tokenId) => tokenById.get(tokenId)?.token.sourceRange)) {
+        errors.push(`repeated deletion ${item.id} must identify kept tokens in occurrence ${keptId}`);
+        continue;
+      }
+      const segments = sources.get(retained.sourceId)?.transcript?.segments;
+      const hasRetainedUtterance = Array.isArray(segments) && segments.some((segment) => {
+        const range = segment.sourceRange;
+        return range && range.sampleRateHz === retained.sourceRange.sampleRateHz
+          && range.startSample >= retained.sourceRange.startSample && range.endSample <= retained.sourceRange.endSample
+          && typeof segment.rawText === 'string' && segment.rawText.trim().length > 0;
+      });
+      if (!hasRetainedUtterance) errors.push(`repeated deletion ${item.id} must identify a complete retained utterance in occurrence ${keptId}`);
+    }
+    if (unmatchedTokens.size > 0) errors.push(`repeated deletion ${item.id} references tokenIds outside the declared retained occurrences: ${[...unmatchedTokens].join(', ')}`);
   }
   for (const decision of plan.decisions) {
     for (const coverageId of decision.coverageIds ?? []) {
@@ -880,6 +1055,7 @@ function inspectPlan(plan) {
     if (!question || typeof question.question !== 'string' || !Array.isArray(question.blocks)) errors.push('question entries require question and blocks');
     if (question.blocks?.some((block) => !['freeze', 'mediaExport', 'crossTrackSync', 'precision'].includes(block))) errors.push(`question ${question.id} has an invalid blocking scope`);
   }
+  errors.push(...editorialMetadataErrors(plan));
   if (plan.state === 'frozen' && plan.questions.some((question) => question.blocks.includes('freeze'))) errors.push('plan cannot be frozen while a freeze-blocking question remains');
   const expectedHash = hashPlan(plan);
   if (plan.integrity?.planSha256 && plan.integrity.planSha256 !== expectedHash) errors.push('plan hash is stale; recompile from the current source decisions');
@@ -899,23 +1075,60 @@ export function validatePlan(plan) {
   return inspectPlan(plan);
 }
 
+export function upsertAnnotation(plan, annotation) {
+  const before = inspectPlan(plan);
+  if (before.errors.length) fail('invalid-plan', 'Cannot annotate an invalid edit plan', before.errors);
+  if (!annotation || typeof annotation !== 'object' || Array.isArray(annotation)) fail('invalid-annotation', 'An annotation must be a structured object');
+  const allowed = new Set(['id', 'sourceId', 'segmentId', 'tokenId', 'occurrenceId', 'userNote', 'analysisNote', 'motionDirection', 'motionBinding']);
+  const unsupported = Object.keys(annotation).filter((key) => !allowed.has(key));
+  if (unsupported.length) fail('invalid-annotation', `Unsupported annotation fields: ${unsupported.join(', ')}`);
+  if (typeof annotation.id !== 'string' || !annotation.id.trim()) fail('invalid-annotation', 'An annotation requires an existing stable id');
+  const next = deepClone(plan);
+  next.annotations ??= [];
+  const existingIndex = next.annotations.findIndex((item) => item.id === annotation.id);
+  if (existingIndex >= 0) {
+    const existing = next.annotations[existingIndex];
+    for (const key of ['sourceId', 'segmentId', 'tokenId', 'occurrenceId']) {
+      if ((existing[key] ?? null) !== (annotation[key] ?? null)) fail('annotation-anchor-immutable', `Annotation ${annotation.id} cannot change its ${key}; create a new annotation id for a different anchor`);
+    }
+    if (existing.userNote != null && annotation.userNote != null && existing.userNote !== annotation.userNote) {
+      fail('user-note-immutable', `Annotation ${annotation.id} preserves its original userNote; add a separate correction note if needed`);
+    }
+    if (plan.state === 'frozen' && existing.analysisNote != null && annotation.analysisNote != null && existing.analysisNote !== annotation.analysisNote) {
+      fail('analysis-note-immutable', `Annotation ${annotation.id} preserves the original analysisNote after the edit plan is frozen`);
+    }
+    next.annotations[existingIndex] = {...existing, ...deepClone(annotation), userNote: existing.userNote ?? annotation.userNote};
+  } else {
+    next.annotations.push(deepClone(annotation));
+  }
+  updateAnnotationHash(next);
+  if (hashPlan(next) !== before.planSha256) fail('annotation-changed-edit-hash', 'Notes and Motion bindings must not change the frozen source, timing, sequence, or approved edit hash');
+  const validation = inspectPlan(next);
+  if (validation.errors.length) fail('invalid-annotation', 'Annotation failed plan validation', validation.errors);
+  return next;
+}
+
 export function insertPresentationInterval(plan, spec, {authorized = false} = {}) {
   if (authorized !== true) fail('presentation-not-authorized', 'Inserting source-free project time requires explicit presentation-timing authorization');
   const before = inspectPlan(plan);
   if (before.errors.length) fail('invalid-plan', 'Cannot add a presentation interval to an invalid edit plan', before.errors);
   if (!spec || typeof spec !== 'object' || Array.isArray(spec)) fail('invalid-presentation-spec', 'A presentation interval requires a structured spec');
-  const allowedKeys = new Set(['id', 'decisionId', 'reason', 'afterOccurrenceId', 'sceneId', 'durationSamples', 'visualHandoff', 'audioHandoff', 'expectedRevision', 'expectedPlanSha256']);
+  const allowedKeys = new Set(['id', 'decisionId', 'reason', 'afterOccurrenceId', 'position', 'sceneId', 'durationSamples', 'visualHandoff', 'audioHandoff', 'expectedRevision', 'expectedPlanSha256']);
   const unknownKeys = Object.keys(spec).filter((key) => !allowedKeys.has(key));
   if (unknownKeys.length) fail('invalid-presentation-spec', `Unsupported presentation spec fields: ${unknownKeys.join(', ')}`);
-  const expected = ['id', 'decisionId', 'reason', 'afterOccurrenceId', 'sceneId', 'durationSamples', 'visualHandoff', 'audioHandoff', 'expectedRevision', 'expectedPlanSha256'];
+  const expected = ['id', 'decisionId', 'reason', 'sceneId', 'durationSamples', 'visualHandoff', 'audioHandoff', 'expectedRevision', 'expectedPlanSha256'];
   const missing = expected.filter((key) => spec[key] === undefined || spec[key] === null);
   if (missing.length) fail('invalid-presentation-spec', `Presentation spec is missing: ${missing.join(', ')}`);
   if (spec.expectedRevision !== plan.project.revision || spec.expectedPlanSha256 !== before.planSha256) {
     fail('presentation-stale-reference', 'Presentation spec was prepared against a different plan revision or hash; re-evaluate its source boundary before applying');
   }
   const nonEmpty = (value) => typeof value === 'string' && value.trim().length > 0;
-  if (!nonEmpty(spec.id) || !nonEmpty(spec.decisionId) || !nonEmpty(spec.reason) || !nonEmpty(spec.afterOccurrenceId) || !nonEmpty(spec.sceneId)) {
-    fail('invalid-presentation-spec', 'Presentation id, decision, reason, source boundary, and scene id must be non-empty strings');
+  if (!nonEmpty(spec.id) || !nonEmpty(spec.decisionId) || !nonEmpty(spec.reason) || !nonEmpty(spec.sceneId)) {
+    fail('invalid-presentation-spec', 'Presentation id, decision, reason, and scene id must be non-empty strings');
+  }
+  const usesPosition = Object.hasOwn(spec, 'position');
+  if (usesPosition === Object.hasOwn(spec, 'afterOccurrenceId') || (usesPosition ? !['before-first', 'after-last'].includes(spec.position) : !nonEmpty(spec.afterOccurrenceId))) {
+    fail('invalid-presentation-spec', 'Choose exactly one afterOccurrenceId or position (before-first / after-last)');
   }
   if (!safeInteger(spec.durationSamples) || spec.durationSamples <= 0) fail('invalid-presentation-duration', 'durationSamples must be a positive integer on the project sample clock');
   if (!spec.visualHandoff || !nonEmpty(spec.visualHandoff.focus) || !nonEmpty(spec.visualHandoff.entryState) || !nonEmpty(spec.visualHandoff.exitCondition)) {
@@ -926,10 +1139,17 @@ export function insertPresentationInterval(plan, spec, {authorized = false} = {}
   }
   if (plan.sequence.some((item) => sequenceKind(plan, item) === 'presentation' && item.id === spec.id)) fail('presentation-id-conflict', `Presentation id ${spec.id} already exists`);
   if (plan.decisions.some((decision) => decision.id === spec.decisionId)) fail('presentation-decision-conflict', `Decision id ${spec.decisionId} already exists`);
-  const boundaryIndex = plan.sequence.findIndex((item) => sequenceKind(plan, item) === 'source' && item.occurrenceId === spec.afterOccurrenceId);
-  if (boundaryIndex < 0) fail('presentation-boundary-missing', `Source occurrence ${spec.afterOccurrenceId} is not retained in the current sequence`);
-  if (!plan.sequence.slice(boundaryIndex + 1).some((item) => sequenceKind(plan, item) === 'source')) {
-    fail('presentation-boundary-terminal', 'A source-free presentation interval must sit between retained source occurrences, not after the final source');
+  const firstSourceIndex = plan.sequence.findIndex((item) => sequenceKind(plan, item) === 'source');
+  if (firstSourceIndex < 0) fail('presentation-boundary-missing', 'A source-free presentation interval requires at least one retained real source occurrence');
+  let insertAt = spec.position === 'before-first' ? firstSourceIndex : plan.sequence.length;
+  if (!usesPosition) {
+    const boundaryIndex = plan.sequence.findIndex((item) => sequenceKind(plan, item) === 'source' && item.occurrenceId === spec.afterOccurrenceId);
+    if (boundaryIndex < 0) fail('presentation-boundary-missing', `Source occurrence ${spec.afterOccurrenceId} is not retained in the current sequence`);
+    if (!plan.sequence.slice(boundaryIndex + 1).some((item) => sequenceKind(plan, item) === 'source')) {
+      fail('presentation-boundary-terminal', 'Use position: after-last for a presentation after the final retained source');
+    }
+    insertAt = boundaryIndex + 1;
+    while (insertAt < plan.sequence.length && sequenceKind(plan, plan.sequence[insertAt]) === 'presentation') insertAt += 1;
   }
   const copy = deepClone(plan);
   copy.format = EDIT_PLAN_V2_FORMAT;
@@ -938,8 +1158,6 @@ export function insertPresentationInterval(plan, spec, {authorized = false} = {}
   copy.project.revision += 1;
   copy.review = {status: 'not_requested', approvedPlanSha256: null};
   copy.sequence = copy.sequence.map((item) => sequenceKind(plan, item) === 'source' ? {kind: 'source', occurrenceId: item.occurrenceId, coverageId: item.coverageId} : item);
-  let insertAt = boundaryIndex + 1;
-  while (insertAt < copy.sequence.length && copy.sequence[insertAt].kind === 'presentation') insertAt += 1;
   const presentation = {
     kind: 'presentation',
     id: spec.id,
@@ -1005,7 +1223,7 @@ function mapSampleBoundary(sample, clipStart, sourceRate, targetRate) {
   return roundRatio(sample - clipStart, targetRate, sourceRate);
 }
 
-function mapRangeToTarget(sourceRange, clipRange, targetRange, outputRate) {
+export function mapRangeToTarget(sourceRange, clipRange, targetRange, outputRate) {
   const startOffset = mapSampleBoundary(sourceRange.startSample, clipRange.startSample, sourceRange.sampleRateHz, outputRate);
   const endOffset = mapSampleBoundary(sourceRange.endSample, clipRange.startSample, sourceRange.sampleRateHz, outputRate);
   return interval(targetRange.startSample + startOffset, targetRange.startSample + endOffset, outputRate);
@@ -1115,6 +1333,7 @@ export function compilePlan(plan) {
     state: plan.state,
     review: deepClone(plan.review),
     planSha256: inspection.planSha256,
+    annotationSha256: hashAnnotations(plan.annotations ?? []),
     sources: plan.sources.map((source) => ({
       id: source.id,
       order: source.order,
@@ -1137,6 +1356,23 @@ export function compilePlan(plan) {
     warnings: [...new Set(warnings)],
     spokenCorrections: deepClone(plan.spokenCorrections ?? []),
   };
+  if (Array.isArray(plan.annotations)) {
+    timeline.annotations = plan.annotations.map((annotation) => {
+      const matches = clips.filter((clip) => clip.sourceId === annotation.sourceId
+        && (annotation.occurrenceId == null || clip.occurrenceId === annotation.occurrenceId));
+      const resolvedTargets = matches.flatMap((clip) => {
+        const target = annotation.tokenId != null
+          ? clip.words.find((word) => word.tokenId === annotation.tokenId)
+          : clip.transcriptSegments.find((segment) => segment.segmentId === annotation.segmentId);
+        return target ? [{occurrenceId: clip.occurrenceId, targetRange: deepClone(target.targetRange), timingPrecision: target.timingPrecision}] : [];
+      });
+      return {
+        ...deepClone(annotation),
+        resolution: resolvedTargets.length ? 'resolved' : 'not-in-retained-timeline',
+        resolvedTargets,
+      };
+    });
+  }
   if (isEditPlanV2(plan)) timeline.units = units;
   return timeline;
 }
@@ -1144,6 +1380,7 @@ export function compilePlan(plan) {
 export function freezePlan(plan) {
   const frozen = deepClone(plan);
   frozen.state = 'frozen';
+  updateAnnotationHash(frozen);
   frozen.integrity.planSha256 = hashPlan(frozen);
   const result = inspectPlan(frozen);
   if (result.errors.length) fail('cannot-freeze', 'Plan cannot be frozen', result.errors);
@@ -1203,13 +1440,70 @@ export async function writeJsonOutput(outPath, value, inputPaths = [], {replace 
     await handle.writeFile(`${JSON.stringify(value, null, 2)}\n`, 'utf8');
     await handle.sync();
     await handle.close();
-    await rename(tempPath, absolute);
+    if (replace) await rename(tempPath, absolute);
+    else {
+      await link(tempPath, absolute);
+      await unlink(tempPath).catch(() => {});
+    }
   } catch (error) {
     await handle.close().catch(() => {});
     await unlink(tempPath).catch(() => {});
     throw error;
   }
   return absolute;
+}
+
+async function writeCaptionOutputPair(jsonPath, jsonValue, srtPath, srtText, inputPaths = [], {replace = false} = {}) {
+  const jsonAbsolute = resolve(jsonPath);
+  const srtAbsolute = resolve(srtPath);
+  const jsonIdentity = await assertSafeOutputPath(jsonAbsolute, inputPaths, {replace});
+  const srtIdentity = await assertSafeOutputPath(srtAbsolute, inputPaths, {replace});
+  if (jsonIdentity.canonical === srtIdentity.canonical
+    || (jsonIdentity.exists && srtIdentity.exists && jsonIdentity.dev === srtIdentity.dev && jsonIdentity.ino === srtIdentity.ino)) {
+    fail('path-alias', 'Caption JSON and SRT outputs must be distinct files');
+  }
+  for (const output of [jsonAbsolute, srtAbsolute]) {
+    try {
+      const info = await lstat(output);
+      if (info.isSymbolicLink() || !info.isFile()) fail('unsafe-output', `Caption output must be a regular file path, not a symlink or special file: ${output}`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+  }
+  const rows = [
+    {target: jsonAbsolute, bytes: Buffer.from(`${JSON.stringify(jsonValue, null, 2)}\n`, 'utf8')},
+    {target: srtAbsolute, bytes: Buffer.from(srtText, 'utf8')},
+  ];
+  const staged = [];
+  const backups = [];
+  const committed = [];
+  try {
+    for (const row of rows) {
+      const temp = join(dirname(row.target), `.${basename(row.target)}.${process.pid}.${randomBytes(6).toString('hex')}.tmp`);
+      const handle = await open(temp, 'wx', 0o600);
+      try { await handle.writeFile(row.bytes); await handle.sync(); }
+      finally { await handle.close(); }
+      staged.push({target: row.target, temp});
+    }
+    if (replace) {
+      for (const row of rows) {
+        try {
+          await lstat(row.target);
+          const backup = join(dirname(row.target), `.${basename(row.target)}.${process.pid}.${randomBytes(6).toString('hex')}.bak`);
+          await rename(row.target, backup);
+          backups.push({target: row.target, backup});
+        } catch (error) { if (error.code !== 'ENOENT') throw error; }
+      }
+    }
+    for (const row of staged) { await rename(row.temp, row.target); committed.push(row.target); }
+    await Promise.all(backups.map(({backup}) => rm(backup, {force: true}).catch(() => {})));
+  } catch (error) {
+    await Promise.all(staged.map(({temp}) => rm(temp, {force: true})));
+    await Promise.all(committed.map((target) => rm(target, {force: true})));
+    for (const {target, backup} of backups.reverse()) await rename(backup, target).catch(() => {});
+    throw error;
+  }
+  return {json: jsonAbsolute, srt: srtAbsolute};
 }
 
 function stableJson(value) {
@@ -1231,11 +1525,37 @@ async function inspectAudioSource(source, ffprobePath) {
   if (!source.sha256) fail('media-hash-missing', `Source ${source.id} has no evidence SHA-256`);
   const actualHash = await hashFile(mediaPath);
   if (actualHash !== source.sha256) fail('source-hash-stale', `Source ${source.id} no longer matches its imported media hash`);
-  const probe = await ffprobeJson(ffprobePath, ['-v', 'error', '-show_streams', '-show_format', '-of', 'json', mediaPath]);
-  const allStreams = Array.isArray(probe.streams) ? probe.streams : [];
-  const audioStreams = allStreams.filter((stream) => stream.codec_type === 'audio');
   const primary = source.tracks.find((track) => track.id === source.primaryAudioTrackId && track.kind === 'audio');
   if (!primary || primary.syncToPrimaryAudio?.status !== 'primary') fail('primary-audio-missing', `Source ${source.id} has no declared primary audio track`);
+  let probe;
+  try { probe = await ffprobeJson(ffprobePath, ['-v', 'error', '-show_streams', '-show_format', '-of', 'json', mediaPath]); }
+  catch (probeError) {
+    if (String(mediaPath).toLowerCase().endsWith('.wav')) {
+      try {
+        const {inspectWavFile} = await import('./audio-postprocess.mjs');
+        const wav = await inspectWavFile(mediaPath);
+        if (primary.streamIndex !== undefined && primary.streamIndex !== 0) fail('audio-stream-missing', `WAV source ${source.id} only has stream 0 but the plan declares stream ${primary.streamIndex}`);
+        if (wav.sampleRateHz !== primary.clock?.sampleRateHz) fail('source-clock-mismatch', `WAV source ${source.id} sample rate does not match the declared primary clock`);
+        if (source.durationSamples !== null && Math.abs(wav.sampleCount - source.durationSamples) > 1) fail('source-duration-mismatch', `WAV source ${source.id} sample count differs from declared durationSamples`);
+        return {
+          source,
+          mediaPath,
+          streamIndex: 0,
+          sampleRateHz: wav.sampleRateHz,
+          channels: wav.channels,
+          channelLayout: null,
+          sampleFormat: wav.audioFormat === 3 ? 'flt' : `s${wav.bitsPerSample}`,
+          bitsPerSample: wav.bitsPerSample,
+          originalIdentity: await pathIdentity(mediaPath),
+        };
+      } catch (wavError) {
+        if (wavError instanceof AsrcutError) throw wavError;
+      }
+    }
+    throw probeError;
+  }
+  const allStreams = Array.isArray(probe.streams) ? probe.streams : [];
+  const audioStreams = allStreams.filter((stream) => stream.codec_type === 'audio');
   let stream = null;
   if (Number.isInteger(primary.streamIndex)) stream = audioStreams.find((candidate) => candidate.index === primary.streamIndex) ?? null;
   else if (audioStreams.length === 1) stream = audioStreams[0];
@@ -1244,8 +1564,16 @@ async function inspectAudioSource(source, ffprobePath) {
   const rate = Number(stream.sample_rate);
   if (!safeInteger(rate) || rate !== primary.clock?.sampleRateHz) fail('source-clock-mismatch', `Source ${source.id} decoded sample rate ${stream.sample_rate} does not match declared primary clock ${primary.clock?.sampleRateHz}`);
   if (source.durationSamples !== null && source.durationSamples > 0) {
-    const durationSeconds = Number(stream.duration ?? probe.format?.duration);
-    if (Number.isFinite(durationSeconds) && Math.abs(durationSeconds * rate - source.durationSamples) > 1) fail('source-duration-mismatch', `Source ${source.id} media duration differs from declared durationSamples`);
+    const streamDuration = Number(stream.duration);
+    if (Number.isFinite(streamDuration)) {
+      if (Math.abs(streamDuration * rate - source.durationSamples) > 1) fail('source-duration-mismatch', `Source ${source.id} media duration differs from declared durationSamples`);
+    } else {
+      const containerDuration = Number(probe.format?.duration);
+      // 无逐流时长（如 Matroska 1ms 时基）时，容器时长允许 ≤100ms 封装/帧尾误差，避免误拒精确解码样本数
+      if (Number.isFinite(containerDuration) && Math.abs(containerDuration * rate - source.durationSamples) > Math.max(1, Math.round(rate * 0.1))) {
+        fail('source-duration-mismatch', `Source ${source.id} media duration differs from declared durationSamples`);
+      }
+    }
   }
   return {
     source,
@@ -1286,7 +1614,11 @@ async function atomicWriteBytes(outPath, bytes, inputPaths, {replace = false} = 
     await handle.writeFile(bytes);
     await handle.sync();
     await handle.close();
-    await rename(tempPath, absolute);
+    if (replace) await rename(tempPath, absolute);
+    else {
+      await link(tempPath, absolute);
+      await unlink(tempPath).catch(() => {});
+    }
   } catch (error) {
     await handle.close().catch(() => {});
     await unlink(tempPath).catch(() => {});
@@ -1295,8 +1627,138 @@ async function atomicWriteBytes(outPath, bytes, inputPaths, {replace = false} = 
   return absolute;
 }
 
-export async function exportAudio({plan, timeline, outPath, tmpDir = join(process.cwd(), '.cache/tmp/laohu-asrcut'), baseDir = process.cwd(), ffmpegPath = process.env.FFMPEG_PATH ?? 'ffmpeg', ffprobePath = process.env.FFPROBE_PATH ?? 'ffprobe'} = {}) {
+async function verifyRoomToneReplacements({plan, timeline, roomTone, silenceMap, authorizeRoomTone, baseDir, ffmpegPath, ffprobePath}) {
+  if (roomTone == null && silenceMap == null && authorizeRoomTone !== true) return [];
+  if (authorizeRoomTone !== true) fail('room-tone-not-authorized', 'Room-tone rendering requires explicit authorization in addition to mediaExport');
+  if (!roomTone || !silenceMap) fail('room-tone-evidence-required', 'Room-tone rendering requires both a bound replacement request and the original source silence map');
+  if (roomTone.format !== 'laohu.asrcut.room-tone/1' || roomTone.projectId !== plan.project.id || roomTone.revision !== plan.project.revision || roomTone.planSha256 !== timeline.planSha256) {
+    fail('room-tone-request-stale', 'Room-tone request must bind the exact project, revision, and plan SHA-256');
+  }
+  if (Object.keys(roomTone).some((key) => !['format', 'projectId', 'revision', 'planSha256', 'replacements'].includes(key))
+    || !Array.isArray(roomTone.replacements) || roomTone.replacements.length === 0) fail('invalid-room-tone-request', 'Room-tone request must contain at least one exact presentation replacement');
+  const units = timeline.units ?? [];
+  const used = new Set();
+  const results = [];
+  const {verifyRoomToneCandidate} = await import('./audio-probe.mjs');
+  for (const row of roomTone.replacements) {
+    if (!row || Object.keys(row).some((key) => !['presentationId', 'sourceId', 'roomToneSourceRange'].includes(key))) fail('invalid-room-tone-request', 'Invalid room-tone replacement fields');
+    if (used.has(row.presentationId)) fail('room-tone-target-duplicate', `Presentation ${row.presentationId} has multiple replacement requests`);
+    const index = units.findIndex((unit) => unit.kind === 'presentation' && unit.id === row.presentationId);
+    if (index < 0) fail('room-tone-target-missing', `Presentation ${row.presentationId} must exist on the compiled timeline`);
+    const previous = units.slice(0, index).findLast((unit) => unit.kind === 'source');
+    const next = units.slice(index + 1).find((unit) => unit.kind === 'source');
+    const source = plan.sources.find((item) => item.id === row.sourceId);
+    if (!source || ![previous?.sourceId, next?.sourceId].includes(source.id)) fail('room-tone-source-not-adjacent', 'Room tone must originate on the primary track of an adjacent retained source');
+    const range = row.roomToneSourceRange;
+    const errors = [];
+    validateRange(range, 'roomToneSourceRange', errors);
+    if (errors.length || Object.keys(range).length !== 3 || range.endSample > source.durationSamples) fail('invalid-room-tone-range', 'Room tone requires an exact range inside the original source clock', errors);
+    const sourceBounds = interval(0, source.durationSamples, range.sampleRateHz);
+    if (!sourceSpeechGaps(source, sourceBounds).some((gap) => containsRange(gap.range, range))) fail('room-tone-overlaps-speech', 'Room-tone source range intersects transcript speech or lacks a bounded source gap');
+    if (roundRatio(range.endSample - range.startSample, timeline.clock.sampleRateHz, range.sampleRateHz) !== units[index].durationSamples) {
+      fail('room-tone-length-mismatch', `Replacement must render exactly ${units[index].durationSamples} project samples without padding or retiming`);
+    }
+    await verifyRoomToneCandidate({silenceMap, sourceId: source.id, plan, range, baseDir, ffmpegPath, ffprobePath});
+    used.add(row.presentationId);
+    results.push({presentationId: row.presentationId, sourceId: source.id, roomToneSourceRange: structuredClone(range), targetRange: units[index].targetRange,
+      sourceSha256: source.sha256, probeSha256: silenceMap.probeSha256});
+  }
+  return results;
+}
+
+function audioSeamFades(timeline, units, seamFadeMs) {
+  const requestedSamples = Math.round(seamFadeMs * timeline.clock.sampleRateHz / 1000);
+  const seams = requestedSamples > 0 ? timelineSeams(timeline).filter((seam) => seam.type === 'source-cut') : [];
+  const fadesIn = new Set(seams.map((seam) => seam.rightIndex));
+  const fadesOut = new Set(seams.map((seam) => seam.leftIndex));
+  const edges = units.map((unit, index) => {
+    const length = unit.targetRange.endSample - unit.targetRange.startSample;
+    const opposing = fadesIn.has(index) && fadesOut.has(index);
+    const samples = Math.min(requestedSamples, opposing ? Math.floor(length / 2) : length);
+    return {inSamples: fadesIn.has(index) ? samples : 0, outSamples: fadesOut.has(index) ? samples : 0};
+  });
+  const receipt = seams.map((seam) => ({targetSample: seam.targetSample, leftOccurrenceId: seam.left.occurrenceId, rightOccurrenceId: seam.right.occurrenceId,
+    fadeOutSamples: edges[seam.leftIndex].outSamples, fadeInSamples: edges[seam.rightIndex].inSamples}));
+  return {edges, receipt};
+}
+
+function audioSeamCrossfades(plan, timeline, units, toneByPresentation, seamCrossfadeMs) {
+  const projectRate = timeline.clock.sampleRateHz;
+  const requestedSamples = Math.round(seamCrossfadeMs * projectRate / 1000);
+  const unitExt = units.map(() => ({preSamples: 0, postSamples: 0, fallbackIn: 0, fallbackOut: 0}));
+  const joinOverlaps = new Array(Math.max(0, units.length - 1)).fill(0);
+  const receipt = [];
+  if (requestedSamples <= 0 || units.length < 2) return {unitExt, joinOverlaps, receipt, hasOverlap: false};
+  const sourcesById = new Map(plan.sources.map((source) => [source.id, source]));
+  const unitId = (unit) => unit.kind === 'source' ? unit.occurrenceId : unit.id;
+  const availAfterUnit = (unit) => {
+    if (unit.kind === 'source') {
+      const source = sourcesById.get(unit.sourceId);
+      return Math.floor(Math.max(0, source.durationSamples - unit.sourceRange.endSample) * projectRate / unit.sourceRange.sampleRateHz);
+    }
+    const tone = toneByPresentation.get(unit.id);
+    if (tone) {
+      const source = sourcesById.get(tone.sourceId);
+      return Math.floor(Math.max(0, source.durationSamples - tone.roomToneSourceRange.endSample) * projectRate / tone.roomToneSourceRange.sampleRateHz);
+    }
+    return requestedSamples;
+  };
+  const availBeforeUnit = (unit) => {
+    if (unit.kind === 'source') {
+      return Math.floor(Math.max(0, unit.sourceRange.startSample) * projectRate / unit.sourceRange.sampleRateHz);
+    }
+    const tone = toneByPresentation.get(unit.id);
+    if (tone) {
+      return Math.floor(Math.max(0, tone.roomToneSourceRange.startSample) * projectRate / tone.roomToneSourceRange.sampleRateHz);
+    }
+    return requestedSamples;
+  };
+  let hasOverlap = false;
+  for (let index = 0; index < units.length - 1; index += 1) {
+    const left = units[index];
+    const right = units[index + 1];
+    if (left.kind === 'source' && right.kind === 'source' && left.sourceId === right.sourceId && left.sourceRange.endSample === right.sourceRange.startSample) continue;
+    if (left.kind === 'presentation' && right.kind === 'presentation' && !toneByPresentation.has(left.id) && !toneByPresentation.has(right.id)) continue;
+    const leftLen = left.targetRange.endSample - left.targetRange.startSample;
+    const rightLen = right.targetRange.endSample - right.targetRange.startSample;
+    const maxIntoLeft = Math.floor(leftLen / 3);
+    const maxIntoRight = Math.floor(rightLen / 3);
+    const availAfter = availAfterUnit(left);
+    const availBefore = availBeforeUnit(right);
+    const halfAfter = Math.floor(requestedSamples / 2);
+    const halfBefore = requestedSamples - halfAfter;
+    let extRight = Math.min(halfAfter, availAfter, maxIntoRight);
+    let extLeft = Math.min(halfBefore, availBefore, maxIntoLeft);
+    if (extRight + extLeft < requestedSamples) {
+      extRight = Math.min(requestedSamples - extLeft, availAfter, maxIntoRight);
+      extLeft = Math.min(requestedSamples - extRight, availBefore, maxIntoLeft);
+    }
+    const overlapSamples = extRight + extLeft;
+    if (overlapSamples > 0) {
+      hasOverlap = true;
+      unitExt[index].postSamples = extRight;
+      unitExt[index + 1].preSamples = extLeft;
+      joinOverlaps[index] = overlapSamples;
+      receipt.push({targetSample: right.targetRange.startSample, leftId: unitId(left), rightId: unitId(right),
+        overlapSamples, postExtendSamples: extRight, preExtendSamples: extLeft, mode: 'equal-power-crossfade'});
+    } else {
+      const fallback = Math.min(requestedSamples, maxIntoLeft, maxIntoRight);
+      unitExt[index].fallbackOut = fallback;
+      unitExt[index + 1].fallbackIn = fallback;
+      receipt.push({targetSample: right.targetRange.startSample, leftId: unitId(left), rightId: unitId(right),
+        overlapSamples: 0, postExtendSamples: 0, preExtendSamples: 0, mode: 'edge-fade-fallback',
+        fadeOutSamples: fallback, fadeInSamples: fallback});
+    }
+  }
+  return {unitExt, joinOverlaps, receipt, hasOverlap};
+}
+
+export async function exportAudio({plan, timeline, outPath, tmpDir = join(process.cwd(), '.cache/tmp/laohu-asrcut'), baseDir = process.cwd(), ffmpegPath = process.env.FFMPEG_PATH ?? 'ffmpeg', ffprobePath = process.env.FFPROBE_PATH ?? 'ffprobe', audioPlanPath = null, processedSourcePath = null, audioReceiptPath = null, seamFadeMs, seamCrossfadeMs, roomTone = null, silenceMap = null, authorizeRoomTone = false, timelineSha256 = null} = {}) {
   if (!plan || !timeline || !outPath) fail('missing-export-input', 'exportAudio requires plan, compiled timeline, and outPath');
+  if (seamFadeMs !== undefined && (!Number.isFinite(seamFadeMs) || seamFadeMs < 0 || seamFadeMs > 30)) fail('invalid-seam-fade', 'seamFadeMs must be a number from 0 to 30 milliseconds');
+  if (seamCrossfadeMs !== undefined && (!Number.isFinite(seamCrossfadeMs) || seamCrossfadeMs < 0 || seamCrossfadeMs > 30)) fail('invalid-seam-crossfade', 'seamCrossfadeMs must be a number from 0 to 30 milliseconds');
+  if ((seamFadeMs ?? 0) > 0 && (seamCrossfadeMs ?? 0) > 0) fail('conflicting-seam-fade-options', 'Use either --seam-crossfade-ms or --seam-fade-ms, not both');
+  if (timelineSha256 !== null && !/^[a-f0-9]{64}$/.test(timelineSha256)) fail('invalid-timeline-sha', 'timelineSha256 must identify the supplied canonical timeline file bytes');
   const validation = inspectPlan(plan);
   if (validation.errors.length) fail('invalid-plan', 'Cannot export from an invalid edit plan', validation.errors);
   const transcriptEvidence = await verifyPlanEvidence(plan, {baseDir});
@@ -1314,11 +1776,22 @@ export async function exportAudio({plan, timeline, outPath, tmpDir = join(proces
   if (compiled.clips.length === 0 || compiled.durationSamples <= 0) fail('empty-export', 'Audio media export has no retained samples');
   if (!String(outPath).toLowerCase().endsWith('.wav')) fail('unsupported-output-format', 'This exporter supports PCM WAV only');
 
+  const suppliedTreatment = [audioPlanPath, processedSourcePath, audioReceiptPath].filter(Boolean);
+  if (suppliedTreatment.length !== 0 && suppliedTreatment.length !== 3) fail('source-treatment-incomplete', 'Processed-source export requires all of --audio-plan, --processed-source, and --audio-receipt; existing raw-source behavior remains unchanged when none are supplied');
+  let sourceTreatment = null;
+  if (suppliedTreatment.length === 3) {
+    if (plan.sources.length !== 1) fail('source-treatment-multisource-unsupported', 'This first source-treatment adapter supports one explicitly bound source; multi-source timing/mixing is not inferred');
+    const source = plan.sources[0];
+    const absoluteSourcePath = source.mediaPath ? resolve(baseDir, source.mediaPath) : null;
+    const {verifySourceTreatment} = await import('./audio-postprocess.mjs');
+    sourceTreatment = await verifySourceTreatment({audioPlanPath, processedPath: processedSourcePath, receiptPath: audioReceiptPath, editPlan: plan, source: {...source, mediaPath: absoluteSourcePath}});
+  }
+
   const absoluteOutput = resolve(outPath);
   const outputParent = dirname(absoluteOutput);
   const outputReceipt = `${absoluteOutput}.artifact.json`;
-  const sourcePaths = plan.sources.map((source) => source.mediaPath).filter(Boolean);
-  const evidencePaths = plan.sources.map((source) => source.transcript.evidenceRef).filter(Boolean).map((ref) => resolve(baseDir, ref));
+  const sourcePaths = [...mediaPaths(plan, baseDir), ...(sourceTreatment ? [audioPlanPath, processedSourcePath, audioReceiptPath] : [])];
+  const evidencePaths = transcriptEvidencePaths(plan, baseDir);
   const planPathInputs = [absoluteOutput, outputReceipt, ...sourcePaths, ...evidencePaths];
   await assertSafeOutputPath(absoluteOutput, planPathInputs.filter((value) => value !== absoluteOutput));
   await assertSafeOutputPath(outputReceipt, [absoluteOutput, ...sourcePaths, ...evidencePaths]);
@@ -1329,7 +1802,14 @@ export async function exportAudio({plan, timeline, outPath, tmpDir = join(proces
   if (tempInfo.dev !== outputParentInfo.dev) fail('cross-volume-temp', 'Audio export temp directory and output must be on the same volume');
 
   const sourceDetails = new Map();
-  for (const source of plan.sources) sourceDetails.set(source.id, await inspectAudioSource(source, ffprobePath));
+  for (const source of plan.sources) sourceDetails.set(source.id, await inspectAudioSource({...source, mediaPath: source.mediaPath ? resolve(baseDir, source.mediaPath) : null}, ffprobePath));
+  if (sourceTreatment) {
+    const original = sourceDetails.get(sourceTreatment.sourceId);
+    if (!original || sourceTreatment.sampleRateHz !== original.sampleRateHz || sourceTreatment.sampleCount !== plan.sources[0].durationSamples || sourceTreatment.channels !== original.channels) {
+      fail('source-treatment-clock', 'Processed source treatment must preserve the imported source sample rate, declared sample count, and channel count');
+    }
+    sourceDetails.set(sourceTreatment.sourceId, {...original, rawMediaPath: original.mediaPath, rawStreamIndex: original.streamIndex, mediaPath: sourceTreatment.mediaPath, streamIndex: sourceTreatment.streamIndex, sampleFormat: 's32', bitsPerSample: 32, processedSha256: sourceTreatment.outputSha256, processedIdentity: sourceTreatment.processedIdentity, sourceTreatment});
+  }
   const mediaShapes = [...sourceDetails.values()];
   const firstShape = mediaShapes[0];
   for (const media of mediaShapes.slice(1)) {
@@ -1337,13 +1817,13 @@ export async function exportAudio({plan, timeline, outPath, tmpDir = join(proces
       fail('channel-layout-mismatch', 'Audio sources have different channel layouts; this exporter will not silently mix or remap channels');
     }
   }
+  const roomToneReplacements = await verifyRoomToneReplacements({plan, timeline: compiled, roomTone, silenceMap, authorizeRoomTone, baseDir, ffmpegPath, ffprobePath});
+  const toneByPresentation = new Map(roomToneReplacements.map((row) => [row.presentationId, row]));
 
   const unique = randomBytes(8).toString('hex');
   const workDir = join(resolve(tmpDir), `asrcut-${process.pid}-${unique}`);
   await mkdir(workDir, {recursive: false});
   const temporaryWave = join(workDir, 'joined.wav');
-  const temporaryFilter = join(workDir, 'filter.txt');
-  const tempOutput = join(outputParent, `.${basename(absoluteOutput)}.${process.pid}.${unique}.tmp.wav`);
   let finalOutputCreated = false;
   try {
     const args = ['-nostdin', '-hide_banner', '-v', 'error', '-y'];
@@ -1351,58 +1831,152 @@ export async function exportAudio({plan, timeline, outPath, tmpDir = join(proces
     const timelineUnits = compiled.format === TIMELINE_V2_FORMAT
       ? compiled.units
       : compiled.clips.map((clip) => ({kind: 'source', ...clip}));
-    let inputIndex = 0;
+    const fades = audioSeamFades(compiled, timelineUnits, seamFadeMs ?? 0);
+    const crossfades = audioSeamCrossfades(plan, compiled, timelineUnits, toneByPresentation, seamCrossfadeMs ?? 0);
+    const sourcesById = new Map(plan.sources.map((source) => [source.id, source]));
+    // 按 (mediaPath, streamIndex) 去重只打开一次源媒体并跳过视频流，用 asplit 复用，避免多段长视频反复全量解封装
+    const inputRegistry = new Map();
+    const inputUses = [];
+    const registerAudioInput = (mediaPath, streamIndex) => {
+      const key = `${mediaPath}::${streamIndex}`;
+      if (!inputRegistry.has(key)) {
+        const idx = inputUses.length;
+        inputRegistry.set(key, idx);
+        inputUses.push({mediaPath, streamIndex, count: 0, cursor: 0});
+      }
+      const entry = inputUses[inputRegistry.get(key)];
+      entry.count += 1;
+      return entry;
+    };
+    const unitInputs = timelineUnits.map((unit) => {
+      if (unit.kind === 'presentation') {
+        const tone = toneByPresentation.get(unit.id);
+        if (!tone) return null;
+        const media = sourceDetails.get(tone.sourceId);
+        return registerAudioInput(media.rawMediaPath ?? media.mediaPath, media.rawStreamIndex ?? media.streamIndex);
+      }
+      if (unit.kind !== 'source') fail('unsupported-timeline-unit', `Audio exporter cannot render timeline unit kind ${unit.kind}`);
+      const media = sourceDetails.get(unit.sourceId);
+      return registerAudioInput(media.mediaPath, media.streamIndex);
+    });
+    inputUses.forEach((entry, inputIdx) => {
+      args.push('-vn', '-sn', '-dn', '-i', entry.mediaPath);
+      if (entry.count > 1) {
+        const outs = Array.from({length: entry.count}, (_, k) => `[src${inputIdx}_${k}]`).join('');
+        filters.push(`[${inputIdx}:${entry.streamIndex}]asplit=${entry.count}${outs}`);
+      }
+      entry.inputIdx = inputIdx;
+    });
+    const nextPad = (entry) => {
+      if (entry.count === 1) return `[${entry.inputIdx}:${entry.streamIndex}]`;
+      const pad = `[src${entry.inputIdx}_${entry.cursor}]`;
+      entry.cursor += 1;
+      return pad;
+    };
     const concatLabels = [];
     timelineUnits.forEach((unit, index) => {
       const label = `unit${index}`;
+      const ext = crossfades.unitExt[index];
+      const fbIn = ext.fallbackIn > 0 ? `,afade=t=in:ss=0:ns=${ext.fallbackIn}` : '';
       if (unit.kind === 'presentation') {
         const silenceLength = unit.targetRange.endSample - unit.targetRange.startSample;
         if (!safeInteger(silenceLength) || silenceLength <= 0 || silenceLength !== unit.durationSamples) fail('invalid-presentation-range', `Presentation ${unit.id} has an invalid sample duration`);
-        const layout = ffmpegSilenceLayout(firstShape);
-        filters.push(`anullsrc=r=${compiled.clock.sampleRateHz}:cl=${layout},atrim=end_sample=${silenceLength},asetpts=PTS-STARTPTS[${label}]`);
+        const totalLength = ext.preSamples + silenceLength + ext.postSamples;
+        const fbOut = ext.fallbackOut > 0 ? `,afade=t=out:ss=${totalLength - ext.fallbackOut}:ns=${ext.fallbackOut}` : '';
+        const tone = toneByPresentation.get(unit.id);
+        if (tone) {
+          const media = sourceDetails.get(tone.sourceId);
+          const src = sourcesById.get(tone.sourceId);
+          const {startSample, endSample, sampleRateHz} = tone.roomToneSourceRange;
+          if (sampleRateHz !== media.sampleRateHz) fail('room-tone-clock-mismatch', `Room tone for ${unit.id} does not match the verified primary audio sample rate`);
+          const srcPre = Math.min(startSample, Math.round(ext.preSamples * sampleRateHz / compiled.clock.sampleRateHz));
+          const srcPost = Math.min(src.durationSamples - endSample, Math.round(ext.postSamples * sampleRateHz / compiled.clock.sampleRateHz));
+          const inPad = nextPad(unitInputs[index]);
+          filters.push(`${inPad}atrim=start_sample=${startSample - srcPre}:end_sample=${endSample + srcPost},asetpts=PTS-STARTPTS,aresample=${compiled.clock.sampleRateHz}:async=0:first_pts=0,apad=whole_len=${totalLength},atrim=end_sample=${totalLength}${fbIn}${fbOut}[${label}]`);
+        } else {
+          const layout = ffmpegSilenceLayout(firstShape);
+          filters.push(`anullsrc=r=${compiled.clock.sampleRateHz}:cl=${layout},atrim=end_sample=${totalLength},asetpts=PTS-STARTPTS${fbIn}${fbOut}[${label}]`);
+        }
         concatLabels.push(`[${label}]`);
         return;
       }
-      if (unit.kind !== 'source') fail('unsupported-timeline-unit', `Audio exporter cannot render timeline unit kind ${unit.kind}`);
       const clip = unit;
       const media = sourceDetails.get(clip.sourceId);
+      const src = sourcesById.get(clip.sourceId);
       if (clip.sourceRange.sampleRateHz !== media.sampleRateHz) fail('clip-source-clock-mismatch', `Clip ${clip.occurrenceId} does not use the decoded source sample rate`);
-      args.push('-i', media.mediaPath);
       const wantedLength = clip.targetRange.endSample - clip.targetRange.startSample;
       if (!safeInteger(wantedLength) || wantedLength <= 0) fail('invalid-target-range', `Clip ${clip.occurrenceId} has an invalid compiled target length`);
-      filters.push(`[${inputIndex}:${media.streamIndex}]atrim=start_sample=${clip.sourceRange.startSample}:end_sample=${clip.sourceRange.endSample},asetpts=PTS-STARTPTS,aresample=${compiled.clock.sampleRateHz}:async=0:first_pts=0,apad=whole_len=${wantedLength},atrim=end_sample=${wantedLength}[${label}]`);
+      const totalLength = ext.preSamples + wantedLength + ext.postSamples;
+      const srcPre = Math.min(clip.sourceRange.startSample, Math.round(ext.preSamples * clip.sourceRange.sampleRateHz / compiled.clock.sampleRateHz));
+      const srcPost = Math.min(src.durationSamples - clip.sourceRange.endSample, Math.round(ext.postSamples * clip.sourceRange.sampleRateHz / compiled.clock.sampleRateHz));
+      const {inSamples, outSamples} = fades.edges[index];
+      const fadeIn = inSamples > 0 ? `,afade=t=in:ss=0:ns=${inSamples}` : fbIn;
+      const fadeOut = outSamples > 0 ? `,afade=t=out:ss=${totalLength - outSamples}:ns=${outSamples}`
+        : ext.fallbackOut > 0 ? `,afade=t=out:ss=${totalLength - ext.fallbackOut}:ns=${ext.fallbackOut}` : '';
+      const inPad = nextPad(unitInputs[index]);
+      filters.push(`${inPad}atrim=start_sample=${clip.sourceRange.startSample - srcPre}:end_sample=${clip.sourceRange.endSample + srcPost},asetpts=PTS-STARTPTS,aresample=${compiled.clock.sampleRateHz}:async=0:first_pts=0,apad=whole_len=${totalLength},atrim=end_sample=${totalLength}${fadeIn}${fadeOut}[${label}]`);
       concatLabels.push(`[${label}]`);
-      inputIndex += 1;
     });
-    filters.push(`${concatLabels.join('')}concat=n=${timelineUnits.length}:v=0:a=1[outa]`);
-    const filterHandle = await open(temporaryFilter, 'wx', 0o600);
-    await filterHandle.writeFile(`${filters.join(';\n')}\n`, 'utf8');
-    await filterHandle.close();
+    if (crossfades.hasOverlap) {
+      let current = 'unit0';
+      for (let index = 1; index < timelineUnits.length; index += 1) {
+        const nextOut = index === timelineUnits.length - 1 ? 'outa' : `mix${index}`;
+        const overlap = crossfades.joinOverlaps[index - 1];
+        if (overlap > 0) filters.push(`[${current}][unit${index}]acrossfade=ns=${overlap}:o=1:c1=qsin:c2=qsin[${nextOut}]`);
+        else filters.push(`[${current}][unit${index}]concat=n=2:v=0:a=1[${nextOut}]`);
+        current = nextOut;
+      }
+    } else {
+      filters.push(`${concatLabels.join('')}concat=n=${timelineUnits.length}:v=0:a=1[outa]`);
+    }
     const {codec} = pcmCodecFor(mediaShapes);
-    args.push('-filter_complex_script', temporaryFilter, '-map', '[outa]', '-map_metadata', '-1', '-c:a', codec, '-ar', String(compiled.clock.sampleRateHz), '-f', 'wav', temporaryWave);
+    args.push('-filter_complex', filters.join(';'), '-map', '[outa]', '-map_metadata', '-1', '-c:a', codec, '-ar', String(compiled.clock.sampleRateHz), '-f', 'wav', temporaryWave);
     try { await execFile(ffmpegPath, args, {encoding: 'utf8', maxBuffer: 16 * 1024 * 1024}); }
     catch (error) { fail('ffmpeg-failed', `ffmpeg could not render the compiled timeline: ${error.stderr || error.message}`); }
 
-    const probe = await ffprobeJson(ffprobePath, ['-v', 'error', '-select_streams', 'a:0', '-show_entries', 'stream=sample_rate,duration_ts,time_base,channels,channel_layout', '-of', 'json', temporaryWave]);
-    const outputStream = probe.streams?.[0];
+    let outputStream;
+    try {
+      const probe = await ffprobeJson(ffprobePath, ['-v', 'error', '-select_streams', 'a:0', '-show_entries', 'stream=sample_rate,duration_ts,time_base,channels,channel_layout', '-of', 'json', temporaryWave]);
+      outputStream = probe.streams?.[0];
+    } catch (probeError) {
+      try {
+        const {inspectWavFile} = await import('./audio-postprocess.mjs');
+        const wav = await inspectWavFile(temporaryWave);
+        outputStream = {sample_rate: wav.sampleRateHz, duration_ts: wav.sampleCount, channels: wav.channels, channel_layout: null};
+      } catch { throw probeError; }
+    }
     const outputRate = Number(outputStream?.sample_rate);
     const durationSamples = Number(outputStream?.duration_ts);
     if (outputRate !== compiled.clock.sampleRateHz || durationSamples !== compiled.durationSamples) {
       fail('rendered-sample-count-mismatch', `Rendered WAV reports ${durationSamples} samples at ${outputRate} Hz; expected ${compiled.durationSamples} samples at ${compiled.clock.sampleRateHz} Hz`);
     }
     const codecInfo = pcmCodecFor(mediaShapes);
-    await rename(temporaryWave, tempOutput);
-    await rename(tempOutput, absoluteOutput);
+    await link(temporaryWave, absoluteOutput);
     finalOutputCreated = true;
     const artifactSha256 = await hashFile(absoluteOutput);
     for (const media of mediaShapes) {
-      const actualHash = await hashFile(media.mediaPath);
-      const currentIdentity = await pathIdentity(media.mediaPath);
+      const rawMediaPath = media.rawMediaPath ?? media.mediaPath;
+      const actualHash = await hashFile(rawMediaPath);
+      const currentIdentity = await pathIdentity(rawMediaPath);
       if (actualHash !== media.source.sha256 || currentIdentity.dev !== media.originalIdentity.dev || currentIdentity.ino !== media.originalIdentity.ino) {
         await unlink(absoluteOutput).catch(() => {});
         finalOutputCreated = false;
         fail('source-changed-during-export', `Source ${media.source.id} changed while exporting`);
       }
+      if (media.sourceTreatment) {
+        const processedHash = await hashFile(media.mediaPath);
+        const processedIdentity = await pathIdentity(media.mediaPath);
+        if (processedHash !== media.processedSha256 || processedIdentity.dev !== media.processedIdentity.dev || processedIdentity.ino !== media.processedIdentity.ino) {
+          await unlink(absoluteOutput).catch(() => {});
+          finalOutputCreated = false;
+          fail('source-treatment-changed-during-export', `Processed source ${media.source.id} or its identity changed while exporting`);
+        }
+      }
+    }
+    if (sourceTreatment) {
+      const {verifySourceTreatment} = await import('./audio-postprocess.mjs');
+      const confirmed = await verifySourceTreatment({audioPlanPath, processedPath: processedSourcePath, receiptPath: audioReceiptPath, editPlan: plan, source: {...plan.sources[0], mediaPath: resolve(baseDir, plan.sources[0].mediaPath)}});
+      if (confirmed.audioPlanSha256 !== sourceTreatment.audioPlanSha256 || confirmed.receiptSha256 !== sourceTreatment.receiptSha256 || confirmed.outputSha256 !== sourceTreatment.outputSha256) fail('source-treatment-stale', 'Source treatment plan/receipt/output changed during timeline export');
     }
     await verifyPlanEvidence(plan, {baseDir});
     const receipt = {
@@ -1418,12 +1992,46 @@ export async function exportAudio({plan, timeline, outPath, tmpDir = join(proces
       channels: outputStream.channels,
       exportedAt: new Date().toISOString(),
       auditionStatus: 'not_auditioned',
-      operation: compiled.format === TIMELINE_V2_FORMAT
-        ? 'equal-speed source trims concatenated once with exact project-sample presentation intervals; no fades, overlap, retiming, source duplication, or mixing'
-        : 'equal-speed sample trim and concatenation; no fades, overlap, retiming, or mixing',
+      operation: sourceTreatment
+        ? 'explicitly receipt-bound continuous source treatment, then the existing equal-speed compiler-mapped trims/concatenation; source audio hash is preserved separately and processing receipt is linked; no fades, overlap, retiming, duplicate source playback, or inferred mixing'
+        : compiled.format === TIMELINE_V2_FORMAT
+          ? 'equal-speed source trims concatenated once with exact project-sample presentation intervals; no fades, overlap, retiming, source duplication, or mixing'
+          : 'equal-speed sample trim and concatenation; no fades, overlap, retiming, or mixing',
       transcriptEvidence: {verifiedSourceIds: transcriptEvidence.verified.map((entry) => entry.sourceId), unlocatedSourceIds: transcriptEvidence.unlocated.map((entry) => entry.sourceId)},
       clips: compiled.clips.map((clip) => ({occurrenceId: clip.occurrenceId, sourceId: clip.sourceId, coverageId: clip.coverageId, sourceRange: clip.sourceRange, targetRange: clip.targetRange})),
     };
+    if (timelineSha256 !== null) receipt.timelineSha256 = timelineSha256;
+    if (seamFadeMs !== undefined) {
+      receipt.seamFadeMs = seamFadeMs;
+      receipt.seamFades = fades.receipt;
+    }
+    if (seamCrossfadeMs !== undefined) {
+      receipt.seamCrossfadeMs = seamCrossfadeMs;
+      receipt.seamCrossfades = crossfades.receipt;
+    }
+    if (roomToneReplacements.length) receipt.roomToneReplacements = roomToneReplacements;
+    if (fades.receipt.length || crossfades.receipt.length || roomToneReplacements.length) {
+      receipt.operation = 'Equal-speed compiler-mapped trims and concatenation'
+        + (sourceTreatment ? ' after receipt-bound continuous source treatment' : '')
+        + (crossfades.receipt.length ? ' with zero-drift equal-power crossfades across non-continuous joins' : '')
+        + (fades.receipt.length ? ' with sample-bounded edge fades on non-continuous source joins' : '')
+        + (roomToneReplacements.length ? ' and equal-length verified original room tone in selected presentation windows' : '') + '.';
+    }
+    if (sourceTreatment) {
+      receipt.audioTreatment = {
+        format: 'laohu.asrcut.source-treatment/1',
+        sourceId: sourceTreatment.sourceId,
+        audioPlanSha256: sourceTreatment.audioPlanSha256,
+        treatmentReceiptSha256: sourceTreatment.receiptSha256,
+        originalSourceSha256: sourceTreatment.inputSha256,
+        processedSourceSha256: sourceTreatment.outputSha256,
+        sampleRateHz: sourceTreatment.sampleRateHz,
+        sampleCount: sourceTreatment.sampleCount,
+        channels: sourceTreatment.channels,
+        renderedBeforeTimelineRanges: true,
+        timelineMapping: 'existing-compiled-source-ranges',
+      };
+    }
     if (compiled.format === TIMELINE_V2_FORMAT) {
       receipt.timelineFormat = TIMELINE_V2_FORMAT;
       receipt.units = compiled.units.map((unit) => unit.kind === 'presentation'
@@ -1446,7 +2054,6 @@ export async function exportAudio({plan, timeline, outPath, tmpDir = join(proces
     throw error;
   } finally {
     await rm(workDir, {recursive: true, force: true}).catch(() => {});
-    await unlink(tempOutput).catch(() => {});
   }
 }
 
@@ -1459,22 +2066,84 @@ function parseArgs(argv) {
     if (!value.startsWith('--')) continue;
     const key = value.slice(2);
     const next = rest[index + 1];
-    if (!next || next.startsWith('--')) options[key] = true;
-    else { options[key] = next; index += 1; }
+    const optionValue = !next || next.startsWith('--') ? true : next;
+    if (optionValue !== true) index += 1;
+    if (key === 'video-track') (options[key] ??= []).push(optionValue);
+    else options[key] = optionValue;
   }
   return {command, options};
+}
+
+function declaredRational(value, label, {positive = false} = {}) {
+  const match = typeof value === 'string' && value.match(/^([+-]?\d+)\/(\d+)$/);
+  const numerator = Number(match?.[1]);
+  const denominator = Number(match?.[2]);
+  if (!match || !safeInteger(numerator) || !safeInteger(denominator) || denominator <= 0 || (positive && numerator <= 0)) {
+    fail('invalid-video-track-declaration', `${label} requires an integer fraction with a positive denominator`);
+  }
+  return {numerator, denominator};
+}
+
+function videoTrackDeclarations(values) {
+  return values.map((value) => {
+    const fields = typeof value === 'string' ? value.split(',').map((part) => part.trim()) : [];
+    const [index, ptsTimebase, offset, precision] = fields;
+    if (!/^\d+$/.test(index ?? '') || !safeInteger(Number(index)) || (offset === 'unknown' ? fields.length !== 3 : fields.length !== 4 || !['measured', 'estimated'].includes(precision))) {
+      fail('invalid-video-track-declaration', 'Use --video-track INDEX,PTS_NUM/DEN,SIGNED_OFFSET_NUM/DEN,measured|estimated or INDEX,PTS_NUM/DEN,unknown');
+    }
+    const timebase = declaredRational(ptsTimebase, 'Video PTS timebase', {positive: true});
+    const syncToPrimaryAudio = offset === 'unknown' ? {status: 'unknown'} : {offsetSeconds: declaredRational(offset, 'Video offset in seconds'), precision};
+    return {streamIndex: Number(index), timebase, syncToPrimaryAudio};
+  });
+}
+
+async function verifyImportVideo({mediaPath, mediaSha256, videoTracks, audioStreamIndex, sourceRate, ffprobePath = process.env.FFPROBE_PATH ?? 'ffprobe'}) {
+  if (!mediaPath) fail('video-track-media-required', '--video-track requires --source with the actual media');
+  const probe = await ffprobeJson(ffprobePath, ['-v', 'error', '-show_streams', '-of', 'json', mediaPath]);
+  const streams = Array.isArray(probe.streams) ? probe.streams : [];
+  const audio = streams.filter((stream) => stream.codec_type === 'audio' && (audioStreamIndex === undefined || stream.index === audioStreamIndex));
+  if (audio.length !== 1) fail('video-import-primary-audio', 'Select the actual primary audio stream with --audio-stream-index when this video has several audio streams');
+  const sampleRateHz = Number(audio[0].sample_rate);
+  assertPositiveRate(sampleRateHz, 'source primary audio rate');
+  if (sourceRate !== undefined && sourceRate !== sampleRateHz) fail('source-clock-mismatch', 'Declared source sample rate differs from the selected audio stream');
+  for (const {streamIndex, timebase} of videoTracks) {
+    const stream = streams.find((item) => item.index === streamIndex && item.codec_type === 'video' && !item.disposition?.attached_pic);
+    if (!stream) fail('video-track-not-found', `Media has no usable video stream with global index ${streamIndex}`);
+    const observed = declaredRational(stream.time_base, `Stream ${streamIndex} PTS timebase`, {positive: true});
+    if (BigInt(observed.numerator) * BigInt(timebase.denominator) !== BigInt(timebase.numerator) * BigInt(observed.denominator)) {
+      fail('video-clock-mismatch', `Video stream ${streamIndex} uses ${stream.time_base}, not the declared PTS timebase`);
+    }
+  }
+  if (await hashFile(mediaPath) !== mediaSha256) fail('source-changed-during-import', 'Linked media changed while verifying the declared tracks');
+  return {sampleRateHz, audioStreamIndex: audio[0].index};
 }
 
 function usage() {
   return [
     'Usage:',
     '  asrcut.mjs import --input <transcript.json|file.srt> --project-id <id> --out <edit-plan.json> [--source-id <id>] [--source <media>] [--source-sample-rate <Hz>] [--source-duration-samples <N>] [--audio-stream-index <index>] [--time-unit seconds|milliseconds] [--recording-segment <index>]',
+    '      [--video-track INDEX,PTS_NUM/DEN,SIGNED_OFFSET_NUM/DEN,measured|estimated] [--video-track INDEX,PTS_NUM/DEN,unknown]',
+    '      [--authorize-media-export] [--authorize-reorder] [--authorize-repeat]',
     '  asrcut.mjs merge --project-id <id> --plans <plan-a.json,plan-b.json> --source-order <id-a,id-b> --out <edit-plan.json>',
+    '  asrcut.mjs apply-edits --plan <edit-plan.json> --ops <edit-ops.json> --out <revised-plan.json> [--silence-map <silence-map.json>] [--update-plan]',
+    '  asrcut.mjs annotate --plan <edit-plan.json> --annotation <annotation.json> --out <new-edit-plan.json> [--update-plan]',
     '  asrcut.mjs insert-presentation --plan <edit-plan.json> --spec <presentation.json> --out <edit-plan.json> --authorize-presentation-timing [--update-plan]',
     '  asrcut.mjs validate --plan <edit-plan.json>',
     '  asrcut.mjs freeze --plan <edit-plan.json> --out <frozen-plan.json>',
     '  asrcut.mjs compile --plan <edit-plan.json> --out <timeline.json>',
-    '  asrcut.mjs export-audio --plan <frozen-plan.json> --timeline <timeline.json> --out <new-audio.wav> [--tmp-dir <same-volume-dir>]',
+    '  asrcut.mjs compile-captions --plan <edit-plan.json> --timeline <canonical-timeline.json> --design <caption-design.json> --out <caption-manifest.json> --srt <captions.srt>',
+    '  asrcut.mjs export-srt --plan <edit-plan.json> --timeline <canonical-timeline.json> --manifest <caption-manifest.json> --out <captions.srt>',
+    '  asrcut.mjs probe-silence --input <source> --out <silence-map.json> [--plan <edit-plan.json>] [--audio-stream-index <index>] [--noise-db <dB>] [--min-silence-ms <ms>]',
+    '  asrcut.mjs export-audio --plan <frozen-plan.json> --timeline <timeline.json> --out <new-audio.wav> [--seam-fade-ms <0..30>] [--tmp-dir <same-volume-dir>]',
+    '  asrcut.mjs inspect-media --input <media> [--audio-stream-index <n>] [--count-samples]',
+    '  asrcut.mjs probe-silence --input <media> [--noise-db -38|auto] [--min-silence-ms 120] [--plan <plan.json>] --out <silence-map.json>',
+    '  asrcut.mjs export-audio --plan <frozen-plan.json> --timeline <timeline.json> --out <new-cut.wav> [--seam-crossfade-ms 0..30 | --seam-fade-ms 0..30]',
+    '      [--audio-plan <source-audio-plan.json> --processed-source <processed-source.wav> --audio-receipt <processed-source.wav.audio.json>]',
+    '      [--room-tone <replacement.json> --silence-map <silence-map.json> --authorize-room-tone]',
+    '  asrcut.mjs extract-seams --plan <frozen-plan.json> --timeline <timeline.json> --audio <cut.wav> --out-dir <new-directory> [--audio-receipt <cut.wav.artifact.json>]',
+    '  asrcut.mjs export-handoff --plan <frozen-plan.json> --timeline <timeline.json> --out <animation-handoff.json> [--silence-map <silence-map.json>]',
+    '  asrcut.mjs export-video --plan <frozen-plan.json> --timeline <timeline.json> --fps <rate> --out <new-video.mov>',
+    '  asrcut.mjs export-nle --plan <frozen-plan.json> --timeline <timeline.json> --fps <rate> --format fcpxml|edl|otio --out <new-file>',
     '  asrcut.mjs transcribe --file <audio> --out <new-raw-asr.json>',
   ].join('\n');
 }
@@ -1482,17 +2151,39 @@ function usage() {
 async function runCli(argv = process.argv.slice(2)) {
   const {command, options} = parseArgs(argv);
   if (!command || options.help) { process.stdout.write(`${usage()}\n`); return 0; }
+  if (command === 'probe-silence') {
+    const {runAudioProbeCli} = await import('./audio-probe.mjs');
+    return runAudioProbeCli(options);
+  }
+  if (command === 'inspect-media') {
+    const {runInspectMediaCli} = await import('./audio-probe.mjs');
+    return runInspectMediaCli(options);
+  }
+  if (['extract-seams', 'export-video', 'export-nle'].includes(command)) {
+    const {runMediaCli} = await import('./video-and-nle.mjs');
+    return runMediaCli(command, options);
+  }
   if (command === 'import') {
     if (!options.input || !options.out || !options['project-id']) fail('missing-argument', 'import requires --input, --project-id, and --out');
     const inputPath = resolve(options.input);
     const inputBytes = await readFile(inputPath);
-    const sourceRate = options['source-sample-rate'] ? Number(options['source-sample-rate']) : undefined;
+    let sourceRate = options['source-sample-rate'] ? Number(options['source-sample-rate']) : undefined;
+    let audioStreamIndex = options['audio-stream-index'] ? Number(options['audio-stream-index']) : undefined;
     const sourceDurationSamples = options['source-duration-samples'] ? Number(options['source-duration-samples']) : undefined;
     let mediaPath = null;
     let mediaSha256 = null;
     if (options.source) {
       mediaPath = resolve(options.source);
       mediaSha256 = await hashFile(mediaPath);
+    }
+    const videoTracks = options['video-track'] ? videoTrackDeclarations(options['video-track']) : [];
+    if (videoTracks.length) {
+      const observed = await verifyImportVideo({mediaPath, mediaSha256, videoTracks, audioStreamIndex, sourceRate, ffprobePath: options.ffprobe || undefined});
+      sourceRate = observed.sampleRateHz;
+      audioStreamIndex = observed.audioStreamIndex;
+    }
+    for (const key of ['authorize-media-export', 'authorize-reorder', 'authorize-repeat']) {
+      if (Object.hasOwn(options, key) && options[key] !== true) fail('invalid-authorization-flag', `--${key} is a standalone explicit switch`);
     }
     const outputPath = resolve(options.out);
     const outputBaseDir = dirname(outputPath);
@@ -1508,7 +2199,9 @@ async function runCli(argv = process.argv.slice(2)) {
       mediaSha256,
       transcriptSha256: sha256(inputBytes),
       evidenceRef,
-      audioStreamIndex: options['audio-stream-index'] ? Number(options['audio-stream-index']) : undefined,
+      audioStreamIndex,
+      videoTracks,
+      authorization: {mediaExport: options['authorize-media-export'] === true, reorder: options['authorize-reorder'] === true, repeat: options['authorize-repeat'] === true},
       recordingSegment: options['recording-segment'] === undefined ? undefined : Number(options['recording-segment']),
       timeUnit: options['time-unit'],
     };
@@ -1531,6 +2224,35 @@ async function runCli(argv = process.argv.slice(2)) {
     const merged = mergePlans(plans, {projectId: options['project-id'], sourceOrder});
     const outPath = await writeJsonOutput(options.out, merged, [...planPaths, ...transcriptEvidencePaths(merged, outputBaseDir)]);
     process.stdout.write(`${JSON.stringify({ok: true, command, output: outPath, project: merged.project, sources: merged.sources.map((source) => source.id), planSha256: merged.integrity.planSha256}, null, 2)}\n`);
+    return 0;
+  }
+  if (command === 'apply-edits') {
+    if (![options.plan, options.ops, options.out].every((value) => typeof value === 'string')) fail('missing-argument', 'apply-edits requires --plan, --ops, and --out');
+    if (options['silence-map'] === true) fail('missing-argument', '--silence-map requires the verified map path');
+    const planPath = resolve(options.plan);
+    const specPath = resolve(options.ops);
+    const outputPath = resolve(options.out);
+    const baseDir = dirname(planPath);
+    const mapPath = options['silence-map'] ? resolve(options['silence-map']) : null;
+    if (baseDir !== dirname(outputPath)) fail('edit-output-location', 'Write the revised plan beside its input so relative media and transcript references keep their meaning');
+    const inPlace = options['update-plan'] === true;
+    if (inPlace !== (outputPath === planPath)) fail('edit-update-target', 'In-place updates require --update-plan and the exact --plan path as --out');
+    if (inPlace) {
+      const info = await lstat(planPath).catch(() => null);
+      if (!info?.isFile() || info.nlink !== 1) fail('edit-update-target', '--update-plan requires an existing regular plan file without symlink or hard-link aliases');
+    }
+    const bytes = await readFile(planPath);
+    const plan = JSON.parse(bytes.toString('utf8'));
+    const spec = JSON.parse(await readFile(specPath, 'utf8'));
+    const silenceMap = mapPath ? JSON.parse(await readFile(mapPath, 'utf8')) : null;
+    await verifyPlanEvidence(plan, {baseDir});
+    const revised = await applyEdits(plan, spec, {baseDir, silenceMap, ffmpegPath: options.ffmpeg || undefined, ffprobePath: options.ffprobe || undefined});
+    const protectedPaths = [specPath, mapPath, ...mediaPaths(plan, baseDir), ...transcriptEvidencePaths(plan, baseDir)];
+    if (!inPlace) protectedPaths.push(planPath);
+    if (inPlace && !(await readFile(planPath)).equals(bytes)) fail('edit-update-source-changed', 'The input plan changed during this edit; reload before writing');
+    await verifyPlanEvidence(revised, {baseDir});
+    const output = await writeJsonOutput(outputPath, revised, protectedPaths, {replace: inPlace});
+    process.stdout.write(`${JSON.stringify({ok: true, command, output, project: revised.project, planSha256: revised.integrity.planSha256, state: revised.state}, null, 2)}\n`);
     return 0;
   }
   if (command === 'insert-presentation') {
@@ -1557,6 +2279,29 @@ async function runCli(argv = process.argv.slice(2)) {
     if (!updatePlan) protectedPaths.push(planPath);
     const outPath = await writeJsonOutput(outputPath, revised, protectedPaths, {replace: updatePlan || options.replace === true});
     process.stdout.write(`${JSON.stringify({ok: true, command, output: outPath, project: revised.project, planSha256: revised.integrity.planSha256, sequenceUnits: revised.sequence.length}, null, 2)}\n`);
+    return 0;
+  }
+  if (command === 'annotate') {
+    if (!options.plan || !options.annotation || !options.out) fail('missing-argument', 'annotate requires --plan, --annotation, and --out');
+    const planPath = resolve(options.plan);
+    const annotationPath = resolve(options.annotation);
+    const outputPath = resolve(options.out);
+    if (dirname(planPath) !== dirname(outputPath)) fail('annotation-output-location', 'Write the revised plan beside its input so transcript evidence references keep their exact meaning');
+    const updatePlan = options['update-plan'] === true;
+    if (updatePlan && outputPath !== planPath) fail('annotation-update-target', '--update-plan requires --out to be the exact same path as --plan');
+    if (!updatePlan && outputPath === planPath) fail('annotation-in-place-explicit', 'Updating the edit plan in place requires explicit --update-plan');
+    if (updatePlan) {
+      const planStat = await lstat(planPath).catch(() => null);
+      if (!planStat || planStat.isSymbolicLink() || planStat.nlink > 1) fail('annotation-update-target', '--update-plan requires an existing regular plan file with no symlink or hard-link aliases');
+    }
+    const plan = JSON.parse(await readFile(planPath, 'utf8'));
+    const annotation = JSON.parse(await readFile(annotationPath, 'utf8'));
+    await verifyPlanEvidence(plan, {baseDir: dirname(planPath)});
+    const revised = upsertAnnotation(plan, annotation);
+    const protectedPaths = [annotationPath, ...revised.sources.map((source) => source.mediaPath), ...transcriptEvidencePaths(revised, dirname(outputPath))];
+    if (!updatePlan) protectedPaths.push(planPath);
+    const outPath = await writeJsonOutput(outputPath, revised, protectedPaths, {replace: updatePlan || options.replace === true});
+    process.stdout.write(`${JSON.stringify({ok: true, command, output: outPath, project: revised.project, planSha256: revised.integrity.planSha256, annotationId: annotation.id}, null, 2)}\n`);
     return 0;
   }
   if (command === 'validate') {
@@ -1592,19 +2337,102 @@ async function runCli(argv = process.argv.slice(2)) {
     process.stdout.write(`${JSON.stringify({ok: true, command, output: outPath, project: timeline.project, planSha256: timeline.planSha256, transcriptEvidence, clips: timeline.clips.length, durationSamples: timeline.durationSamples, coverageComplete: timeline.coverageComplete, warnings: timeline.warnings}, null, 2)}\n`);
     return 0;
   }
+  if (command === 'compile-captions' || command === 'export-srt') {
+    const needsDesign = command === 'compile-captions';
+    if (!options.plan || !options.timeline || (needsDesign && (!options.design || !options.out || !options.srt))
+      || (!needsDesign && (!options.manifest || !options.out))) {
+      fail('missing-argument', needsDesign
+        ? 'compile-captions requires --plan, --timeline, --design, --out, and --srt'
+        : 'export-srt requires --plan, --timeline, --manifest, and --out');
+    }
+    const planPath = resolve(options.plan);
+    const timelinePath = resolve(options.timeline);
+    const plan = JSON.parse(await readFile(planPath, 'utf8'));
+    await verifyPlanEvidence(plan, {baseDir: dirname(planPath)});
+    const canonicalTimeline = compilePlan(plan);
+    const timelineBytes = await readFile(timelinePath);
+    const suppliedTimeline = JSON.parse(timelineBytes.toString('utf8'));
+    if (stableJson(suppliedTimeline) !== stableJson(canonicalTimeline)) {
+      fail('stale-timeline', 'Supplied timeline differs from the timeline recompiled from the supplied edit plan');
+    }
+    const timelineSha256 = sha256(timelineBytes);
+    const planDigest = hashPlan(plan);
+    const protectedInputs = [planPath, timelinePath, ...plan.sources.map((source) => source.mediaPath), ...transcriptEvidencePaths(plan, dirname(planPath))];
+    if (needsDesign) {
+      const designPath = resolve(options.design);
+      const design = JSON.parse(await readFile(designPath, 'utf8'));
+      const manifest = compileCaptionManifest({plan, timeline: canonicalTimeline, design, planSha256: planDigest, timelineSha256});
+      const outputs = await writeCaptionOutputPair(options.out, manifest, options.srt, captionManifestToSrt(manifest), [...protectedInputs, designPath], {replace: options.replace === true});
+      process.stdout.write(`${JSON.stringify({ok: true, command, format: manifest.format, displayLanguages: manifest.displayLanguages ?? null,
+        manifest: outputs.json, srt: outputs.srt, manifestSha256: manifest.integrity.manifestSha256, cueCount: manifest.cues.length}, null, 2)}\n`);
+      return 0;
+    }
+    const manifestPath = resolve(options.manifest);
+    const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+    verifyCaptionManifest(manifest, {plan, timeline: canonicalTimeline, planSha256: planDigest, timelineSha256});
+    const srt = captionManifestToSrt(manifest);
+    const outPath = resolve(options.out);
+    try {
+      const info = await lstat(outPath);
+      if (info.isSymbolicLink() || !info.isFile()) fail('unsafe-output', `SRT output must be a regular file path, not a symlink or special file: ${outPath}`);
+    } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    await atomicWriteBytes(outPath, Buffer.from(srt, 'utf8'), [...protectedInputs, manifestPath], {replace: options.replace === true});
+    process.stdout.write(`${JSON.stringify({ok: true, command, format: manifest.format, displayLanguages: manifest.displayLanguages ?? null,
+      output: outPath, manifestSha256: manifest.integrity.manifestSha256, cueCount: manifest.cues.length}, null, 2)}\n`);
+    return 0;
+  }
+  if (command === 'export-handoff') {
+    if (![options.plan, options.timeline, options.out].every((value) => typeof value === 'string')) fail('missing-argument', 'export-handoff requires --plan, --timeline, and --out');
+    if (options['silence-map'] === true) fail('missing-argument', '--silence-map requires the verified map path');
+    const planPath = resolve(options.plan);
+    const timelinePath = resolve(options.timeline);
+    const baseDir = dirname(planPath);
+    const plan = JSON.parse(await readFile(planPath, 'utf8'));
+    const timelineBytes = await readFile(timelinePath);
+    const mapPath = options['silence-map'] ? resolve(options['silence-map']) : null;
+    const silenceMap = mapPath ? JSON.parse(await readFile(mapPath, 'utf8')) : null;
+    const handoff = await compileAnimationHandoff({plan, timelineBytes, silenceMap, baseDir, ffmpegPath: options.ffmpeg || undefined, ffprobePath: options.ffprobe || undefined});
+    const output = await writeJsonOutput(options.out, handoff, [planPath, timelinePath, mapPath, ...mediaPaths(plan, baseDir), ...transcriptEvidencePaths(plan, baseDir)]);
+    process.stdout.write(`${JSON.stringify({ok: true, command, output, project: handoff.project, planSha256: handoff.planSha256, timelineSha256: handoff.timelineSha256,
+      narrativeBeats: handoff.narrativeBeats.length, availablePauseWindows: handoff.availablePauseWindows.length, visualCueCandidates: handoff.visualCueCandidates.length, visualSeamRisks: handoff.visualSeamRisks.length}, null, 2)}\n`);
+    return 0;
+  }
   if (command === 'export-audio') {
     if (!options.plan || !options.timeline || !options.out) fail('missing-argument', 'export-audio requires --plan, --timeline, and --out');
     const planPath = resolve(options.plan);
     const timelinePath = resolve(options.timeline);
     const plan = JSON.parse(await readFile(planPath, 'utf8'));
-    const timeline = JSON.parse(await readFile(timelinePath, 'utf8'));
+    const timelineBytes = await readFile(timelinePath);
+    const timeline = JSON.parse(timelineBytes.toString('utf8'));
+    const treatmentArgs = [options['audio-plan'], options['processed-source'], options['audio-receipt']].filter(Boolean);
+    if (treatmentArgs.length !== 0 && treatmentArgs.length !== 3) fail('source-treatment-incomplete', 'Use all three of --audio-plan, --processed-source, and --audio-receipt together; omit all three for the original export behavior');
     const outPath = resolve(options.out);
     const planBaseDir = dirname(planPath);
-    const protectedInputs = [planPath, timelinePath, ...plan.sources.map((source) => source.mediaPath), ...transcriptEvidencePaths(plan, planBaseDir)];
+    const hasFade = Object.hasOwn(options, 'seam-fade-ms');
+    const fadeValue = options['seam-fade-ms'];
+    if (hasFade && (typeof fadeValue !== 'string' || !fadeValue.trim())) fail('invalid-seam-fade', '--seam-fade-ms requires a number from 0 to 30');
+    const seamFadeMs = hasFade ? Number(fadeValue) : undefined;
+    const hasCrossfade = Object.hasOwn(options, 'seam-crossfade-ms');
+    const crossfadeValue = options['seam-crossfade-ms'];
+    if (hasCrossfade && (typeof crossfadeValue !== 'string' || !crossfadeValue.trim())) fail('invalid-seam-crossfade', '--seam-crossfade-ms requires a number from 0 to 30');
+    const seamCrossfadeMs = hasCrossfade ? Number(crossfadeValue) : undefined;
+    if (options['room-tone'] === true || options['silence-map'] === true) fail('missing-argument', '--room-tone and --silence-map require file paths');
+    const roomTonePath = options['room-tone'] ? resolve(options['room-tone']) : null;
+    const mapPath = options['silence-map'] ? resolve(options['silence-map']) : null;
+    const protectedInputs = [planPath, timelinePath, roomTonePath, mapPath, ...mediaPaths(plan, planBaseDir), ...transcriptEvidencePaths(plan, planBaseDir), ...treatmentArgs.map((path) => resolve(path))];
     await assertSafeOutputPath(outPath, protectedInputs);
     await assertSafeOutputPath(`${outPath}.artifact.json`, [outPath, ...protectedInputs]);
-    const result = await exportAudio({plan, timeline, outPath, baseDir: planBaseDir, tmpDir: options['tmp-dir'] ? resolve(options['tmp-dir']) : undefined});
-    process.stdout.write(`${JSON.stringify({ok: true, command, output: result.output, receipt: result.receipt, sampleRateHz: result.receiptData.sampleRateHz, sampleCount: result.receiptData.sampleCount, auditionStatus: result.receiptData.auditionStatus}, null, 2)}\n`);
+    const roomTone = roomTonePath ? JSON.parse(await readFile(roomTonePath, 'utf8')) : null;
+    const silenceMap = mapPath ? JSON.parse(await readFile(mapPath, 'utf8')) : null;
+    const result = await exportAudio({plan, timeline, outPath, baseDir: planBaseDir,
+      tmpDir: options['tmp-dir'] ? resolve(options['tmp-dir']) : undefined,
+      ffmpegPath: options.ffmpeg || undefined, ffprobePath: options.ffprobe || undefined,
+      audioPlanPath: options['audio-plan'] ? resolve(options['audio-plan']) : null,
+      processedSourcePath: options['processed-source'] ? resolve(options['processed-source']) : null,
+      audioReceiptPath: options['audio-receipt'] ? resolve(options['audio-receipt']) : null,
+      seamFadeMs, seamCrossfadeMs, roomTone, silenceMap, authorizeRoomTone: options['authorize-room-tone'] === true,
+      timelineSha256: hasFade || hasCrossfade || roomTonePath ? sha256(timelineBytes) : null});
+    process.stdout.write(`${JSON.stringify({ok: true, command, output: result.output, receipt: result.receipt, sampleRateHz: result.receiptData.sampleRateHz, sampleCount: result.receiptData.sampleCount, auditionStatus: result.receiptData.auditionStatus, audioTreatment: result.receiptData.audioTreatment ?? null}, null, 2)}\n`);
     return 0;
   }
   if (command === 'transcribe') {

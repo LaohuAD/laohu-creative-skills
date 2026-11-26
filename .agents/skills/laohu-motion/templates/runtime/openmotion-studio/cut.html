@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" type="image/png" />
+    <title>动画工作台</title>
+    <link rel="stylesheet" href="/__workbench/cut.css" />
+  </head>
+  <body>
+    <header>
+      <h1 id="project">动画</h1>
+    </header>
+    <main>
+      <aside id="workspace-sidebar" aria-label="作品侧栏">
+        <nav id="sidebar-tabs" role="tablist" aria-label="工作台面板">
+          <button id="library-tab" role="tab" aria-selected="true" aria-controls="library">素材库</button>
+          <button id="progress" role="tab" aria-selected="false" aria-controls="review" tabindex="-1">制作进度</button>
+        </nav>
+        <section id="library" role="tabpanel" aria-labelledby="library-tab">
+          <nav class="library-tabs" aria-label="素材分类">
+            <button data-tab="original">原始素材</button>
+            <button data-tab="processed">处理后素材</button>
+            <button data-tab="history">历史记录</button>
+          </nav>
+          <div id="library-body"></div>
+        </section>
+        <section id="review" role="tabpanel" aria-labelledby="progress" hidden>
+          <div class="review-layout">
+            <div class="review-menus">
+              <nav id="review-stages" aria-label="制作步骤"></nav>
+              <nav id="review-items" class="review-item-menu" aria-label="条目"></nav>
+            </div>
+            <section id="review-detail" aria-label="当前步骤"></section>
+          </div>
+        </section>
+      </aside>
+      <section class="viewer" aria-label="成片预览">
+        <div class="monitor" id="monitor">
+          <iframe id="scene" title="当前剪辑的工程实渲" tabindex="-1"></iframe>
+          <button id="play" class="preview-surface" aria-label="播放" disabled><span class="segment-icon" aria-hidden="true"></span></button>
+          <button id="pick" aria-pressed="false" hidden>指认片段</button>
+          <div id="outline" hidden><span></span></div>
+          <div id="hitmenu" class="popup" hidden></div>
+        </div>
+      </section>
+      <section id="dock" class="dock">
+        <div class="toolbar">
+          <strong>片段时间轴</strong><span class="spacer"></span><button id="back" aria-label="上一帧">‹</button
+          ><button id="next" aria-label="下一帧">›</button
+          ><output id="clock">00:00.00</output><span id="duration"></span>
+          <div class="push"></div>
+          <button id="captions">字幕与标记</button
+          ><select id="zoom" aria-label="时间轴显示范围">
+            <option value="30">30 秒</option>
+            <option value="90">90 秒</option>
+            <option value="0" selected>全片</option>
+            <option value="10">10 秒</option>
+          </select>
+        </div>
+        <div id="scroll"><div id="tracks"></div></div>
+        <div class="commands">
+          <span id="selected">选择片段</span><button id="hide" disabled>隐藏</button
+          ><button id="remove" disabled>移除</button><button id="audition" disabled>回放片段</button
+          ><button id="undo" disabled>撤销</button><button id="redo" disabled>重做</button>
+          <form id="form">
+            <button type="button" id="mic" hidden aria-pressed="false">口述</button
+            ><input
+              id="command"
+              aria-label="片段指令，可使用系统听写"
+              placeholder="输入或听写指令，如「隐藏动画三号」"
+              autocomplete="off"
+            /><button>执行</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <aside id="drawer" hidden>
+      <div class="drawer-title">
+        <h2 id="drawer-title">字幕与标记</h2>
+        <button id="close" aria-label="关闭面板">×</button>
+      </div>
+      <div id="drawer-body"></div>
+    </aside>
+
+    <div id="notice" role="status" hidden></div>
+    <audio id="mix" preload="metadata"></audio><audio id="solo" preload="none"></audio>
+    <script type="module" src="/__workbench/cut.js"></script>
+  </body>
+</html>

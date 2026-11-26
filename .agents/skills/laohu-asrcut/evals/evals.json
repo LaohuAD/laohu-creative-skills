@@ -72,6 +72,22 @@
       "fixture_status": "self_contained_prompt"
     },
     {
+      "id": "same-blueprint-annotation-to-remotion-consumer",
+      "type": "mechanical",
+      "prompt": "使用 synthetic-annotation-review edit plan/timeline 验证 userNote、analysisNote 与 Motion binding 同处一个稳定 annotation ID，且实际保留 token 映射到唯一目标采样范围。",
+      "input_files": [".cache/validation/motion-foundation/annotation-review/edit-plan.json", ".cache/validation/motion-foundation/annotation-review/timeline.json"],
+      "expected_behavior": [
+        "userNote 和 transcript.rawText 分字段保存，修订 Motion binding 后原 userNote 仍存在",
+        "timeline.annotations[].resolvedTargets 由真实 occurrence/token 时间映射生成，目标样本与 token timeline 相同",
+        "motionBinding 包含对象、状态、素材、组件调用、锚点 phase、转场和声音事件，并通过真实 local TSX consumer 接线",
+        "revision/hash 变化会使旧时间线失效；不存在的 source/segment/token/occurrence 被拒绝",
+        "synthetic fixture 只证明结构、路由和行为，不得据此评价真实成片质量"
+      ],
+      "execution_class": "technical_fixture",
+      "fixture_requirements": ["synthetic edit plan and compiled timeline with one resolved annotation"],
+      "fixture_status": "workspace_validation_cache"
+    },
+    {
       "id": "technical-clock-and-whole-word-cuts",
       "type": "mechanical",
       "prompt": "使用隔离合成ASR夹具验证源时间转目标采样、删除闭合、保留静默、词级剪点完整性、不同source各自时钟、未知offset、哈希失效、路径别名和不支持操作的阻断行为。",
@@ -86,7 +102,228 @@
         "输出别名不得覆盖任何输入；变速、重叠等未支持操作明确拒绝"
       ],
       "execution_class": "technical_fixture",
-      "fixture_requirements": ["synthetic ASR JSON and SRT fixtures"],
+      "fixture_requirements": [
+        "synthetic ASR JSON and SRT fixtures"
+      ],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "pure-audio-repair-without-asr",
+      "type": "behavior",
+      "prompt": "这段口播底噪有点明显，请按实际听到的问题修复并给我两版试听比较。",
+      "input_files": [],
+      "expected_behavior": [
+        "只要真实原音即可创建 source audio-plan，不为修音调用 ASR，也不额外生成无意义的 edit-plan/timeline",
+        "把可听现象与用户描述区分开，按授权逐项试做受限后端步骤并保留旁路与回退条件",
+        "交付新的处理 WAV、处理回执、同内容同响度 A/B 副本和真实可播放的 review 页面",
+        "没有人工听审时明确标 not_auditioned，不把参数、测量或算法成功称为音质通过"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "srt-without-original-cannot-repair-audio",
+      "type": "behavior",
+      "prompt": "我只有这份 SRT，没有录音。请把口播里的回声和闷声修好。",
+      "input_files": [],
+      "expected_behavior": [
+        "明确 SRT 不能提供真实音源、混响证据或听审依据，不诊断、不处理、不声称声音已经修好",
+        "如果仍有独立剪辑请求，继续完成 SRT 支持的虚拟方案与时间线，并标清没有原音、不能试听或导出音频",
+        "不因声音问题请求 ASR 或伪造声音测量"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "protect-music-and-system-sound",
+      "type": "behavior",
+      "prompt": "这段录屏有讲解、背景音乐和软件提示声，我想让人声清楚一点。",
+      "input_files": [],
+      "expected_behavior": [
+        "先识别音轨与内容；若音乐/提示音与人声在同一混合轨，不能把它们一律当作噪声清除",
+        "若为多条音轨，不猜默认轨或同步偏移，保留未解决轨道并只处理有明确依据和授权的范围",
+        "当前执行器不支持语音隔离或复杂混音时，报告能力边界并保留原声，不把普通 denoise 冒充 speech isolation"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "clean-recording-bypass",
+      "type": "behavior",
+      "prompt": "这段录音其实挺干净，但请检查一下有没有需要处理的地方。",
+      "input_files": [],
+      "expected_behavior": [
+        "核对实际原音和测量；没有可辨问题时保持旁路或仅报告无需修复，不为体现处理动作而硬套 EQ/降噪/压缩",
+        "若生成旁路对照，仍使用真实音频和匹配响度，不声称处理后质量提高"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "compile-semantic-captions-without-mutating-edit-plan",
+      "type": "behavior",
+      "prompt": "请按已确认的剪辑方案为这段保留口播设计动画字幕，并交付同源 SRT 和可被 Motion 核验的字幕清单。原识别有些只有句段时间。",
+      "input_files": [],
+      "expected_behavior": [
+        "由 Analysis 按意义、真实可用时间精度、阅读任务和同期画面决定分组与切分理由；不将 ASR/SRT utterance、自动换行或标点机械当作最终字幕 cue。",
+        "中文讲解实际需要字幕且用户未指定单语/其他语言或锁定例外时，默认编译 /2 中英双语；中文留在源 lines，英语单独绑定为 translation 并共用同一真实显示窗口，不产生英语 ASR token 或独立词时码。",
+        "词级锚点使用真实 occurrence 与 token 实例；仅句段精度时整项保持 segment 精度，不虚构词时码。完整覆盖所选时间线中的所有保留讲述，遵守 all-retained-speech/1，不以 exclusion 漏掉语音。",
+        "中文字幕遵循用户锁定优先；未锁定时可去句末句号并优先语义换条，保留问号、感叹号、列举、数字小数点、网址、专名和词内符号，不做全局标点剥除或改词。",
+        "用 compile-captions 从已验证 plan、canonical timeline 与 caption-design 生成独立 manifest 和 SRT；任何必要的语义读时扩展先评估授权的 presentation，而不改冻结音频或手写绝对时码。",
+        "遵守 zh-caption/1 validator 边界：displayWindow 精确对应 speech span 加 lead/hold；lead 不超过 500ms、hold 不超过 2000ms，非零调整有 reason，各 cue display windows 不重叠。明确这些上限不代表读者读得完。",
+        "SRT CR/LF 版式换行保留在 manifest rawText，仅从 lexicalText 删除并记录 line-breaks-are-layout/1 与删除数；字幕层不修改 edit-plan displayText、编辑 hash、原始 ASR、语音或音频切点。",
+        "只有在 manifest 与 plan/timeline 身份及哈希匹配、可复编译后才由 export-srt 导出；不以 SRT 文件存在冒充设计、覆盖或验证完整。",
+        "明确句段、字幕 cue 与连续画面是不同边界：按真实屏显 cue 区间能定位其对应状态/持续动作，无新动作时标明当前持续画面；字幕不自动成为切镜点，跨多个 cue 的连续动作仍可持续。句号和逗号按实际屏显策略处理，不机械触发字幕切分或镜头切换；词级触发只能用真实词时码。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "no-narration-screen-labels-do-not-trigger-asr",
+      "type": "behavior",
+      "prompt": "我只要一段无旁白的纯体验动画，画面里有少量说明标签；没有原音，也不需要转写。请帮我确定这项文字需求该走什么路线。",
+      "input_files": [],
+      "expected_behavior": [
+        "识别当前是无旁白/无原音的屏显文字需求，不为了创建字幕而调用 ASR，也不额外生成无意义的 edit-plan、timeline 或 caption manifest。",
+        "将说明标签作为屏显文字而非字幕；其功能、空间关系、出现/停留/退出与实际任务交由 Writing/Analysis/Motion 的对应入口设计，不把标签伪造成口播词或 source anchor。",
+        "若后续确实出现有源口播，再按实际来源精度走 caption-design/1 与 caption-manifest/1；当前不扩张范围、不制造时间精度或媒体导出能力。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "rough-recording-paper-edit-before-radio-edit",
+      "type": "behavior",
+      "prompt": "这是我录给第一次用表单工具的同事看的录屏，先帮我出剪辑审阅，我想讲清怎么把旧表单盖到新版本上。试麦、同一句重来、绕圈的话可以剪，别把必要的操作关系剪断。这轮先看报告。下表来自我的时间码导出，原视频暂时没发。\n\n00:00–00:03 试麦，能听见吗，好，重新来。\n00:03–00:08 迁移表单，先复制……不对，复制的是模板，重新说。\n00:08–00:13 先选旧表单，大家看屏幕左边这里，把列表展开。〔左侧列表同时展开〕\n00:13–00:18 选“覆盖版本”，审批记录会跟着表单 ID 走。\n00:18–00:22 只有收到“覆盖成功”的回执，才能下线旧表单。〔画面展示回执文字〕\n00:22–00:29 反正就是覆盖，不是说不能覆盖，能覆盖就是覆盖。\n00:29–00:33 老链接还能投，靠的就是没换表单 ID。\n00:33–00:42 我之前其实还研究过表单界面主题，调了五种颜色……",
+      "input_files": [],
+      "expected_behavior": [
+        "写出面向新手迁移操作的剪辑承诺和原顺序叙述主线，在决定具体气口前先完成逐段粗剪与删前承接检查",
+        "识别试麦、不完整重录、无新增信息的复述与主题支线，保护左侧展开的伴随词、审批依凭和成功回执条件",
+        "将能前置的原句列为待授权建议，sequence 沿原序；原地删除线和改动理由能指回这次字幕段",
+        "未取得原视频时只给保留/删除候选或句段级虚拟结果，标注实际精剪、同期画面和听审未确认"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "pause-hierarchy-standard-narration",
+      "type": "behavior",
+      "prompt": "这段普通教程的气口拖了一点，帮我列一张可审的修改单。正常说话的节奏就行。录音还没上传，下面是我在工程里回听并记下的边界，表里的安静时长从上一句的真实尾音结束量到下一句的实际起音；自动转写那列原样贴过来。\n\n01 开口前是同一房间的底声 0.72 秒，随后说“复制前”；\n02 “复制前。先核对表名”中间 0.28 秒，连续讲出一条指令；\n03 “保留权限。覆盖时审核历史也会留着”中间 0.89 秒，实际听感上后一半仍在补充同一个条件句，双侧已听见清楚完整的尾音和起音；\n04 “第一步完成了，文件现在可用”中间 1.03 秒，前句已收束，后句是独立确认，静音只有房间底声；\n05 “至此迁移结束，下面讲怎样回滚”中间 1.32 秒，是从迁移切换到回滚，没有其他演示声；\n06 末句结束后同一房间底声 0.84 秒。",
+      "input_files": [],
+      "expected_behavior": [
+        "按记录里的完整语意辨别边界，保留自动句号处 0.28 秒微停，将例 03 分句、04 独立命题、05 换段分别处理",
+        "按标准口播档提出 0.15 秒开口前、0.20 秒说完后与 0.35–0.45/0.55/0.70 秒的目标及前尾后头余量",
+        "把时长判断写成能审的修改单；用户回听笔记支持计划，缺原音时报告 ASR 起音偏移与同期声音仍待核，不虚构采样或实际导出"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "pause-no-synthetic-silence-and-functional-exemption",
+      "type": "behavior",
+      "prompt": "我想让录屏口播自然一点。先看下面的回看笔记帮我做气口处理建议，原片随后发。第 1 截“保存成功。接着点同步”之间 0.24 秒，连起来很顺，画面也已经进入下一步。第 2 截“等它验证一下”到“成功了”之间 1.10 秒，中间进度条走满并响一声确认提示，提示音结束才说“成功了”。第 3 截我故意停 1.14 秒，镜头保留我憋笑的表情，随后抖出“我刚刚删的是测试表”。第 4 截“打开列表”到“你能看到三个文件”之间平平地空了 1.22 秒，我是在找稿，画面没动，底声平稳。",
+      "input_files": [],
+      "expected_behavior": [
+        "保留自然流畅的 0.24 秒衔接，不为了数字目标补静音",
+        "保护 1.10 秒内真实进度与系统声，同时保留承担喜剧节奏的 1.14 秒",
+        "只将平稳的 1.22 秒找稿停顿列为可压缩候选，说明语义级别和实源底声与声音核对的条件"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "pause-precision-degradation-srt-only",
+      "type": "behavior",
+      "prompt": "原音丢了，我只有下面这份 SRT。请把第一句里面的逗号都剪成 0.4 秒，顺便找找别处能收紧的地方。源字幕到 11.400 秒，暂时不需要视频文件。\n\n1\n00:00:00,000 --> 00:00:03,400\n复制前，先核对账号，再点击覆盖。\n\n2\n00:00:04,950 --> 00:00:07,150\n等收到覆盖成功回执。\n\n3\n00:00:07,800 --> 00:00:11,400\n如果一直提示冲突，就返回旧表重新核对。\n",
+      "input_files": [],
+      "expected_behavior": [
+        "保住第一条 SRT 的完整句段并拒绝把逗号切成 0.4 秒，保持 utterance 类型的真实时间",
+        "优先标出句段间 1.55 秒空档核对候选，区分可定位的字幕空档与尚未证实的实际静音",
+        "只报告实际可交付的虚拟结果，无原音时不得导出或声称试听"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "probe-silence-roomtone-and-apply-edits-mechanical",
+      "type": "mechanical",
+      "prompt": "用离线合成 WAV 做一段 4 秒的单声道口播夹具。底层是可重现的低能带噪底，夹两次高能语音占位信号、一处小于 350 ms 的自然间隙和一处约 1 秒的无功能停顿。另建能定位两个话段、一个有意延迟的词首的普通 ASR JSON。先用只读工具探测，再按真实切点修订这个隔离的剪辑计划。",
+      "input_files": [],
+      "expected_behavior": [
+        "探针输出可复核的整数采样静音边界、谷底、可用时的零交叉和稳定实源底声候选，追溯输入 SHA",
+        "只有匹配真实波形与词锚时定位 onsetDriftWarning。探针不更改受保护输入",
+        "编辑后覆盖无洞，tokenIds 维持源顺序，只接受合法整词切点；自然微停或跨词内操作被拒绝",
+        "旧计划哈希、原始 ASR 与原音保留，新计划按实际编辑递增 revision 并重新计算 SHA"
+      ],
+      "execution_class": "technical_fixture",
+      "fixture_requirements": [
+        "确定性低能噪声与语音占位的 WAV",
+        "带可核词级时间的 ASR JSON",
+        "同版本 silence-map"
+      ],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "seam-fade-zero-drift-and-extract-seams",
+      "type": "mechanical",
+      "prompt": "生成一份 48 kHz、至少 6 秒的隔离 PCM WAV，包含三个连续可辨音频区和两个可裁的低能空段。删掉中间一段后重新编译，输出默认 WAV 和接缝微淡化版两条，对同一接头各取一次跨界片段。",
+      "input_files": [],
+      "expected_behavior": [
+        "开启 15 ms 微淡化与默认导出的样本数相同，保持预期目标时长，启用版回执记 seamFadeMs",
+        "同一实际接缝的切片锚点来自 canonical timeline，远离项目边界时窗长 2.5 秒，近边界时范围据实裁剪",
+        "使用同版 WAV 与匹配回执，拒绝篡改或过期引用。提取成功仍未完成逐缝听审"
+      ],
+      "execution_class": "technical_fixture",
+      "fixture_requirements": [
+        "带真实校验源和中间接头的离线 PCM WAV",
+        "冻结 plan/canonical timeline 与 WAV 回执"
+      ],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "audio-driven-video-cut-and-nle-export",
+      "type": "mechanical",
+      "prompt": "在隔离目录生成 30fps 的时间色条录屏和 48 kHz 的脉冲音轨。标记二者可校正的已知偏移，并设置数个非整数帧边界的剪口，另建偏移未知的同源计划。请导出视频和三种交换件，核对每处边界与最后一帧。",
+      "input_files": [],
+      "expected_behavior": [
+        "累计绝对目标时间量化，逐剪段帧区间持续对应 canonical timeline，音频样本时钟保持，未知偏移被阻断",
+        "FCPXML、CMX 3600 EDL 和 OTIO 序列化记录各自规格内可表达的区间与标记或注释；文件生成与真实编辑器导入分开核验",
+        "视频与交换件生成新路径，回执或格式身份能回查冻结计划与真实轨道"
+      ],
+      "execution_class": "technical_fixture",
+      "fixture_requirements": [
+        "确定性 CFR 彩条和 48 kHz 有声轨视频",
+        "known/unknown 同步偏移的两个计划",
+        "实源源/目标样本映射"
+      ],
+      "fixture_status": "self_contained_prompt"
+    },
+    {
+      "id": "animation-handoff-and-head-tail-presentation",
+      "type": "mechanical",
+      "prompt": "生成带少量实源底声和真实模拟词边界的离线口播夹具。开头安排画面说明，最后让已出现的结果字停一会儿。保留录音中间已存在的换段和手势指引，再把同一个冻结版本接到 Motion 计划。",
+      "input_files": [],
+      "expected_behavior": [
+        "before-first/after-last 可在真实 source 时间线两侧添加各自独立的 presentation，段间接口仍按原位置工作",
+        "未改 timeline 字节，animation-handoff 绑定实际 plan/timeline 版本，给出已注明语义节拍、合乎资格的 ≥450ms 源停顿窗、词提示与跳剪风险",
+        "独立 Motion consumer 验证真实 JSON、接入时钟与摘要；无探针或过期探针不冒充已核实停顿"
+      ],
+      "execution_class": "technical_fixture",
+      "fixture_requirements": [
+        "可探测真实底声的 PCM WAV",
+        "带词锚、停顿角色与剪口决定的 plan",
+        "生成的 presentation 及 animation-handoff 消费输入"
+      ],
       "fixture_status": "self_contained_prompt"
     }
   ]

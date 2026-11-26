@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-audit | 老胡找茬"
-  short_description: "诊断有据差距，并在报告中给同材料局部改后对照；不改原件。"
-  default_prompt: "使用 $laohu-audit，按用途检查材料；确认具体差距后，在报告中给出同材料局部改后对照，不改原件。"
+  short_description: "直击作品、规则与流程的核心真差距及过度限制，默认给同材料最小改后对照。"
+  default_prompt: "使用 $laohu-audit，先锁保护项再按真实用途检查材料与规则；确认有据差距后，在报告中给同材料最小改后对照，不改原件。"

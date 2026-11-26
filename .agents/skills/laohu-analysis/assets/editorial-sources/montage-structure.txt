@@ -1,0 +1,161 @@
+## Start by defining the edit promise
+
+Before choosing cuts, state the edit promise in one sentence:
+
+> This edit will make the viewer feel/understand/believe/do ___ by arranging ___ into ___ over ___ seconds for ___ platform/context.
+
+Then lock these working decisions:
+
+- Delivery context: ad, trailer, social post, explainer, documentary segment, product demo, music video, internal recap, teaser, or cutdown.
+- Primary viewer action: keep watching, understand a concept, feel stakes, trust a claim, click, buy, remember, share, approve, or learn.
+- Emotional curve: curiosity to clarity, anxiety to relief, awe to proof, problem to solution, calm authority, escalating hype, playful reveal, investigative discovery.
+- Time budget and aspect ratio: target duration, safe-zone needs, caption strategy, platform constraints, audio-on/audio-off assumption.
+- Source regime: source footage-led, generated clip-led, stills-to-motion, screen/UI-led, avatar-led, mixed media, or music-led.
+- Revision authority: what may change freely, what is locked by client/brand/legal/music/platform, and what requires approval.
+
+If the user only asks "make it snappier," translate that into observable edit changes: shorter shot durations, earlier hook, removed redundancy, stronger audio hits, simpler captions, tighter action matching, or changed story order.
+
+## The edit decision ladder
+
+When judging any cut, use this priority order. It is inspired by professional editing traditions that rank emotion, story, rhythm, viewer attention, and spatial clarity, but it is a heuristic, not a law.
+
+1. Viewer effect: What should the viewer feel, infer, or ask at this instant?
+2. Story function: Does the cut advance the promise, reveal, proof, escalation, or payoff?
+3. Attention path: Does the viewer's eye land where the next shot needs it?
+4. Rhythm: Does the cut align with breath, speech, movement, beat, or intentional rupture?
+5. Continuity: Is time, space, identity, screen direction, and causality clear enough for this style?
+6. Technical cleanliness: Are frames, audio joins, captions, and transitions free of avoidable defects?
+
+If two priorities conflict, explain the tradeoff. Example: "This jump cut violates spatial smoothness, but it improves urgency and removes a dead clause; acceptable for TikTok UGC, not for a calm documentary sequence."
+
+## Build the story spine before the timeline
+
+Choose a structure that matches the deliverable.
+
+For explainers:
+
+- Cold open: state the surprising problem, visual metaphor, or before/after.
+- Orientation: give the viewer the minimum context needed to follow.
+- Steps: one idea per beat; each visual must prove or clarify the narration.
+- Synthesis: show how the parts connect.
+- Close: memorable sentence, implication, or action.
+
+For product videos:
+
+- Pain or desired outcome.
+- Product in use, not just product beauty.
+- One feature per beat, tied to a user benefit.
+- Proof: UI, result, comparison, testimonial, metric, or demonstration.
+- CTA or next step.
+
+For ads:
+
+- Hook: recognizable problem, contradiction, spectacle, person-to-camera line, product-in-action, or fast before/after.
+- Relevance: "this is for me" signal.
+- Value proposition: one main claim, not a pile of features.
+- Proof or demo.
+- Offer, urgency, or CTA.
+
+For trailers/teasers:
+
+- World or premise.
+- Disruption.
+- Escalation through increasingly consequential images.
+- Signature moments.
+- Final button: joke, shock, title, date, product/logo, or unresolved question.
+
+For documentary-style pieces:
+
+- Claim/question.
+- Human anchor or observed reality.
+- Evidence beats.
+- Counterpoint or complication.
+- Synthesis without over-explaining.
+
+For music/beat-driven edits:
+
+- Map sections first: intro, groove, lift, drop, bridge, finale.
+- Assign visual energy to musical energy.
+- Use repetition with variation: recurring subject, movement, color, framing, or motif.
+- Reserve the strongest visual change for the strongest musical change.
+
+## Shot selection: assign function, then choose
+
+Log or infer each candidate shot with:
+
+- ID/path/source/provider/seed/version/license/rights status.
+- Duration, usable in/out range, frame rate, resolution, aspect ratio, audio status.
+- Shot type: establishing, wide, medium, close-up, insert, cutaway, reaction, POV, screen capture, graphic, title, transition, product macro, proof shot, texture.
+- Content: subject, action, text visible, brand marks, faces, hands, UI state, object state.
+- Motion: camera, subject, dominant direction, speed, start/end pose.
+- Continuity risks: identity drift, lighting mismatch, impossible geography, bad hands, text artifacts, logo distortion, physics issues.
+- Editorial value: orient, reveal, prove, compare, intensify, bridge, breathe, or close.
+
+Select shots by function, not prettiness. Keep a beautiful generated shot only if it carries story value or emotional force. Reject shots that introduce unpayable questions unless confusion is intentional.
+
+Common shot functions:
+
+- Establishing: where/what scale are we in?
+- Insert: what exact detail matters?
+- Reaction: how should the viewer feel about what just happened?
+- Cutaway: what covers a time jump, compresses action, or adds context?
+- Proof: what makes the claim credible?
+- Bridge: what lets two discontinuous moments connect?
+- Reset: where can the viewer breathe before density rises again?
+- Button: what last image or sound seals the beat?
+
+## Continuity editing for generated and mixed media
+
+Use continuity when the viewer must believe events are connected in time and space.
+
+Check:
+
+- Screen direction: a subject moving left-to-right should usually keep that direction across adjacent shots unless you establish a turn, neutral shot, or deliberate disorientation.
+- Eyeline: if a person looks screen right, the object/person they look at should be positioned to satisfy the implied look.
+- Match on action: cut during a movement and continue the same action in the next shot when preserving flow.
+- Object permanence: product color, logo, shape, UI state, outfit, props, hand count, and environment should not mutate accidentally.
+- Temporal logic: if a cup is full, then empty, then full, the timeline needs a reason.
+- Light and color: generated clips with different time-of-day or color temperature need a motivated transition, grade, or separation.
+- Spatial scale: avoid cutting from macro to wide if the viewer cannot identify the object being magnified.
+- Audio space: room tone, ambience, music bed, and reverb should not jump unless the location changes.
+
+When continuity fails, choose one:
+
+- Hide it: cut away, crop, cover with graphics, use a reaction, or trim unstable frames.
+- Motivate it: turn mismatch into a time jump, dream logic, glitch, memory, or montage association.
+- Separate it: insert a title card, wipe, sound bridge, flash, map, caption, or chapter beat.
+- Regenerate/replace it: if the continuity problem corrupts identity, factual claims, product trust, or safety.
+
+## Montage theory for production use
+
+Montage creates meaning from juxtaposition. Use it when sequence matters more than continuous action.
+
+Choose the montage relationship:
+
+- Graphic: shots connect by shape, color, composition, line, texture, or visual mass.
+- Rhythmic: shots connect by movement, beat, action speed, or cut length.
+- Spatial: shots build or disrupt a sense of place.
+- Temporal: shots compress time, compare past/present/future, or imply process.
+- Associative: shots create an idea by collision, analogy, contrast, or metaphor.
+- Emotional: shots intensify, release, or redirect feeling.
+- Evidentiary: shots accumulate proof or examples.
+
+Do not call every fast sequence a montage. A montage needs a transformation, contrast, accumulation, or idea that emerges across shots.
+
+Useful montage patterns:
+
+- Accumulation: one example, then another, then another, until the claim feels proven.
+- Compression: remove procedural steps but preserve cause and result.
+- Contrast: before/after, promise/reality, old/new, manual/automated, expensive/simple.
+- Parallel escalation: two threads become more intense until they meet.
+- Motif return: repeat an image or sound with changed meaning.
+- Conceptual collision: place two images together so the viewer infers the relationship.
+
+Avoid weak montage patterns:
+
+- Random B-roll over narration.
+- Visual synonyms that repeat the script literally without adding information.
+- Unmotivated speed ramps and whip transitions.
+- Cutting on every beat with no phrase-level shape.
+- Visual escalation that arrives before the story stakes are established.
+

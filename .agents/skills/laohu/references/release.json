@@ -1,5 +1,5 @@
 {
-  "version": "1.10.0",
-  "notice": "新增录音粗剪精剪与作品方法库，接通动画模板和声音制作，扩展写作与公众号主题。",
+  "version": "2.0.0",
+  "notice": "整套创作技能重构，公众号排版改由 HTML 展示入口承接。",
   "details_url": "https://github.com/LaohuAD/laohu-creative-skills/blob/main/CHANGELOG.md"
 }

@@ -104,8 +104,8 @@ function Get-RoleSetting([string]$name,[string]$fallback) {
     } catch {}
     return $fallback
 }
-$LUNA_MODEL  = if ($env:LAOHU_LUNA_MODEL) { $env:LAOHU_LUNA_MODEL } elseif ($env:ASTRA_LUNA_MODEL) { $env:ASTRA_LUNA_MODEL } else { Get-RoleSetting 'model' 'gpt-6-luna' }
-$LUNA_EFFORT = if ($env:LAOHU_LUNA_EFFORT) { $env:LAOHU_LUNA_EFFORT } elseif ($env:ASTRA_LUNA_EFFORT) { $env:ASTRA_LUNA_EFFORT } else { Get-RoleSetting 'model_reasoning_effort' 'max' }
+$LUNA_MODEL  = if ($env:LAOHU_LUNA_MODEL) { $env:LAOHU_LUNA_MODEL } elseif ($env:ASTRA_LUNA_MODEL) { $env:ASTRA_LUNA_MODEL } else { Get-RoleSetting 'model' 'gpt-6.2-sol' }
+$LUNA_EFFORT = if ($env:LAOHU_LUNA_EFFORT) { $env:LAOHU_LUNA_EFFORT } elseif ($env:ASTRA_LUNA_EFFORT) { $env:ASTRA_LUNA_EFFORT } else { Get-RoleSetting 'model_reasoning_effort' 'high' }
 $script:Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $script:EXIT = 0
 $script:OwnedLock = $null

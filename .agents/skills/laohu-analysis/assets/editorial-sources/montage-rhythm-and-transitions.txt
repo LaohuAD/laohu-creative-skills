@@ -1,0 +1,80 @@
+## Rhythm and pacing
+
+Pacing is the viewer's perceived information flow, not just average shot length.
+
+Shape rhythm with:
+
+- Shot duration.
+- Motion speed inside the frame.
+- Narration density and pause length.
+- Music tempo, bars, fills, drops, and transients.
+- Caption length and reading speed.
+- Visual complexity.
+- Sound design attacks, risers, impacts, whooshes, silence.
+- Repetition, variation, and rest.
+
+Use faster cuts when:
+
+- The viewer already understands the subject and needs energy.
+- The beat is emotional rather than explanatory.
+- The platform rewards immediate clarity and novelty.
+- The source footage has redundant action.
+- The music is the structural driver.
+
+Use slower cuts when:
+
+- The viewer must read UI, captions, labels, charts, or product details.
+- A reaction, reveal, or emotion needs time to land.
+- The shot contains complex spatial information.
+- The voiceover is dense.
+- The brand tone is premium, calm, technical, or documentary.
+
+Review rhythm in passes:
+
+1. Silent picture pass: does the visual story read without narration?
+2. Audio-only pass: does the argument, emotion, and timing work without picture?
+3. Caption-only pass: can a sound-off viewer understand the video?
+4. Full pass: do picture, audio, captions, and graphics compete or cooperate?
+
+## J-cuts, L-cuts, and sound bridges
+
+Use split edits to make edits feel intentional and to bridge discontinuous visuals.
+
+J-cut:
+
+- Best for entering a new scene, thought, location, speaker, or energy before the viewer sees it.
+- Use when the next beat should pull the viewer forward.
+- Example use: hearing crowd noise before cutting from a quiet product close-up to a launch event.
+
+L-cut:
+
+- Best for preserving emotion, explanation, or ambience while the picture moves on.
+- Use when a speaker's words should carry over proof shots, reactions, product inserts, or memory images.
+- Example use: founder says "we almost missed payroll" while the image cuts to empty desks and a late-night spreadsheet.
+
+Sound bridge:
+
+- Use ambience, music, breath, effects, or a repeated sound motif to connect shots whose images do not match.
+- Keep room tone and music continuity clean; abrupt audio holes are often more distracting than visual discontinuity.
+
+## Match cuts, cutaways, transitions
+
+Match cut:
+
+- Connect shots through matched action, composition, shape, motion, color, sound, or concept.
+- Use for elegance, compression, metaphor, or continuity.
+- Do not use if the viewer needs a clear factual boundary and the match implies a false equivalence.
+
+Cutaway:
+
+- Use to compress time, hide a jump, show context, redirect attention, cover a bad generated frame, or add proof.
+- Prefer cutaways that add meaning, not generic filler.
+- In interviews or documentary edits, cutaways should relate to the statement being made or reveal a truthful context.
+
+Transition:
+
+- A straight cut is usually the default.
+- Use dissolves for time passage, memory, softness, or comparison when motivated.
+- Use wipes, whip pans, flashes, glitch, morphs, or animated transitions only when they match the visual language and do not hide weak structure.
+- For generated media, transitions can mask discontinuity, but overuse makes the edit feel evasive.
+

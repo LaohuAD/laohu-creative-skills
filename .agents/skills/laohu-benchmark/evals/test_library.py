@@ -107,6 +107,156 @@ class LibraryTests(unittest.TestCase):
         self.assertEqual(result["index"]["status"], "rebuilt")
         return result
 
+    def receiving_skill(self, name):
+        skill = self.root / "installed" / ".agents" / "skills" / name / "SKILL.md"
+        skill.parent.mkdir(parents=True, exist_ok=True)
+        skill.write_text(f"---\nname: {name}\ndescription: Synthetic CLI fixture\n---\n", encoding="utf-8")
+        return skill
+
+    def test_two_receiving_skills_discover_own_methods_and_the_same_canonical_source(self):
+        motion = self.receiving_skill("laohu-motion")
+        script = self.receiving_skill("laohu-script")
+        business = self.root / "other-work-project"
+        business.mkdir()
+        host_attachment = self.root / "installed-motion-link"
+        host_attachment.symlink_to(motion.parent, target_is_directory=True)
+
+        def cli(skill, *args, payload=None, expected=0):
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), "--skill-file", str(skill), *args],
+                cwd=business, input=None if payload is None else json.dumps(payload),
+                capture_output=True, text=True,
+            )
+            self.assertEqual(result.returncode, expected, result.stderr)
+            return json.loads(result.stdout if expected == 0 else result.stderr)
+
+        motion_root, script_root = (skill.parent / "benchmark" for skill in (motion, script))
+        self.assertEqual(cli(host_attachment / "SKILL.md", "info")["library_root"], str(motion_root))
+        self.assertFalse(motion_root.exists())
+        self.assertFalse(script_root.exists())
+
+        motion_bundle = bundle_with_units()
+        motion_atom = motion_bundle["atoms"][0]
+        motion_atom["category"] = "style"
+        motion_atom["index_card"]["title"] = "Animation cue fixture"
+        motion_atom["consumer_bindings"][0]["consumer"] = "laohu-motion"
+        saved_motion = cli(host_attachment / "SKILL.md", "put", "--input", "-", payload=motion_bundle)
+        source_id = saved_motion["source_ids"][0]
+        canonical = motion_root / "sources" / (source_id + ".json")
+        source_before = canonical.read_bytes()
+
+        duplicate = cli(script, "put", "--input", "-", payload={"source": motion_bundle["source"]}, expected=1)
+        self.assertIn("already owned", duplicate["error"])
+        self.assertFalse(script_root.exists())
+        script_atom = copy.deepcopy(motion_atom)
+        script_atom["category"] = "narrative"
+        script_atom["index_card"]["title"] = "Screenplay reveal fixture"
+        script_atom["consumer_bindings"][0]["consumer"] = "laohu-script"
+        script_bundle = {
+            "source_links": [{"source_id": source_id, "owner_root": str(motion_root)}],
+            "atom": script_atom,
+        }
+        saved_script = cli(script, "put", "--input", "-", payload=script_bundle)
+        self.assertFalse((script_root / "sources").exists())
+        link = script_root / ".source-links" / (source_id + ".json")
+        self.assertEqual(json.loads(link.read_text())["owner_library"], ".agents/skills/laohu-motion/benchmark")
+        self.assertEqual(cli(script, "put", "--input", "-", payload=script_bundle)["files_written"], [])
+        self.assertEqual(canonical.read_bytes(), source_before)
+        self.assertFalse((business / "benchmark").exists())
+
+        for skill, keyword, batch, consumer in (
+            (motion, "Animation cue", saved_motion, "laohu-motion"),
+            (script, "Screenplay reveal", saved_script, "laohu-script"),
+        ):
+            view = cli(skill, "query", keyword, "--kind", "method", "--consumer", consumer)
+            self.assertEqual([card["ref"]["atom_id"] for card in view["cards"]], batch["atom_ids"])
+            self.assertEqual(view["cards"][0]["ref"]["source_id"], source_id)
+            detail = cli(skill, "get-atom", batch["atom_ids"][0], "--view", "decision", "--consumer", consumer)
+            self.assertEqual(detail["binding_context"]["status"], "registered")
+            unit = cli(skill, "get-source", source_id, "--unit", "fixture-01", "--view", "material")
+            self.assertEqual(unit["ref"]["source_id"], source_id)
+            self.assertTrue(cli(skill, "validate")["ok"])
+
+        search = cli(script, "query", "Fixture Work", "--kind", "material")
+        self.assertEqual({card["ref"]["source_id"] for card in search["cards"]}, {source_id})
+        identity = cli(script, "locate-source", source_id)
+        self.assertEqual(Path(identity["source_path"]), canonical)
+        self.assertEqual(identity["sha256"], hashlib.sha256(source_before).hexdigest())
+
+        updated = json.loads(source_before)
+        updated["notes"] = "The primary record changed; both libraries can detect the source revision."
+        canonical.write_text(json.dumps(updated), encoding="utf-8")
+        self.assertEqual(cli(script, "info")["catalog_state"], "stale")
+        self.assertEqual(cli(script, "get-source", source_id)["notes"], updated["notes"])
+        cli(script, "rebuild-index")
+        self.assertTrue(cli(script, "validate")["ok"])
+
+    def test_receiving_library_can_link_an_existing_root_source_without_moving_it(self):
+        script = self.receiving_skill("laohu-script")
+        legacy = self.root / "installed" / "benchmark"
+        original = library.put_bundle(legacy, sample_bundle())
+        source_id = original["source_ids"][0]
+        root_result = subprocess.run(
+            [sys.executable, str(SCRIPT), "--library-root", str(legacy), "query", "Two step reveal", "--kind", "method"],
+            capture_output=True, text=True,
+        )
+        self.assertEqual(root_result.returncode, 0, root_result.stderr)
+        self.assertEqual(json.loads(root_result.stdout)["cards"][0]["ref"]["atom_id"], original["atom_ids"][0])
+        root = library.library_root_for_skill(script)
+        link = {"source_id": source_id, "owner_root": str(legacy)}
+        library.put_bundle(root, {"source_links": [link]})
+        self.assertEqual(library.get_source(root, source_id), library.get_source(legacy, source_id))
+        self.assertEqual(library.locate_source(root, source_id)["owner_root"], str(legacy))
+        self.assertTrue((legacy / "sources" / (source_id + ".json")).is_file())
+        self.assertFalse((root / "sources").exists())
+        outside = self.root / "benchmark"
+        library.put_bundle(outside, sample_bundle())
+        with self.assertRaisesRegex(library.LibraryError, "outside the benchmark collection"):
+            library.put_bundle(root, {"source_links": [dict(link, owner_root=str(outside))]})
+
+    def test_concurrent_domains_keep_one_canonical_source_for_the_same_id(self):
+        roots = [library.library_root_for_skill(self.receiving_skill(name))
+                 for name in ("laohu-motion", "laohu-script")]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            writes = [executor.submit(library.put_bundle, root, source_only_bundle()) for root in roots]
+            outcomes = []
+            for write in writes:
+                try:
+                    outcomes.append(write.result()["source_committed"])
+                except library.LibraryError as error:
+                    self.assertIn("already owned", str(error))
+        self.assertEqual(outcomes, [True])
+        self.assertEqual(sum(len(list(root.glob("sources/SRC-*.json"))) for root in roots), 1)
+
+    def test_legacy_atom_link_keeps_old_query_and_records_usage_at_owner(self):
+        skill = self.receiving_skill("laohu-writing")
+        owner = library.library_root_for_skill(skill)
+        legacy = self.root / "installed" / "benchmark"
+        saved = library.put_bundle(owner, sample_bundle())
+        source_id, atom_id = saved["source_ids"][0], saved["atom_ids"][0]
+        library.put_bundle(legacy, {"source_links": [{"source_id": source_id, "owner_root": str(owner)}]})
+        atom_links = legacy / library.ATOM_LINKS
+        atom_links.mkdir()
+        library._write_json_file(atom_links / (atom_id + ".json"), {
+            "schema_version": 1, "atom_id": atom_id, "category": "language",
+            "owner_library": ".agents/skills/laohu-writing/benchmark",
+        })
+        library.rebuild_index(legacy)
+        self.assertEqual(library.get_atom(legacy, atom_id, "language"), library.get_atom(owner, atom_id))
+        self.assertEqual(library.search(legacy, "Two step reveal")[0]["atom_id"], atom_id)
+        cards = library.query(legacy, "Two step reveal", kind="method")["cards"]
+        self.assertEqual(cards[0]["ref"]["atom_id"], atom_id)
+        self.assertFalse((legacy / "language" / "atoms").exists())
+        usage = {"atom_id": atom_id, "category": "language", "consumer": "laohu-writing",
+                 "decision": "how to order an explanation", "stage": "structure", "outcome": "adapted",
+                 "recorded_at": "2026-11-02T00:00:00Z", "case_ref": "synthetic-legacy-retry"}
+        first = library.log_usage(legacy, usage)
+        self.assertEqual(first["library_root"], str(owner))
+        self.assertEqual(library.log_usage(owner, usage)["usage_id"], first["usage_id"])
+        self.assertEqual(library.stats(owner)["usage_count"], 1)
+        self.assertFalse((legacy / "language" / "usage").exists())
+        self.assertTrue(library.validate(legacy)["ok"])
+
     def test_read_commands_do_not_create_or_rebuild(self):
         missing = self.root / "not-created"
         with self.assertRaises(library.LibraryError):
@@ -1108,7 +1258,7 @@ class LibraryTests(unittest.TestCase):
         self.assertEqual(catalog.read_bytes(), original)
         self.assertEqual(library.info(self.root)["catalog_state"], "current")
 
-    def test_workspace_ignore_rules_keep_all_root_benchmark_data_local(self):
+    def test_workspace_ignore_rules_separate_private_research_from_motion_assets(self):
         isolation_root = TMP / "benchmark-local-only"
         isolation_root.mkdir(parents=True, exist_ok=True)
         ignored_paths = [
@@ -1127,13 +1277,22 @@ class LibraryTests(unittest.TestCase):
             "benchmark/.transactions/TXN-0123456789abcdef0123456789abcdef/journal.json",
             "benchmark/.library.lock",
             "benchmark/.library.lock.stale-123456",
+            ".agents/skills/laohu-motion/benchmark/sources/SRC-0123456789ABCDEF.json",
+            ".agents/skills/laohu-script/benchmark/.source-links/SRC-0123456789ABCDEF.json",
+            ".agents/skills/laohu-script/skills/laohu-script-ozu/benchmark/narrative/atoms/ATM-0123456789ABCDEF.json",
+            ".agents/skills/laohu-cover/benchmark/exports/fixture.bin",
         ]
         visible_paths = [
+            ".agents/skills/laohu-motion/assets/motion-library/openmotion/catalog.json",
+            ".agents/skills/laohu-motion/assets/motion-library/openmotion/remix/vendor/three-0.128.0/build/three.min.js",
+            ".agents/skills/laohu-motion/assets/motion-library/openmotion/remix/vendor/d3-delaunay-6.0.4/dist/d3-delaunay.min.js",
             "benchmark/README.md",
             ".agents/skills/laohu-benchmark/SKILL.md",
             ".agents/skills/laohu-benchmark/scripts/library.py",
             ".agents/skills/laohu-benchmark/manifest.json",
             ".agents/skills/laohu-benchmark/schemas/source.schema.json",
+            ".agents/skills/laohu-motion/assets/motion-library/README.md",
+            ".agents/skills/laohu-script/skills/laohu-script-ozu/SKILL.md",
         ]
         with tempfile.TemporaryDirectory(dir=isolation_root) as temp_dir:
             sandbox = Path(temp_dir)

@@ -1,0 +1,8 @@
+{
+  "name": "laohu-showreel-browser-vendor",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "three": "0.181.2"
+  }
+}

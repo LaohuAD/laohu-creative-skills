@@ -1,0 +1,464 @@
+{
+  "mashanzheng/MaShanZheng-Regular.ttf": {
+    "id": "font:ma-shan-zheng",
+    "label": "马善政毛笔字",
+    "category": "中文书写",
+    "aliases": [
+      "毛笔",
+      "楷书",
+      "榜书",
+      "题签",
+      "楹联",
+      "庄重"
+    ],
+    "summary": "厚重的起收笔让题字有分量。可试门联、匾额或郑重落款，让整句停稳。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/mashanzheng/MaShanZheng-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/mashanzheng/OFL.txt",
+    "sha256": "6d2546bb189c732a8ca29af9e22457b152387d158aa459e4ac2ce1e51788b7fb",
+    "licenseSha256": "d7bdb1cee215b689e23c2f95672a6084c790542170648267a55114103d756a08"
+  },
+  "zhimangxing/ZhiMangXing-Regular.ttf": {
+    "id": "font:zhi-mang-xing",
+    "label": "钟齐志莽行书",
+    "category": "中文书写",
+    "aliases": [
+      "毛笔",
+      "行书",
+      "连笔",
+      "手札",
+      "落款",
+      "书信"
+    ],
+    "summary": "同一字内笔势相连，字与字之间仍留有间隔。适合试亲笔寄语或署名，留时间看清连笔。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/zhimangxing/ZhiMangXing-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/zhimangxing/OFL.txt",
+    "sha256": "644e0cae9b40f0b10ab729a01bd32032e3973bac22be3dccae01bf6ae7fde969",
+    "licenseSha256": "10947328199e369a3e6b4a67e8e5507ed99d5bbb264a1f156415aa9b665e4d15"
+  },
+  "liujianmaocao/LiuJianMaoCao-Regular.ttf": {
+    "id": "font:liu-jian-mao-cao",
+    "label": "钟齐流江毛笔草体",
+    "category": "中文书写",
+    "aliases": [
+      "毛笔",
+      "草书",
+      "草体",
+      "题字",
+      "抒情",
+      "挥毫"
+    ],
+    "summary": "草书省笔、牵连明显，可把情绪放在一个短题或转折词上。人名、日期等须逐字辨清时另选。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/liujianmaocao/LiuJianMaoCao-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/liujianmaocao/OFL.txt",
+    "sha256": "cab396b91a5b7c0b4005a35891180d06e6751f5ac261fe680aec65c1ae209033",
+    "licenseSha256": "ff56684b0212481e7c3886c26d5a655de9b211c8119e5ccc756138a97b066acc"
+  },
+  "longcang/LongCang-Regular.ttf": {
+    "id": "font:long-cang",
+    "label": "有字库龙藏体",
+    "category": "中文书写",
+    "aliases": [
+      "手写",
+      "手记",
+      "便笺",
+      "私人",
+      "笔记",
+      "粗粝"
+    ],
+    "summary": "笔画带些粗糙，收笔有手写痕迹。把原句放回便笺或人物手记里，看是否像这个人会留下的字。",
+    "upstream": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/longcang/LongCang-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/longcang/OFL.txt",
+    "sha256": "e5bf2c3f24ef2327c6f136d8f73e2f9dfdf44896fdbeb35a9515f44777bb91bc",
+    "licenseSha256": "603546b7219a94bb59bf8294458194a5010119486354092b66a09a3fd61aeacc"
+  },
+  "ark-pixel/ark-pixel-12px-monospaced-zh_hans.ttf.woff2": {
+    "id": "font:ark-pixel-12px-mono-zh-hans",
+    "label": "方舟像素体",
+    "category": "中文像素",
+    "aliases": [
+      "像素",
+      "复古",
+      "游戏",
+      "点阵",
+      "掌机",
+      "终端"
+    ],
+    "summary": "12 像素等宽简中版。适合旧掌机、游戏菜单或低分辨率屏幕中的文字，优先试 12 像素的整倍数并检查输出缩放。",
+    "upstream": "https://github.com/TakWolf/ark-pixel-font/releases/tag/2026.11.10",
+    "licenseSource": "https://github.com/TakWolf/ark-pixel-font/releases/download/2026.11.10/ark-pixel-font-12px-monospaced-ttf.woff2-v2026.11.10.zip#OFL.txt",
+    "archive": "https://github.com/TakWolf/ark-pixel-font/releases/download/2026.11.10/ark-pixel-font-12px-monospaced-ttf.woff2-v2026.11.10.zip",
+    "archiveSha256": "74f54a9d9fecf6fa74eebcc6ff6dbabf32b0daec1017535b22cac60f455cf03a",
+    "archiveMember": "ark-pixel-12px-monospaced-zh_hans.ttf.woff2",
+    "sha256": "0b34f129fa0897fd11c4f9e83cbe86ad89e2f22039eaaac3c92d6e1c4a922e16",
+    "licenseSha256": "3ab41567e68e3988ba1ef16dd2644eca95ca5648ea12e7d46e6287fc0bbe5aee"
+  },
+  "retained/cmu-serif-roman/cmunrm.woff": {
+    "id": "font:cmu-serif-roman",
+    "label": "CMU Serif",
+    "category": "拉丁衬线",
+    "aliases": [
+      "衬线",
+      "拉丁排印",
+      "短标题"
+    ],
+    "summary": "对照笔端衬线与笔画对比，检验短标题和阅读字的层级。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-effects/fonts/cmunrm.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-effects/licenses/OFL.txt",
+    "sha256": "32115abbbfb231586813333bfa5a234f4dc7f28b27df7260f42f81146ccd9097",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/inter-variable/Inter-var.woff": {
+    "id": "font:inter-variable",
+    "label": "Inter",
+    "category": "拉丁无衬线",
+    "aliases": [
+      "无衬线",
+      "拉丁排印",
+      "阅读字",
+      "层级"
+    ],
+    "summary": "观察实际字重、字宽与字腔，按短标题或阅读任务用原句试排。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/Inter-var.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+    "sha256": "a54bc9f6ba847df43752bfb35f63aa1599ccc113b58c23bfa07c4dc88976647b",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/jetbrains-mono-variable/JetBrainsMono[wght].ttf": {
+    "id": "font:jetbrains-mono-variable",
+    "label": "JetBrains Mono",
+    "category": "等宽字",
+    "aliases": [
+      "数字",
+      "时间码",
+      "操作演示",
+      "代码"
+    ],
+    "summary": "等宽拉丁字符，便于对比数字和代码的变化；与中文混排须量真实基线与字面。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-showcase/shared/fonts/jetbrains-mono/JetBrainsMono[wght].ttf",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-showcase/shared/fonts/jetbrains-mono/OFL.txt",
+    "sha256": "3cfafa86e28b87184d592fef82846e8c10cb48653c62efcda34f082da225ec34",
+    "licenseSha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697"
+  },
+  "retained/lxgw-wenkai-medium-subset/LXGWWenKai-500.woff": {
+    "id": "font:lxgw-wenkai-medium-subset",
+    "label": "LXGW WenKai",
+    "category": "中文书写",
+    "aliases": [
+      "霞鹜文楷",
+      "霞鶩文楷",
+      "楷体",
+      "手写",
+      "人物笔记",
+      "板书"
+    ],
+    "summary": "有楷书式笔形和转折，可比较人物笔记、批注与书写展示。密排或短窗须验证读速。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/LXGWWenKai-500.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+    "sha256": "734bd187392579417ac83effe31d37b9de43c7b290bcb400800456511ed79e8f",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/noto-sans-sc-500-subset/NotoSansSC-500.woff": {
+    "id": "font:noto-sans-sc-500-subset",
+    "label": "Noto Sans SC",
+    "category": "中文黑体",
+    "aliases": [
+      "思源黑体",
+      "简体中文",
+      "阅读字"
+    ],
+    "summary": "线条平直、笔画粗细相近；实际字重可做标签、说明和展示层级。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-500.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+    "sha256": "928d841b1ec663ebce82593568cbc19749fe652f88b8ec960723b7d87b551512",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/noto-sans-sc-700-subset/NotoSansSC-700.woff": {
+    "id": "font:noto-sans-sc-700-subset",
+    "label": "Noto Sans SC",
+    "category": "中文黑体",
+    "aliases": [
+      "思源黑体",
+      "简体中文",
+      "阅读字"
+    ],
+    "summary": "线条平直、笔画粗细相近；实际字重可做标签、说明和展示层级。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-700.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+    "sha256": "dd0d39a9780eb995c499af0c20cca93b1dfdda865da70871a20890b3e406b968",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/noto-sans-sc-800-subset/NotoSansSC-800.woff": {
+    "id": "font:noto-sans-sc-800-subset",
+    "label": "Noto Sans SC",
+    "category": "中文黑体",
+    "aliases": [
+      "思源黑体",
+      "简体中文",
+      "阅读字"
+    ],
+    "summary": "线条平直、笔画粗细相近；实际字重可做标签、说明和展示层级。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-800.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+    "sha256": "b57f9c645b1a4967a3c8914ed41f24d109394a8175e36af08f93e40803e84664",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/noto-sans-sc-900-subset/NotoSansSC-900.woff": {
+    "id": "font:noto-sans-sc-900-subset",
+    "label": "Noto Sans SC",
+    "category": "中文黑体",
+    "aliases": [
+      "思源黑体",
+      "简体中文",
+      "阅读字"
+    ],
+    "summary": "线条平直、笔画粗细相近；实际字重可做标签、说明和展示层级。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/NotoSansSC-900.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-native-clips/lib/fonts/OFL.txt",
+    "sha256": "d2d8a42438b18b65b6577434df4e41bb08c6b5051281757849af00ab743bb58f",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/noto-serif-sc-subset/NotoSerifSC-sub.woff": {
+    "id": "font:noto-serif-sc-subset",
+    "label": "Noto Serif SC",
+    "category": "中文宋体",
+    "aliases": [
+      "思源宋体",
+      "简体中文",
+      "展示字",
+      "出版",
+      "衬线"
+    ],
+    "summary": "有明显横细竖粗和笔端起伏。可比较短结论、书页、叙述转折；小字和运动中的细画需看实际帧。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-effects/fonts/NotoSerifSC-sub.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-effects/licenses/OFL.txt",
+    "sha256": "be59f4f630f0fac191dbc6e8d6945da681e5613df7602b2cef8ca7049fa19b66",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/playfair-display-bold/PlayfairDisplay-700.woff": {
+    "id": "font:playfair-display-bold",
+    "label": "Playfair Display",
+    "category": "拉丁衬线",
+    "aliases": [
+      "衬线",
+      "拉丁排印",
+      "短标题"
+    ],
+    "summary": "对照笔端衬线与笔画对比，检验短标题和阅读字的层级。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-700.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-showcase/shared/fonts/playfair-display/OFL.txt",
+    "sha256": "2644f0e3c7c8f79e9d0c56ad22d246294c7c2b21ea884a7a2b1a10261cb95469",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/playfair-display-bold-italic/PlayfairDisplay-700i.woff": {
+    "id": "font:playfair-display-bold-italic",
+    "label": "Playfair Display",
+    "category": "拉丁衬线",
+    "aliases": [
+      "衬线",
+      "拉丁排印",
+      "短标题"
+    ],
+    "summary": "对照笔端衬线与笔画对比，检验短标题和阅读字的层级。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-700i.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-showcase/shared/fonts/playfair-display/OFL.txt",
+    "sha256": "f263323db61a414618d9cafe489d0e18adf6682cd36baa45239ed804fe26fcf1",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "retained/playfair-display-regular-italic/PlayfairDisplay-400i.woff": {
+    "id": "font:playfair-display-regular-italic",
+    "label": "Playfair Display",
+    "category": "拉丁衬线",
+    "aliases": [
+      "衬线",
+      "拉丁排印",
+      "短标题"
+    ],
+    "summary": "对照笔端衬线与笔画对比，检验短标题和阅读字的层级。",
+    "upstream": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-showcase/shared/fonts/playfair-display/PlayfairDisplay-400i.woff",
+    "licenseSource": "retained-from:.agents/skills/laohu-motion/templates/runtime/laohu-showcase/shared/fonts/playfair-display/OFL.txt",
+    "sha256": "30cbe57e84bc719727dc54814f708eb9fa2d05a06f04d8c196b1466ecacb74d8",
+    "licenseSha256": "67c5d5206b96f8340b95fabd02ae60701e0b20ce2594d976216f1065e5aa3822"
+  },
+  "lxgwmarkergothic/LXGWMarkerGothic-Regular.ttf": {
+    "id": "font:lxgw-marker-gothic",
+    "label": "霞鹜漫黑",
+    "category": "中文展示",
+    "aliases": [
+      "马克笔",
+      "漫画",
+      "轻松",
+      "科普",
+      "吐槽",
+      "粗黑",
+      "中文标题"
+    ],
+    "summary": "带马克笔圆润笔触的粗黑体，适合轻松科普、观点吐槽、漫画分格与鲜活短标题。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/lxgwmarkergothic/LXGWMarkerGothic-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/lxgwmarkergothic/OFL.txt",
+    "sha256": "e6a55cfd5f18dc393f92670a164397a69242cb4eabe1d3feb5dc22fc4947a8ba",
+    "licenseSha256": "58e494ff4a5177d593a97ffc482f4069f59f54a0d4049fd29e531d3b1009e8b4"
+  },
+  "cactusclassicalserif/CactusClassicalSerif-Regular.ttf": {
+    "id": "font:cactus-classical-serif",
+    "label": "仙人掌古典宋体",
+    "category": "中文宋体",
+    "aliases": [
+      "古典宋体",
+      "文艺",
+      "人文",
+      "书封",
+      "纪录片",
+      "标题"
+    ],
+    "summary": "笔锋清雅克制的古典宋体，适合人文纪录、书页叙事与沉静克制的片头文字。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/cactusclassicalserif/CactusClassicalSerif-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/cactusclassicalserif/OFL.txt",
+    "sha256": "ecbd58961db922392d7fecfafa3681fefaeec0c399b860ab6940ba700f7da055",
+    "licenseSha256": "358cbc7066747b8ed6581a771dbccf6397c21db559fdf671e560d7a8a084c5d4"
+  },
+  "chocolateclassicalsans/ChocolateClassicalSans-Regular.ttf": {
+    "id": "font:chocolate-classical-sans",
+    "label": "巧克力古典黑体",
+    "category": "中文黑体",
+    "aliases": [
+      "古典黑体",
+      "人文黑体",
+      "杂志",
+      "现代阅读",
+      "清爽",
+      "中文标题"
+    ],
+    "summary": "融合传统手写骨架与现代无衬线的优雅人文黑体，比常规机械黑体更具书卷与设计气质。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/chocolateclassicalsans/ChocolateClassicalSans-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/chocolateclassicalsans/OFL.txt",
+    "sha256": "e6345f3d92c7a9b7044c31a87d9b61f50220b08c0f1dcc2736e94c2aa587ce03",
+    "licenseSha256": "2e07464fdfc781cd68f976fcfab13ad30913c04465571c33eaddc7db20f74ad6"
+  },
+  "syne/Syne[wght].ttf": {
+    "id": "font:syne-variable",
+    "label": "Syne 先锋宽体无衬线",
+    "category": "拉丁展示",
+    "aliases": [
+      "先锋",
+      "宽体",
+      "英文大字",
+      "工作室",
+      "作品集",
+      "艺术展示"
+    ],
+    "summary": "宽比例且高辨识度的现代设计工作室展示字，粗字重极具力量感，适合英文片头、作品集与大号章节字。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/syne/Syne[wght].ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/syne/OFL.txt",
+    "sha256": "ce5ac77142a65cab2248a1a2ebb740b1d4d9c20b52488877d3ff664d1356104a",
+    "licenseSha256": "cc43cdce6f91c57989af8459341c276655e34224e954fa69c2ad700831a742d8"
+  },
+  "unbounded/Unbounded[wght].ttf": {
+    "id": "font:unbounded-variable",
+    "label": "Unbounded 超宽科技展示",
+    "category": "拉丁展示",
+    "aliases": [
+      "超宽",
+      "科技",
+      "数据爆点",
+      "数字",
+      "未来",
+      "英文大字"
+    ],
+    "summary": "几何张力极强的超宽可变展示字，在数据爆点、数字滚动与高能量动效片里识别度极高。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/unbounded/Unbounded[wght].ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/unbounded/OFL.txt",
+    "sha256": "323b511be380c8d474ef030686b71aedde501f8d9cd46da558b7c40454372c3f",
+    "licenseSha256": "31e5d4e83955e7103c34570dd49b0570ef490800bd65b42923c0dd02445263b3"
+  },
+  "instrumentserif/InstrumentSerif-Regular.ttf": {
+    "id": "font:instrument-serif-regular",
+    "label": "Instrument 编辑部高窄衬线",
+    "category": "拉丁衬线",
+    "aliases": [
+      "编辑部",
+      "杂志",
+      "高端",
+      "优雅",
+      "极简",
+      "英文大字"
+    ],
+    "summary": "高窄优雅的当代编辑部衬线大字，与米白纸色背景或极简留白构图搭配极具电影与画册质感。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/instrumentserif/InstrumentSerif-Regular.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/instrumentserif/OFL.txt",
+    "sha256": "498efd461f6ddfcb7a111bf9a565709d2085d48201d501ead960d93e84ffbb88",
+    "licenseSha256": "129ed7618959716959f2941fdd5b49e0ad6e6c1d78726761786a00253d865521"
+  },
+  "instrumentserif/InstrumentSerif-Italic.ttf": {
+    "id": "font:instrument-serif-italic",
+    "label": "Instrument 编辑部斜体衬线",
+    "category": "拉丁衬线",
+    "aliases": [
+      "斜体",
+      "引语",
+      "杂志",
+      "诗意",
+      "点睛",
+      "英文大字"
+    ],
+    "summary": "Instrument Serif 配套斜体，适合在英文标题中与正体混排点亮关键词或引语。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/instrumentserif/InstrumentSerif-Italic.ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/instrumentserif/OFL.txt",
+    "sha256": "08939b8bdf534afec24ae0ef5e03f948940cd9a8fe08e7fecbad040e62327385",
+    "licenseSha256": "129ed7618959716959f2941fdd5b49e0ad6e6c1d78726761786a00253d865521"
+  },
+  "spacegrotesk/SpaceGrotesk[wght].ttf": {
+    "id": "font:space-grotesk-variable",
+    "label": "Space Grotesk 几何科技无衬线",
+    "category": "拉丁无衬线",
+    "aliases": [
+      "科技",
+      "几何",
+      "产品",
+      "数据",
+      "现代",
+      "英文标题"
+    ],
+    "summary": "带独特技术细节的几何无衬线可变字体，数字与英文标题气质利落，适合替代平庸默认无衬线。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/spacegrotesk/SpaceGrotesk[wght].ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/spacegrotesk/OFL.txt",
+    "sha256": "acad6de1fc93436f5c0f1f4137751ef04f1aea3063e7036535970ffcfbd79f72",
+    "licenseSha256": "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72"
+  },
+  "bricolagegrotesque/BricolageGrotesque[opsz,wdth,wght].ttf": {
+    "id": "font:bricolage-grotesque-variable",
+    "label": "Bricolage 当代个性多轴无衬线",
+    "category": "拉丁展示",
+    "aliases": [
+      "多轴可变",
+      "个性",
+      "海报",
+      "活泼",
+      "反差",
+      "英文大字"
+    ],
+    "summary": "同时具备字重、字宽与视觉尺寸三轴的个性现代字体，兼具温度与锋芒，适合创意短片与高张力排印。",
+    "upstream": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/bricolagegrotesque/BricolageGrotesque[opsz,wdth,wght].ttf",
+    "licenseSource": "https://github.com/google/fonts/blob/06bfe0d62a98375cb09c942fa18e68bd32cff057/ofl/bricolagegrotesque/OFL.txt",
+    "sha256": "413e7357809ddd12fd80a96a8a396de0e401638d4acd3cb3e37532f0472ac682",
+    "licenseSha256": "4b5a7d8f37f5602621c8a8d7358a6a2e71317e6c231c661e15aef0275d3e07ba"
+  },
+  "zhuque-fangsong/ZhuqueFangsong-Regular.ttf": {
+    "id": "font:zhuque-fangsong",
+    "label": "朱雀仿宋",
+    "category": "中文仿宋",
+    "aliases": [
+      "仿宋",
+      "民国活字",
+      "文艺",
+      "档案",
+      "信件",
+      "公文",
+      "纪录片"
+    ],
+    "summary": "以民国南宋仿宋活字为蓝本的开源中文仿宋，清雅有筋骨，填补文艺叙事、历史档案与书信引文空白。",
+    "upstream": "https://github.com/TrionesType/zhuque/releases/download/v0.212/ZhuqueFangsong-v0.212.zip",
+    "licenseSource": "https://github.com/TrionesType/zhuque/blob/main/LICENSE.txt",
+    "sha256": "558c62730844fe54ba220146ed62f859d4e2880188d92d985f8921c6e3743bc4",
+    "licenseSha256": "66cc01ad4df62fca6936431a426104cb32a52ce8da49de9a7d643e02d7659043"
+  }
+}

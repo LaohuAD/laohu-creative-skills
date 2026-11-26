@@ -1,0 +1,10 @@
+Freesound individual source-page evidence captured 2026-11-22.
+
+Source page: https://freesound.org/people/shqiptarbas/sounds/868504/
+Title: minimal investigative tension no melody
+Creator: shqiptarbas
+Source page license label: Creative Commons 0 (CC0). Verified canonical deed link present on source page.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Retrieved file: Freesound MP3, 2,691,744 bytes; measured duration 116.928 seconds; SHA-256 365ade59871466cd0fc7209783457155fafce62bb0d9fd10192c9e3565c4bb3e.
+Listening status for this project: UNKNOWN. No human listening review was recorded yet.

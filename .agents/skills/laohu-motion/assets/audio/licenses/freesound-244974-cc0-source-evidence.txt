@@ -1,0 +1,10 @@
+Freesound individual source-page evidence captured 2026-11-22.
+
+Source page: https://freesound.org/people/xpansive/sounds/244974/
+Title: experimental electronic beat
+Creator: xpansive
+Source page license label: Creative Commons 0 (CC0). Verified canonical deed link present on source page.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Retrieved file: Freesound MP3, 328,200 bytes; measured duration 13.714286 seconds; SHA-256 9427667cc73776faacfa42b731f89fd4a476650bd85940bd5d533ee7c0c3441d.
+Listening status for this project: UNKNOWN. No human listening review was recorded yet.
