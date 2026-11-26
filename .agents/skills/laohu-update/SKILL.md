@@ -28,6 +28,7 @@ git -C "{PROJECT_ROOT}" rev-parse --show-toplevel
 | 用途 | 路径 |
 |---|---|
 | 本地版本 / 更新日志 | `{PROJECT_ROOT}/VERSION` · `{PROJECT_ROOT}/CHANGELOG.md` |
+| 会员资格、配对与更新准备 | [会员更新](references/member-update.md) |
 | 版本检查脚本 | `{SKILL_DIR}/../laohu/scripts/check-update.py` |
 | 全仓结构与离线测试 | `{PROJECT_ROOT}/tools/check_project.py` |
 | Git 隔离更新细则 | [Git 更新操作](references/git-update.md) |
@@ -38,7 +39,7 @@ git -C "{PROJECT_ROOT}" rev-parse --show-toplevel
 ## 2. 按意图直入对应功能分支
 
 ### 分支 A：查版本与检查新版（只读）
-只问本地版本读 `VERSION`；检查官方新版运行：
+只问本地版本读 `VERSION`。用户主动检查更新时，先按[会员更新](references/member-update.md)在对话里判断通道与提示。只查公开版或会员服务不可达时，单独核对官方公开版本：
 
 ```bash
 python3 "{SKILL_DIR}/../laohu/scripts/check-update.py" --force --json
@@ -52,7 +53,7 @@ python3 "{SKILL_DIR}/../laohu/scripts/check-update.py" --force --json
 ### 分支 C：完整项目更新（先隔离比较，有冲突再拍板）
 读取 [Git 更新操作](references/git-update.md) 与 [入口安装](references/installation.md) 执行：
 1. **首次安装**：`git clone` 官方完整仓库至已确认不存在的新目录并跑 `check_project.py`。
-2. **已有 Git 仓库**：记录本地现状（HEAD、分支、暂存、未暂存、未跟踪与忽略资产），`git fetch` 锁定精确 `{TARGET_COMMIT}`，在同盘 `.cache/tmp/` 隔离副本上试合并，同时检查文件冲突、语义/规则冲突与全局入口增删改名冲突。
+2. **已有 Git 仓库**。记录本地现状（HEAD、分支、暂存、未暂存、未跟踪与忽略资产），按[会员更新](references/member-update.md)选择通道。公开版按 Git 更新操作获取目标提交，会员版以本机工具返回的已验证提交为目标。锁定精确 `{TARGET_COMMIT}` 后在同盘 `.cache/tmp/` 隔离副本上试合并，检查文件冲突、语义冲突和已登记入口的增删改名。
 3. **无 Git 历史的旧副本目录**：保留原目录，新克隆完整仓库到新目录后逐项比对迁移个人改动。
 4. **冲突先给可拍板方案**：列清受影响文件与段落、本地内容、官方改动、冲突原因、建议合并法及影响（摘短片段，不甩整屏 diff），等待用户拍板。用户拒绝则原工作区、索引与分支原封不动；无冲突且无新取舍时直接应用。
 5. **落盘后双检**：
