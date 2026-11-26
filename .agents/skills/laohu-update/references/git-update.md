@@ -21,7 +21,7 @@
   git -C "{PROJECT_ROOT}" ls-files --others --ignored --exclude-standard -z
   ```
   若存在未结束的 merge/rebase/cherry-pick、未解决冲突或 detached HEAD，先向用户说明状态并确认目标分支，不强行启动合并。
-- **获取并锁定精确目标提交**：沿用官方跟踪分支或默认分支（远端不符或锁定了发行标签时先确认）：
+- **获取并锁定精确目标提交**：公开版沿用官方跟踪分支或默认分支（远端不符或锁定了发行标签时先确认）。会员版从[会员更新工具](member-update.md)取得已验证提交后直接计算共同祖先与差异，后续步骤共用。公开版获取命令如下。
   ```bash
   git -C "{PROJECT_ROOT}" fetch --no-tags "{OFFICIAL_REMOTE}" "refs/heads/{TARGET_BRANCH}"
   git -C "{PROJECT_ROOT}" rev-parse FETCH_HEAD

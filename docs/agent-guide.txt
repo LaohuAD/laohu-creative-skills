@@ -119,12 +119,12 @@ https://lao-hu.com/learn/laohu-creative-skills/
 边界：创作、讨论或命名本身不等于保存授权；项目内默认入 works/，项目外位置未定时先给建议路径并等确认，绝不从安装库反推业务目录。
 公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-archive/SKILL.md
 
-13. 完整项目安装、更新与发布：laohu-update
+13. 完整项目安装与更新：laohu-update
 
-适合：首次克隆完整仓库、注册/检查/同步/卸载全局技能入口、检查官方新版、通过 Git 隔离合并更新完整项目，或直接输入 `/laohu-update` 同步并发布已完成的项目改动。
-请提供：目标宿主（如 Codex、Claude Code 或指定目录）、仓库位置、是否仅预览或仅同步不发布，以及需保护的本地修改。
-交付：完整仓库安装、冲突合并方案、结构与离线测试核验、全局入口同步及版本发布实际状态。
-边界：只查版本或用法时不写入；普通更新不自动发布；直接 `/laohu-update` 含更新与发布授权，明确说只同步官方版本时停在普通更新。长期方法进化归 laohu-evolution。
+适合：首次克隆完整仓库、注册/检查/同步/卸载全局技能入口、检查可以使用的新版、通过 Git 隔离合并更新完整项目。
+请提供：目标宿主（如 Codex、Claude Code 或指定目录）、仓库位置、是否仅预览，以及需保护的本地修改。
+交付：完整仓库安装、冲突合并方案、结构与离线测试核验、全局入口同步和安装实际状态。
+边界：只查版本或用法时保持仓库现状。输入 `/laohu-update` 执行本机安装或更新。维护者需要发布时另行明确目标与范围。长期方法进化归 laohu-evolution。
 公开定义：https://github.com/LaohuAD/laohu-creative-skills/blob/main/.agents/skills/laohu-update/SKILL.md
 
 14. 视频分镜、分段与三段式提示词：laohu-video
@@ -262,7 +262,11 @@ python3 tools/install.py uninstall --host codex --write
 
 完整项目更新
 
-用户要求取得官方更新、检查更新、升级、发布项目版本或修复入口时，使用 `/laohu-update`。它管理完整 Git 仓库（技能、项目规则、工具与知识），不等于只复制 Skill 文件，也不等于全局 `sync`。更新前核对官方仓库、本地状态与用户修改；有冲突先呈递差异与合并方案等用户拍板。普通更新不自动发布；直接输入 `/laohu-update` 同时授权更新完整项目与发布已审阅的可发布改动。
+用户要求取得官方更新、检查更新、升级或修复入口时，使用 `/laohu-update`。它管理完整 Git 仓库（技能、项目规则、工具与知识），不等于只复制 Skill 文件，也不等于全局 `sync`。更新前核对官方仓库、本地状态与用户修改；有冲突先呈递差异与合并方案等用户拍板。输入 `/laohu-update` 只授权本机更新。
+
+用户说“请把老胡造梦技能更新到我当前可以使用的最新版本，保留我的个人修改”时，按普通更新处理。先在本机安装根查找 `.agents/skills/laohu-update/scripts/member-update.py`。旧版尚无该脚本时，先按既有公开 Git 更新流程取得官方公开版并保留个人改动，再读取新版 `.agents/skills/laohu-update/SKILL.md`，继续同一个更新请求。
+
+使用新版入口的会员检查和提醒规则。对话里给已有会员可复制的设备配对指令和泠月私聊链接。设备验证通过后，按工具确认的版本试合并。同一功能版本的内测提醒展示一次，可略过或关闭。公开版仍可单独更新，会员服务不可用或权益到期时保留本机现有版本。
 
 作品保存与外部操作
 
