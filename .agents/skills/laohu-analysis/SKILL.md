@@ -16,11 +16,11 @@ description: 当表现模糊、原因不明、多方案存在关键取舍，或�
 | 本轮需要 | 按需读取 | 交付到什么程度 |
 |---|---|---|
 | 宽泛反馈定因、区分竞争解释、比较修法、评估规则改动影响或出变更规格 | [因果调查与方案决策](references/investigation.md) | 最早杠杆断点、首选解释/方案及切换条件、生态影响与 6 项决策级变更规格 |
-| 新建、整体重构或重大扩域一项可复用能力 / Skill | [第一性原理能力设计](references/capability-design.md) + [万能造梦框架](../../../docs/governance/universal-dream-framework.md) | 四类工作形态标尺、殿堂特征与三态边界、原生能力减负、分层架构与可落地交接 |
+| 新建、整体重构或重大扩域一项可复用能力 / Skill | [第一性原理能力设计](references/capability-design.md) | 四类工作形态标尺、殿堂特征与三态边界、原生能力减负、分层架构与可落地交接 |
 | 方案走查、A/B 盲测设计或核验证据层级 | [验证与走查指南](references/validation.md) + [评估与验证协议](../../../docs/governance/evaluation-protocol.md) | 隔离验证方案、条件切换观察与四维×四态证据边界 |
 | 只需解释眼前的简单材料关系 | 无需额外加载重参考 | 证据相称的清晰解释与关键未知，不硬塞修复计划 |
 
-**顶层框架按需防火墙**：仅在新建、整体重构或深度分析本仓库 Skill 与规则工作流时，按需读取[万能造梦框架](../../../docs/governance/universal-dream-framework.md)做 4×4 透视（局部修订只深查受影响交点及直接上下游，交付按自然工作语言展开，绝不输出 16 格表格）；**日常分析普通作品、创作简报、业务方案或单一故障时 0 加载顶层框架**，直接沿本入口与 [investigation.md](references/investigation.md) 就地完成高海拔定因。
+**维护任务的检查范围**。新建、整体重构或深度分析 Skill 与规则工作流时，按[三技能协作协议](../../../docs/governance/triad-handoff.md#3-三技能的检查范围)确定深度，交付按实际问题组织。日常作品分析、创作简报、业务方案或单一故障沿用本入口及[因果调查与方案决策](references/investigation.md)。
 
 ## 2. 四条核心分析纪律
 

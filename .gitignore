@@ -54,3 +54,6 @@ build/
 
 # Maintainer-only publishing workflow; never distribute
 .agents/skills/laohu-publish/
+
+# Member-only source document
+universal-dream-framework.md
