@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}} · 公众号排版预览</title>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:#f3f2ee;color:#1f2328;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;-webkit-text-size-adjust:100%;}
+  .gzh-toolbar{position:fixed;top:0;left:0;right:0;min-height:56px;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(17,24,39,.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:8px 18px;z-index:99;}
+  .gzh-hint{font-size:13px;color:#57606a;line-height:1.4;}
+  .gzh-hint b{color:#1f2328;}
+  .gzh-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;flex-shrink:0;}
+  .gzh-view-switch{display:inline-flex;background:#eef0f2;border-radius:8px;padding:3px;gap:2px;}
+  .gzh-view-btn{border:0;background:transparent;color:#57606a;font-size:12px;font-weight:600;padding:6px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s;}
+  .gzh-view-btn.active{background:#ffffff;color:#111827;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+  .gzh-copy-sub{background:#ffffff;color:#1f2328;border:1px solid rgba(17,24,39,.16);border-radius:8px;padding:8px 13px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s;}
+  .gzh-copy-sub:hover{background:#f6f7f9;border-color:rgba(17,24,39,.28);}
+  .gzh-copy{background:#059669;color:#fff;border:0;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(5,150,105,.24);white-space:nowrap;transition:transform .08s,background .15s;}
+  .gzh-copy:hover{background:#047857;}
+  .gzh-copy:active{transform:translateY(1px);}
+  .gzh-toast{position:fixed;top:68px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .22s;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.22);max-width:88vw;text-align:center;}
+  .gzh-toast.show{opacity:1;}
+  .gzh-stage{max-width:697px;margin:80px auto 64px;padding:0 10px;transition:max-width .2s ease;}
+  .gzh-stage.mobile-view{max-width:417px;}
+  .gzh-stage.mobile-view #gzh-content{background:#ffffff;border-radius:18px;border:1px solid rgba(17,24,39,.1);box-shadow:0 10px 30px -12px rgba(17,24,39,.14);padding:14px 10px;overflow:hidden;}
+  @media(max-width:680px){.gzh-hint{display:none;}.gzh-toolbar{justify-content:flex-end;}}
+</style>
+</head>
+<body>
+<div class="gzh-toolbar">
+  <span class="gzh-hint">预览无误后点右侧 <b>复制到公众号</b>，粘贴到微信后台复核排版与素材</span>
+  <div class="gzh-actions">
+    <div class="gzh-view-switch" role="group" aria-label="预览视口宽度">
+      <button type="button" class="gzh-view-btn active" id="gzhViewMobile" onclick="gzhSetView('mobile')">手机 375px</button>
+      <button type="button" class="gzh-view-btn" id="gzhViewWide" onclick="gzhSetView('wide')">电脑 677px</button>
+    </div>
+    <button type="button" class="gzh-copy-sub" id="gzhCopyBodyBtn" onclick="gzhCopyNoTitle()">仅复制正文（去主标题）</button>
+    <button type="button" class="gzh-copy" id="gzhCopyBtn" onclick="gzhCopy()">复制到公众号</button>
+  </div>
+</div>
+<div class="gzh-toast" id="gzhToast"></div>
+<div class="gzh-stage mobile-view" id="gzhStage">
+  <div id="gzh-content">
+<!--GZH_CONTENT-->
+  </div>
+</div>
+<script>
+  function gzhSetView(mode){
+    var stage=document.getElementById('gzhStage');
+    var wideBtn=document.getElementById('gzhViewWide');
+    var mobileBtn=document.getElementById('gzhViewMobile');
+    if(!stage) return;
+    var isMobile=(mode==='mobile');
+    stage.classList.toggle('mobile-view',isMobile);
+    if(wideBtn) wideBtn.classList.toggle('active',!isMobile);
+    if(mobileBtn) mobileBtn.classList.toggle('active',isMobile);
+  }
+  function gzhShowToast(msg){
+    var t=document.getElementById('gzhToast');
+    t.textContent=msg;t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer=setTimeout(function(){t.classList.remove('show');},2800);
+  }
+  function gzhFlashButton(btn,label){
+    if(!btn) return;
+    if(!btn._origText) btn._origText=btn.textContent;
+    btn.textContent=label;
+    clearTimeout(btn._resetTimer);
+    btn._resetTimer=setTimeout(function(){btn.textContent=btn._origText;},2200);
+  }
+  async function gzhCopyPayload(htmlStr,plainStr,el,btn,toastOk){
+    function announceCopied(){
+      gzhShowToast(toastOk);
+      gzhFlashButton(btn,'已复制');
+    }
+    function selectBody(){
+      var sel=window.getSelection();
+      if(!el || !sel) return null;
+      var range=document.createRange();
+      range.selectNodeContents(el);
+      if(btn && btn.blur) btn.blur();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      return sel;
+    }
+
+    // ClipboardItem 必须由用户点击触发；预览外壳不进入 text/html 正文。
+    try{
+      if(el && navigator.clipboard && navigator.clipboard.write &&
+         typeof ClipboardItem!=='undefined' && typeof Blob!=='undefined'){
+        var item=new ClipboardItem({
+          'text/html':new Blob([htmlStr],{type:'text/html'}),
+          'text/plain':new Blob([plainStr],{type:'text/plain'})
+        });
+        await navigator.clipboard.write([item]);
+        announceCopied();
+        return;
+      }
+    }catch(e){/* 权限或浏览器限制时继续尝试选区复制。 */}
+
+    var sel=null,ok=false;
+    var copyHandler=function(event){
+      try{
+        if(!event.clipboardData || !event.clipboardData.setData) return;
+        event.clipboardData.setData('text/html',htmlStr);
+        event.clipboardData.setData('text/plain',plainStr);
+        event.preventDefault();
+      }catch(e){/* 事件剪贴板不支持时仍保留浏览器选区复制。 */}
+    };
+    try{
+      document.addEventListener('copy',copyHandler,{once:true});
+      sel=selectBody();if(sel) ok=document.execCommand('copy');
+    }catch(e){ok=false;}
+    finally{document.removeEventListener('copy',copyHandler);}
+    if(ok){
+      sel.removeAllRanges();
+      announceCopied();
+    }else{
+      try{sel=selectBody();}catch(e){sel=null;}
+      gzhShowToast(sel ? '自动复制未完成，正文已选中。请直接按 Ctrl/⌘+C，再到公众号编辑器粘贴。'
+        : '无法自动选中正文，请打开交付的干净正文 HTML 文件，手动选择正文并复制。');
+    }
+  }
+  async function gzhCopy(){
+    var el=document.getElementById('gzh-content');
+    var btn=document.getElementById('gzhCopyBtn');
+    var htmlStr=el ? el.innerHTML : '';
+    var plainStr=el ? (el.innerText||el.textContent||'') : '';
+    await gzhCopyPayload(htmlStr,plainStr,el,btn,'内容已写入剪贴板；粘贴到公众号后请复核排版与素材是否完整');
+  }
+  async function gzhCopyNoTitle(){
+    var el=document.getElementById('gzh-content');
+    var btn=document.getElementById('gzhCopyBodyBtn');
+    if(!el) return;
+    var clone=el.cloneNode(true);
+    var firstH1=clone.querySelector ? clone.querySelector('h1') : null;
+    if(firstH1 && firstH1.parentNode) firstH1.parentNode.removeChild(firstH1);
+    var htmlStr=clone.innerHTML.trim();
+    var plainStr=(clone.textContent||'').trim();
+    await gzhCopyPayload(htmlStr,plainStr,el,btn,'已写入不含主标题的正文到剪贴板；请到公众号正文框粘贴复核');
+  }
+</script>
+</body>
+</html>

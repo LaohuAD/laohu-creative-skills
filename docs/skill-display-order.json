@@ -12,13 +12,7 @@
         { "command": "/laohu-cover", "label": "封面与信息图" },
         { "command": "/laohu-image", "label": "构思图片画面" },
         { "command": "/laohu-title", "label": "标题与传播入口" },
-        {
-          "command": "/laohu-htmlshow",
-          "label": "HTML 展示",
-          "children": [
-            { "command": "/laohu-htmlshow-gzh", "label": "公众号排版" }
-          ]
-        },
+        { "command": "/laohu-htmlshow", "label": "HTML 展示" },
         { "command": "/laohu-assets", "label": "筛选可复用资产" },
         { "command": "/laohu-archive", "label": "作品收录" },
         { "command": "/laohu-update", "label": "安装与更新" },

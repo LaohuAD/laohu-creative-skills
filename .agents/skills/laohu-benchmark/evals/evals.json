@@ -379,7 +379,7 @@
       "input_files": [],
       "execution_mode": "conditional",
       "expected_behavior": [
-        "从当前任务确认的业务项目位置找 benchmark；不以 Skill 安装目录推断资料路径。",
+        "这条请求指向当前项目的已有库；从确认的位置使用 --library-root，只看该库。",
         "只调用 info 查看状态、可靠清点和 revision，不查询或读取具体卡片，不全量加载描述。",
         "把 current 限定解释为 path/size/mtime_ns 清单相符，不声称完成记录内容审计、方法核验或实际采用检查；计数不把整来源回退当已验证独立单元数。",
         "若显示 missing，查看实际路径与返回库存信息，区分根目录缺失和根目录存在但 catalog 缺失；不建库、不修复或重建缓存。"
@@ -393,12 +393,12 @@
       "input_files": [],
       "execution_mode": "conditional",
       "expected_behavior": [
-        "这是具体文章的开放标题选择；若当前项目资料库已确认存在且同目的没有新鲜查询结果与所选详情，起草/锁定前自动做一次有界检索，不要求用户另说 benchmark 或固定命令。",
+        "这是具体文章的开放标题选择；先定位 laohu-title 的真实 SKILL.md 同级 benchmark，库可用且缺少同目的新鲜结果时，起草和锁定前自动做一次有界检索。",
         "即使用户已提供文章材料或本地 title Reference 有专业方法，也不把“材料足够写”当成跳过本地检索的理由；可按本轮决定查 material、method 或 all，避免全量描述卡。",
         "从候选卡只读取少量相关详情，把结果交回 laohu-title 的专业判断并完成标题；检索候选不决定标题目标或自动采用，也不附完整 benchmark 报告。",
         "若用户明确排除资料库、标题已锁而本轮只是忠实校对/格式落地，或同目的结果可复用，则按例外跳过检索。"
       ],
-      "material_precondition": "需要本轮用户实际提供的文章材料、当前项目确认存在的资料库，以及一个尚未由同目的新鲜结果覆盖的标题选择；本 eval 不附文章或用户数据库，当前记 NOT_RUN。"
+      "material_precondition": "需要本轮用户提供的文章材料、laohu-title 可用的研究库，以及一个尚未由新鲜结果覆盖的标题选择；本 eval 不附文章或用户数据库，当前记 NOT_RUN。"
     },
     {
       "id": "faithful-correction-skips-library-retrieval",
@@ -407,7 +407,7 @@
       "input_files": [],
       "execution_mode": "conditional",
       "expected_behavior": [
-        "辨认这是受限忠实校正，没有新增材料或表现选择；即使当前项目资料库存在，也不调用 info/query/get-source/get-atom。",
+        "辨认这是受限忠实校正，没有新增材料或表现选择；直接按给定材料校正。",
         "只修复授权范围内的错别字/漏字，保护原意、顺序和语气；不借检索扩成成稿、风格改写或素材采用。"
       ],
       "material_precondition": "需要用户实际提供可读的待校正转写，并确认本轮没有开放的新创作选择；当前 eval 不附转写，记 NOT_RUN。"
@@ -423,7 +423,7 @@
         "用户目标 consumer 尚未登记时，selected atom details 明确呈现 not-registered 和共同上下文；不得臆造已有 binding，也不得因未登记自动排除候选。",
         "按需读取当前短片/动效专业方法，核实输入、适用条件、需重建或损失的信息、返回阶段和真实成品检查；仅作为探索候选，不记录 usage 或修改 binding。"
       ],
-      "material_precondition": "需要真实的新媒介任务、当前项目确认的资料库及至少一个可读 method 候选；没有用户库或候选时记 NOT_RUN，不合成数据库记录。"
+      "material_precondition": "需要真实的新媒介任务、接收专业 Skill 的已确认资料库及至少一个可读 method 候选；缺少库或候选时记 NOT_RUN。"
     },
     {
       "id": "same-purpose-query-and-detail-are-reused",
@@ -476,6 +476,160 @@
         "清楚说明这是一条来源材料候选，不自动称为成熟方法、consumer binding、已采用或效果证据。"
       ],
       "material_precondition": "需要当前项目中真实存在 source-only 来源或有稳定 unit 的材料记录；本 eval 不附用户数据库，当前记 NOT_RUN。"
+    },
+    {
+      "id": "animation-screenshots-do-not-prove-motion",
+      "type": "behavior",
+      "prompt": "我提供的只有这段动画的几张截图，没有原视频。我记得其中有个字母形状变成了下一幕。请分析这几张图现在能支持什么，以及要确认那个动效还缺什么材料。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "material_identity": "用户提供的静态截图；当前未提供视频、连续帧或音轨。",
+      "expected_behavior": [
+        "只描述截图实际可见的形态、材质、配色、排印、遮挡和空间关系；明确这组图片不能证明字形变形路径、方向、时长、相位、转场连续性或声音同步。",
+        "不把用户回忆改写成已核验的视频事实；可说明这是用户转述，并指出若需确认转场需读取原视频及前后上下文。",
+        "不给截图补出AE、Three.js、弹簧算法、参数或精确时间；在可用静态范围内仍完成有依据的分析。",
+        "不写 source、atom、usage 或 Motion 生产文件；普通分析继续只读。",
+        "若用户要确认动态方法，说明需读取同一真实版本中动作前、中间连续帧、接触/揭示、落定及相关前后切点；涉及声画关系时还要实际听同一时钟下的音轨。不同条件或限制未被材料覆盖时写明未知，不从几张静帧补出动作、音色或受众审美证明。"
+      ],
+      "material_precondition": "需要用户真实提供截图并明确没有可读原视频；当前 eval 不附截图，缺少时记 NOT_RUN。"
+    },
+    {
+      "id": "animation-transition-uses-contiguous-context",
+      "type": "behavior",
+      "prompt": "我认可这段片子里圆点穿过标题 O 后显出下一场景的转场。请先看清它是怎样接上的，再整理成可以交给 Motion 的一个完整动作方法。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "expected_behavior": [
+        "沿用用户认可的圆点穿字转场，核对实际作品版本和时间基准，以正常速度先看完整指定范围和前后承接，再回看动作起点、连续中间帧、首次揭开新画面的帧和落定结果。",
+        "为关键观察保留可回指的时码/帧号，描述字母、圆点、遮挡和镜头/尺度如何从前态走到后态；区分帧上可见事实与对连续运动机制的推论。",
+        "把与视觉效果耦合的运动、遮罩、视点、时间及实际声响作为一个完整配方，说明必须保留的关系、开放变量和渲染检查位置；不拆成互不完整的小原子。",
+        "若未提供源码，不把视频外观反推成实际算法或生产栈；报告没有读取的音频范围和其他限制。",
+        "把动作候选交回现有 Motion 配方和本地消费者比较，复用已有适用做法；不因为分析完成就写入研究库或生产资源。"
+      ],
+      "material_precondition": "需要用户实际提供可读的视频版本及用户标出的转场范围；本 eval 不附视频，缺少时记 NOT_RUN。"
+    },
+    {
+      "id": "animation-mp4-does-not-prove-source-algorithm",
+      "type": "behavior",
+      "prompt": "这是我喜欢的动效 MP4。请告诉我作者是不是用 Three.js 做的，弹簧的 freq/damp 精确是多少、关键转场用了哪种 shader；我想尽量复现。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "expected_behavior": [
+        "读取视频实际可达的画面和与请求相关的技术元数据，按时码/帧号报告可核实特征；只有本次任务涉及声音或声画关系时才读取音轨。把“精确工具/参数/着色器”标为现有 MP4 证据不能确认。",
+        "将可观察动作形态、连续性与时间关系和机制推论分开；不得以相似外观声称已读到作者源码、工程或内部状态。",
+        "说明要核实作者实现需要原始源码/工程、版本及依赖等具体材料；仍依据视频中实际可见的动效继续拆解，并在足够清楚时给出基于成熟 Motion 方法的本地复现路线，清楚标为本地建议，不把重建冒称原实现。",
+        "没有经用户确认的源实现时，不锁定原作工具、算法名或数值参数，不把猜测写进方法 atom。"
+      ],
+      "material_precondition": "需要用户提供实际 MP4；若有可读取的作者源码/工程则另行标明。当前 eval 不附任何源文件，记 NOT_RUN。"
+    },
+    {
+      "id": "localized-animation-effect-does-not-fill-style-card",
+      "type": "behavior",
+      "prompt": "我认可的只有视频 2.4–2.8 秒那次液态遮罩揭幕。请把这个效果完整拆开；不要顺手把整支片说成这种风格。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "expected_behavior": [
+        "只将用户指定的液态遮罩动作作为主要观察单位，读取其起点、连续相位、结果及必要前后上下文，不强行遍历整片所有风格特征。",
+        "交付局部效果的完整方法候选，说明来源事实、机制推论、时钟/空间条件、耦合步骤和局限；不建立整片风格边界。",
+        "即使用户提到风格，也不把一次局部效果编成完整 Motion 风格卡；不为凑原版模板要求的信号数量、技术路线、声音调色板或适配范围而补造信息。",
+        "需要新增生产配方时与现有 recipes 比较并交给 Motion 正式维护流程；本次 Benchmark 分析本身不写生产文件。"
+      ],
+      "material_precondition": "需要可读的完整视频并能定位用户所指的 2.4–2.8 秒范围；本 eval 不附该视频，当前记 NOT_RUN。"
+    },
+    {
+      "id": "single-video-style-scope-stays-work-specific",
+      "type": "behavior",
+      "prompt": "我很喜欢这支动画，想看看里面有哪些地方做得好、以后能学什么。请按视频本身拆解，不要把它直接归成行业通用风格。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "expected_behavior": [
+        "用户只表达喜欢整片时，不先要求用户从局部效果、整片风格或声音中挑一个；先正常速度观看可达完整范围，结合前后上下文定位具体突出点与反复出现的设计选择，再据证据推进并解释选择观察范围的理由。",
+        "跨多个段落比较实际重复选择及例外；不把某个局部效果当成贯穿全片的证据。若确有足够可描述的统一视觉语法，输出范围限定为该作品与已读版本的风格候选；若材料不足，保留局部观察并说明缺口。",
+        "只有证据支持时才用本地原版风格模板的各部分和辨识信号；作者源实现未知不妨碍足够清楚的视觉语法形成风格候选，可在技术路线中提出明确标注的本地实现建议。不得由一支视频外推通用流派、复写现有相同风格或补造信号来填满模板。",
+        "视听效果仅按实际读取音轨、连续帧、时间和上下文下结论；创作者说明、源码实现和本地重建各自标明身份。"
+      ],
+      "material_precondition": "需要用户提供可读的完整或授权范围视频；多个段落须在材料中实际可达。当前 eval 不附视频，记 NOT_RUN。"
+    },
+    {
+      "id": "complete-animation-source-adds-without-overwrite",
+      "type": "behavior",
+      "prompt": "我提供了一套可运行的动画转场源码，连同许可、依赖和调用示例都在附件里。我授权由 Evolution 把它作为新的 Motion 本地方法加入；请先与现有库核对并交接，不能覆盖已有风格、配方或脚本。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "expected_behavior": [
+        "实际阅读完整来源实现、许可、依赖、公开接口和真实消费者，再与 Motion 当前同类资源比较；不得以 MP4 预览、文件名或索引摘要代替源码核验。",
+        "确认原资源和本轮既有文件的可恢复状态；将独立且获准实现交 Evolution 写入新增 Motion 本地资源并更新真实读取者，既有 style、recipe、script、starter、模板与原始来源不被覆盖或改写；Benchmark 只分析、比较与交接。",
+        "确属同一方法时复用现有文件或指向现有实现，不因命名差异重复添加；依赖/接口不闭合时只报告缺少的部分，不宣称已能运行。",
+        "不把正式生产资源的新增说成 Benchmark 私库收录，不默认写 source/atom/usage；生产文件改动遵循已授权的 Evolution 实施路径。"
+      ],
+      "material_precondition": "需要本轮实际提供完整源码、许可、依赖说明、现有 Motion 目标资源和可比较同类项；当前 eval 不附这些材料，记 NOT_RUN。"
+    },
+    {
+      "id": "same-animation-atom-reused-across-consumers",
+      "type": "behavior",
+      "prompt": "本地已有一条能解释这类遮罩揭幕的 atom，原来绑在 laohu-motion 的转场实施决定上。我明确授权在保留现有细读和七字段 binding 的前提下，让同一关系也供 laohu-analysis/motion 的完整动画 brief 设计使用；请更新这一条，不要复制。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "expected_behavior": [
+        "读取真实 atom/source 详情与其稳定 ID，核对 laohu-motion 与 laohu-analysis/motion 两个消费者的不同决定、阶段、必要上下文、适配、返回和成品检查是否各自成立。",
+        "沿用同一 atom ID 与已有 source，保留旧 analysis 和原有 binding；仅在已授权的同一 atom 上追加完整且独立适用的新 binding，consumer_bindings 仍严格使用原七字段，不改 schema。",
+        "若现有关系不能满足 Analysis brief 的决定，应继续记为探索/候选或说明缺口，不为了两个消费者标签相同而强行绑定；不建立重复 atom 或按 consumer 新建类别。",
+        "仅这次跨消费者可用性扩展不等于真实作品已采用；没有可核对的本轮成品结果时不新增 usage，也不升级效果状态。"
+      ],
+      "material_precondition": "需要项目中真实存在该 atom/source 及现有 binding，并有可读的动画材料支持新用途；本 eval 不附私有数据库，当前记 NOT_RUN。"
+    },
+    {
+      "id": "research-collection-and-production-transfer-are-separate",
+      "type": "behavior",
+      "prompt": "我想把这支动画拆出可复用的遮罩方法，供我们之后研究；这次不用接入 Motion 的正式生产资源。请说明研究记录怎么收、现在能否被生成任务直接调用。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "expected_behavior": [
+        "先按实际视频与来源证据分析方法，按现有 Benchmark 来源/atom 格式提出具体收录方案；用户未批准具体拟保存内容前不写库，沿用原子复用和授权边界。",
+        "明确 Benchmark 私有研究记录不等于 Motion 本地生产文件；若正式生产资源尚未写入并接通，回答运行时不可直接依赖该私库调用。",
+        "不因研究收录需求创建/改写 Motion 模板、配方或脚本，不伪称生产方法已安装或验证可运行。"
+      ],
+      "material_precondition": "需要可读的用户动画源和本轮实际资料库状态；收录还需要已确认的研究方案及授权。当前 eval 不附源视频或数据库，记 NOT_RUN。"
+    },
+    {
+      "id": "production-transfer-does-not-imply-research-collection",
+      "type": "behavior",
+      "prompt": "我认可的源方法已够清楚，也授权由 Evolution 把它完整接入 Motion 本地运行资源；这次不要在 Benchmark 研究库收录。请准备正式转入所需的证据和接口说明。",
+      "input_files": [],
+      "execution_mode": "conditional",
+      "expected_behavior": [
+        "整理方法所需的完整输入、条件、步骤、源码依赖/许可、真实 Motion consumer、返回点及渲染检查，不把摘要或原子 ID 当作生产实现。",
+        "将正式文件写入与实际消费者接通交由 Evolution 按授权流程实施；本次 Benchmark 不写 source、atom 或 usage，也不建立第二份私库。",
+        "转入前不声称资源可运行；转入后以本地文件、调用路径和实际技术检查为证据，若任一未完成则准确标明未接通范围。",
+        "运行时方法应由 Motion 本地生产资源完整提供，不要求未来使用者回查 Benchmark 私库补全步骤。"
+      ],
+      "material_precondition": "需要用户实际授权的完整来源方法、Motion 本地目标和 Evolution 的有效写入交接；本 eval 无这些材料和实施记录，当前记 NOT_RUN。"
+    },
+    {
+      "id": "animation-style-overlap-compares-production-mechanisms",
+      "type": "behavior",
+      "execution_mode": "conditional",
+      "input_files": [
+        ".cache/restore/animation-showreel-rebuild/styles/entries/L17.md",
+        ".cache/restore/animation-showreel-rebuild/styles/entries/L26.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/styles/crayon-storybook.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/styles/paper-cut.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/styles/shadow-puppet.md",
+        ".agents/skills/laohu-motion/templates/styles/entries/watercolor-field-journal.md",
+        ".agents/skills/laohu-motion/templates/styles/entries/paper-cut-lightbox.md",
+        ".agents/skills/laohu-motion/templates/runtime/laohu-showreel/references/styles/_template.md"
+      ],
+      "material_identity": "完整L17/L26来源正文及其最相近的受保护原版卡；相关Motion卡用于覆盖比较。静态预览仅作静帧证据。",
+      "prompt": "我觉得蜡笔绘本、剪纸和纸艺分层已经差不多。请通读附件来源与相近卡，判断两个候选方法是否已被现有生产卡完整覆盖；按实际机制说明保留、复用或新增的依据，不要只按名字或静帧下结论。",
+      "expected_behavior": [
+        "通读两份候选来源正文及列出的相近卡；按材料如何生成图像、对象连接与运动、光路/空间、排印、声音、适用与排除条件比较实际方法，不以风格名称或题材相近推定完整覆盖。",
+        "对L17保留纸齿锚定、压力决定蜡覆盖、蜡层排斥水彩的因果链；指出原版crayon-storybook虽有蜡笔、纸纹、12fps沸线和一般水彩，但没有这组压力/抗染机制。",
+        "对L26保留前光不透明红纸、镂空和铆点关节纸偶的12fps动作；区分paper-cut的多层纸空间/层间投影与shadow-puppet的透光皮革/幕布背光，也核对背光灯箱变体并说明其为何不覆盖此动作结构。",
+        "把有来源正文支持的独立机制作为明确变体交正式Motion维护，并说明与相邻原版卡的关系；原版内容只读不覆盖。若差异实际上只换题材或外观，则复用已有ID，不为数量凑条目。",
+        "使用来源全文中的具体机制与参数；静态预览不证明连续动作、真实源码、实际作者工具或本地渲染。来源实施路径只可作为源示例，技术重建须标为本地路线。",
+        "Benchmark分析与正式生产写入分开；按既有授权流程交接，不把本次分析或资料库记录称为已接通、可运行的生产资源。"
+      ],
+      "material_precondition": "需要所列L17/L26完整来源正文、三张真实相近原版卡及相关新增Motion卡可读。该案例比较来源文方法，不要求假设视频连续运动或作者源码；缺少任何关键文本时记NOT_RUN。"
     }
   ],
   "execution_notes": [

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>动画制作工作台</title><link rel="stylesheet" href="/__showreel-editor/editor.css">
+<style>
+.topbar h1{font:600 15px/1.4 inherit;font-family:inherit;font-size:15px;margin:0;color:var(--text)}
+#garden-work{display:flex;min-height:0;flex:1}
+#garden-work iframe{border:0;flex:1;min-width:0;background:var(--bg)}
+#plan{width:clamp(235px,23vw,335px);border-left:1px solid var(--line);display:flex;flex-direction:column;background:var(--panel)}
+#stages-list{overflow:auto;flex:1;padding:5px 12px 15px}
+details.phase{border-bottom:1px solid var(--line);padding:7px 0}
+.phase summary{cursor:pointer;min-height:29px;padding:4px 0}.phase summary span{float:right}
+.phase p{color:#afb6bf;line-height:1.55;overflow-wrap:anywhere;margin:4px 0 8px}
+.phase button.item{width:100%;display:grid;grid-template-columns:50px 1fr auto;align-items:baseline;gap:5px;text-align:left;white-space:normal;padding:7px 4px;margin:2px 0;border:1px solid transparent;background:transparent}
+.phase button.item:focus-visible,.phase button.item:hover,.phase button.item.selected{background:#252b24;border-color:#47543c}
+.phase button.item:disabled{opacity:.8}
+.stamp,#frame-clock{font:11px ui-monospace,monospace;font-variant-numeric:tabular-nums;color:#bac4cf}
+.tag{font-size:10px;color:#a6adb8}.tag.available{color:#bddc9b}.tag.pending{color:#dec18c}
+.phase a{font-size:11px;display:inline-block;margin:2px 8px 5px 0}
+.statusbar{gap:15px} #sync-note{margin-left:auto}
+@media(max-width:780px){#plan{width:205px}.topbar{gap:8px}}@media(max-width:580px){#garden-work{flex-direction:column}#plan{width:auto;height:32%;border-top:1px solid var(--line)}}
+</style></head><body>
+<header class="topbar"><h1 class="project-title" id="project-name">动画制作工作台</h1><div class="top-actions"><button id="toggle-progress" aria-expanded="true" aria-controls="plan"><i class="status-dot"></i><span id="current-stage">制作流程</span></button></div></header>
+<main id="garden-work"><iframe id="garden-motion" title="工程预览与时间轴" src="/studio/embed?session=project&amp;project=project" allow="autoplay; fullscreen"></iframe>
+<aside id="plan" aria-label="制作流程"><div class="panel-heading"><strong>制作流程</strong><span id="plan-count"></span></div><div id="stages-list"></div></aside></main>
+<footer class="statusbar"><output id="frame-clock">00:00.00</output><span id="selection" role="status">正在连接工程</span><span id="sync-note"></span></footer>
+<script type="module" src="/__showreel-editor/garden-studio.js"></script></body></html>

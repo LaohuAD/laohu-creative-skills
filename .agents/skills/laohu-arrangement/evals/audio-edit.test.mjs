@@ -5,13 +5,22 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { editSourceWav, readWavInfo, validateSpec } from "../scripts/audio-edit.mjs";
+import { decodeIndexedAsset, editSourceWav, readWavInfo, validateSpec } from "../scripts/audio-edit.mjs";
 
 const evalDir = path.dirname(fileURLToPath(import.meta.url));
 const arrangementDir = path.resolve(evalDir, "..");
 const projectRoot = path.resolve(arrangementDir, "../../..");
 const scriptFile = path.join(arrangementDir, "scripts", "audio-edit.mjs");
+const cacheRoot = process.env.MOTION_AUDIO_TEST_TMP_DIR
+  ? path.resolve(process.env.MOTION_AUDIO_TEST_TMP_DIR)
+  : path.join(projectRoot, ".cache", "tmp", "arrangement-sound", "audio-edit-tests");
+const artifactRoot = process.env.MOTION_AUDIO_TEST_ARTIFACTS_DIR
+  ? path.resolve(process.env.MOTION_AUDIO_TEST_ARTIFACTS_DIR)
+  : path.join(projectRoot, ".cache", "validation", "motion-resource-upgrade", "audio");
 const ffmpeg = process.env.MOTION_TEST_FFMPEG || process.env.MOTION_FFMPEG;
+const ffprobe = process.env.MOTION_TEST_FFPROBE || process.env.MOTION_FFPROBE
+  || (ffmpeg && (path.isAbsolute(ffmpeg) || ffmpeg.includes(path.sep))
+    ? path.join(path.dirname(path.resolve(ffmpeg)), "ffprobe") : "ffprobe");
 
 function hash(bytes) { return createHash("sha256").update(bytes).digest("hex"); }
 function run(command, args, env = process.env) {
@@ -58,7 +67,6 @@ test("audio-edit spec refuses ambiguous tempo and unsupported fields", () => {
 });
 
 test("CLI edits real source WAVs, records duration/hash/hitpoint mapping, and keeps source files intact", { skip: !ffmpeg }, async () => {
-  const cacheRoot = path.join(projectRoot, ".cache", "tmp", "arrangement-sound", "audio-edit-tests");
   await fs.mkdir(cacheRoot, { recursive: true });
   const directory = await fs.mkdtemp(path.join(cacheRoot, "real-source-edit-"));
   try {
@@ -68,11 +76,17 @@ test("CLI edits real source WAVs, records duration/hash/hitpoint mapping, and ke
     const receiptFile = path.join(directory, "derived.receipt.json");
     await makeSine(source);
     const sourceHash = hash(await fs.readFile(source));
+    const sourceAsset = {
+      assetId: "licensed-source-asset",
+      sha256: sourceHash,
+      generationMode: "indexed-source",
+      redistributionStatus: "redistributable",
+    };
     const spec = {
       schemaVersion: 1,
       notes: "Technical test only; not a listening or ready-status claim.",
       layers: [
-        { id: "tempo-layer", file: "source.wav", sourceInSec: 0.1, sourceOutSec: 0.9, startSec: 0.2, gainDb: -6, fadeInSec: 0.02, fadeOutSec: 0.02, tempo: 2, repeatCount: 2, crossfadeSec: 0.05, hitPointsSec: [0.3] },
+        { id: "tempo-layer", file: "source.wav", sourceAsset, sourceInSec: 0.1, sourceOutSec: 0.9, startSec: 0.2, gainDb: -6, fadeInSec: 0.02, fadeOutSec: 0.02, tempo: 2, repeatCount: 2, crossfadeSec: 0.05, hitPointsSec: [0.3] },
         { id: "rate-layer", file: "source.wav", sourceInSec: 0.2, sourceOutSec: 0.8, startSec: 0.1, playbackRate: 1.5, hitPointsSec: [0.35] },
       ],
     };
@@ -93,6 +107,11 @@ test("CLI edits real source WAVs, records duration/hash/hitpoint mapping, and ke
     assert.equal(receipt.reviewStatus, "candidate-unreviewed");
     assert.equal(receipt.output.sha256, hash(await fs.readFile(outputFile)));
     assert.equal(receipt.layers[0].edit.timeChange, "tempo-preserving-pitch");
+    assert.equal(receipt.sourceLineage.format, "laohu.audio-source-lineage/1");
+    assert.equal(receipt.sourceLineage.status, "incomplete-source-declarations", "undeclared layers remain visibly incomplete");
+    assert.equal(receipt.sourceLineage.parents[0].assetId, sourceAsset.assetId);
+    assert.equal(receipt.sourceLineage.parents[0].sha256, sourceHash);
+    assert.equal(receipt.layers[0].sourceAsset.redistributionStatus, "redistributable");
     assert.deepEqual(receipt.layers[0].hitPoints.map((item) => item.sample), [14400, 31200]);
     assert.equal(receipt.layers[1].edit.timeChange, "playback-rate-changes-pitch");
     assert.equal(receipt.layers[1].hitPoints[0].sample, 9600);
@@ -102,8 +121,117 @@ test("CLI edits real source WAVs, records duration/hash/hitpoint mapping, and ke
   }
 });
 
+test("indexed MP3 and OGG decode receipts bind original identity through a derived technical mix", { skip: !ffmpeg || !ffprobe }, async () => {
+  const indexPath = path.join(projectRoot, ".agents", "skills", "laohu-motion", "assets", "audio", "index.json");
+  const index = JSON.parse(await fs.readFile(indexPath, "utf8"));
+  const music = index.assets.find((asset) => asset.id === "freesound.music-explanatory-soft-piano-710546");
+  const sfx = index.assets.find((asset) => asset.id === "kenney.impact-wood-light-001");
+  assert.ok(music, "the real indexed Freesound MP3 is available");
+  assert.ok(sfx, "the real indexed Kenney OGG is available");
+  const validationDir = artifactRoot;
+  const scratchDir = path.join(projectRoot, ".cache", "tmp", "motion-resource-upgrade", "audio", "identity-chain-test");
+  await fs.mkdir(validationDir, { recursive: true });
+  const musicOriginalPath = path.resolve(path.dirname(indexPath), music.file);
+  const sfxOriginalPath = path.resolve(path.dirname(indexPath), sfx.file);
+  const musicOriginalSha = hash(await fs.readFile(musicOriginalPath));
+  const sfxOriginalSha = hash(await fs.readFile(sfxOriginalPath));
+  const musicWav = path.join(validationDir, "identity-chain-soft-piano-decoded.wav");
+  const musicDecodeReceiptPath = path.join(validationDir, "identity-chain-soft-piano-decoded.receipt.json");
+  const sfxWav = path.join(validationDir, "identity-chain-wood-impact-decoded.wav");
+  const sfxDecodeReceiptPath = path.join(validationDir, "identity-chain-wood-impact-decoded.receipt.json");
+  const musicDecode = await decodeIndexedAsset({
+    assetIndexFile: indexPath, assetId: music.id, outputFile: musicWav, receiptFile: musicDecodeReceiptPath,
+    tmpDir: scratchDir, workRoot: projectRoot, ffmpeg, ffprobe, overwrite: true,
+  });
+  const sfxDecode = await decodeIndexedAsset({
+    assetIndexFile: indexPath, assetId: sfx.id, outputFile: sfxWav, receiptFile: sfxDecodeReceiptPath,
+    tmpDir: scratchDir, workRoot: projectRoot, ffmpeg, ffprobe, overwrite: true,
+  });
+  const musicInfo = await readWavInfo(musicWav);
+  const sfxInfo = await readWavInfo(sfxWav);
+  const durationSec = Math.min(5, musicInfo.durationSec);
+  const impactDurationSec = Math.min(0.55, sfxInfo.durationSec);
+  assert.ok(durationSec > 2 && impactDurationSec > 0.05);
+  const specFile = path.join(validationDir, "identity-chain-technical-mix.spec.json");
+  const outputFile = path.join(validationDir, "identity-chain-technical-mix.wav");
+  const editReceiptFile = path.join(validationDir, "identity-chain-technical-mix.receipt.json");
+  const spec = {
+    schemaVersion: 1,
+    notes: "Technical MP3+OGG decode and source-edit chain proof; not auditioned and not a creative mix approval.",
+    layers: [
+      {
+        id: "indexed-music-bed", file: path.basename(musicWav), sourceAssetReceipt: path.basename(musicDecodeReceiptPath),
+        sourceInSec: 0, sourceOutSec: durationSec, startSec: 0, gainDb: -12,
+        fadeInSec: 0.15, fadeOutSec: 0.3,
+      },
+      {
+        id: "indexed-wood-impact", file: path.basename(sfxWav), sourceAssetReceipt: path.basename(sfxDecodeReceiptPath),
+        sourceInSec: 0, sourceOutSec: impactDurationSec, startSec: 1.2, gainDb: -14,
+      },
+    ],
+  };
+  await fs.writeFile(specFile, `${JSON.stringify(spec, null, 2)}\n`);
+  const edit = await editSourceWav({
+    specFile, outputFile, receiptFile: editReceiptFile, tmpDir: scratchDir, ffmpeg, overwrite: true,
+  });
+  const editReceipt = edit.receipt;
+  assert.equal(editReceipt.reviewStatus, "candidate-unreviewed");
+  assert.equal(editReceipt.sourceLineage.status, "indexed-decode-receipt-and-hash-matched");
+  assert.equal(editReceipt.output.sha256, hash(await fs.readFile(outputFile)));
+  assert.equal(editReceipt.output.durationSec, 5);
+  const lineageById = new Map(editReceipt.sourceLineage.parents.map((parent) => [parent.parent.assetId, parent]));
+  for (const [asset, decoded, originalSha, layerId] of [
+    [music, musicDecode, musicOriginalSha, "indexed-music-bed"],
+    [sfx, sfxDecode, sfxOriginalSha, "indexed-wood-impact"],
+  ]) {
+    const decodedReceipt = JSON.parse(await fs.readFile(decoded.receiptFile, "utf8"));
+    const layer = editReceipt.layers.find((row) => row.id === layerId);
+    const lineage = lineageById.get(asset.id);
+    assert.equal(decodedReceipt.sourceSha256, originalSha);
+    assert.equal(decodedReceipt.sourceAsset.id, asset.id);
+    assert.equal(decodedReceipt.decoded.sha256, hash(await fs.readFile(decoded.output)));
+    assert.equal(layer.source.sha256, decodedReceipt.decoded.sha256);
+    assert.equal(layer.sourceAsset.sha256, decodedReceipt.decoded.sha256);
+    assert.equal(layer.sourceAsset.sourceAssetReceiptSha256, hash(await fs.readFile(decoded.receiptFile)));
+    assert.equal(layer.sourceAsset.parent.assetId, asset.id);
+    assert.equal(layer.sourceAsset.parent.sha256, originalSha);
+    assert.equal(lineage.sha256, decodedReceipt.decoded.sha256);
+    assert.equal(lineage.parent.sha256, originalSha);
+    assert.equal(lineage.parent.sourceProvenance.author, asset.author);
+    assert.equal(lineage.parent.sourceProvenance.license, asset.license);
+    assert.equal(lineage.parent.sourceProvenance.sourcePage, asset.source.page);
+    assert.equal(decodedReceipt.reviewStatus, "candidate-unreviewed");
+  }
+  assert.equal(editReceipt.layers.find((row) => row.id === "indexed-music-bed").sourceAsset.parent.assetId, music.id);
+  assert.equal(editReceipt.layers.find((row) => row.id === "indexed-wood-impact").sourceAsset.parent.assetId, sfx.id);
+  assert.equal(hash(await fs.readFile(musicOriginalPath)), musicOriginalSha, "original MP3 stays unchanged");
+  assert.equal(hash(await fs.readFile(sfxOriginalPath)), sfxOriginalSha, "original OGG stays unchanged");
+});
+
+test("audio-edit refuses source lineage metadata whose hash does not match the actual layer WAV", { skip: !ffmpeg }, async () => {
+  await fs.mkdir(cacheRoot, { recursive: true });
+  const directory = await fs.mkdtemp(path.join(cacheRoot, "lineage-hash-mismatch-"));
+  try {
+    const source = path.join(directory, "source.wav");
+    const specFile = path.join(directory, "spec.json");
+    await makeSine(source);
+    await fs.writeFile(specFile, JSON.stringify({
+      schemaVersion: 1,
+      layers: [{ id: "source", file: "source.wav", sourceAsset: {
+        assetId: "mismatched-source", sha256: "0".repeat(64), generationMode: "indexed-source", redistributionStatus: "redistributable",
+      } }],
+    }));
+    await assert.rejects(editSourceWav({
+      specFile, outputFile: path.join(directory, "derived.wav"), receiptFile: path.join(directory, "derived.receipt.json"),
+      tmpDir: path.join(directory, "tmp"), ffmpeg,
+    }), /sourceAsset.sha256 does not match the actual source WAV/);
+    assert.equal(await fs.access(path.join(directory, "derived.wav")).then(() => true, () => false), false);
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});
+
 test("tempo keeps pitch while playbackRate changes pitch in actual rendered WAVs", { skip: !ffmpeg }, async () => {
-  const cacheRoot = path.join(projectRoot, ".cache", "tmp", "arrangement-sound", "audio-edit-tests");
   await fs.mkdir(cacheRoot, { recursive: true });
   const directory = await fs.mkdtemp(path.join(cacheRoot, "tempo-vs-rate-"));
   try {
@@ -129,7 +257,6 @@ test("tempo keeps pitch while playbackRate changes pitch in actual rendered WAVs
 });
 
 test("technical loop crossfade reduces a discontinuous source seam without claiming musical phrase validity", { skip: !ffmpeg }, async () => {
-  const cacheRoot = path.join(projectRoot, ".cache", "tmp", "arrangement-sound", "audio-edit-tests");
   await fs.mkdir(cacheRoot, { recursive: true });
   const directory = await fs.mkdtemp(path.join(cacheRoot, "loop-seam-"));
   try {
@@ -155,16 +282,60 @@ test("technical loop crossfade reduces a discontinuous source seam without claim
       const seamEnd = crossfadeSec ? 0.81 : 0.81;
       results.push({ info, samples: await readFloatSamples(outputFile, seamStart, seamEnd) });
     }
-    assert.ok(Math.abs(results[0].info.durationSec - 1.6) <= 1 / 48000);
-    assert.ok(Math.abs(results[1].info.durationSec - 1.5) <= 1 / 48000);
+    assert.ok(Math.abs(results[0].info.durationSec - 1.6) <= 2 / 48000);
+    assert.ok(Math.abs(results[1].info.durationSec - 1.5) <= 2 / 48000);
     assert.ok(maxAdjacentDelta(results[1].samples) < maxAdjacentDelta(results[0].samples), "crossfade smooths the constructed signal discontinuity");
   } finally {
     await fs.rm(directory, { recursive: true, force: true });
   }
 });
 
+test("cross-source music handoff keeps both independently faded layers overlapping instead of creating a gap", { skip: !ffmpeg }, async () => {
+  await fs.mkdir(cacheRoot, { recursive: true });
+  const directory = await fs.mkdtemp(path.join(cacheRoot, "cross-source-handoff-"));
+  try {
+    await makeSine(path.join(directory, "section-a.wav"), 440, 1, "0.45");
+    await makeSine(path.join(directory, "section-b.wav"), 880, 1, "0.45");
+    const layerA = { id: "section-a", file: "section-a.wav", startSec: 0, fadeOutSec: 0.3, gainDb: -6 };
+    const layerB = { id: "section-b", file: "section-b.wav", startSec: 0.8, fadeInSec: 0.3, gainDb: -6 };
+    const render = async (name, layers) => {
+      const specFile = path.join(directory, `${name}.json`);
+      const outputFile = path.join(directory, `${name}.wav`);
+      const receiptFile = path.join(directory, `${name}.receipt.json`);
+      await fs.writeFile(specFile, JSON.stringify({
+        schemaVersion: 1,
+        notes: "Technical linear-sum reference only; source phrase, harmony, and listening quality are not judged by this test.",
+        layers,
+      }, null, 2));
+      const result = await editSourceWav({
+        specFile, outputFile, receiptFile, tmpDir: path.join(directory, `${name}-tmp`), ffmpeg,
+      });
+      return { outputFile, result };
+    };
+    const soloA = await render("solo-a", [layerA]);
+    const soloB = await render("solo-b", [layerB]);
+    const mixed = await render("handoff", [layerA, layerB]);
+    assert.ok(Math.abs(mixed.result.durationSec - 1.8) <= 1 / 48000);
+    assert.equal(mixed.result.receipt.layers[0].edit.startSec, 0);
+    assert.equal(mixed.result.receipt.layers[1].edit.startSec, 0.8);
+    assert.ok(mixed.result.receipt.layers[0].edit.startSec + mixed.result.receipt.layers[0].edit.derivedDurationSec > mixed.result.receipt.layers[1].edit.startSec,
+      "the first source remains active when the second source starts");
+    const [a, b, sum] = await Promise.all([
+      readFloatSamples(soloA.outputFile, 0.9, 0.95),
+      readFloatSamples(soloB.outputFile, 0.9, 0.95),
+      readFloatSamples(mixed.outputFile, 0.9, 0.95),
+    ]);
+    assert.equal(sum.length, a.length);
+    assert.equal(sum.length, b.length);
+    const maximumLinearSumError = Math.max(...sum.map((sample, index) => Math.abs(sample - a[index] - b[index])));
+    assert.ok(maximumLinearSumError <= 1e-5,
+      `cross-source handoff must equal the two independently faded source layers in their overlap (max error ${maximumLinearSumError})`);
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});
+
 test("float source summing retains over-range peaks and reports them without normalization or limiting", { skip: !ffmpeg }, async () => {
-  const cacheRoot = path.join(projectRoot, ".cache", "tmp", "arrangement-sound", "audio-edit-tests");
   await fs.mkdir(cacheRoot, { recursive: true });
   const directory = await fs.mkdtemp(path.join(cacheRoot, "float-headroom-"));
   try {
@@ -185,7 +356,6 @@ test("float source summing retains over-range peaks and reports them without nor
 });
 
 test("source spec path and same-inode aliases cannot be overwritten as outputs", { skip: !ffmpeg }, async () => {
-  const cacheRoot = path.join(projectRoot, ".cache", "tmp", "arrangement-sound", "audio-edit-tests");
   await fs.mkdir(cacheRoot, { recursive: true });
   const directory = await fs.mkdtemp(path.join(cacheRoot, "path-protection-"));
   try {

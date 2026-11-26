@@ -238,7 +238,7 @@
       "expected_behavior": [
         "读取 laohu-arrangement-salsa；按两小节2–3 clave组织montuno/guajeo，bass在前一小节第4拍预奏根音并持续越过边线、占住下一小节第1拍（QN offset 至少越过新小节起点一个拍位），给2&的五度/和弦音回应留空；若交ABC/MusicXML须将跨线延音分段tie。",
         "把主唱句后转合唱/应答的时点编入结构，不任意逐小节翻转 clave 方向。",
-        "完整独立新作无速度输入时采用 4/4、96 BPM 四分音符宏拍（不按48半速计），80小节：Intro8→Verse16→Coro/Pregón16→Montuno16→Final Coro/Pregón16→Outro8；明确 2–3 clave 的两小节方向循环。双倍 subdivision 只标细分，不把 tempo-map 改写成192 BPM后沿用相同小节长度。"
+        "完整独立新作无速度输入时采用标准 2 小节 = 1 Clave 的 4/4 Cut-Time 记谱，明确标出二分音符宏拍 90–100 BPM 与对应的 DAW/MIDI/ABC 四分音符速度 180–200 BPM（如 ♩=184 或 192 BPM / 𝅗𝅥=92 或 96 BPM，避免误将四分音符写成 96 BPM 导致实播变成 48 BPM 半速），并给出清晰可计算的 2–3 clave 两小节循环与完整段落表。"
       ],
       "context": "验证 salsa 周期与低音、钢琴、合唱的对齐。"
     },

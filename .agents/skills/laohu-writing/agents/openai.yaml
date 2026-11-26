@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-writing | 老胡内容写作"
-  short_description: "创作或修订文章与口播讲解稿，复盘其内容或结构；按用户目标选择媒介，不由材料推断。"
-  default_prompt: "使用 $laohu-writing，请根据材料和目标交付文章、口播讲解稿，或复盘现有稿件的内容/结构；保留事实、观点与作者声音，不由输入媒介推断输出形式。"
+  short_description: "创作或修订文章、教程、口播、短帖与飞书文稿，或复盘内容和结构。"
+  default_prompt: "使用 $laohu-writing，按实际交付场景创作或修订文章、教程、口播讲解、短帖或飞书图文文稿。沿用已有材料、锁定项和作者声音，动画解释文字及录后复盘按需要处理。"

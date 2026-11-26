@@ -1,0 +1,50 @@
+{
+  "sourceRevision": "d10c1c9985ec874625818a9628d06a111a8feae8",
+  "categoryDescriptions": {
+    "界面操作与状态": "点击、输入、选区、加载和结果等连续的界面反馈。",
+    "卡片编排与视图切换": "卡片层叠、滚动、聚焦、分栏和版式重排。",
+    "跨屏与设备衔接": "保留同一内容或任务，穿过手机、平板、桌面与画幅变化。",
+    "流程与关系图解": "节点、连线、顺序、并行与分流怎样解释事情之间的关系。",
+    "数据与图表": "把指标、变化、对照和分布变成可读的动态图。",
+    "动态文字与排版": "字形、数字、字号、基线、语义重音和停读控制。",
+    "标志与片头": "让品牌标记出现、聚合或交接到标题与开场信息。",
+    "几何图形与粒子": "从基本图元、点群、线路与插画变化看运动机制。",
+    "三维空间与运镜": "透视推进、纵深分层、实体旋转、遮挡与镜头接力。",
+    "光效与材质": "借流光、玻璃、反射、纹理和透明度组织画面。",
+    "照片拼贴与蒙太奇": "用照片、图像切片、纸面图层和不同媒介素材建立连续画面。",
+    "实拍与人物": "跟随人的动作、景别切换及真实空间里的匹配剪辑。"
+  },
+  "entries": [
+    {
+      "id": "openmotion-motion-orbit-launch",
+      "title": "轨道信号发布片头（Orbit Launch）",
+      "summary": "信号沿外轨扫过 270 度后停稳，两行标题接续入场，完整信息留在末段。",
+      "category": "标志与片头",
+      "tags": [
+        "轨道",
+        "标志",
+        "标题",
+        "文字动效",
+        "图形动效",
+        "产品发布"
+      ],
+      "guide": "templates/motion-orbit-launch/motion.zh-CN.md",
+      "preview": "objects/15f3c61b5bba8cafb3c6d21cdc06ca1846720f3946e0d01f9dc3f9114cded3a8.webm",
+      "source": "templates/motion-orbit-launch/source",
+      "hasProjectFiles": false,
+      "contactSheet": "objects/1d21dcc69a5a91b376a19320f820b23d11168e1ac2ff3d97328c118f7f5b319a.webp",
+      "sampleTimesSeconds": [
+        0.5,
+        1.5,
+        2.5,
+        3.5,
+        4.5,
+        5.5
+      ],
+      "originalPreview": {
+        "sha256": "15f3c61b5bba8cafb3c6d21cdc06ca1846720f3946e0d01f9dc3f9114cded3a8",
+        "path": "objects/15f3c61b5bba8cafb3c6d21cdc06ca1846720f3946e0d01f9dc3f9114cded3a8.webm"
+      }
+    }
+  ]
+}

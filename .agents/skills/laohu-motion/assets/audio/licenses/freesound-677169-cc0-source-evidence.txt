@@ -1,0 +1,17 @@
+Freesound individual source-page evidence captured 2026-11-13.
+
+Source page: https://freesound.org/people/Seth_Makes_Sounds/sounds/677169/
+Title: 60 bpm background music
+Creator: Seth_Makes_Sounds
+Source page category: Music > Multiple instruments; Chill Stuff
+Source page date: February 28, 2023
+Source-page audio facts: WAV, 44.1 kHz, 24 bit, stereo, displayed duration 1:56.000.
+Uploader title/tags claim 60 BPM, background music, loop/simple music, electronic, drum-loop, and strings. These labels are source claims, not this project's listening findings.
+
+Source page license label: Creative Commons 0 (CC0). The page links to the canonical CC0 1.0 deed.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Individual-page community facts at capture: 18 ratings, 249 downloads, 3 comments. Freesound search metadata separately showed average rating 4.9 with 18 votes and 249 downloads. Counts and ratings are platform activity, not a listening review.
+
+Retrieved file: Freesound high-quality MP3 preview, 2,774,437 bytes; measured duration 116.035918 seconds; SHA-256 1042ddb36f2376b4be4b26a6195c2dbade24473117f814648b6d7ad96da2da99.
+Listening status for this project: UNKNOWN. No human listening review was recorded.

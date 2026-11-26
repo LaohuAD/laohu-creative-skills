@@ -1,0 +1,10 @@
+Freesound individual source-page evidence captured 2026-11-22.
+
+Source page: https://freesound.org/people/Children_of_Creation/sounds/347815/
+Title: Warm Breeze.mp3
+Creator: Children_of_Creation
+Source page license label: Creative Commons 0 (CC0). Verified canonical deed link present on source page.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Retrieved file: Freesound MP3, 507,937 bytes; measured duration 22.414127 seconds; SHA-256 db4249473f953bf9f4e12442cbfd2967dda157326ce5742aaa5c72d7dba51d8a.
+Listening status for this project: UNKNOWN. No human listening review was recorded yet.

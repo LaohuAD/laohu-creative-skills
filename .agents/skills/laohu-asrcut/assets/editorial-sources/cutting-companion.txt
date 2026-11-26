@@ -1,0 +1,37 @@
+**3. Fade audio 30ms at every segment boundary.** `afade` in at the start and
+out at the end of each extracted segment. Without it, every cut pops.
+
+**6. Never cut inside a word.** Snap every edge to a word or phrase boundary
+from the transcript, then confirm it against silence detection.
+
+**7. Pad every cut edge, 30–200ms.** Transcript timestamps drift 50–100ms;
+padding absorbs it. Tighter for fast pacing, looser for measured.
+
+**13. Approve the cut before building on it.** Captions, motion and sound all
+carry timestamps derived from the cut. Changing the cut afterwards invalidates
+every one of them.
+
+**18. Anchor cut edges on silence, not on word onsets.** ASR word onsets land
+on the consonant, so an edge placed at the onset chops the attack off the first
+word — the edit sounds clipped even though the transcript says every word is
+present. Find the edge in the silence either side, then use the transcript only
+to decide which silences are legal boundaries. Rule 6 has the dependency the
+wrong way round when read alone; this rule governs. Padding does not fix it:
+the offset is systematic toward the consonant, not random drift, so a 50ms
+in-pad can sit entirely inside the attack.
+
+**19. Time every cue to a word onset, never to a caption chunk.** When ASR
+returns segment-level timing — which it does for every language in
+`transcribe.py`'s `NON_LATIN` set — `captions.py` divides each segment evenly
+across its words. Those positions are arithmetic, not speech. A cue placed on
+one lands up to 1.4s away from the word it illustrates, and the error is
+invisible in every file: the transcript reads correctly and the chunk times
+look plausible. Re-derive onsets with `whisper-cli --dtw` per segment
+(a whole-file DTW pass smears across cut seams) and verify a few by
+transcribing the slice on its own.
+
+Rules 1–7 and 10 are adapted from [browser-use/video-use](https://github.com/browser-use/video-use)
+(MIT), which isolated these production-correctness traps cleanly.
+Rules 8, 9, 11–13 and 18–20 come from failures observed in this project.
+*Rule 18 was reported by u/MRRmaker on r/ContentCreators, 2026-09-08,
+who works on a tool in this space and pointed it out unprompted.*

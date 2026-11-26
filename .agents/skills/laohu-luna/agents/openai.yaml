@@ -1,4 +1,4 @@
 interface:
-  display_name: "laohu-luna | 指挥官与 Luna Worker 协作"
-  short_description: "读取实际专业能力，统筹 Luna 执行并按成品与证据验收。"
-  default_prompt: "使用 $laohu-luna，由当前会话模型担任指挥官，读取任务所需专业 Skill，统筹 Luna Worker 完成工作，并按实际成品与证据验收。"
+  display_name: "laohu-luna | 指挥官与 Luna 双强协作"
+  short_description: "跨宿主双强指挥官：工程交 GPT/Codex、审美与审美验收归 Antigravity/Gemini，并发实审打回。"
+  default_prompt: "使用 $laohu-luna，由当前会话模型担任指挥官；先探测本机可用子 Agent 与 CLI，按软件工程走 GPT/Codex、审美视觉与文艺创作/审核走 Antigravity/Gemini 的双强分工确认路线后派发，并对每个交付产物亲自实审挑刺、不达标直接打回返工。"

@@ -1,0 +1,157 @@
+TITLE: Multimodal cohesion and viewers' comprehension of scene transitions in film: an empirical investigation
+SOURCE PDF: https://www.frontiersin.org/journals/communication/articles/10.3389/fcomm.2024.1347788/pdf
+LICENSE: Creative Commons Attribution (CC BY), as explicitly stated in the article; https://creativecommons.org/licenses/by/4.0/
+TRANSFORMATION: Complete all-page text extraction with pdf text layout; images and film/video frames excluded. This is not the original PDF. Author attribution and license statement retained below.
+SOURCE PDF SHA256: d77267b7970d314ef8324cce96fbc4f9dde15f14a92877fa485c1bbd00ddd445
+
+                                                                                                                       TYPE Original Research
+                                                                                                                       PUBLISHED 28 March 2024
+                                                                                                                       DOI 10.3389/fcomm.2024.1347788
+
+
+
+
+                                                    Multimodal cohesion and
+OPEN ACCESS                                         viewers’ comprehension of scene
+                                                    transitions in ﬁlm: an empirical
+EDITED BY
+Claudia Lehmann,
+University of Potsdam, Germany
+REVIEWED BY
+Karl-Heinrich Schmidt,
+                                                    investigation
+University of Wuppertal, Germany
+Assimakis Tseronis,
+Örebro University, Sweden                           Dayana Markhabayeva1* and Chiao-I Tseng2
+*CORRESPONDENCE                                     1
+                                                      Faculty of Linguistics and Literary Studies, University of Bremen, Bremen, Germany, 2 Department of
+Dayana Markhabayeva
+                                                    Applied Information Technology, University of Gothenburg, Gothenburg, Sweden
+  dayana1@uni-bremen.de
+RECEIVED 01 December 2023
+ACCEPTED 08 March 2024
+PUBLISHED 28 March 2024
+                                                    This paper presents three empirical studies that unravel how the devices
+                                                    of multimodal cohesion support viewers’ narrative interpretation of scene
+CITATION
+Markhabayeva D and Tseng C-I (2024)                 transitions in ﬁlm. The linguistics-informed method of cohesion analysis
+Multimodal cohesion and viewers’                    in ﬁlm uncovers the establishment of cohesive ties between characters,
+comprehension of scene transitions in ﬁlm: an
+                                                    objects, settings and characters’ actions. Previous studies using eye-tracking
+empirical investigation.
+Front. Commun. 9:1347788.                           and comprehension tests already indicate the signiﬁcance of multimodal
+doi: 10.3389/fcomm.2024.1347788                     cohesion in people’s comprehension of background settings within a continuous
+COPYRIGHT                                           scene. The present paper investigates further whether ﬁlm cohesion impacts
+© 2024 Markhabayeva and Tseng. This is an           viewers’ story comprehension across different scenes and settings. Moreover,
+open-access article distributed under the
+terms of the Creative Commons Attribution
+                                                    it also explores whether the spatio-temporal relations between scenes is a
+License (CC BY). The use, distribution or           signiﬁcant factor, along with cohesive devices, in viewers’ scene comprehension.
+reproduction in other forums is permitted,          Methodologically, we create contrasting ﬁlm situations by manipulating
+provided the original author(s) and the
+copyright owner(s) are credited and that the
+                                                    cohesion structures and spatio-temporal orders of scenes. Our comparative
+original publication in this journal is cited, in   analyses of viewers’ comprehension of these different ﬁlm situations reveal that
+accordance with accepted academic practice.         the presence of cohesive cues signiﬁcantly can inﬂuence viewers’ accurate scene
+No use, distribution or reproduction is
+permitted which does not comply with these
+                                                    comprehension. Through testing the inter-relation of cohesion, spatio-temporal
+terms.                                              order, characters’ intention and viewers’ time perception, this paper offers new
+                                                    avenues for further exploration of space, time and coherence in ﬁlm.
+
+                                                    KEYWORDS
+
+                                                    ﬁlm, cohesion, scene transition, multimodal                      discourse     analysis,    narrative
+                                                    comprehension, spatio-temporal relations
+
+
+
+                                                    1 Introduction
+                                                        In the history of film studies, the ways of how the viewers are carried from shot to
+                                                    shot and scene to scene as well as the effects of different types of scene transitions have
+                                                    been frequently investigated. Eisenstein (1969) explored how filmmakers’ combinations of
+compared to participants in conditions without cohesive cues (M                       4 Discussion and conclusion
+= 2.474, SD = 0.893).
+    As in the analysis of the questions 1 and 2, the effect of temporal                    The results of our three studies have further empirically
+order on confidence level was not statistically significant (p >                      supported our hypothesis that cohesion in film is highly relevant
+0.05) and there was no significant interaction effect between visual                  and significant in people’s comprehension of scenes and settings
+cohesive cues and temporal order either.                                              whether during a continuous scene or transition across different
+    Question 4 - Viewers’ time perception of story events                             scenes and whether in a complex puzzle film or in a narratively
+    For analysing the responses of question 4, we used the ART test                   straightforward film. We also provide results showing that cohesion
+again to test the effect of cohesive cues and temporal scene order on                 is significant in viewers’ inferences of character’s intention in the
+the time perception of the story events.                                              story. Moreover, we also show the significance of temporal order
+    A significant main effect of temporal order was observed (p                       of scenes in viewers’ inferences of both scenes and settings and the
+= 0.024), indicating that participants estimated the approximate                      length of event time.
+
+
+
+Frontiers in Communication                                                       15                                                                    frontiersin.org
+Markhabayeva and Tseng                                                                                                      10.3389/fcomm.2024.1347788
+
+
+
+
+   FIGURE 13
+   Main effect of cohesive cues on participants’ ability to establish the goal of the main character in Julie & Julia.
+
+
+
+
+    The empirical results of our study lead to more questions and                   The event comprehension model (Zacks, 2007) proposes that the
+hypotheses for future investigation.                                                changes of space, time and intention all lead to the comprehension
+    First of all, the cultural background of viewers might impact                   of event change. However, there has not been sufficient research
+their understanding of a film. For instance, two participants in our                indicating whether these factors actually interact—our study 3
+Study 3 noted after the experiment that such butcher’s shops were                   shows that space (cohesive cues of setting) is significant in
+more prevalent in the countries of their origin than in Germany.                    viewers’ comprehension of character’s intention, while time is not
+This observation is similar to the previous research on the role of                 a significant factor for story intention. Hence, more empirical tests
+cultural background in narrative comprehension (Horiba, 1990),                      are thus required to untangle the inter-relation of these factors for
+which demonstrated that, when reading about scenes taking place                     event comprehension.
+in Japan, native Japanese readers focus on more intricate details                       Our study 3 also explores the intriguing issue of time perception
+and utilize their cultural knowledge about the local details to infer               and its relation to space in film. Our results indicate that the
+the protagonists’ actions. In contrast, non-native Japanese readers                 difference in the perception of the temporal length of events in the
+did not exhibit the same degree of event details in their narrative                 two experimental groups (original and alternative versions) actually
+comprehension. Hence, we believe that cultural origin of viewers                    rests on the different narrative spatial structures. For instance, in
+could be a relevant factor for different ways of establishing cohesion              the non-chronological version, in which S4 in Julie’s kitchen is
+within a scene and could be a crucial variable to investigate                       edited directly before S1 in Julie’s living room, the story event
+empirically.                                                                        time seem shortened for the viewers due to the contiguous space
+    Another question to dive deeper into is what narrative features                 relation between S4 (kitchen) and S1 (living room). We hence
+impact viewers’ interpretation of intentions and goals of characters.               further hypothesize that event perception of two contiguous spaces
+
+
+
+Frontiers in Communication                                                     16                                                          frontiersin.org
+Markhabayeva and Tseng                                                                                                   10.3389/fcomm.2024.1347788
+
+
+
+
+   FIGURE 14
+   Main effect of cohesive cues on participants’ level of conﬁdence in their inferences in Julie & Julia.
+
+
+
+
+could also lead to the event interpretation of closeness in event time.                We also identify limitations of conducting experiments
+The hypothesis will require further empirical studies.                             using cinematic materials. It is challenging to predict if a film
+     In this paper, we have presented results of three empirical                   material offers enough control of stimuli. The refinement of
+studies conducted with the aim of investigating how multimodal                     our experimental from Study 1 to Study 3 shows our endeavor
+cohesion in film influences viewers’ narrative comprehension of                    to shift from Memento to Julie & Julia in order to extend
+events across scene transitions. While the previous research (Tseng                the questions that can be addressed in a more controlled
+et al., 2021) has indicated that the absence of cohesive cues leads                fashion.
+to an uncertainty about the setting within a continuous scene,                         We hope our empirical studies on multimodal cohesion
+we have broadened the test scope about multimodal cohesion in                      demonstrate a valuable combination of empirical methods and
+three aspects: (1) we tested how cohesive cues function to carry                   multimodal discourse analysis, which is a robust, textual-
+viewers across scene transitions (study 1), (2) we added another                   based model highly valuable for investigating people’s cognitive
+factor, namely, temporal order of scenes theorized by Bateman                      processes through uncovering how people maximize coherence
+(2007), to investigate how these two factors impact narrative                      when perceiving multimodal artifacts. Finally, we also hope
+comprehension independently and interactively, (3) apart from                      to have shown how the multimodal film research endeavors
+testing viewers’ correct understanding of setting identities, we                   in the last decade by Bateman (2007), Bateman and Schmidt
+also tested the viewers’ confidential level about their answers,                   (2012), Tseng and Bateman (2012), and Tseng et al. (2021)
+whether their understanding of character’s intention and event                     continue to develop and shed light on significant aspects
+time perception are related to the two factors, cohesive cues and                  of human perception and meaning interpretation of film
+temporal scene orders.                                                             narratives.
+
+
+
+
+Frontiers in Communication                                                    17                                                       frontiersin.org

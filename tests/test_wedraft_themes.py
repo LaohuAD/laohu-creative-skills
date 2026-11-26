@@ -5,7 +5,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / '.agents/skills/laohu-htmlshow-gzh/scripts/render_reading_theme.py'
+SCRIPT = ROOT / '.agents/skills/laohu-htmlshow/gzh/scripts/render_reading_theme.py'
 
 
 class Texts(HTMLParser):

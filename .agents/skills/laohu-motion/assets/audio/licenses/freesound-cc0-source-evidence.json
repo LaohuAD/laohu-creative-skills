@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "licenseId": "CC0-1.0",
+  "licenseTitle": "CC0 1.0 Universal",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseSummary": "The official CC0 deed states that users may copy, modify, distribute, and perform the work, including for commercial purposes.",
+  "sourceGetReceipt": ".cache/validation/motion-resource-upgrade/audio/source-get-music.json",
+  "sourceGetReceiptSha256": "98abd77f87e0af1025d1541b53acaca40fb44b479e042fe1b2555dbbb4369dc0",
+  "sourceSearchReceipt": ".cache/validation/finished-assets-production/assets/source-search-music.json",
+  "sourceSearchReceiptSha256": "3050d4fc2b21a9fbc84a3fb4f8d2cdcd86584ea9a0e7faad5a9697c09361ec87",
+  "checkedAt": "2026-11-12",
+  "items": [
+    {
+      "key": "fs:516738",
+      "title": "Funky Loop",
+      "creator": "mvrasseli",
+      "sourcePage": "https://freesound.org/people/mvrasseli/sounds/516738/",
+      "sourcePageCategory": "Music > Solo instrument",
+      "sourcePageLicenseLabel": "Creative Commons 0",
+      "originalUpload": {
+        "format": "WAV",
+        "durationSec": 9.599,
+        "description": "Uploader describes a guitar loop made with virtual instruments."
+      },
+      "downloadedFile": {
+        "kind": "provider-preview-or-download-url",
+        "previewUrl": "https://cdn.freesound.org/previews/516/516738_527080-hq.mp3",
+        "format": "MP3 HQ preview",
+        "sha256": "bbc6dd28895e7f58f4e2fe14a7f5f81af52a4af1eef8b454fe616c0e544cf9e9"
+      },
+      "sourcePageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourcePageSnapshot": ".cache/validation/motion-resource-upgrade/audio/source-pages/fs-516738.html",
+      "sourcePageSnapshotSha256": "b1a5c3dcf53f04e348616ff140cdfea4987b856d51cbb9f5eea6237f46f318e5",
+      "sourceSearchReceipt": ".cache/validation/finished-assets-production/assets/source-search-music.json",
+      "sourceSearchReceiptSha256": "3050d4fc2b21a9fbc84a3fb4f8d2cdcd86584ea9a0e7faad5a9697c09361ec87",
+      "sourceGetReceipt": ".cache/validation/finished-assets-production/assets/source-get-music.json",
+      "sourceGetReceiptSha256": "9b596c0d6a975ccc5a73b3c547d19e85118960c9c2f6428bf85ee1459dc9b455"
+    },
+    {
+      "key": "fs:707613",
+      "title": "Sly Piano Instrumental [Loop]",
+      "creator": "NearTheAtmoshphere",
+      "sourcePage": "https://freesound.org/people/NearTheAtmoshphere/sounds/707613/",
+      "sourcePageCategory": "Music > Solo instrument; Music and Loops",
+      "sourcePageLicenseLabel": "Creative Commons 0",
+      "sourcePageNotes": "The page lists 134 BPM and identifies a WAV original. The file preview was downloaded as MP3 HQ.",
+      "originalUpload": {
+        "format": "WAV",
+        "durationSec": 40.298
+      },
+      "downloadedFile": {
+        "kind": "provider-preview-or-download-url",
+        "previewUrl": "https://cdn.freesound.org/previews/707/707613_2578040-hq.mp3",
+        "format": "MP3 HQ preview",
+        "sha256": "5243d28a24122d9e43c7c15ff856a751feb8d78c7b0f975f1f28db407910c68d"
+      },
+      "sourcePageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourcePageSnapshot": ".cache/validation/motion-resource-upgrade/audio/source-pages/fs-707613.html",
+      "sourcePageSnapshotSha256": "6b6cadbcec41de384a3a6b3be7ba0064be95aa43443f8f3d1585605f87bb1bac",
+      "sourceSearchReceipt": ".cache/validation/finished-assets-production/assets/source-search-music.json",
+      "sourceSearchReceiptSha256": "3050d4fc2b21a9fbc84a3fb4f8d2cdcd86584ea9a0e7faad5a9697c09361ec87",
+      "sourceGetReceipt": ".cache/validation/finished-assets-production/assets/source-get-music.json",
+      "sourceGetReceiptSha256": "9b596c0d6a975ccc5a73b3c547d19e85118960c9c2f6428bf85ee1459dc9b455"
+    },
+    {
+      "key": "fs:710546",
+      "title": "Soft Piano Loop",
+      "creator": "Ncone",
+      "sourcePage": "https://freesound.org/people/Ncone/sounds/710546/",
+      "sourcePageCategory": "Music > Solo instrument",
+      "sourcePageLicenseLabel": "Creative Commons 0",
+      "sourcePageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourcePageDescription": "Clear piano with major keys for visual novel looped.",
+      "sourcePageTags": [
+        "background",
+        "calm",
+        "happy",
+        "loop",
+        "novel",
+        "piano",
+        "short",
+        "soft",
+        "visual"
+      ],
+      "sourcePageSnapshot": ".cache/validation/motion-resource-upgrade/audio/source-pages/fs-710546.html",
+      "sourcePageSnapshotSha256": "45e6b526f71095d91fb3a09a5d8293677760e7a59513cb96d4330fc4c0ad60eb",
+      "originalUpload": {
+        "format": "MP3",
+        "durationSec": 19.312
+      },
+      "downloadedFile": {
+        "kind": "provider-preview-or-download-url",
+        "previewUrl": "https://cdn.freesound.org/previews/710/710546_14716160-hq.mp3",
+        "format": "MP3 HQ preview",
+        "sha256": "3639c702b78757d064c9fd0dfee254cf0bb990180d39e0d44e433b04f3ab2428",
+        "ffprobe": {
+          "channelLayout": "stereo",
+          "channels": 2,
+          "codec": "mp3",
+          "container": "mp3",
+          "durationSec": 19.356735,
+          "sampleRate": 44100,
+          "status": "success"
+        }
+      },
+      "sourceSearchReceipt": ".cache/validation/motion-resource-upgrade/audio/source-search-explaining-music.json",
+      "sourceSearchReceiptSha256": "fe1af92dc72aba7668dda44a21c1394d6048434cea5d5704a05f3af06ecfe3b2",
+      "sourceGetReceipt": ".cache/validation/motion-resource-upgrade/audio/source-get-music.json",
+      "sourceGetReceiptSha256": "98abd77f87e0af1025d1541b53acaca40fb44b479e042fe1b2555dbbb4369dc0",
+      "reviewStatus": "candidate-unreviewed",
+      "listeningReview": "none; page metadata and file probe are not audition evidence"
+    },
+    {
+      "key": "fs:727259",
+      "title": "Calm Melody Loop",
+      "creator": "Ncone",
+      "sourcePage": "https://freesound.org/people/Ncone/sounds/727259/",
+      "sourcePageCategory": "Music > Solo instrument",
+      "sourcePageLicenseLabel": "Creative Commons 0",
+      "sourcePageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourcePageDescription": "Made using Chrome Music Lab and mixed using Cakewalk; the page does not describe a specific section or narrative role.",
+      "sourcePageTags": [
+        "ascending",
+        "background",
+        "bgm",
+        "calm",
+        "cinematic",
+        "dramatic",
+        "film",
+        "happy",
+        "hope",
+        "loop",
+        "melody",
+        "melancholic",
+        "movie",
+        "piano",
+        "repetition",
+        "short",
+        "soft",
+        "soundtrack",
+        "subtle",
+        "visual"
+      ],
+      "sourcePageSnapshot": ".cache/validation/motion-resource-upgrade/audio/source-pages/fs-727259.html",
+      "sourcePageSnapshotSha256": "783dccfd2c49d1975f95678c5cf6ce5d75e1869337c70eef7a9f101ac5e652da",
+      "originalUpload": {
+        "format": "MP3",
+        "durationSec": 11.968
+      },
+      "downloadedFile": {
+        "kind": "provider-preview-or-download-url",
+        "previewUrl": "https://cdn.freesound.org/previews/727/727259_14716160-hq.mp3",
+        "format": "MP3 HQ preview",
+        "sha256": "eca38b4238efef60f075df94e6ec80339ecf041e9a14d1cb6c2781d6f28b46c7",
+        "ffprobe": {
+          "channelLayout": "stereo",
+          "channels": 2,
+          "codec": "mp3",
+          "container": "mp3",
+          "durationSec": 12.016327,
+          "sampleRate": 44100,
+          "status": "success"
+        }
+      },
+      "sourceSearchReceipt": ".cache/validation/motion-resource-upgrade/audio/source-search-explaining-music.json",
+      "sourceSearchReceiptSha256": "fe1af92dc72aba7668dda44a21c1394d6048434cea5d5704a05f3af06ecfe3b2",
+      "sourceGetReceipt": ".cache/validation/motion-resource-upgrade/audio/source-get-music.json",
+      "sourceGetReceiptSha256": "98abd77f87e0af1025d1541b53acaca40fb44b479e042fe1b2555dbbb4369dc0",
+      "reviewStatus": "candidate-unreviewed",
+      "listeningReview": "none; page metadata and file probe are not audition evidence"
+    },
+    {
+      "key": "fs:826622",
+      "title": "Memories of a sweet summer (music) (loop)",
+      "creator": "xkeril",
+      "sourcePage": "https://freesound.org/people/xkeril/sounds/826622/",
+      "sourcePageCategory": "Music > Solo instrument",
+      "sourcePageLicenseLabel": "Creative Commons 0",
+      "sourcePageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourcePageDescription": "Uploader describes a soft, mellow, cheerful and nostalgic electric-piano melody made as a loop/songstarter; C major at 96 BPM.",
+      "sourcePageTags": [
+        "ambient",
+        "calm",
+        "chill",
+        "electric",
+        "electric-piano",
+        "keyboard",
+        "lo-fi",
+        "loop",
+        "mellow",
+        "music",
+        "nostalgia",
+        "piano",
+        "soft"
+      ],
+      "sourcePageSnapshot": ".cache/validation/motion-resource-upgrade/audio/source-pages/fs-826622.html",
+      "sourcePageSnapshotSha256": "02b0ab214a6fe8c23a6c7b72dd042e5d22289b25adb180b006570fcef82e98a4",
+      "originalUpload": {
+        "format": "WAV",
+        "durationSec": 20.0
+      },
+      "downloadedFile": {
+        "kind": "provider-preview-or-download-url",
+        "previewUrl": "https://cdn.freesound.org/previews/826/826622_13504080-hq.mp3",
+        "format": "MP3 HQ preview",
+        "sha256": "28d4b01668c9eb339b97b20fb1746a88644a77ea62c2c274d7dd3d116d0ddea6",
+        "ffprobe": {
+          "channelLayout": "stereo",
+          "channels": 2,
+          "codec": "mp3",
+          "container": "mp3",
+          "durationSec": 20.04,
+          "sampleRate": 48000,
+          "status": "success"
+        }
+      },
+      "sourceSearchReceipt": ".cache/validation/motion-resource-upgrade/audio/source-search-music-freesound.json",
+      "sourceSearchReceiptSha256": "501eeca21f90c726d24cd941d557040538430f5888033b966fdd4a3ef48a171e",
+      "sourceGetReceipt": ".cache/validation/motion-resource-upgrade/audio/source-get-music.json",
+      "sourceGetReceiptSha256": "98abd77f87e0af1025d1541b53acaca40fb44b479e042fe1b2555dbbb4369dc0",
+      "reviewStatus": "candidate-unreviewed",
+      "listeningReview": "none; page metadata and file probe are not audition evidence"
+    },
+    {
+      "key": "fs:733734",
+      "title": "intro/outro  music",
+      "creator": "jjwoosh",
+      "sourcePage": "https://freesound.org/people/jjwoosh/sounds/733734/",
+      "sourcePageCategory": "Music > Multiple instruments",
+      "sourcePageLicenseLabel": "Creative Commons 0",
+      "sourcePageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourcePageDescription": "A nice intro/outro music.",
+      "sourcePageTags": [
+        "drums",
+        "intro",
+        "outro",
+        "piano"
+      ],
+      "sourcePageSnapshot": ".cache/validation/motion-resource-upgrade/audio/source-pages/fs-733734.html",
+      "sourcePageSnapshotSha256": "7e9f4c495e8a2c311fcbc5d5ff99a66aa07ad7646b5e313014661d52e9a98ada",
+      "originalUpload": {
+        "format": "WAV",
+        "durationSec": 13.023
+      },
+      "downloadedFile": {
+        "kind": "provider-preview-or-download-url",
+        "previewUrl": "https://cdn.freesound.org/previews/733/733734_15741152-hq.mp3",
+        "format": "MP3 HQ preview",
+        "sha256": "b5b86c5b9b576043bd1c96ebbd9319229432548f13e17b96202e4208c3d87079",
+        "ffprobe": {
+          "channelLayout": "stereo",
+          "channels": 2,
+          "codec": "mp3",
+          "container": "mp3",
+          "durationSec": 13.061224,
+          "sampleRate": 44100,
+          "status": "success"
+        }
+      },
+      "sourceSearchReceipt": ".cache/validation/motion-resource-upgrade/audio/source-search-outro.json",
+      "sourceSearchReceiptSha256": "f3c3f1c74d0059b46b9cac01dfd2cce829d0b412d429f07195c1b91313e68cca",
+      "sourceGetReceipt": ".cache/validation/motion-resource-upgrade/audio/source-get-music.json",
+      "sourceGetReceiptSha256": "98abd77f87e0af1025d1541b53acaca40fb44b479e042fe1b2555dbbb4369dc0",
+      "reviewStatus": "candidate-unreviewed",
+      "listeningReview": "none; page metadata and file probe are not audition evidence"
+    }
+  ],
+  "reviewBoundary": "Freesound individual pages for each listed file declare Creative Commons 0 and link to the canonical CC0 1.0 deed. Raw page snapshots and source/get receipts are hash-identified under the task validation cache; the Creative Commons deed explains license terms but does not verify an uploader’s underlying copyright claim. This record is not an audio listening review; all new files remain candidate-unreviewed."
+}

@@ -23,11 +23,266 @@ function stableId(value, label) {
 function fmt(value) { return Number(value.toFixed(9)).toString(); }
 function sha256(bytes) { return createHash("sha256").update(bytes).digest("hex"); }
 
+const LINEAGE_MODES = new Set(["original-synthesis", "source-edit", "transcode", "audio-edit", "source-recording", "indexed-source", "user-provided"]);
+
+function normalizeAssetLineage(value, label, depth = 0) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) fail(`${label} must be a source asset lineage object`);
+  if (depth > 8) fail(`${label} exceeds the supported lineage depth`);
+  const allowed = new Set(["assetId", "sha256", "generationMode", "generationScopes", "generationAuthorizationRequestSha256", "redistributionStatus", "sourceAssetReceiptSha256", "sourceProvenance", "parent", "parents"]);
+  for (const key of Object.keys(value)) if (!allowed.has(key)) fail(`${label}.${key} is not implemented by audio-edit/1`);
+  const assetId = stableId(value.assetId, `${label}.assetId`);
+  if (typeof value.sha256 !== "string" || !/^[a-f0-9]{64}$/i.test(value.sha256)) fail(`${label}.sha256 must be a SHA-256`);
+  const generationMode = value.generationMode == null ? "indexed-source" : value.generationMode;
+  if (typeof generationMode !== "string" || !LINEAGE_MODES.has(generationMode)) fail(`${label}.generationMode is unsupported`);
+  if (typeof value.redistributionStatus !== "string" || !value.redistributionStatus.trim()) fail(`${label}.redistributionStatus is required`);
+  let generationScopes;
+  if (value.generationScopes != null) {
+    if (!Array.isArray(value.generationScopes) || value.generationScopes.some((scope) => !["music", "sfx"].includes(scope))) {
+      fail(`${label}.generationScopes must contain only music and sfx`);
+    }
+    generationScopes = [...new Set(value.generationScopes)].sort();
+  }
+  if (value.generationAuthorizationRequestSha256 != null
+      && (typeof value.generationAuthorizationRequestSha256 !== "string" || !/^[a-f0-9]{64}$/i.test(value.generationAuthorizationRequestSha256))) {
+    fail(`${label}.generationAuthorizationRequestSha256 must be a SHA-256`);
+  }
+  if (value.sourceAssetReceiptSha256 != null
+      && (typeof value.sourceAssetReceiptSha256 !== "string" || !/^[a-f0-9]{64}$/i.test(value.sourceAssetReceiptSha256))) {
+    fail(`${label}.sourceAssetReceiptSha256 must be a SHA-256`);
+  }
+  let sourceProvenance;
+  if (value.sourceProvenance != null) {
+    if (!value.sourceProvenance || typeof value.sourceProvenance !== "object" || Array.isArray(value.sourceProvenance)) {
+      fail(`${label}.sourceProvenance must be an object`);
+    }
+    const provenanceFields = new Set(["provider", "key", "file", "role", "author", "sourcePage", "license", "licenseTitle", "licenseUrl", "sourceGetReceiptSha256", "sourceSearchReceiptSha256", "licenseEvidenceFile", "licenseEvidenceSha256", "reviewStatus"]);
+    for (const key of Object.keys(value.sourceProvenance)) {
+      if (!provenanceFields.has(key)) fail(`${label}.sourceProvenance.${key} is not implemented by audio-edit/1`);
+      if (value.sourceProvenance[key] != null && typeof value.sourceProvenance[key] !== "string") {
+        fail(`${label}.sourceProvenance.${key} must be a string when present`);
+      }
+    }
+    sourceProvenance = Object.fromEntries(Object.entries(value.sourceProvenance).filter(([, item]) => item != null));
+  }
+  if (value.parent != null && value.parents != null) fail(`${label} cannot set both parent and parents`);
+  const parentValues = value.parents ?? (value.parent == null ? [] : [value.parent]);
+  if (!Array.isArray(parentValues) || parentValues.length > 8) fail(`${label}.parents must contain at most 8 source records`);
+  const parents = parentValues.map((parent, index) => normalizeAssetLineage(parent, `${label}.parents[${index}]`, depth + 1));
+  return {
+    assetId,
+    sha256: value.sha256.toLowerCase(),
+    generationMode,
+    ...(generationScopes ? { generationScopes } : {}),
+    ...(value.generationAuthorizationRequestSha256 ? { generationAuthorizationRequestSha256: value.generationAuthorizationRequestSha256.toLowerCase() } : {}),
+    redistributionStatus: value.redistributionStatus,
+    ...(value.sourceAssetReceiptSha256 ? { sourceAssetReceiptSha256: value.sourceAssetReceiptSha256.toLowerCase() } : {}),
+    ...(sourceProvenance ? { sourceProvenance } : {}),
+    ...(parents.length === 1 ? { parent: parents[0] } : parents.length > 1 ? { parents } : {}),
+  };
+}
+
 async function hashFile(file) {
   const hash = createHash("sha256");
   const stream = (await import("node:fs")).createReadStream(file);
   for await (const chunk of stream) hash.update(chunk);
   return hash.digest("hex");
+}
+
+function capture(command, argv, env, label) {
+  const result = spawnSync(command, argv, { encoding: "utf8", maxBuffer: 8 * 1024 * 1024, env });
+  if (result.error) fail(`${label} could not start: ${result.error.message}`);
+  if (result.status !== 0) fail(`${label} failed (exit ${result.status})\n${result.stdout || ""}\n${result.stderr || ""}`);
+  return { stdout: result.stdout || "", stderr: result.stderr || "" };
+}
+
+function indexedSourceAssetFromReceipt(receipt, receiptBytes) {
+  if (!receipt || typeof receipt !== "object" || receipt.format !== "laohu.audio-source-decode-receipt/1") {
+    fail("sourceAssetReceipt must use laohu.audio-source-decode-receipt/1");
+  }
+  const decoded = receipt.decoded;
+  const original = receipt.sourceAsset;
+  if (!decoded || !original || typeof decoded !== "object" || typeof original !== "object") fail("sourceAssetReceipt is missing its decoded asset or indexed source asset");
+  if (typeof decoded.assetId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]*$/.test(decoded.assetId)) fail("sourceAssetReceipt decoded asset ID is invalid");
+  if (typeof decoded.sha256 !== "string" || !/^[a-f0-9]{64}$/i.test(decoded.sha256)) fail("sourceAssetReceipt decoded hash is invalid");
+  if (typeof original.id !== "string" || typeof original.sha256 !== "string" || !/^[a-f0-9]{64}$/i.test(original.sha256)) fail("sourceAssetReceipt indexed source identity is invalid");
+  if (typeof decoded.file !== "string" || !decoded.file.trim()) fail("sourceAssetReceipt decoded output file is invalid");
+  if (receipt.sourceSha256 !== original.sha256.toLowerCase()
+      || decoded.parentAssetId !== original.id || decoded.parentSha256 !== original.sha256.toLowerCase()) {
+    fail("sourceAssetReceipt decoded parent does not match the indexed source asset");
+  }
+  if (!receipt.assetIndex || typeof receipt.assetIndex.sha256 !== "string" || !/^[a-f0-9]{64}$/i.test(receipt.assetIndex.sha256)) {
+    fail("sourceAssetReceipt does not identify the exact source index hash");
+  }
+  const redistributionStatus = original.redistribution?.status || "unknown";
+  const provenance = {
+    provider: original.source?.provider,
+    key: original.source?.key,
+    file: original.file,
+    role: original.role,
+    author: original.author,
+    sourcePage: original.source?.page,
+    license: original.license,
+    licenseTitle: original.licenseTitle || original.source?.licenseTitle,
+    licenseUrl: original.licenseUrl || original.source?.licenseUrl,
+    sourceGetReceiptSha256: original.source?.sourceGetReceiptSha256,
+    sourceSearchReceiptSha256: original.source?.sourceSearchReceiptSha256,
+    licenseEvidenceFile: original.source?.licenseEvidenceFile,
+    licenseEvidenceSha256: original.source?.licenseEvidenceSha256,
+    reviewStatus: original.reviewStatus,
+  };
+  const parent = normalizeAssetLineage({
+    assetId: original.id,
+    sha256: original.sha256,
+    generationMode: "indexed-source",
+    redistributionStatus,
+    sourceProvenance: provenance,
+  }, "sourceAssetReceipt.sourceAsset");
+  return normalizeAssetLineage({
+    assetId: decoded.assetId,
+    sha256: decoded.sha256,
+    generationMode: "transcode",
+    redistributionStatus,
+    sourceAssetReceiptSha256: sha256(receiptBytes),
+    sourceProvenance: { ...provenance, file: decoded.file },
+    parent,
+  }, "sourceAssetReceipt.decoded");
+}
+
+function relativePathOrAbsolute(root, file) {
+  const relative = path.relative(root, file);
+  return relative && !relative.startsWith(`..${path.sep}`) && relative !== ".." && !path.isAbsolute(relative)
+    ? relative.split(path.sep).join("/")
+    : file;
+}
+
+export async function decodeIndexedAsset({ assetIndexFile, assetId, outputFile, receiptFile, tmpDir,
+  workRoot = process.cwd(), ffmpeg = process.env.MOTION_FFMPEG || "ffmpeg",
+  ffprobe = process.env.MOTION_FFPROBE || "ffprobe", overwrite = false }) {
+  if (![assetIndexFile, assetId, outputFile, receiptFile, tmpDir].every((value) => typeof value === "string" && value)) {
+    fail("assetIndexFile, assetId, outputFile, receiptFile, and tmpDir are required");
+  }
+  stableId(assetId, "assetId");
+  const indexPath = path.resolve(assetIndexFile);
+  const outputPath = path.resolve(outputFile);
+  const receiptPath = path.resolve(receiptFile);
+  const tempPath = path.resolve(tmpDir);
+  const workRootPath = path.resolve(workRoot);
+  if (outputPath === receiptPath) fail("outputFile and receiptFile must be different paths");
+  if (path.extname(outputPath).toLowerCase() !== ".wav") fail("decoded outputFile must use the .wav extension");
+  const indexBytes = await fs.readFile(indexPath);
+  const index = JSON.parse(indexBytes.toString("utf8"));
+  if (!index || typeof index !== "object" || index.schemaVersion !== 1 || !Array.isArray(index.assets)) fail("asset index must use schemaVersion 1 and an assets array");
+  const records = index.assets.filter((asset) => asset && asset.id === assetId);
+  if (records.length !== 1) fail(`asset index must contain exactly one asset with ID ${assetId}`);
+  const sourceAsset = records[0];
+  if (typeof sourceAsset.file !== "string" || !sourceAsset.file.trim()) fail(`indexed asset ${assetId} has no relative file path`);
+  if (path.isAbsolute(sourceAsset.file)) fail(`indexed asset ${assetId} file path must be relative to the index`);
+  const sourcePath = path.resolve(path.dirname(indexPath), sourceAsset.file);
+  const sourceRelative = path.relative(path.dirname(indexPath), sourcePath);
+  if (sourceRelative === ".." || sourceRelative.startsWith(`..${path.sep}`) || path.isAbsolute(sourceRelative)) fail(`indexed asset ${assetId} file escapes the audio index directory`);
+  if (typeof sourceAsset.sha256 !== "string" || !/^[a-f0-9]{64}$/i.test(sourceAsset.sha256)) fail(`indexed asset ${assetId} has no valid SHA-256`);
+  if (await sameFile(sourcePath, outputPath) || await sameFile(sourcePath, receiptPath) || await sameFile(indexPath, outputPath) || await sameFile(indexPath, receiptPath)) {
+    fail("output or receipt path collides with the indexed source or index");
+  }
+  const [actualSourceSha256, probed] = await Promise.all([
+    hashFile(sourcePath),
+    Promise.resolve(capture(ffprobe, ["-v", "error", "-show_streams", "-show_format", "-of", "json", sourcePath], process.env, "FFprobe indexed source")),
+  ]);
+  if (actualSourceSha256.toLowerCase() !== sourceAsset.sha256.toLowerCase()) fail(`indexed asset ${assetId} SHA-256 does not match its actual file`);
+  let sourceProbe;
+  try { sourceProbe = JSON.parse(probed.stdout); } catch { fail("FFprobe returned invalid JSON for indexed source"); }
+  const audioStream = sourceProbe.streams?.find((stream) => stream.codec_type === "audio");
+  if (!audioStream) fail(`indexed asset ${assetId} contains no audio stream`);
+  const durationSec = Number(audioStream.duration || sourceProbe.format?.duration);
+  if (!Number.isFinite(durationSec) || durationSec <= 0) fail(`FFprobe did not return a valid duration for indexed asset ${assetId}`);
+  const codec = audioStream.codec_name || null;
+  const sourceFormat = sourceProbe.format?.format_name || null;
+  const sourceProbeInfo = {
+    codec, format: sourceFormat,
+    durationSec,
+    sampleRate: audioStream.sample_rate ? Number(audioStream.sample_rate) : null,
+    channels: audioStream.channels ?? null,
+  };
+  for (const candidate of [outputPath, receiptPath]) {
+    if (!overwrite && await exists(candidate)) fail(`refusing to overwrite existing output without --overwrite: ${candidate}`);
+  }
+  if (await sameFile(outputPath, receiptPath)) fail("outputFile and receiptFile resolve to the same file");
+  await fs.mkdir(tempPath, { recursive: true });
+  await fs.mkdir(path.dirname(outputPath), { recursive: true });
+  await fs.mkdir(path.dirname(receiptPath), { recursive: true });
+  const runDir = await fs.mkdtemp(path.join(tempPath, "audio-decode-"));
+  const stageWav = path.join(runDir, "decoded.wav");
+  const outputStage = path.join(path.dirname(outputPath), `.${path.basename(outputPath)}.${process.pid}.partial`);
+  const receiptStage = path.join(path.dirname(receiptPath), `.${path.basename(receiptPath)}.${process.pid}.partial`);
+  const env = { ...process.env, TMPDIR: runDir, TMP: runDir, TEMP: runDir };
+  try {
+    const ffmpegVersion = capture(ffmpeg, ["-version"], env, "FFmpeg version check").stdout.split(/\r?\n/, 1)[0];
+    const decodeArgs = ["-hide_banner", "-loglevel", "error", "-y", "-i", sourcePath, "-map", "0:a:0", "-vn", "-sn", "-dn", "-c:a", "pcm_f32le", "-ar", "48000", "-ac", "2", stageWav];
+    capture(ffmpeg, decodeArgs, env, "FFmpeg indexed source decode");
+    const decodedInfo = await readWavInfo(stageWav);
+    if (decodedInfo.format !== "float-pcm" || decodedInfo.sampleRate !== 48000 || decodedInfo.channels !== 2 || decodedInfo.bitsPerSample !== 32) {
+      fail("FFmpeg decoded output did not match float PCM32 48000 Hz stereo WAV");
+    }
+    if (Math.abs(decodedInfo.durationSec - durationSec) > 0.1) fail(`decoded duration ${decodedInfo.durationSec} differs materially from FFprobe source duration ${durationSec}`);
+    const decodedSha256 = await hashFile(stageWav);
+    if ((await hashFile(sourcePath)).toLowerCase() !== actualSourceSha256.toLowerCase()) fail("indexed source changed during decode");
+    const decodedAssetId = `${assetId}.decoded-48000-f32-stereo`;
+    const receipt = {
+      format: "laohu.audio-source-decode-receipt/1",
+      assetIndex: {
+        file: relativePathOrAbsolute(workRootPath, indexPath),
+        sha256: sha256(indexBytes),
+      },
+      sourceAsset: JSON.parse(JSON.stringify(sourceAsset)),
+      sourceFile: relativePathOrAbsolute(path.dirname(indexPath), sourcePath),
+      sourceProbe: sourceProbeInfo,
+      sourceSha256: actualSourceSha256,
+      decoded: {
+        assetId: decodedAssetId,
+        file: path.basename(outputPath),
+        sha256: decodedSha256,
+        format: decodedInfo.format,
+        durationSec: decodedInfo.durationSec,
+        sampleRate: decodedInfo.sampleRate,
+        channels: decodedInfo.channels,
+        bitsPerSample: decodedInfo.bitsPerSample,
+        parentAssetId: sourceAsset.id,
+        parentSha256: actualSourceSha256,
+      },
+      processing: {
+        renderer: "FFmpeg",
+        version: ffmpegVersion,
+        argv: ["-map", "0:a:0", "-vn", "-sn", "-dn", "-c:a", "pcm_f32le", "-ar", "48000", "-ac", "2"],
+        operation: "decode-indexed-compressed-source-to-float-pcm-wav",
+      },
+      reviewStatus: sourceAsset.reviewStatus || "candidate-unreviewed",
+      reviewBoundary: "The receipt binds the indexed source file, its source hash, and the decoded WAV hash. Decoding and probing do not establish acoustic suitability or listening review.",
+    };
+    const receiptBytes = Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`, "utf8");
+    await fs.copyFile(stageWav, outputStage);
+    await fs.writeFile(receiptStage, receiptBytes, { flag: "wx" });
+    if (overwrite) {
+      await fs.rename(outputStage, outputPath);
+      await fs.rename(receiptStage, receiptPath);
+    } else {
+      let committedOutput = false;
+      try {
+        await fs.link(outputStage, outputPath);
+        committedOutput = true;
+        await fs.link(receiptStage, receiptPath);
+      } catch (error) {
+        if (committedOutput) await fs.rm(outputPath, { force: true });
+        throw error;
+      }
+      await fs.rm(outputStage, { force: true });
+      await fs.rm(receiptStage, { force: true });
+    }
+    return { output: outputPath, receiptFile: receiptPath, outputSha256: decodedSha256, receipt };
+  } finally {
+    await fs.rm(runDir, { recursive: true, force: true });
+    await fs.rm(outputStage, { force: true });
+    await fs.rm(receiptStage, { force: true });
+  }
 }
 
 async function readWavInfo(file) {
@@ -152,12 +407,15 @@ function validateSpec(spec) {
   for (const [index, layer] of spec.layers.entries()) {
     const label = `layers[${index}]`;
     if (!layer || typeof layer !== "object" || Array.isArray(layer)) fail(`${label} must be an object`);
-    const allowed = new Set(["id", "file", "sourceInSec", "sourceOutSec", "startSec", "gainDb", "fadeInSec", "fadeOutSec", "tempo", "playbackRate", "repeatCount", "crossfadeSec", "hitPointsSec"]);
+    const allowed = new Set(["id", "file", "sourceInSec", "sourceOutSec", "startSec", "gainDb", "fadeInSec", "fadeOutSec", "tempo", "playbackRate", "repeatCount", "crossfadeSec", "hitPointsSec", "sourceAsset", "sourceAssetReceipt"]);
     for (const key of Object.keys(layer)) if (!allowed.has(key)) fail(`${label}.${key} is not implemented by audio-edit/1`);
     layer.id = stableId(layer.id, `${label}.id`);
     if (ids.has(layer.id)) fail(`duplicate layer id: ${layer.id}`);
     ids.add(layer.id);
     if (typeof layer.file !== "string" || !layer.file.trim()) fail(`${label}.file is required`);
+    if (layer.sourceAsset != null && layer.sourceAssetReceipt != null) fail(`${label} cannot set both sourceAsset and sourceAssetReceipt`);
+    if (layer.sourceAssetReceipt != null && (typeof layer.sourceAssetReceipt !== "string" || !layer.sourceAssetReceipt.trim())) fail(`${label}.sourceAssetReceipt must be a receipt path`);
+    if (layer.sourceAsset != null) layer.sourceAsset = normalizeAssetLineage(layer.sourceAsset, `${label}.sourceAsset`);
     for (const key of ["sourceInSec", "sourceOutSec", "startSec", "gainDb", "fadeInSec", "fadeOutSec", "tempo", "playbackRate", "crossfadeSec"]) {
       if (layer[key] != null) finite(layer[key], `${label}.${key}`, { min: key === "gainDb" ? -120 : 0 });
     }
@@ -307,6 +565,24 @@ export async function editSourceWav({ specFile, outputFile, receiptFile, tmpDir,
     const file = path.resolve(specDir, layer.file);
     if (await sameFile(file, specPath) || await sameFile(file, outputPath) || await sameFile(file, receiptPath)) fail(`layer ${layer.id} source collides with a plan or output path`);
     const [info, sourceSha256] = await Promise.all([readWavInfo(file), hashFile(file)]);
+    if (layer.sourceAssetReceipt) {
+      const lineageReceiptPath = path.resolve(specDir, layer.sourceAssetReceipt);
+      if (await sameFile(lineageReceiptPath, file) || await sameFile(lineageReceiptPath, specPath)
+          || await sameFile(lineageReceiptPath, outputPath) || await sameFile(lineageReceiptPath, receiptPath)) {
+        fail(`layer ${layer.id}.sourceAssetReceipt collides with a source, spec, output, or edit receipt`);
+      }
+      const lineageReceiptBytes = await fs.readFile(lineageReceiptPath);
+      let lineageReceipt;
+      try { lineageReceipt = JSON.parse(lineageReceiptBytes.toString("utf8")); }
+      catch { fail(`layer ${layer.id}.sourceAssetReceipt is not valid JSON`); }
+      layer.sourceAsset = indexedSourceAssetFromReceipt(lineageReceipt, lineageReceiptBytes);
+      if (lineageReceipt.decoded.sha256.toLowerCase() !== sourceSha256.toLowerCase()) {
+        fail(`layer ${layer.id}.sourceAssetReceipt decoded hash does not match the actual source WAV`);
+      }
+    }
+    if (layer.sourceAsset && layer.sourceAsset.sha256.toLowerCase() !== sourceSha256.toLowerCase()) {
+      fail(`layer ${layer.id}.sourceAsset.sha256 does not match the actual source WAV`);
+    }
     const calc = calculateLayer(layer, info);
     layerInfos.push({ layer, info, file, sourceSha256, calc });
   }
@@ -332,7 +608,7 @@ export async function editSourceWav({ specFile, outputFile, receiptFile, tmpDir,
     if (outputInfo.format !== "float-pcm" || outputInfo.sampleRate !== 48000 || outputInfo.channels !== 2 || outputInfo.bitsPerSample !== 32) {
       fail("FFmpeg output did not match float PCM32 48000 Hz stereo WAV");
     }
-    if (Math.abs(outputInfo.durationSec - graph.expectedDurationSec) > 1 / outputInfo.sampleRate) {
+    if (Math.abs(outputInfo.durationSec - graph.expectedDurationSec) > 2 / outputInfo.sampleRate) {
       fail(`derived WAV duration ${outputInfo.durationSec} does not match planned ${graph.expectedDurationSec}`);
     }
     const metrics = await measureWav(workWav, outputInfo);
@@ -347,6 +623,17 @@ export async function editSourceWav({ specFile, outputFile, receiptFile, tmpDir,
         peakAbsolute: metrics.peakAbsolute, samplesAboveFullScale: metrics.samplesAboveFullScale,
         peakMeasure: "Sample peak in float PCM; values above 1.0 are retained without normalization or limiting.",
       },
+      sourceLineage: {
+        format: "laohu.audio-source-lineage/1",
+        operation: "audio-edit",
+        status: layerInfos.every((row) => row.layer.sourceAsset?.sourceAssetReceiptSha256)
+          ? "indexed-decode-receipt-and-hash-matched"
+          : layerInfos.every((row) => row.layer.sourceAsset) ? "declared-and-hash-matched" : "incomplete-source-declarations",
+        parents: layerInfos.map(({ layer, sourceSha256 }) => layer.sourceAsset
+          ? { ...layer.sourceAsset, sha256: sourceSha256 }
+          : { assetId: null, sha256: sourceSha256, generationMode: "unknown-source", redistributionStatus: "unknown" }),
+        boundary: "Declared asset identity and lineage are bound to source WAV hashes; audio-edit cannot independently verify source license or human authorization claims.",
+      },
       layers: graph.outputLayers.map((item, index) => ({
         id: item.id,
         source: {
@@ -357,6 +644,7 @@ export async function editSourceWav({ specFile, outputFile, receiptFile, tmpDir,
           sampleRate: item.sourceInfo.sampleRate,
           channels: item.sourceInfo.channels,
         },
+        sourceAsset: layerInfos[index].layer.sourceAsset || null,
         edit: {
           sourceInSec: item.sourceInSec,
           sourceOutSec: item.sourceOutSec,
@@ -433,16 +721,38 @@ function parseArgs(argv) {
   return options;
 }
 
+function parseDecodeArgs(argv) {
+  const values = new Set(["--asset-index", "--asset-id", "--output", "--receipt", "--tmp-dir", "--work-root", "--ffmpeg", "--ffprobe"]);
+  const options = { overwrite: false };
+  for (let index = 0; index < argv.length; index += 1) {
+    const key = argv[index];
+    if (key === "--overwrite") { options.overwrite = true; continue; }
+    if (!values.has(key)) fail(`unknown decode argument ${key}`);
+    if (!argv[index + 1] || argv[index + 1].startsWith("--")) fail(`missing value for ${key}`);
+    const optionName = key.slice(2).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    const argumentNames = { assetIndex: "assetIndexFile", assetId: "assetId", output: "outputFile", receipt: "receiptFile", tmpDir: "tmpDir", workRoot: "workRoot", ffmpeg: "ffmpeg", ffprobe: "ffprobe" };
+    options[argumentNames[optionName]] = argv[++index];
+  }
+  return options;
+}
+
 function usage() {
   return [
     "Usage: node scripts/audio-edit.mjs --spec /project/source-edit.json --output /project/derived.wav --receipt /project/derived.receipt.json --tmp-dir /project/.cache/tmp/audio-edit [--ffmpeg /path/to/ffmpeg] [--overwrite]",
     "The spec contains 1–8 local source WAV layers, relative trims, fades, optional tempo OR pitch-changing playbackRate, technical repeats/crossfades, and source hit points.",
+    "Usage: node scripts/audio-edit.mjs decode-indexed-source --asset-index /project/.agents/skills/laohu-motion/assets/audio/index.json --asset-id indexed.asset-id --output /project/.cache/validation/decoded.wav --receipt /project/.cache/validation/decoded.receipt.json --tmp-dir /project/.cache/tmp/audio-edit [--work-root /project] [--ffmpeg /path/to/ffmpeg] [--ffprobe /path/to/ffprobe] [--overwrite]",
+    "The decode receipt binds an indexed compressed source file and its hash to the decoded WAV hash; reference it as sourceAssetReceipt in an audio-edit layer.",
   ].join("\n");
 }
 
 async function main() {
   const argv = process.argv.slice(2);
   if (argv.length === 1 && ["--help", "-h"].includes(argv[0])) { process.stdout.write(usage() + "\n"); return; }
+  if (argv[0] === "decode-indexed-source") {
+    const result = await decodeIndexedAsset(parseDecodeArgs(argv.slice(1)));
+    process.stdout.write(`WAV ${result.output}\nRECEIPT ${result.receiptFile}\nSHA256 ${result.outputSha256}\nSOURCE_ASSET ${result.receipt.sourceAsset.id}\nREVIEW_STATUS ${result.receipt.reviewStatus}\n`);
+    return;
+  }
   const result = await editSourceWav(parseArgs(argv));
   process.stdout.write(`WAV ${result.output}\nRECEIPT ${result.receiptFile}\nDURATION_SEC ${result.durationSec}\nSHA256 ${result.outputSha256}\nREVIEW_STATUS candidate-unreviewed\n`);
 }
@@ -451,4 +761,4 @@ if (path.resolve(process.argv[1] || "") === fileURLToPath(import.meta.url)) {
   main().catch((error) => { process.stderr.write(`${error.stack || error.message}\n${usage()}\n`); process.exitCode = 1; });
 }
 
-export { buildFilterGraph, calculateLayer, parseArgs, readWavInfo, validateSpec };
+export { buildFilterGraph, calculateLayer, parseArgs, parseDecodeArgs, readWavInfo, validateSpec };

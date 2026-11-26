@@ -1,4 +1,4 @@
 interface:
-  display_name: "laohu-asrcut | 老胡录音虚拟剪辑"
-  short_description: "按录音或转写制作可追溯的虚拟剪辑、审阅页和剪后时间轴。"
-  default_prompt: "使用 $laohu-asrcut 根据我的录音、录屏或 ASR/SRT 做粗剪和精剪，保留重要表达，给我一份可审阅的剪辑方案与剪后时间轴。"
+  display_name: "laohu-asrcut | 老胡口播与录屏剪辑"
+  short_description: "用音频驱动粗剪、精剪与情绪气口整形，输出审阅页、音视频、字幕或动画交接时间轴，也支持独立修音。"
+  default_prompt: "使用 $laohu-asrcut 根据我的录音、录屏或 ASR/SRT 做粗剪、情绪气口精剪和表达梳理，给我清晰可核对的审阅结果，并按我指定的范围导出音视频、字幕或动画交接材料。"

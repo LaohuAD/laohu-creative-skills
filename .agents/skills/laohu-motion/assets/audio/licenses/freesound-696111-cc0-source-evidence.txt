@@ -1,0 +1,17 @@
+Freesound individual source-page evidence captured 2026-11-13.
+
+Source page: https://freesound.org/people/Seth_Makes_Sounds/sounds/696111/
+Title: Upbeat Background Music
+Creator: Seth_Makes_Sounds
+Source page category: Music > Multiple instruments
+Source page date: July 16, 2023
+Source-page audio facts: WAV, 44.1 kHz, 24 bit, stereo, displayed duration 0:59.049.
+The uploader description links to a SoundCloud “FULL VERSION”; this 59-second Freesound file is not assumed to be the full external track. The source tags include background-music, upbeat, happy, groovy, guitar, melody, music, and song. These are source claims, not a voice-fit or listening review.
+
+Source page license label: Creative Commons 0 (CC0). The page links to the canonical CC0 1.0 deed.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Individual-page community facts at capture: 69 ratings, about 2.1K downloads, 7 comments. Visible comments include praise and a piano-string mention; the external full-version link is in the uploader description, not a comment. Freesound search metadata separately showed average rating 4.9 with 69 votes and 2,074 downloads. This is source-community activity, not proof of suitability.
+
+Retrieved file: Freesound high-quality MP3 preview, 1,395,828 bytes; measured duration 59.088980 seconds; SHA-256 d5b373deb0b9ffe90770c67714ddf8ca6778169905fd169afa71c3a7afc3a384.
+Listening status for this project: UNKNOWN. No human listening review was recorded.
