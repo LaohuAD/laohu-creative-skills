@@ -217,7 +217,7 @@ Library of Congress、Smithsonian Folkways、Berklee、作者本人材料、同�
 
 ## 2026-11-22 v6 4×4 四元闭环升级与古风活声口归位补录
 
-- **核心判断理论显式回归运行态与冷台账分界**：依据 `docs/governance/universal-dream-framework.md` 横轴四元闭环（目标/判断/行动/结果）与判断层理论显式化原则，将原本沉淀在本文件的核心学科理论锚点（陆正兰《歌词学》、Sondheim、Culler 抒情当下性、Langer 音乐虚拟时间、吴颂今《歌词写作十八讲》、海明威冰山原则、Pattison 语境重染与 Prosody、Middleton 重复生产性、Byron Hook 显著性、康德/布洛/李泽厚/荣格/叶嘉莹/Eliot/王夫之/刘勰选象美学、Fenollosa/Pound 意象直拼、Fauconnier & Turner 概念整合、朱光潜/闻一多/王国维综合声律及姜夔《白石道人诗说》雕刻伤气与敷衍露骨）显式归位至 `SKILL.md`、`references/language-and-sound.md` 与 `skills/laohu-lyrics-gufeng/SKILL.md` 的运行态判断层，本文件继续专门承担外部出处、版本核验与证据适用边界记录。
+- **核心判断理论显式回归运行态与冷台账分界**：依据 当时的万能造梦框架 横轴四元闭环（目标/判断/行动/结果）与判断层理论显式化原则，将原本沉淀在本文件的核心学科理论锚点（陆正兰《歌词学》、Sondheim、Culler 抒情当下性、Langer 音乐虚拟时间、吴颂今《歌词写作十八讲》、海明威冰山原则、Pattison 语境重染与 Prosody、Middleton 重复生产性、Byron Hook 显著性、康德/布洛/李泽厚/荣格/叶嘉莹/Eliot/王夫之/刘勰选象美学、Fenollosa/Pound 意象直拼、Fauconnier & Turner 概念整合、朱光潜/闻一多/王国维综合声律及姜夔《白石道人诗说》雕刻伤气与敷衍露骨）显式归位至 `SKILL.md`、`references/language-and-sound.md` 与 `skills/laohu-lyrics-gufeng/SKILL.md` 的运行态判断层，本文件继续专门承担外部出处、版本核验与证据适用边界记录。
 - **古风活声口与冰山切面补充样本观察（《烟花易冷》方文山词、《赤伶》清彦词、《探窗》东方千月词、《牵丝戏》Vagary 词、《乱世书》周仁词）**：核验日期 2026-11-22。用于观察爆款古风与国风歌词如何舍弃时间线流水账、切入单一宿命横截面、用零书面胶水短切片直撞画面并以活人呼吸声口承情，彻底废除旧 `laohu-lyrics-gufeng` 中“非日常汉语 / 非日常古雅语体”导致的文言书面翻译腔误导；同样只迁移可观察组织机制，严禁搬用原作故事壳、意象组合与可识别词句，也不以传播热度等同绝对法则。
 
 
