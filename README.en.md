@@ -76,7 +76,7 @@ When you know what you want to do, choose the matching command. When you only kn
 | /laohu-htmlshow | Polished, readable HTML views for articles, reports, prompts, and scripts, plus on-demand WeChat article formatting |
 | /laohu-assets | Reusable visual assets (default seamless four-grid or single image) and authorized voice prompts |
 | /laohu-archive | Creating and reusing work folders to keep each project’s files together |
-| /laohu-update | Installing the repo, managing global entries, updating via Git, and releasing verified changes |
+| /laohu-update | Installing the repo, managing global entries, and updating through Git |
 | /laohu-video | Script splitting (default 15s, adjustable) and 4-track drama/martial-arts/VFX/animation video prompts |
 | /laohu-script | Develops story ideas into scripts, from pre-design and scenes to action, dialogue, and audiovisual expression |
 | /laohu-lyrics | Write or revise lyrics across 28 on-demand genre/language/purpose specializations with chorus hook alignment |

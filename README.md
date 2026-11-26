@@ -65,7 +65,7 @@ README 仅说明可选方式；Agent 不得仅凭阅读安装说明擅自执行�
 
 **作品与个人偏好保存：** 在老胡仓库内，创作作品默认保存到 `works/` 并告知实际路径；用户的个人偏好、工具说明等私有资料放在 `knowledge/`。`works/` 与 `knowledge/` 中的个人内容均已纳入 `.gitignore` 忽略范围，留在你自己的电脑里，不会随仓库上传到 GitHub。在仓库外且尚未确定目录时，Agent 会给出路径建议，经你确认再写入；外部目录不自动继承本仓库的 Git 忽略规则。
 
-**更新、发布、检查与卸载：** 普通更新会拉取完整仓库并保留你的本地修改；直接输入 `/laohu-update` 是更新项目加发布已审阅改动的合并指令，只想同步官方版本时请明确说“只更新，不发布本地改动”。全局模式会自动同步受管理入口；运行 `python3 tools/install.py status` 可查当前链接状态。卸载 Codex 全局入口时先用 `python3 tools/install.py uninstall --host codex` 预览，再加 `--write`，不会删除仓库和作品。搬迁仓库前请先卸载全局入口，搬完再重新注册。详见 [安装与入口管理](.agents/skills/laohu-update/references/installation.md)。
+**更新、检查与卸载。** 输入 `/laohu-update` 或直接告诉 Agent 更新到你可以使用的最新版本。更新完整仓库时会保留本地修改。全局模式会自动同步受管理入口；运行 `python3 tools/install.py status` 可查当前链接状态。卸载 Codex 全局入口时先用 `python3 tools/install.py uninstall --host codex` 预览，再加 `--write`，不会删除仓库和作品。搬迁仓库前请先卸载全局入口，搬完再重新注册。详见 [安装与入口管理](.agents/skills/laohu-update/references/installation.md)。
 
 ## 从哪里开始
 
@@ -94,7 +94,7 @@ README 仅说明可选方式；Agent 不得仅凭阅读安装说明擅自执行�
 | /laohu-htmlshow | 将文章、报告、提示词、剧本做成美观易读易复制的离线 HTML 展示页，含按需加载的公众号排版专项 |
 | /laohu-assets | 剧本复用资产筛选、视觉资产（默认一体化四宫格，支持单图）与授权声线提示词 |
 | /laohu-archive | 创建与复用作品目录，持续收录同一作品的各类内容 |
-| /laohu-update | 安装完整仓库、管理全局入口、Git 更新项目及直接调用时的版本发布 |
+| /laohu-update | 安装完整仓库、管理全局入口、按权限更新项目 |
 | /laohu-video | 剧本自动分段（默认 15 秒，可调）与写实文戏/物理武打/VFX 大战/动画四轨三段式视频提示词 |
 | /laohu-script | 将灵感或构想发展为剧本，涵盖前置拆解、结构分场、人物行动、台词与视听表达 |
 | /laohu-lyrics | 歌词创作、续写与修订，覆盖 28 个曲风/语种/用途按需专项与副歌核联动 |
@@ -145,7 +145,7 @@ README 仅说明可选方式；Agent 不得仅凭阅读安装说明擅自执行�
 
 ## 持续更新
 
-版本变化见 [更新记录](CHANGELOG.md)；输入 `/laohu 更新帮助` 了解升级方式。只想同步官方版本时可明确说“只更新官方版本”；直接输入 `/laohu-update` 将按完整更新与发布流程执行。维护者可运行 `python3 tools/check_project.py --test`，具体发布步骤见 [项目维护指南](docs/maintenance.md)。
+版本变化见 [更新记录](CHANGELOG.md)；输入 `/laohu 更新帮助` 了解升级方式。使用 `/laohu-update` 更新本机安装。维护者可运行 `python3 tools/check_project.py --test`，具体发布步骤见 [项目维护指南](docs/maintenance.md)。
 
 这套技能会跟着真实创作持续打磨。使用中遇到问题，或者有新的创作场景和想法，欢迎通过 [老胡个人网站](https://lao-hu.com/#contact) 找到 **AI造梦师老胡** 一起聊。
 
