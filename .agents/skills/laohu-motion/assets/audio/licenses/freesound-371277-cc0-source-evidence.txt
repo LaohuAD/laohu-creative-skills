@@ -1,0 +1,10 @@
+Freesound individual source-page evidence captured 2026-11-22.
+
+Source page: https://freesound.org/people/goulven/sounds/371277/
+Title: Dark Ambient Loop
+Creator: goulven
+Source page license label: Creative Commons 0 (CC0). Verified canonical deed link present on source page.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Retrieved file: Freesound MP3, 696,439 bytes; measured duration 30.886825 seconds; SHA-256 6170ae920667b126d27fce3aaaf1195be1c51c68d618364db6e4c3d8d15a35e6.
+Listening status for this project: UNKNOWN. No human listening review was recorded yet.

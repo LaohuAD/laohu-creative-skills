@@ -1,0 +1,938 @@
+{
+  "archive": "https://github.com/adunext/human-video-knowledge",
+  "archive_commit": "332748002ec055dc2e6274835e3dd7d0ed1f3752",
+  "scope": "Pinned, licensed source selections. File paths are relative to this manifest. Byte spans are zero-based and end-exclusive; pieces are copied with no transformations from the archived members. Archive metadata reports upstream text extraction when applicable. These files are reference material, not executable Skill entries.",
+  "files": [
+    {
+      "local_path": "montage-structure.txt",
+      "use": "Edit promise, comparison priorities, story and shot organization, continuity and montage.",
+      "archive_path": "upstream/calesthio__generative-media-skills/skills/production/post-production/editing-montage/SKILL.md",
+      "archive_manifest": "batches/0107/SOURCES.json",
+      "upstream": "https://github.com/calesthio/generative-media-skills/blob/8c85352d5d75d4dcbe58480bd138e37b9742bab1/skills/production/post-production/editing-montage/SKILL.md",
+      "upstream_revision": "8c85352d5d75d4dcbe58480bd138e37b9742bab1",
+      "archive_member_sha256": "c1cc77a249f5607d11ab4b562a3982dfc61583a5f79dfbcc3755550fcc5cfe1a",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://github.com/calesthio/generative-media-skills/blob/8c85352d5d75d4dcbe58480bd138e37b9742bab1/LICENSE"
+      ],
+      "local_notice_files": [
+        "montage-LICENSE.txt"
+      ],
+      "archive_conditions": "Retain unchanged original bytes and complete license/attribution notices; no external media, dependencies or third-party linked material included.",
+      "local_sha256": "6011508288c616a6e11380924ca98a20745347c5304436a65b9b071fc31677d4",
+      "local_bytes": 8588,
+      "pieces": [
+        {
+          "section": "Edit promise, decision ladder, story spine, shot selection, continuity and montage",
+          "source_selector": "40–200",
+          "source_bytes": [
+            5705,
+            14293
+          ],
+          "local_bytes": [
+            0,
+            8588
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "montage-rhythm-and-transitions.txt",
+      "use": "Rhythm, separate review passes, sound bridges and motivated cuts.",
+      "archive_path": "upstream/calesthio__generative-media-skills/skills/production/post-production/editing-montage/SKILL.md",
+      "archive_manifest": "batches/0107/SOURCES.json",
+      "upstream": "https://github.com/calesthio/generative-media-skills/blob/8c85352d5d75d4dcbe58480bd138e37b9742bab1/skills/production/post-production/editing-montage/SKILL.md",
+      "upstream_revision": "8c85352d5d75d4dcbe58480bd138e37b9742bab1",
+      "archive_member_sha256": "c1cc77a249f5607d11ab4b562a3982dfc61583a5f79dfbcc3755550fcc5cfe1a",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://github.com/calesthio/generative-media-skills/blob/8c85352d5d75d4dcbe58480bd138e37b9742bab1/LICENSE"
+      ],
+      "local_notice_files": [
+        "montage-LICENSE.txt"
+      ],
+      "archive_conditions": "Retain unchanged original bytes and complete license/attribution notices; no external media, dependencies or third-party linked material included.",
+      "local_sha256": "5ad31c9376f21d87a3433e1f5b4ec92949fed74f578336db7411db3b9ed8a414",
+      "local_bytes": 3234,
+      "pieces": [
+        {
+          "section": "Rhythm and pacing, J-cuts, L-cuts, sound bridges, match cuts, cutaways, and transitions",
+          "source_selector": "201–280",
+          "source_bytes": [
+            14293,
+            17527
+          ],
+          "local_bytes": [
+            0,
+            3234
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "montage-LICENSE.txt",
+      "use": "MIT license and original copyright.",
+      "archive_path": "upstream/calesthio__generative-media-skills/LICENSE",
+      "archive_manifest": "batches/0107/SOURCES.json",
+      "upstream": "https://github.com/calesthio/generative-media-skills/blob/8c85352d5d75d4dcbe58480bd138e37b9742bab1/LICENSE",
+      "upstream_revision": "8c85352d5d75d4dcbe58480bd138e37b9742bab1",
+      "archive_member_sha256": "27570f011a5a53e84412bcb6abcce17654c4e2b0e68c3522dca8885de7deaf93",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://github.com/calesthio/generative-media-skills/blob/8c85352d5d75d4dcbe58480bd138e37b9742bab1/LICENSE"
+      ],
+      "local_notice_files": [],
+      "archive_conditions": "Retain unchanged original bytes and complete license/attribution notices; no external media, dependencies or third-party linked material included.",
+      "local_sha256": "27570f011a5a53e84412bcb6abcce17654c4e2b0e68c3522dca8885de7deaf93",
+      "local_bytes": 1093,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            1093
+          ],
+          "local_bytes": [
+            0,
+            1093
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "acmi-editing.html",
+      "use": "ACMI Film It teaching text, checkable exercises and textual examples.",
+      "archive_path": "upstream/web__www.acmi.net.au/SRC-2ce3e79c789a/original.html",
+      "archive_manifest": "batches/0130/SOURCES.json",
+      "upstream": "https://www.acmi.net.au/education/school-program-and-resources/film-it-editing/",
+      "upstream_revision": "retrieved-20261117",
+      "archive_member_sha256": "7c7618e60daf638ba28d0666b01c76590bc8527d6e2c98a14ccff257089cae19",
+      "archive_member_is_unmodified_upstream": false,
+      "credit": "© Australian Centre for the Moving Image. ACMI Film It: Editing. Linked exercise footage and embedded media excluded.",
+      "license": "CC-BY (version not specified)",
+      "license_evidence": [
+        "https://www.acmi.net.au/about/terms-conditions/websites-terms-of-use/"
+      ],
+      "local_notice_files": [
+        "acmi-terms.html"
+      ],
+      "archive_conditions": "Full main textual content extracted. © Australian Centre for the Moving Image. CC BY text; version unspecified. Images, audio/video and third-party media excluded. Formatting normalized, not unchanged original webpage.",
+      "local_sha256": "7c7618e60daf638ba28d0666b01c76590bc8527d6e2c98a14ccff257089cae19",
+      "local_bytes": 21491,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            21491
+          ],
+          "local_bytes": [
+            0,
+            21491
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "acmi-terms.html",
+      "use": "Publisher terms archived as evidence, §4 copyright and attribution.",
+      "archive_path": "upstream/web__www.acmi.net.au/SRC-2ce3e79c789a/license-evidence.html",
+      "archive_manifest": "batches/0130/SOURCES.json",
+      "upstream": "https://www.acmi.net.au/about/terms-conditions/websites-terms-of-use/",
+      "upstream_revision": "retrieved-20261117",
+      "archive_member_sha256": "45c97a16b348c46439c5f2dacbbf4c89e53ca4bc0cd25d4c85e79d7717ddf6cc",
+      "archive_member_is_unmodified_upstream": false,
+      "license": "CC-BY (version not specified)",
+      "license_evidence": [
+        "https://www.acmi.net.au/about/terms-conditions/websites-terms-of-use/"
+      ],
+      "local_notice_files": [],
+      "local_sha256": "45c97a16b348c46439c5f2dacbbf4c89e53ca4bc0cd25d4c85e79d7717ddf6cc",
+      "local_bytes": 14263,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            14263
+          ],
+          "local_bytes": [
+            0,
+            14263
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "parallel-perspectives.txt",
+      "use": "Filmmaker account of documentary narrative tension, concurrent points of view, material limitations and exclusions.",
+      "archive_path": "upstream/articles/oneday-september-kevin-macdonald-interview.fulltext.txt",
+      "archive_manifest": "batches/0157/SOURCES.json",
+      "upstream": "https://www.nitrateonline.com/2000/foneday.html",
+      "upstream_revision": "retrieved-20261118",
+      "archive_member_sha256": "c48dd2875063d89dbeaed371d3e4fcecc249026e7e662b99b437821b1d02f232",
+      "archive_member_is_unmodified_upstream": false,
+      "credit": "Cynthia Fuchs, interview with Kevin Macdonald, Nitrate Online, December 2000. Selected Q&A and attribution from the archive text.",
+      "license": "CC-BY-4.0",
+      "license_evidence": [
+        "https://www.nitrateonline.com/2000/foneday.html",
+        "https://www.nitrateonline.com/aboutus.html"
+      ],
+      "local_notice_files": [],
+      "archive_conditions": "Full article/interview text only; whitespace normalized, external imagery/media/scripts/navigation excluded. Retain author/publisher attribution and current publisher license. Not permission for the discussed film, music or footage.",
+      "local_sha256": "f6cda2302653058e07d94197e6b9d3d55b9e9e8fe1d7c57252bc2ba3dbd459c1",
+      "local_bytes": 7000,
+      "pieces": [
+        {
+          "section": "Original attribution, license and normalization notice",
+          "source_selector": "1–9",
+          "source_bytes": [
+            0,
+            1041
+          ],
+          "local_bytes": [
+            0,
+            1041
+          ]
+        },
+        {
+          "section": "Interview sequence on narrative tension, concurrent perspectives and material decisions",
+          "source_selector": "14–42",
+          "source_bytes": [
+            2538,
+            8497
+          ],
+          "local_bytes": [
+            1041,
+            7000
+          ]
+        }
+      ],
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "local_path": "scene-cohesion.txt",
+      "use": "Research on consecutive-scene location, character-intention and time inferences.",
+      "archive_path": "upstream/web__www.frontiersin.org/SRC-25fe476b433e/original.txt",
+      "archive_manifest": "batches/0139/SOURCES.json",
+      "upstream": "https://www.frontiersin.org/journals/communication/articles/10.3389/fcomm.2024.1347788/pdf",
+      "upstream_revision": "retrieved-20261117",
+      "archive_member_sha256": "dc5896b9cfac596aa2213124ebdc87d4bae49eea5c89b612105482d0423a647f",
+      "archive_member_is_unmodified_upstream": false,
+      "credit": "Dayana Markhabayeva and Chiao-I Tseng (2024), Frontiers in Communication 9:1347788, doi:10.3389/fcomm.2024.1347788. Selected text from two-column PDF extraction. Original study images and film frames omitted.",
+      "license": "CC-BY (article notice)",
+      "license_evidence": [
+        "https://www.frontiersin.org/journals/communication/articles/10.3389/fcomm.2024.1347788/pdf"
+      ],
+      "local_notice_files": [],
+      "archive_conditions": "Full article text extraction; excludes third-party frames from commercial films including Memento and Julie & Julia. Original text, author attribution, figure captions and license notice retained; whitespace/layout normalization is a declared transformation.",
+      "local_sha256": "acd9b70032d792f681bf13290129c73a6e0c1ce94fa0de12032d038ef1cfd822",
+      "local_bytes": 13677,
+      "pieces": [
+        {
+          "section": "Original title, attribution, license and abstract",
+          "source_selector": "1–72",
+          "source_bytes": [
+            0,
+            5557
+          ],
+          "local_bytes": [
+            0,
+            5557
+          ]
+        },
+        {
+          "section": "Discussion, conclusion and limitations",
+          "source_selector": "817–901",
+          "source_bytes": [
+            86775,
+            94895
+          ],
+          "local_bytes": [
+            5557,
+            13677
+          ]
+        }
+      ],
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "local_path": "data-visual-tracking.txt",
+      "use": "Tracking target sets, identities and features; methods and examples.",
+      "archive_path": "upstream/web__www.ebi.ac.uk/SRC-a2cf3afb26da/original.xml",
+      "archive_manifest": "batches/0129/SOURCES.json",
+      "upstream": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML",
+      "upstream_revision": "retrieved-20261116",
+      "archive_member_sha256": "851f62abe99e0706cf1129e4a92319ca67f0a4d64109bb6c743abccb9cee7837",
+      "archive_member_is_unmodified_upstream": false,
+      "credit": "Ouxun Jiang, Camillia Matuk, Madhumitha Gopalakrishnan, Wen Xu, Jason Dykes, Anastasia Bezerianos, Fanny Chevalier, Petra Isenberg and Steven Franconeri (2026), Cognitive Research: Principles and Implications 11, 31, doi:10.1186/s41235-026-00724-y. Selected sections from normalized JATS; see publisher for original article and graphics.",
+      "license": "CC-BY-4.0",
+      "license_evidence": [
+        "https://doi.org/10.1186/s41235-026-00724-y",
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML"
+      ],
+      "local_notice_files": [
+        "data-visual-application.txt"
+      ],
+      "archive_conditions": "Normalized full article text from https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML. Original author attribution and license retained. No image/audio/video assets included; graphics/media references removed. This is not a byte-identical original file.",
+      "local_sha256": "bc5d80839919935a5a4488cce1aa45c17f0ff9b95e3e38a997d697380cac1f30",
+      "local_bytes": 14973,
+      "pieces": [
+        {
+          "section": "Tracking tasks and suggested design techniques",
+          "source_selector": "Sec5 up to Sec10",
+          "source_bytes": [
+            26014,
+            40987
+          ],
+          "local_bytes": [
+            0,
+            14973
+          ]
+        }
+      ],
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "local_path": "data-visual-tasks.txt",
+      "use": "Holistic judgments and noticing objects added or removed, with category-specific methods and known/unknown bounds.",
+      "archive_path": "upstream/web__www.ebi.ac.uk/SRC-a2cf3afb26da/original.xml",
+      "archive_manifest": "batches/0129/SOURCES.json",
+      "upstream": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML",
+      "upstream_revision": "retrieved-20261116",
+      "archive_member_sha256": "851f62abe99e0706cf1129e4a92319ca67f0a4d64109bb6c743abccb9cee7837",
+      "archive_member_is_unmodified_upstream": false,
+      "credit": "Ouxun Jiang, Camillia Matuk, Madhumitha Gopalakrishnan, Wen Xu, Jason Dykes, Anastasia Bezerianos, Fanny Chevalier, Petra Isenberg and Steven Franconeri (2026), Cognitive Research: Principles and Implications 11, 31, doi:10.1186/s41235-026-00724-y. Selected sections from normalized JATS; see publisher for original article and graphics.",
+      "license": "CC-BY-4.0",
+      "license_evidence": [
+        "https://doi.org/10.1186/s41235-026-00724-y",
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML"
+      ],
+      "local_notice_files": [
+        "data-visual-application.txt"
+      ],
+      "archive_conditions": "Normalized full article text from https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML. Original author attribution and license retained. No image/audio/video assets included; graphics/media references removed. This is not a byte-identical original file.",
+      "local_sha256": "24f70f37ce20149b57ddd0224913541a1516234b3467534f5b3399d3ec7fdb5b",
+      "local_bytes": 18593,
+      "pieces": [
+        {
+          "section": "Holistic judgments and noticing changes",
+          "source_selector": "Sec10 up to Sec16",
+          "source_bytes": [
+            40987,
+            59580
+          ],
+          "local_bytes": [
+            0,
+            18593
+          ]
+        }
+      ],
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "local_path": "data-visual-application.txt",
+      "use": "Technique interference, task combinations and empirical limitations.",
+      "archive_path": "upstream/web__www.ebi.ac.uk/SRC-a2cf3afb26da/original.xml",
+      "archive_manifest": "batches/0129/SOURCES.json",
+      "upstream": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML",
+      "upstream_revision": "retrieved-20261116",
+      "archive_member_sha256": "851f62abe99e0706cf1129e4a92319ca67f0a4d64109bb6c743abccb9cee7837",
+      "archive_member_is_unmodified_upstream": false,
+      "credit": "Ouxun Jiang, Camillia Matuk, Madhumitha Gopalakrishnan, Wen Xu, Jason Dykes, Anastasia Bezerianos, Fanny Chevalier, Petra Isenberg and Steven Franconeri (2026), Cognitive Research: Principles and Implications 11, 31, doi:10.1186/s41235-026-00724-y. Selected sections from normalized JATS; see publisher for original article and graphics.",
+      "license": "CC-BY-4.0",
+      "license_evidence": [
+        "https://doi.org/10.1186/s41235-026-00724-y",
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML"
+      ],
+      "local_notice_files": [],
+      "archive_conditions": "Normalized full article text from https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13038703/fullTextXML. Original author attribution and license retained. No image/audio/video assets included; graphics/media references removed. This is not a byte-identical original file.",
+      "local_sha256": "8a2ce4203a35edf5670f73343fa20079f9a23ff6b078162fb48da9dcfad7a1b4",
+      "local_bytes": 9490,
+      "pieces": [
+        {
+          "section": "Original article permission notice",
+          "source_selector": "front/article-meta/permissions",
+          "source_bytes": [
+            3680,
+            4818
+          ],
+          "local_bytes": [
+            0,
+            1138
+          ]
+        },
+        {
+          "section": "Design guidelines, discussion and future work",
+          "source_selector": "Sec16 up to notes1",
+          "source_bytes": [
+            59580,
+            67932
+          ],
+          "local_bytes": [
+            1138,
+            9490
+          ]
+        }
+      ],
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "local_path": "micro-edits.txt",
+      "use": "Dialogue-scene findings, rhythm/view distinction, pre/post-roll and low-synchrony windows with study boundaries.",
+      "archive_path": "upstream/web__microedits.github.io/SRC-d3c01b2ce6df/original.txt",
+      "archive_manifest": "batches/0135/SOURCES.json",
+      "upstream": "https://microedits.github.io/pdf/micro_edits_final.pdf",
+      "upstream_revision": "retrieved-20261117",
+      "archive_member_sha256": "0833f220c3c51c3a2b0e2d6c9a11d14c9c08b5e34f7918862ae7d1d51796a78e",
+      "archive_member_is_unmodified_upstream": false,
+      "credit": "Nhan (Nathan) Tran, Hijung Valentina Shin, Abe Davis and Mackenzie Leake (2026), Micro-Edits, UIST 2026, doi:10.1145/3830398.3830545. Text extraction excerpts with original layout artifacts. Images, media and system implementation excluded.",
+      "license": "CC-BY-4.0",
+      "license_evidence": [
+        "https://microedits.github.io/pdf/micro_edits_final.pdf",
+        "https://creativecommons.org/licenses/by/4.0/"
+      ],
+      "local_notice_files": [],
+      "archive_conditions": "CC BY 4.0 attribution and license retained; full text-only extraction, not unmodified original PDF. All video frames are explicitly copyright EditStock. All embedded images, including these frames, are excluded.",
+      "local_sha256": "257cf95333e5357f10126e09b77e50a2e7dc5ff61010853e1434edbb57e1bbfc",
+      "local_bytes": 10715,
+      "pieces": [
+        {
+          "section": "Archive and licensing notice",
+          "source_selector": "1–11",
+          "source_bytes": [
+            0,
+            841
+          ],
+          "local_bytes": [
+            0,
+            841
+          ]
+        },
+        {
+          "section": "Study context, findings and design insights",
+          "source_selector": "281–402",
+          "source_bytes": [
+            11564,
+            17977
+          ],
+          "local_bytes": [
+            841,
+            7254
+          ]
+        },
+        {
+          "section": "Micro-editing windows and two boundary conditions",
+          "source_selector": "750–786",
+          "source_bytes": [
+            28981,
+            30364
+          ],
+          "local_bytes": [
+            7254,
+            8637
+          ]
+        },
+        {
+          "section": "Scope and limitations",
+          "source_selector": "1931–1963",
+          "source_bytes": [
+            60669,
+            62747
+          ],
+          "local_bytes": [
+            8637,
+            10715
+          ]
+        }
+      ],
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/choreography.txt",
+      "use": "Hero, choreography, common start, stagger and attention patterns.",
+      "archive_path": "upstream/LottieFiles__motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/director/choreography.md",
+      "archive_manifest": "batches/0143/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/director/choreography.md",
+      "upstream_revision": "2e1f3c052dd70c60b598413e2fc5d7704d9e9896",
+      "archive_member_sha256": "c81257b56160b9b2f3d99f78d4b8172b425c22d9ca73be06d3ffaa7305a34deb",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/director/choreography.md"
+      ],
+      "local_notice_files": [
+        "../../../laohu-motion/assets/editorial-sources/lottiefiles-LICENSE.txt"
+      ],
+      "archive_conditions": "Complete unmodified tracked text file from pinned official repository; all 21 tracked files are retained as one complete repository source. Root MIT license and LottieFiles copyright retained. Static archival copy only; no upstream instructions or code executed.",
+      "local_sha256": "c81257b56160b9b2f3d99f78d4b8172b425c22d9ca73be06d3ffaa7305a34deb",
+      "local_bytes": 3035,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            3035
+          ],
+          "local_bytes": [
+            0,
+            3035
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/multi-element.txt",
+      "use": "Timings, curves, measured offsets and grouped motion example recipes.",
+      "archive_path": "upstream/LottieFiles__motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/patterns/multi-element.md",
+      "archive_manifest": "batches/0143/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/patterns/multi-element.md",
+      "upstream_revision": "2e1f3c052dd70c60b598413e2fc5d7704d9e9896",
+      "archive_member_sha256": "46c8da91843c593deb763a4a7fa32849bdaeb7a7ecd4d559e3b21bcc976f2c46",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/patterns/multi-element.md"
+      ],
+      "local_notice_files": [
+        "../../../laohu-motion/assets/editorial-sources/lottiefiles-LICENSE.txt"
+      ],
+      "archive_conditions": "Complete unmodified tracked text file from pinned official repository; all 21 tracked files are retained as one complete repository source. Root MIT license and LottieFiles copyright retained. Static archival copy only; no upstream instructions or code executed.",
+      "local_sha256": "46c8da91843c593deb763a4a7fa32849bdaeb7a7ecd4d559e3b21bcc976f2c46",
+      "local_bytes": 2362,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            2362
+          ],
+          "local_bytes": [
+            0,
+            2362
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/timing-easing-tables.txt",
+      "use": "Original timing and easing specifications for comparison.",
+      "archive_path": "upstream/LottieFiles__motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/timing-easing-tables.md",
+      "archive_manifest": "batches/0143/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/timing-easing-tables.md",
+      "upstream_revision": "2e1f3c052dd70c60b598413e2fc5d7704d9e9896",
+      "archive_member_sha256": "e478f3b99c4cac3f96eca008e20f8808d4cfae165f5799f260092baf9b6ebcff",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/timing-easing-tables.md"
+      ],
+      "local_notice_files": [
+        "../../../laohu-motion/assets/editorial-sources/lottiefiles-LICENSE.txt"
+      ],
+      "archive_conditions": "Complete unmodified tracked text file from pinned official repository; all 21 tracked files are retained as one complete repository source. Root MIT license and LottieFiles copyright retained. Static archival copy only; no upstream instructions or code executed.",
+      "local_sha256": "e478f3b99c4cac3f96eca008e20f8808d4cfae165f5799f260092baf9b6ebcff",
+      "local_bytes": 2900,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            2900
+          ],
+          "local_bytes": [
+            0,
+            2900
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/property-selection.txt",
+      "use": "Animation property and combination choices by purpose.",
+      "archive_path": "upstream/LottieFiles__motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/property-selection.md",
+      "archive_manifest": "batches/0143/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/property-selection.md",
+      "upstream_revision": "2e1f3c052dd70c60b598413e2fc5d7704d9e9896",
+      "archive_member_sha256": "053d830795fc824fed27618fbd18084207af6aeed55b73c0a6e1d5665de894ae",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/property-selection.md"
+      ],
+      "local_notice_files": [
+        "../../../laohu-motion/assets/editorial-sources/lottiefiles-LICENSE.txt"
+      ],
+      "archive_conditions": "Complete unmodified tracked text file from pinned official repository; all 21 tracked files are retained as one complete repository source. Root MIT license and LottieFiles copyright retained. Static archival copy only; no upstream instructions or code executed.",
+      "local_sha256": "053d830795fc824fed27618fbd18084207af6aeed55b73c0a6e1d5665de894ae",
+      "local_bytes": 2922,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            2922
+          ],
+          "local_bytes": [
+            0,
+            2922
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/state-feedback.txt",
+      "use": "Interaction feedback, loading transitions and state indication.",
+      "archive_path": "upstream/LottieFiles__motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/patterns/state-feedback.md",
+      "archive_manifest": "batches/0143/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/patterns/state-feedback.md",
+      "upstream_revision": "2e1f3c052dd70c60b598413e2fc5d7704d9e9896",
+      "archive_member_sha256": "dac86388c2d8fcdfc2f194b4f8877caedcdc010df9ce29d27dfc99d08cf8c60e",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/patterns/state-feedback.md"
+      ],
+      "local_notice_files": [
+        "../../../laohu-motion/assets/editorial-sources/lottiefiles-LICENSE.txt"
+      ],
+      "archive_conditions": "Complete unmodified tracked text file from pinned official repository; all 21 tracked files are retained as one complete repository source. Root MIT license and LottieFiles copyright retained. Static archival copy only; no upstream instructions or code executed.",
+      "local_sha256": "dac86388c2d8fcdfc2f194b4f8877caedcdc010df9ce29d27dfc99d08cf8c60e",
+      "local_bytes": 3062,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            3062
+          ],
+          "local_bytes": [
+            0,
+            3062
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/troubleshooting.txt",
+      "use": "Motion hierarchy, timing and playback troubleshooting.",
+      "archive_path": "upstream/LottieFiles__motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/troubleshooting.md",
+      "archive_manifest": "batches/0143/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/troubleshooting.md",
+      "upstream_revision": "2e1f3c052dd70c60b598413e2fc5d7704d9e9896",
+      "archive_member_sha256": "69e5aaeee108231d51187143ae3fce4db7a42936f10682908ca9462a008a047a",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/skills/motion-design/reference/troubleshooting.md"
+      ],
+      "local_notice_files": [
+        "../../../laohu-motion/assets/editorial-sources/lottiefiles-LICENSE.txt"
+      ],
+      "archive_conditions": "Complete unmodified tracked text file from pinned official repository; all 21 tracked files are retained as one complete repository source. Root MIT license and LottieFiles copyright retained. Static archival copy only; no upstream instructions or code executed.",
+      "local_sha256": "69e5aaeee108231d51187143ae3fce4db7a42936f10682908ca9462a008a047a",
+      "local_bytes": 2709,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            2709
+          ],
+          "local_bytes": [
+            0,
+            2709
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/lottiefiles-LICENSE.txt",
+      "use": "MIT license and original copyright.",
+      "archive_path": "upstream/LottieFiles__motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/LICENSE",
+      "archive_manifest": "batches/0143/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/LICENSE",
+      "upstream_revision": "2e1f3c052dd70c60b598413e2fc5d7704d9e9896",
+      "archive_member_sha256": "9fc2e8685daa09e28d54b6afa8a38f168417c5735a3cd676c80c159785e93a80",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/LottieFiles/motion-design-skill/2e1f3c052dd70c60b598413e2fc5d7704d9e9896/LICENSE"
+      ],
+      "local_notice_files": [],
+      "archive_conditions": "Complete unmodified tracked text file from pinned official repository; all 21 tracked files are retained as one complete repository source. Root MIT license and LottieFiles copyright retained. Static archival copy only; no upstream instructions or code executed.",
+      "local_sha256": "9fc2e8685daa09e28d54b6afa8a38f168417c5735a3cd676c80c159785e93a80",
+      "local_bytes": 1068,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            1068
+          ],
+          "local_bytes": [
+            0,
+            1068
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/bookmark-example.py.txt",
+      "use": "Read-only comparison of waiting for a real event, fitting an available interval, applying a duration cap and inferred syllable timing.",
+      "archive_path": "upstream/ManimCommunity__manim-voiceover/examples/bookmark-example.py",
+      "archive_manifest": "batches/0152/SOURCES.json",
+      "upstream": "https://github.com/ManimCommunity/manim-voiceover/blob/3dc0d95d2f1d9d0937872b3dd68c7b38c4dfc96a/examples/bookmark-example.py",
+      "upstream_revision": "3dc0d95d2f1d9d0937872b3dd68c7b38c4dfc96a",
+      "archive_member_sha256": "c0f3a930bc088345c91958f31f1d6c10f6fa44d82d655cbff3814ec4347d4529",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://github.com/ManimCommunity/manim-voiceover/blob/3dc0d95d2f1d9d0937872b3dd68c7b38c4dfc96a/LICENSE"
+      ],
+      "local_notice_files": [
+        "../../../laohu-motion/assets/editorial-sources/manim-voiceover-LICENSE.txt"
+      ],
+      "archive_conditions": "Complete unmodified implementation/documentation file from original research fixed revision. Root and applicable closer licenses, original copyright and notices retained. Linked media, assets, datasets, service credentials and dependencies not included. Partial repository selection, not runnable project; no instructions/code executed.",
+      "local_sha256": "c0f3a930bc088345c91958f31f1d6c10f6fa44d82d655cbff3814ec4347d4529",
+      "local_bytes": 4690,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            4690
+          ],
+          "local_bytes": [
+            0,
+            4690
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-motion/assets/editorial-sources/manim-voiceover-LICENSE.txt",
+      "use": "MIT license and original copyright.",
+      "archive_path": "upstream/ManimCommunity__manim-voiceover/LICENSE",
+      "archive_manifest": "batches/0114/SOURCES.json",
+      "upstream": "https://github.com/ManimCommunity/manim-voiceover/blob/3dc0d95d2f1d9d0937872b3dd68c7b38c4dfc96a/LICENSE",
+      "upstream_revision": "3dc0d95d2f1d9d0937872b3dd68c7b38c4dfc96a",
+      "archive_member_sha256": "71ed6936079871afa2986d8ebf137a35bd36322ca02a090654ca375756b39a27",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://github.com/ManimCommunity/manim-voiceover/blob/3dc0d95d2f1d9d0937872b3dd68c7b38c4dfc96a/LICENSE"
+      ],
+      "local_notice_files": [],
+      "archive_conditions": "Retain unchanged original bytes, authorship, license and notices. Only listed text files included; linked media, models, datasets, dependencies and third-party content not acquired.",
+      "local_sha256": "71ed6936079871afa2986d8ebf137a35bd36322ca02a090654ca375756b39a27",
+      "local_bytes": 1088,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            1088
+          ],
+          "local_bytes": [
+            0,
+            1088
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-asrcut/assets/editorial-sources/cutting.txt",
+      "use": "Original take selection, source thresholds, intended retained gaps, opening hold, split cut limits and verification.",
+      "archive_path": "upstream/ranahaani__i-hate-editing/a5add74b595f652e0da9577bbf8f6fc4b1d57457/rules/cutting.md",
+      "archive_manifest": "batches/0142/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/ranahaani/i-hate-editing/a5add74b595f652e0da9577bbf8f6fc4b1d57457/rules/cutting.md",
+      "upstream_revision": "a5add74b595f652e0da9577bbf8f6fc4b1d57457",
+      "archive_member_sha256": "4c14bb2e5d5caea03b1c39d89b033af267171e46fcb476e540e54dfa4098e397",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/ranahaani/i-hate-editing/a5add74b595f652e0da9577bbf8f6fc4b1d57457/rules/cutting.md"
+      ],
+      "local_notice_files": [
+        "../../../laohu-asrcut/assets/editorial-sources/cutting-LICENSE.txt",
+        "../../../laohu-asrcut/assets/editorial-sources/video-use-LICENSE.txt"
+      ],
+      "archive_conditions": "Unmodified companion source file for already-published I Hate Editing SKILL.md; not a new independent source object. Root MIT license and adapted-work attribution retained. Source archived only, not executed or security-certified.",
+      "local_sha256": "4c14bb2e5d5caea03b1c39d89b033af267171e46fcb476e540e54dfa4098e397",
+      "local_bytes": 4818,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            4818
+          ],
+          "local_bytes": [
+            0,
+            4818
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-asrcut/assets/editorial-sources/cutting-companion.txt",
+      "use": "Preserve referenced and governing upstream provisions with credits, from the same revision.",
+      "archive_path": "upstream/ranahaani__i-hate-editing/a5add74b595f652e0da9577bbf8f6fc4b1d57457/HARD-RULES.md",
+      "archive_manifest": "batches/0142/SOURCES.json",
+      "upstream": "https://raw.githubusercontent.com/ranahaani/i-hate-editing/a5add74b595f652e0da9577bbf8f6fc4b1d57457/HARD-RULES.md",
+      "upstream_revision": "a5add74b595f652e0da9577bbf8f6fc4b1d57457",
+      "archive_member_sha256": "6c38bba1a39a278f876fe991d783403bbbfe22ddf8927cd24f68bff231e0e73e",
+      "archive_member_is_unmodified_upstream": true,
+      "credit": "Muhammad Abdullah, I Hate Editing, rules 1–7 and 10 adapted from browser-use/video-use (MIT). Rule 18 acknowledgement retained.",
+      "license": "MIT",
+      "license_evidence": [
+        "https://raw.githubusercontent.com/ranahaani/i-hate-editing/a5add74b595f652e0da9577bbf8f6fc4b1d57457/HARD-RULES.md"
+      ],
+      "local_notice_files": [
+        "../../../laohu-asrcut/assets/editorial-sources/cutting-LICENSE.txt",
+        "../../../laohu-asrcut/assets/editorial-sources/video-use-LICENSE.txt"
+      ],
+      "archive_conditions": "Unmodified companion source file for already-published I Hate Editing SKILL.md; not a new independent source object. Root MIT license and adapted-work attribution retained. Source archived only, not executed or security-certified.",
+      "local_sha256": "c1ca12857c1faeb7823153fb48a0539f8968ac955975131fac4e90f45ac09e03",
+      "local_bytes": 2210,
+      "pieces": [
+        {
+          "section": "Boundary fade, source word protection and padding",
+          "source_selector": "18–20",
+          "source_bytes": [
+            592,
+            741
+          ],
+          "local_bytes": [
+            0,
+            149
+          ]
+        },
+        {
+          "section": "Rules 6 and 7",
+          "source_selector": "29–34",
+          "source_bytes": [
+            1094,
+            1382
+          ],
+          "local_bytes": [
+            149,
+            437
+          ]
+        },
+        {
+          "section": "Rule 13",
+          "source_selector": "83–86",
+          "source_bytes": [
+            4033,
+            4210
+          ],
+          "local_bytes": [
+            437,
+            614
+          ]
+        },
+        {
+          "section": "Rules 18 and 19",
+          "source_selector": "106–124",
+          "source_bytes": [
+            5228,
+            6443
+          ],
+          "local_bytes": [
+            614,
+            1829
+          ]
+        },
+        {
+          "section": "Original adaptation credits and Rule 18 attribution",
+          "source_selector": "133–135",
+          "source_bytes": [
+            6787,
+            7032
+          ],
+          "local_bytes": [
+            1829,
+            2074
+          ]
+        },
+        {
+          "section": "Rule 18 acknowledgement",
+          "source_selector": "142–143",
+          "source_bytes": [
+            7275,
+            7411
+          ],
+          "local_bytes": [
+            2074,
+            2210
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-asrcut/assets/editorial-sources/cutting-LICENSE.txt",
+      "use": "MIT license and original copyright.",
+      "archive_path": "license-only/ranahaani__i-hate-editing/LICENSE",
+      "archive_manifest": "SOURCES.json",
+      "upstream": "https://github.com/ranahaani/i-hate-editing/blob/a5add74b595f652e0da9577bbf8f6fc4b1d57457/LICENSE",
+      "upstream_revision": "a5add74b595f652e0da9577bbf8f6fc4b1d57457",
+      "archive_member_sha256": "d9653651935253966e0f94c34ed8f95308104fd72d534fa11bdc677e75ac9b41",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://github.com/ranahaani/i-hate-editing/blob/a5add74b595f652e0da9577bbf8f6fc4b1d57457/LICENSE"
+      ],
+      "local_notice_files": [],
+      "local_sha256": "d9653651935253966e0f94c34ed8f95308104fd72d534fa11bdc677e75ac9b41",
+      "local_bytes": 1074,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            1074
+          ],
+          "local_bytes": [
+            0,
+            1074
+          ]
+        }
+      ]
+    },
+    {
+      "local_path": "../../../laohu-asrcut/assets/editorial-sources/video-use-LICENSE.txt",
+      "use": "MIT license for attributed inherited boundary rules.",
+      "archive_path": "upstream/browser-use__video-use/LICENSE",
+      "archive_manifest": "SOURCES.json",
+      "upstream": "https://github.com/browser-use/video-use/blob/43cfc566833548093455c9d4a46bd69913b7e552/LICENSE",
+      "upstream_revision": "43cfc566833548093455c9d4a46bd69913b7e552",
+      "archive_member_sha256": "5afa3d97bf1e6f998d587fa101e3fe0d0c416840b7fe77bcd6ae97690a334631",
+      "archive_member_is_unmodified_upstream": true,
+      "license": "MIT",
+      "license_evidence": [
+        "https://github.com/browser-use/video-use/blob/43cfc566833548093455c9d4a46bd69913b7e552/LICENSE"
+      ],
+      "local_notice_files": [],
+      "local_sha256": "5afa3d97bf1e6f998d587fa101e3fe0d0c416840b7fe77bcd6ae97690a334631",
+      "local_bytes": 1068,
+      "pieces": [
+        {
+          "section": "Complete archive member",
+          "source_bytes": [
+            0,
+            1068
+          ],
+          "local_bytes": [
+            0,
+            1068
+          ]
+        }
+      ]
+    }
+  ]
+}

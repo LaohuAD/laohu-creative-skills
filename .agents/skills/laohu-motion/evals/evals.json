@@ -10,7 +10,7 @@
       "把被选中的局部方法扩成全片固定皮肤，或把模块加载数量当作作品质量证据"
     ]
   },
-  "execution_protocol": "评测执行者只接收本轮 prompt、conversation_context、用户实际提供的 input_files、最终 Skill 与实际按条件读取的 Reference/三级专项，不接收 expected_behavior。先记录被读取文件和本轮请求模式。仅方案案例不得渲染；审查案例不得默认修改或渲染。涉及画面构思时，检查观看任务/语义事实约束/素材与锁定范围如何共同形成表示法和关键画面；动作图不当作预制布局。新组织画面的内部关键态预演用实际画面覆盖起、中、落并先自审；正常完整制作在用户确认前先交可播放的约 15–30 秒代表样片；确认前仅推进全稿阅读、整体蓝图、必要 ASR 虚拟粗精剪/时间轴准备及样片自身依赖，不得批量制作/生成其余镜头或全片素材、先完成整片工程后补交样片或渲染剩余全片，除非用户明确跳过或可复用仍适用的已确认样片；短片/仅短样片、方案/审查和已确认方向内的小修按主文例外。样片须由真实区间能力或独立样片场景产生，不用静帧、全片后裁或虚构接口代替；工具能力不足就报告缺口并停。制作输入是录屏/视频/录音时，先判断是否有需清理内容及授权；确需且获授权才转 asrcut，已剪/锁定不重剪。局部方法结果回到同一镜头蓝图并由工程真实消费；可保留承担比较/阅读职责的稳定布局，不设每拍换色、动作或运镜配额。制作案例在独立可恢复工程/临时副本中按环境可用工具落实，保留用户原稿、原音和素材；必须记录实际工具/版本、命令、工程路径和本阶段最后媒体路径；样片阶段正常速度顺播该实际样片，完整制作阶段播放最终全片并检查镜头转换/文字/关键事实/声画锚点，未获样片确认不得渲染剩余全片。工具阻塞时如实记录最后完成阶段与停止点。每案回报意图路由、读取路径、完整交付物与暂停点；不得向用户资产写入评测文件。结构检查不证明 ROUTE/BEHAVIOR/QUALITY；自评最多 OBSERVE。没有接收者或使用证据且未发现目标差距时 QUALITY=UNKNOWN；一旦观察到目标差距，按判据记录 FAIL，不能被其他缺失证据改记为 UNKNOWN。 对 execution_class=fixture_gated 且 fixture_status=missing_from_eval_input_files 的案例，至少评估是否发现并准确说明缺失、暂停边界与最小补充项；不得将单纯缺附件后的停答计作脚本/工程/音轨/媒体制作或质量证据。direct 案例从本条目内嵌请求直接执行；工具不可用时仍需报告实际阻塞阶段。若某 fixture-gated 案例在其本地判据中明确允许不依赖缺失材料的独立部分，可如实记录该局部工程/媒体、范围与路径；该局部证据只支持相应范围的行为/媒体，不替代缺料镜头、完整项目或全片交付判据，也不证明被锁定素材的处理或整片质量；该案例未明确允许时，按 expected_if_fixture_missing 的停止范围处理。 这些新增案例的 `evidence_scope` 仅标明输入允许产生的证据类别（plan / technical_fixture / production），不是通过状态；内嵌技术夹具只证明对该假设输入的推理，不能代替实际工程或成片。production 且缺少锁定素材的 fixture-gated 案例必须按自身判据限定缺料识别和暂停边界：只有本案明示允许的独立制作可计作相应镜头的有限行为/媒体证据，不能计作缺料依赖部分或整片完成证据，也不能据此将案例整体标记为通过；其余缺料案例只检验缺料识别和正确停止，不因任何局部制作而豁免原判据。",
+  "execution_protocol": "评测执行者只接收本轮 prompt、conversation_context、用户实际提供的 input_files、最终 Skill 与实际按条件读取的 References，不接收 expected_behavior。先记录本轮请求模式和可核验的实际 read trace（加载/读取的路径）；新 Showreel 案例核对完整正式 styles index 与本片适用的原版 Showreel References；既有旧工程才按真实 consumer 读取 legacy-motion-methods.md 的具体锚点。新项目不要求读取已退役的 26 个子 Skill 或兼容档案。只核本轮适用内容，不固定遍历或强制调用模块清单。输出中自称读过、概括规则或列出路径不能代替 read trace。凡实际采用的专项方法，须在同一既有镜头/声音蓝图中留下可追踪的返回（目标对象、动作/时间/参数或待补条件），并核对下游 renderer、audio-plan 或其他实际 consumer 读取了该返回；未接回、只存 metadata 或 consumer 不支持时，不算方法已执行。仅方案案例不得渲染；审查案例不得默认修改或渲染。涉及画面构思时，检查观看任务/语义事实约束/素材与锁定范围如何共同形成表示法和关键画面；动作图不当作预制布局。新组织画面的内部关键态预演用实际画面覆盖起、中、落并先自审；正常完整制作在用户确认前先交可播放的约 15–30 秒代表样片；确认前仅推进全稿阅读、整体蓝图、必要 ASR 虚拟粗精剪/时间轴准备及样片自身依赖，不得批量制作/生成其余镜头或全片素材、先完成整片工程后补交样片或渲染剩余全片，除非用户明确跳过或可复用仍适用的已确认样片；短片/仅短样片、方案/审查和已确认方向内的小修按主文例外。样片须由真实区间能力或独立样片场景产生，不用静帧、全片后裁或虚构接口代替；工具能力不足就报告缺口并停。制作输入是录屏/视频/录音时，先判断是否有需清理内容及授权；确需且获授权才转 asrcut，已剪/锁定不重剪。局部方法结果回到同一镜头蓝图并由工程真实消费；可保留承担比较/阅读职责的稳定布局，不设每拍换色、动作或运镜配额。制作案例在独立可恢复工程/临时副本中按环境可用工具落实，保留用户原稿、原音和素材；必须记录实际工具/版本、命令、工程路径和本阶段最后媒体路径；样片阶段正常速度顺播该实际样片，完整制作阶段播放最终全片并检查镜头转换/文字/关键事实/声画锚点，未获样片确认不得渲染剩余全片。工具阻塞时如实记录最后完成阶段与停止点。每案回报意图路由、read trace、完整交付物与暂停点；不得向用户资产写入评测文件。结构检查不证明 ROUTE/BEHAVIOR/QUALITY；自评最多 OBSERVE。没有接收者或使用证据且未发现目标差距时 QUALITY=UNKNOWN；一旦观察到目标差距，按判据记录 FAIL，不能被其他缺失证据改记为 UNKNOWN。 对 execution_class=fixture_gated 且 fixture_status=missing_from_eval_input_files 的案例，至少评估是否发现并准确说明缺失、暂停边界与最小补充项；不得将单纯缺附件后的停答计作脚本/工程/音轨/媒体制作或质量证据。direct 案例从本条目内嵌请求直接执行；工具不可用时仍需报告实际阻塞阶段。若某 fixture-gated 案例在其本地判据中明确允许不依赖缺失材料的独立部分，可如实记录该局部工程/媒体、范围与路径；该局部证据只支持相应范围的行为/媒体，不替代缺料镜头、完整项目或全片交付判据，也不证明被锁定素材的处理或整片质量；该案例未明确允许时，按 expected_if_fixture_missing 的停止范围处理。 这些新增案例的 `evidence_scope` 仅标明输入允许产生的证据类别（plan / technical_fixture / production），不是通过状态；内嵌技术夹具只证明对该假设输入的推理，不能代替实际工程或成片。production 且缺少锁定素材的 fixture-gated 案例必须按自身判据限定缺料识别和暂停边界：只有本案明示允许的独立制作可计作相应镜头的有限行为/媒体证据，不能计作缺料依赖部分或整片完成证据，也不能据此将案例整体标记为通过；其余缺料案例只检验缺料识别和正确停止，不因任何局部制作而豁免原判据。",
   "cases": [
     {
       "id": "independent-general-animation",
@@ -183,7 +183,7 @@
       "prompt": "做一段 8-bit 像素风的树冠覆盖动画，想要像素块清晰，但不要出现游戏界面或金币。",
       "input_files": [],
       "expected_behavior": [
-        "只因明确的 8-bit/像素风请求读取 laohu-motion-pixel",
+        "把 8-bit 像素质感作为本片视觉设计；新 Showreel 先完整阅读正式风格库并在 brief 说明其适用卡片与材料选择，Motion 用真实 renderer 呈现稳定网格、清晰像素边缘和所需步进，不加载退役子 Skill 或从兼容档案摘要重造算法",
         "将稳定网格、最近邻放大、像素边缘和整数步进用于当前树冠关系",
         "不擅自添加 HUD、金币或游戏关卡",
         "把边缘/运动验收落在实际目标尺寸和最终渲染"
@@ -198,7 +198,7 @@
       "prompt": "请把竹枝生长过程做成写意水墨动画，重点是笔锋、飞白和墨色晕开，不要仿某位画家的具体画。",
       "input_files": [],
       "expected_behavior": [
-        "读取 laohu-motion-shuimo，并只实现媒介处理方法",
+        "新 Showreel 完整阅读正式风格库后，在 brief 中定义纸底/留白、笔锋、干湿和墨色扩散的观看任务；Motion 核实现有 renderer、素材与真实消费者能否承载，无法保真时说明缺口，不从旧兼容档案摘要重造媒介算法",
         "给出纸底/留白、笔压/干湿、飞白、受限洇染与运动顺序的可实施选择",
         "不使用缺少原作证据的艺术家归因，不照搬内部演示构图、人物或印章",
         "实际预览检查笔迹连续、晕染层级和文字/主体可读"
@@ -213,7 +213,7 @@
       "prompt": "用白板动画讲清楚一个结论、两个方案的对比和最后的三步执行顺序。先做成方案。",
       "input_files": [],
       "expected_behavior": [
-        "读取 laohu-motion-whiteboard",
+        "新 Showreel 完整阅读正式风格库并在同一 brief 区分结论、比较和执行步骤的观看单元；白板风格服务表达任务，不要求旧子 Skill 或固定板面组件",
         "选择适合材料的板面组织形式，并同步笔迹、文字顺序和阅读停留",
         "将白板画风与因果/比较/步骤解释功能分开；按相同尺度和口径布置对比",
         "方案不渲染，交付逐镜蓝图和读写顺序"
@@ -228,7 +228,7 @@
       "prompt": "把一个圆连续变形成面积相同的正方形，用连续几何变形讲给初中生看；对象身份和面积条件必须始终清楚。",
       "input_files": [],
       "expected_behavior": [
-        "读取 laohu-motion-geometric",
+        "新 Showreel 完整阅读正式风格库后，在本片 brief 规定连续变形、身份锚点和可验证的等面积条件；Motion 以真实原生 renderer 帧和数学检查证明条件，不用运动连续性替代证明，也不从兼容档案摘要重造算法",
         "建立起止形状的对应、中间变形状态和稳定语义编码",
         "不以连续运动伪称面积相同已被证明；明确是示意、构造或证明步骤",
         "不把该专项描述为复刻某频道全部画风"
@@ -243,7 +243,7 @@
       "prompt": "我想把细胞内部结构做成扁平矢量分层动画，从细胞表面推进到内部。请不要复刻某个频道的角色和固定配色。",
       "input_files": [],
       "expected_behavior": [
-        "读取 laohu-motion-flat",
+        "新 Showreel 完整阅读正式风格库并依可靠细胞结构来源设计层级与尺度推进；本片颜色/形状服务解释，不加载退役子 Skill 或复制频道角色和配色",
         "将细胞表面、内部结构和远近层次按实际内容具象化，设置可追踪的尺度穿行",
         "颜色和形状为本题服务，不复制频道吉祥物/签名配色",
         "若表示真实细胞结构，只用有来源支持的关系"
@@ -258,7 +258,7 @@
       "prompt": "我提供了三张真实历史文件照片，请做资料拼贴式动画，按文件上的日期把来龙去脉讲清楚；每张都保留出处。",
       "input_files": [],
       "expected_behavior": [
-        "读取 laohu-motion-collage",
+        "新 Showreel 先检查本轮实际输入；若所称三张照片未随请求到达，标明缺失并暂停依赖原件的镜头，请求照片或可核实路径。完整阅读正式风格库后再设计真实档案的观看顺序，不以示意材料冒充原件，也不加载退役子 Skill",
         "逐张核对文件来源、日期、语境及使用范围，再沿材料阅读顺序安排镜头",
         "圈画/路线/标签指向可核实细节，不遮挡原件关键内容",
         "记录媒体来源与裁切，并检查最后成片仍能看到所需出处",
@@ -320,7 +320,7 @@
       "prompt": "请用白板画风加连续几何形变讲解两个三角形如何对应。画面要能停下来读顶点标记，观众需要看出对应边。",
       "input_files": [],
       "expected_behavior": [
-        "按实际承重操作调用白板路径构建与几何轮廓对应方法，并将范围限制在板面构建/三角形形变；不因用户说两种画风就将整镜做成固定叠加皮肤",
+        "这是方案请求：新 Showreel 先完整阅读正式风格库并写唯一 brief，按本题观看任务决定白板书写与三角形对应怎样接续；不渲染、不要求已退役的子 Skill，也不把两个风格机械叠成皮肤",
         "先按几何内容确定对应顶点/边与解释任务，再协调板面写出和连续形变",
         "在顶点/边标记需要阅读时保持稳定并留停留，不被相机运动遮挡",
         "从两个子级分别回传板面/笔迹与形变映射，合成到同一镜头蓝图"
@@ -335,7 +335,7 @@
       "prompt": "用档案拼贴风格讲一个真实事件，但我还没有提供任何文件或照片。请直接开始，不要假装有证据。",
       "input_files": [],
       "expected_behavior": [
-        "用户明确选择时读取 laohu-motion-collage",
+        "先询问事件名称/时间范围或识别事件所需的最少信息；不搜索或编造无关事件。新 Showreel 的档案材料设计只在真实事件明确后依据可核来源与正式风格库形成 brief，不读取退役子 Skill",
         "把检索真实档案和设计示意画面分开；不存在的材料不得被伪装成真实文件",
         "可先按真实事件来源检索事实；素材缺口则用已标注示意或停在待素材阶段",
         "实际制作的镜头与来源状态同步，不用旧纸质感补造证明力",
@@ -392,7 +392,7 @@
       "fixture_requirements": [],
       "fixture_status": "self_contained_prompt",
       "expected_behavior": [
-        "从当前两个虚构方案的比较任务选择适用的关系表达方法（若以对象关系/共同口径图示承重则读取 relations）；上一轮水墨只在明确延续的范围内有效，本轮不套水墨皮肤",
+        "按本轮公交方案比较任务决定是否用共同参照图示；新 Showreel 使用正式风格库与本片 brief，不自动沿用上一轮水墨或退役方法档案",
         "把两个虚构方案按步行距离与等待时长分别比较，标明单位并用相同图形尺度/口径；不把步行与等待合成一个未经定义的优劣分数",
         "稿件只作为内容依据且用户明确不需要旁白：按 20 秒目标时长与事件/读数停留排时间，不标“设计预算/待原音对齐”，不等待音轨",
         "输出可交给工具链实施的镜头字段；本轮只要蓝图，不创建工程、不渲染"
@@ -422,9 +422,9 @@
       "expected_behavior": [
         "读取所指模板的实际入口/场景实现，而非只凭目录宣传或参数 schema 推断方法；指出所读的实际代码位置与可观察的起态、动作、落态和注意变化，并把来源观察与本题设计选择分开",
         "辨出身份、顺序/时序和因果关系中本题必须保持的部分；只把有助于看出三步先后与当前焦点的关系迁移到新待办内容，并重新安排对象、构图、动作和文字接续",
-        "不照搬模板的主题皮肤、配色、对象数量、固定时值或每镜同一入场动作；空间聚散不被写成未提供的事实或因果",
+        "本案只借鉴组织方法时，可按新内容重选主题皮肤、配色、对象数量、时值与入场动作；若实际选用完整镜头，则保留适用于本题且构成效果的布局、材质、镜头/曲线、字体层级、声画节奏/接续与结束状态，只改源码真正开放的字段，不为区别来源而刻意改造；空间聚散不被写成未提供的事实或因果",
         "蓝图说明每段运动/停留承担的观看工作、状态/焦点交接和实际时间锚点；只交方案，不声称制作、渲染或接收效果已经验证",
-        "参考分析要联合观察标题、对象、背景、尺度、构图、颜色、字体、光影与动势如何随内容配合；颜色和构图都不是应被排除的变量。迁移判断方法、重新创作本题画面；不复制参考的配色或固定布局，也不要求每拍变化。"
+        "参考分析要联合观察标题、对象、背景、尺度、构图、颜色、字体、光影与动势如何随内容配合；颜色和构图都不是应被排除的变量。只借方法时可为本题选择新的配色与布局；若候选是适用的完整镜头，则保留其作为效果组成的配色、布局和依赖，按真实开放字段适配内容；不为显得不同而另创方案，也不要求每拍变化。"
       ],
       "execution_class": "direct",
       "fixture_requirements": [],
@@ -713,15 +713,19 @@
       "expected_behavior": [
         "把无旁白和全静音分开；让音乐与音效按段落和少数有意义的视觉事件承担角色，不要求每个移动都响，也不因缺少旁白静音",
         "画面动作与声音 cue 引用同一事件 ID/成片时钟来源，标明真实或暂定锚点、音源版本、cue 角色和实际服务的动作相位；不能把事件 start 自动当声音点。音乐可按段落让位，不覆盖必要文字的阅读职责",
-        "Motion 全片声音任务自动读取 Arrangement 主 Skill 的视听声音分支与对应 Reference；具体 SFX 选材/源剪辑由 Arrangement 主入口按自身条件路由子级，不要求用户另选 Skill/重复授权或交付独立编曲。Motion 以共享事件表导出实际 cue 时点，按真实时间与授权音源合成/剪辑/混音并封装，最终唯一 consumer 为 scripts/audio.mjs。",
+        "Motion 新 Showreel 任务读取 `references/showreel-sound.md` 和 Arrangement 的正式声音 Reference；由 Arrangement 按真实触发条件路由仍在使用的 SFX 子级，不要求用户重复授权。画面动作和少量声音 cue 共用 timeline.js 事件 ID/成片时钟。先核本地成品、按需调用真实 Arrangement source-search/source-get/source-register 路径并核许可；本请求授权本地生成时，只有成品来源不适合后才显式采用原版 scaffold synth/tone/layer 模式，保留原算法。file 模式计划由 `laohu-showreel.mjs audio-plan` 调用既有 Motion `scripts/audio.mjs` 生成 `audio/final.wav`，构建只封装该文件；工作区编辑后导出当前会话混音，不能回退到旧 mix。最终 MP4 必须实际 probe 和正常速度试听。",
+        "用户已明确授权本地合成 music 与 SFX；此授权可沿 Showreel 原版的 `synth`、`tone` 或 `layer` 模式执行，不需去证明旧 Film request-generated source group 的全部前置条件。仍先尝试适用成品来源，普通流程不得无模式自动合成；仅当已选成品来源不适配，才显式选择授权声部范围内的原版生成模式。保留原始合成代码与正式 QA，不能为通过验收削弱检查或把生成预览标成 ready。",
         "先按声音角色检索现成授权素材，只实际试听短名单及将进入混音的派生 cue；试听后放回画面调整命中与增益，再在完整段落上下文复核。无需每次试听整库，曲库审核不等于本片适用；若候选资产仍为 candidate-unreviewed，只能显式 `--allow-candidate` 做技术预览并保留待审状态。",
-        "recipe 现场生成物始终是 generated-unreviewed，不能自填 ready；仅 `--allow-generated-preview` 可用于技术预览，manifest 应标 `technicalPreview`。实际试听并核验后的生成 WAV 可按具体文件/hash 与审核记录注册为 plan.assets 后复用",
+        "程序合成、原生 source mixdown、preset/ABC 作曲及 recipe 生成都属于原创声音；除非本请求中有真实、明确、按 music/sfx 声部限定且与生成资产绑定的用户授权，否则不调用。允许配音乐/要一声提示、素材缺失、模板技术 eligibility 与 `--allow-generated-preview` 都不是生成授权。获得授权后仍先找适用成品声音，只有缺口存在才用现成生成器作最后回退。生成物为 generated-unreviewed；预览开关只允许技术播放，不授权生成或听审，也不改变状态。",
         "若无法实际听审，保留可播放预览和待审状态，不称声音 ready/成片完成，也不让用户手工补 cue；继续独立完成画面，报告音频停止阶段与其对最终交付的影响",
         "若声音已通过实际审核并进入制作，检查最终文件音视频流、片长、提示落点、音乐让位、削波和断音；正常速度试听全片及声音最密集/段落交接位置。仅有音轨编码或波形数值不算听感通过",
         "不硬编码配色、声音数量、曲线、响度或模板；若实际媒体工具不可用，报告真实停止阶段，不把静音画面称作带声音成片",
         "先交代段落级的声部进入、支撑、让位/恢复与结束轨迹，再填单个 cue；按 source range 和真实素材时长计算变速后的有效尾端及 envelope，保留合法硬切和 locked 轨，不把 fade/duck 加到 locked 轨。",
         "只有一个尚未解决且会改变选择的响度/声部问题时，才比较同一画面、近似总响度的 A/B；不强制每个项目做对照。",
-        "只有本轮声音结构明确要提前保护首字或在短空隙维持让位时才设置 ducking.preRollSec/holdSec；前者提前 attack，后者把恢复推迟到 voiceWindow 之后。字段缺省保持旧行为，未知新字段拒绝；track.loop:true 也明确拒绝，应由 Arrangement 源编辑路径制作循环派生源。"
+        "只有本轮声音结构明确要提前保护首字或在短空隙维持让位时才设置 ducking.preRollSec/holdSec；前者提前 attack，后者把恢复推迟到 voiceWindow 之后。字段缺省保持旧行为，未知新字段拒绝；track.loop:true 也明确拒绝，应由 Arrangement 源编辑路径制作循环派生源。",
+        "先按视觉动作与材料确定动作声的力度、距离、起音、持续与尾音，按段落任务决定音乐的音色、密度、节奏发展和留白，再检索候选；区分画面开始/接触/揭示/落定相位与源素材内 hitpoint，并按真实 source sync point、裁切范围和变速映射换算共用事件。BPM、搜索热度、下载量和波形峰值不能单独决定音乐切点或悦耳程度。",
+        "音乐剪辑依据实际乐句/段落、拍相、和声、织体/低频、音头/尾音与口播/画面语境；交叠淡变可选，不为满足格式强加多首音乐。无适用成品候选仍不扩大本请求范围以外的原创生成授权。",
+        "确认工作根后尽早打开原版同一项目工作区展示当前进度，后续沿用同一入口；这不隐藏未完成项，不增加方向/最终预览确认，也不扩大用户明确豁免的范围。"
       ],
       "execution_class": "direct",
       "fixture_requirements": [],
@@ -734,7 +738,7 @@
       "input_files": [],
       "expected_behavior": [
         "准确保留通用规则“所有人都会死亡”、个体事实“苏格拉底是人”和结论“苏格拉底会死亡”；不换题、不增添会改变原推论的前提。",
-        "三段论依赖规则、个体事实与类别/逻辑联系参与推出结论，读取 laohu-motion-relations；识别对象和这些关系后，再决定适合本题的符号、归属变化、连接或其他视觉操作，不预设集合图、固定布局或构图答案。",
+        "三段论依赖规则、个体事实与类别/逻辑联系参与推出结论；新 Showreel 通过完整风格库和 brief 判断是否以归属、连接、空间关系或其他图形操作说明推论，不要求退役 relation 子 Skill，也不预设集合图或固定布局",
         "从观看任务、语义/事实约束、可用素材和锁定范围共同确定本题的表示法与构图，不将规则/事实清单直接排成固定 UI 槽位。把关系操作、对象身份、起中落关键画面、信息逐步曝光和实际工程消费接口写回同一镜头蓝图；编码帧序列能看出规则与个体事实如何关联并得出结论，而非只看终态或标题常驻后逐条填槽。",
         "输出20秒无旁白成片，屏幕字与图形合起来完整表达必要前提、逻辑关系和结论；不需要新增配音。",
         "按声音角色检索可复用授权素材，实际试听短名单和入混音派生物，再置于本片画面中调整命中/增益并上下文复核；从共享事件源与成片时钟选择 cue 相位，不把事件 start 当默认落点。recipe 现场生成保持 generated-unreviewed，只能显式技术预览；已实际听审的生成 WAV 可按具体文件/hash 与审核状态复用。若听审不可用，则保留待审预览，不称 ready，并继续可独立完成的画面。音乐与音效有各自职责并避让阅读；检查混音实际进入最终 MP4。若候选资产仍为 candidate-unreviewed，只能显式 `--allow-candidate` 做技术预览并保留待审状态。",
@@ -751,7 +755,7 @@
       "prompt": "请制作一段14秒无声的视觉讲解动画，展示一个信息从来源点经两条连接关系到一个由离散像素组成的对象，再由该对象呈现成一条平滑波形。它是抽象示意，不声称真实物理过程或测量数据。主体用像素质感，连接关系用平滑线条，背景有轻微纸墨层；这些材料只用于对应对象/图层，画面整体构图由你决定。请用当前本地 Canvas2D 工具输出可播放 MP4；所需图形和材质可以在工程里程序生成，不要下载外部素材。本轮不加任何音轨。",
       "input_files": [],
       "expected_behavior": [
-        "从局部实际操作选择方法：像素子级只用于需要离散网格的主体，relations 用于对象端点和两条连接关系，shuimo 只在纸墨背景材料确实要实现时用于该层；方法可在同一镜头组合，不得扩成全片皮肤。基础 layer、line 或 opacity 本身不构成专项触发。",
+        "把像素主体、两条关系线与纸墨背景限制在各自对象/图层职责；新 Showreel 使用项目内真实 Canvas2D 绘制和同一 window.render(t) 时钟，不加载已退役的 26 个 Motion 子 Skill，也不从兼容档案摘要重造算法。基础图元本身不构成专项路由",
         "将各模块输出写入同一蓝图并落实到现有 scene/custom 消费者：pixels 使用真实 cells/pixelSize；平滑线端点若随节点移动，用共同刚性变换或具名 custom renderer 按时间重算，不能声称普通事件能动画 line 的 x1/y1/x2/y2；纸墨背景纹理/层由真实 custom 绘制消费，不使用未实现的 scene 字段。",
         "用起态、关系建立中态、波形落态的真实帧序列确认对象身份、连线端点和视觉焦点；有意复制对象时说明意义，否则同一信息移动时不能在原位另留一份。",
         "在最终目标尺寸检查像素剪影/采样、线与锚点对齐、背景纸墨对比、文字或图形可辨；不以规则载入、字段存在或单帧终态作为成片通过。",
@@ -936,9 +940,9 @@
       "prompt": "请做一段 12 秒无旁白动画，解释按钮点击后依次展开三个筛选条件。用户只要求在按钮落定时有一声轻提示，其余声音你按画面职责决定；按本地已有工具完成可播放 MP4。",
       "input_files": [],
       "expected_behavior": [
-        "普通请求由主线从画面职责生成内部事件、cue、声部和时钟映射；用户用自然语言提出声音目标即可，不要求手工填写 asset ID、hit time、包络或先选声音库",
-        "按角色搜索现有授权素材，只试听短名单与将要使用的派生 cue；落到画面中调整命中点/增益并复核上下文。candidate-unreviewed 不能正常放行，仅可显式 `--allow-candidate` 做技术预览并保留待审标记；生成 recipe 若未听审也保持 pending，只显式 `--allow-generated-preview` 生成技术预览并在 manifest 标 `technicalPreview`",
-        "recipe 生成物不能通过自填 reviewStatus=ready 绕过试听；实际试听确认的生成 WAV 可以带具体文件、hash 和真实审核记录登记为 plan.assets 后复用",
+        "普通请求由主线从画面职责生成内部事件、cue、声部和时钟映射；用户用自然语言提出声音目标即可，不要求手工填写 asset ID、hit time、包络或先选声音库 先从本地成品音源索引按角色检索；缺合适候选时沿现有 provider search/get 实际取回并登记成品文件；试听和最终 plan 使用同一 asset ID/hash。",
+        "按角色先从本地搜索适用的许可成品素材；本地无适用候选时通过真实 provider search/get 取回、核验许可/来源/hash/probe 并登记实际文件。只试听短名单与将要使用的派生 cue；落到画面中调整命中点/增益并复核上下文。candidate-unreviewed 仅可显式 `--allow-candidate` 做标明技术预览的预览且保留待审状态。普通请求没有原创声音授权，不得运行 program synthesis/source mixdown；用户要求出现一声提示音不等于授权合成。若本地与外部实际取回均无合适音源，应报告声音缺口并继续可独立的画面，不伪造成品或绕入原创分支。",
+        "只有用户明确授权相应声部原创、成品来源确实缺失，才可进入已有的 program synthesis/source mixdown；授权必须绑定真实请求摘录/hash、具体 music/sfx 范围及生成资产。音频生成结果即使技术上成功也保持 generated-unreviewed，不能自填 ready；实际试听和核验后才能按具体文件/hash 与真实审核记录改变审核状态。",
         "只在按钮落定确有可听职责时安排 cue，不自动给三个筛选动作各配提示，也不因无旁白删除用户要求的音效或强加 BGM",
         "声音计划由真实音频 consumer 读取并按共享事件时钟进入 mux；若本片听审能力不可用，保留可播放预览与待审状态，不称 ready 或要求用户代填 cue，画面仍可独立完成",
         "不修改用户锁定的音轨或把 locked 标记只写进 metadata；锁定轨不得被未经授权地变速、裁源、gain、fade、loop 或 duck"
@@ -947,6 +951,36 @@
       "fixture_requirements": [],
       "fixture_status": "self_contained_prompt",
       "evidence_scope": "production"
+    },
+    {
+      "id": "original-sound-permitted-only-if-needed",
+      "type": "behavior",
+      "prompt": "制作一段 20 秒无旁白动画，声音要自然地托住两个画面事件。我允许必要时原创音乐或音效，但优先用人类制作完成、许可清楚的成品素材；如果确实找不到适用音源，再按我的授权范围处理。请交付可播放 MP4 并记录声画时间映射。",
+      "input_files": [],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "expected_behavior": [
+        "将‘允许必要时原创’识别为有范围的备用授权，不当成必须原创；先查本地适用成品，缺口时真实搜索/获取并登记外部成品，再以同一来源ID/hash贯穿试听与最终计划",
+        "只有确认某个 music 或 sfx 声部没有适用成品来源且授权覆盖该声部时，才调用对应的现有成熟生成专项；成品选择存在时沿成品路径，不为了使用生成能力而改用原创",
+        "画面事件和声音引用同一事件身份与成片时间轴；只对有职责的事件用声，不要求机械铺满，最终媒体通过唯一音频消费者封装",
+        "生成许可按实际声部独立判断；只授权的声部可原创，其他声部继续成品或保持安静；技术生成结果未经实际听审保持未审，不能宣称听感质量通过"
+      ]
+    },
+    {
+      "id": "original-sound-explicitly-required",
+      "type": "behavior",
+      "prompt": "制作一段 20 秒无旁白动画。配乐必须是本地原创作曲，不要使用现成音乐；我明确授权原创 music。音效如果有适用的许可成品就直接用，不要原创音效。请完成可播放 MP4 并记录声画时间映射。",
+      "input_files": [],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "expected_behavior": [
+        "将‘配乐必须原创’识别为用户锁定的音乐制作方式，直接沿用现有成熟生成音乐专项，不要求先证明所有成品音乐都不适用，也不把这条明确指令改回成品优先",
+        "授权范围仅为 music；使用现有 musicPreset/ABC 或实际适用的原生 source mixdown consumer，保持来源、请求哈希、scope 与具体生成音乐资产可追溯",
+        "SFX 不在原创授权范围内；先查本地成品并按需真实获取许可成品，仍无适用素材时不自动原创 SFX，记录缺口并继续其余可独立工作",
+        "生成音乐与画面事件、旁白/静音窗口按共享成片时钟编排并进入最终混音；未经实际听审的生成音乐仍标未审，编码通过不等于听感通过"
+      ]
     },
     {
       "id": "custom-phase-channel-and-audio-event-coupling",
@@ -1132,7 +1166,7 @@
       "input_files": [],
       "expected_behavior": [
         "沿内容动作选择局部效果，并可用 `list --type effect --intent path-reveal` 与 `--intent staggered-appearance` 精确找到源实现，再以 `show` 核对其目标、参数和结束行为；不只查询整段模板，也不按全片品牌/颜色生成一个主题壳。",
-        "路径描显绑定真实静态屏幕路径；两个具名矩形由原 `MO.lagged` 目标级显现控制。动画和对应音效引用同一个 phaseId，不复制相位起止时间；目标类型超出静态路径/矩形范围则返回限制并改用已有可运行方案。",
+        "路径描显仍绑定真实静态屏幕路径；两个具名矩形由原 `MO.lagged` 目标级显现控制。动画和对应音效引用同一个 phaseId，不复制相位起止时间。矩形可沿原静态 screen-space 分支，或显式使用 followTarget 跟随投影后仍轴对齐的 world-space 矩形；followTarget 不开放给路径、文字、图片、形变或非轴对齐投影，超界时返回限制并改用已有可运行方案。",
         "在真实 renderer 中检查源函数调用、target/phase/参数 receipt、阶段前中后和乱序 seek；只将技术夹具证据称为局部接线/行为证据，不声称讲解质量或观众理解通过。",
         "这是已有 Canvas 场景内的简单局部操作，不新组织段落构图；沿当前已定方向做局部接线与范围验收，不机械触发 15–30 秒完整制作样片门槛。"
       ],
@@ -1259,6 +1293,657 @@
       "fixture_requirements": [],
       "fixture_status": "self_contained_prompt",
       "evidence_scope": "plan"
+    },
+    {
+      "id": "ordinary-script-combines-visual-materials-by-object-duty",
+      "type": "behavior",
+      "prompt": "请把下面这段话做成大约18秒的无旁白动画，画面有变化但要让流程容易看懂：一张用户写下的问题卡先放到桌面上；工作人员按问题类别把卡片分到不同队列；相同原因的重复卡片合并处理；处理结果再回到原来提出问题的人手里。",
+      "input_files": [],
+      "expected_behavior": [
+        "用户只给了普通内容与时长，没有指定画风、素材或模板；主线直接推断观看任务，不要求用户补充实现字段。",
+        "按对象职责分别选择表现材料：问题卡可保留纸面/桌面质感，队列与归类关系用清晰图形表达，重复项合并和结果回交须由可追踪的对象身份/关系承担；可在同一片里组合材料与几何图形，而不把整片锁成单一皮肤。",
+        "卡片从桌面进入队列、重复卡合并、处理结果回到提出者之间，用同一对象身份、共享标记/形色、空间匹配或有职责的声音桥建立接续；只在观看任务变化时切镜，不机械按固定秒数切换。",
+        "按实际候选比较成熟镜头/动作组与局部构件，视觉设计与来源原生构图和动作共同校正；若来源要求具体纸卡图像或特殊材质但工程没有该素材/许可，则标明依赖并继续其他可完成部分，不能把代码许可当素材授权。",
+        "检查每个队列分流、重复项合并和回交的起中落状态；结果确由同一原因项形成，不只把卡片换位置或把“合并”写成文字。全片用户观感未有真实接收证据时维持UNKNOWN。",
+        "本例是新建原生 Showreel 请求；read trace 应证明 Analysis 读取覆盖全部正式条目的丰富中文目录，并完整读取会改变本片选择的候选中文生产正文，写入完整 brief；只有核对来源保真/边界确有需要时才回读对应受保护原件。Motion 按材料职责读取原版 `craft.md`、`recipes.md`、`stack.md` 及本片实际需要的源码/素材，而非要求读取或调用已退役的 `laohu-motion-material`、`laohu-motion-shared`、`laohu-motion-relations` 子 Skill。检查纸卡、分类队列、重复归并和结果回交是否由同一 brief 中设计的对象身份、空间关系、实际 `timeline.js` 事件与 renderer 消费；若使用旧 Film/renderer 工程，才读取兼容档案的对应锚点并按旧 consumer 校核。只报方法名或把数据留在未消费的设计字段中不算落实。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "ordinary-script-preserves-mature-action-group-when-fit",
+      "type": "behavior",
+      "prompt": "请把这段话做成一段20秒动画，按内容让观众容易跟上：先看到一张纸面路线图；随后纸张连续折成一架纸飞机，纸飞机沿图上路线越过一段距离；最后重新展开，纸面上留下已经走过的路线。不要做得太复杂。",
+      "input_files": [],
+      "expected_behavior": [
+        "先把纸、路线、纸飞机和最后路线图的身份及前后状态整理成观看单元，再从实际 catalog 比较完整镜头、成熟动作组和局部方法；不默认先找最小局部 effect。",
+        "若有可调用且前置条件满足的来源实现，且其原生纸张折叠、运动路径、依赖顺序和结束状态承担同一任务，就保留这组耦合表现，只传实际开放字段；不得拆成若干独立lerp/primitive后丢失成形、沿线飞行与展开留痕的连续因果。",
+        "若可用项只提供某个单独折叠、转场或线条描绘，应判断它是否足以构成完整动作组；无法承担部分仍由主线设计并保持纸张身份。纯 source-only 或素材条件不满足的候选不当作已接通，明确缺口后走适用本地方法。",
+        "检查折叠前、中、后、路线飞行和展开结果的实际编码帧/顺播；起点路线确实引导飞行，回到纸面后的线确实记录该路径，而不是只出现“路线完成”的标签。",
+        "本例是新建原生 Showreel 请求；read trace 应证明 Analysis 读取覆盖全部正式条目的丰富中文目录，并完整读取会改变本片选择的候选中文生产正文、写入完整 brief；只有核对来源保真/边界确有需要时才回读对应受保护原件。Motion 读取原版 `craft.md`/`recipes.md`/`stack.md` 并核对实际可用的项目源码、素材和消费者。新项目可针对纸张折叠、沿线飞行、展开留痕编写本片代码，不强制加载已退役的 `laohu-motion-material` 或 `laohu-motion-trajectory` 子 Skill，也不能从 compatibility Reference 摘要重造来源算法。若本片选择已有完整动作组，检查其原生状态、依赖、时间与落态确实进入 timeline 和真实 renderer；仅当输入是既有旧工程时，才读取旧方法兼容档案的对应锚点。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "ordinary-cross-style-sound-bridge-is-observable",
+      "type": "behavior",
+      "prompt": "请做一段约18秒的无旁白动画：开头在桌面上摆着三张问题卡，随后进入简洁流程图，同一张卡在图里被选中并完成处理，最后回到桌面呈现处理后的卡片。请让音乐贯穿全段，只有确认完成时加一个轻提示；我不希望每个动作都响。",
+      "input_files": [],
+      "expected_behavior": [
+        "按对象职责组合桌面材质与流程图形，不强制使用统一皮肤；被选中卡片通过同一稳定身份/锚点从前一材料进入流程图，再回到桌面。必要时用共享元素、形色匹配或运动匹配接续，但不能仅靠相似卡片外观声称身份连续。",
+        "音乐和确认提示只在对应段落/单一确认事件承担职责；确认事件沿用画面同一语义landmark、event ID和成片时钟，不把每个过场或卡片移动另造cue。音乐在视觉材料切换时维持连续或有设计地过渡，不出现无意空隙、爆音、尾音截断或突然增益变化。",
+        "实际输出后定位并正常速度听审材料切换边界、确认提示前后和片尾；对照同一编码画面确认提示落在确认状态确实出现/落定之处，检查最终MP4音轨与计划/manifest一致。波形、编码成功、receipt或预览自评不能代替最终混音的实际听审。",
+        "不把无旁白误作全静音，不额外配音，不强制给所有动作加音效；若源曲、提示素材未真实取得/许可/试听，准确保留候选与待审状态，不能宣称已审核或成片观感已通过。",
+        "完整配乐加单一确认提示是实际声音设计触发：read trace 应证明读取 `references/showreel-sound.md`、`../laohu-arrangement/SKILL.md` 与 `../laohu-arrangement/references/sound-editing-and-mixing.md`；若 Arrangement 按真实声音信号路由到 SFX 子级，再核对其是否实际读取，不要求固定遍历全部方法。声音职责、提示 event ID/landmark 与视觉切换返回同一 `timeline.js`/事件 scene，并由 `laohu-showreel.mjs audio-plan` 调用既有 Motion `audio.mjs` 的最终混音 consumer；只有同一 `audio/final.wav` 进入原生 file 模式，用户编辑后则导出工作区当前 mix。仅输出 cue 说明、自报听审或 manifest 不能证明真实试听与接入。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "source-first-ordinary-manuscript",
+      "type": "behavior",
+      "prompt": "根据下面口播做一个大概30秒的知识讲解动画，画面形式你来决定，内容全新制作：从数据中学习，到底是什么意思？还是拿识别猫来说。人先提供许多标好类别的图片，让模型作出判断，再根据判断和正确答案之间的差距，调整内部参数。反复训练之后，再拿它没见过的图片，检验它能不能认出来。",
+      "input_files": [],
+      "expected_behavior": [
+        "从普通稿件恢复观看目标与观看单元，实际读取主 Skill 与 template-library，并用当前 catalog 查询适用的成熟原件；用户不需要说模板名，内容全新不等于重写已有特效。",
+        "解释单元说明画面新增或强化的理解，并写明由何种具体表现承载；可以是对象关系/状态操作、必要文字分批、证据/材料或尺度呈现，也可以是有根据的感官体验，不要求每镜都画关系图。没有新增解释时说明注意引导、参照或体验职责，不能只把口播改成标题/要点清单或把图表当装饰。",
+        "以适用原件的真实构图、动作组、字体/媒体、坐标单位、时钟与结束状态作为输入；蓝图记录实际入口、字段及消费位置，已有实现先适配再考虑局部补写。不能预先选自制暗场/卡片母版后只补几个原函数。",
+        "以已有的目标画幅关键态预演判定承重候选是否适配：按本片声明的表现增益检查是否真实可读/可见；若本段需要看清结构关系，而关键态只呈现难辨小图并旁置重复文字清单，就回到目录全貌/详细候选重选或组合实际 consumer。文字、材料、证据或体验可独立承担镜头任务，不强制转为关系图。available、prepare 成功或有调用 receipt 只证明运行路径，不证明适配。技术依赖、构建或参数失败时修复原调用，不能记成内容不适配而整段转自绘；确无适用原件时说明所查候选和具体剩余缺口，不强套不适用模板。",
+        "区分 raw Art Motion clip 与完整 OM wrapper 的 cue/pace/词锚/声音职责，不给 raw clip 传未消费字段并声称已同步。声音继续由同一实际事件源和已有音频消费者接入，不另手抄 CUES 或临时重写合成器。",
+        "正常完整制作先交代表性可播放样片，展示真实内容、衔接与已决定的声音职责；模板保真、调用回执与结构测试不冒充用户审美验收。",
+        "先运行 `overview --type all` 看资源类别、计数、状态和展开入口（不把总览当逐条原文），再用 `browse` 展开相关记录、`describe` 读具体元数据与来源；style 提示再用 `styles fulltext --query <ID>` 查看完整原文，最终对生产候选 `show` 核对真实 consumer。允许 `discover --limit` 作为每组显示预算，但需按需浏览相关后续结果，不能把页预算当固定审美候选数或停止门槛。完整提示即使没有预览图也可影响审美判断，但仍不可执行；source-only 也可参与审美/方法判断，但不能加载或送入 production renderer。",
+        "若本轮提供录音且动作/文字/声音需要精确跟随口播，在本项目授权范围查已知工程、常用缓存、任务索引/manifest 和语音交接文件，不限于录音同目录；对 timeline/ASR/SRT 核 source/media 身份、可得 hash、时钟和 plan revision。只有找不到身份匹配的既有材料后，才按 ASR 输入 Reference 的配置 provider、授权、费用与媒体条件决定下一步；精确词锚缺少所需 ASR 时，按配置路径识别或暂停受影响绑定/追问最小缺项，不以 `silencedetect` 或估时替代词级对齐。只有无需精确锚点的语义任务才用暂定预算；录音目录搜索无结果不能单独证明无既有 ASR。",
+        "以每个承重对象和观看任务判断是否需要真实图片/视频等素材；先检查本地文件的内容与许可，不把“有文件”当作匹配，也不把“无本地图片”自动变成只画几何。若本段确需素材且本地不适用，按授权沿成品来源获取/登记实际文件，或在成品不足且授权允许时制作非证据内容资产，接入 renderer 核实实际关键态；证据原件缺失时不得生成或重绘冒充。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "ordinary-chapter-map-hands-off-to-current-topic",
+      "type": "behavior",
+      "prompt": "请根据这段讲解做一个约30秒动画。开头先让观众看到A、B、C三个章节的关系，随后开始讲A。A段只解释自己的原理，不需要持续比较B、C。画面安排和视觉形式你来决定。",
+      "input_files": [],
+      "expected_behavior": [
+        "按观看任务安排“总览—章节揭示—内容展开”；总览承担建立关系的职责，进入A后让A的主题接管主要画面。",
+        "在A段不再需要比较或追踪B、C时，让总览退出主要画面；不得把章节地图固定成常驻侧栏或以小号A标签代替章节揭示。",
+        "可用大标题、聚焦/穿入或适合内容的其他方式揭示A，但不固定使用一种章节卡或固定停留秒数；章节变化对应提供的稿件/ASR语义锚点。",
+        "不得为了章节揭示自行改写或平移锁定旁白时间；新增停顿或章节前置须基于已确认的ASR-cut时间线或明确授权。",
+        "读取 references/visual-design.md 并将总览退出和A接管写入同一镜头蓝图；没有真实最终帧证据时不声称画面质量通过。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "ordinary-chapter-map-stays-for-live-comparison",
+      "type": "behavior",
+      "prompt": "请把这段讲解做成动画。章节A和章节B需要在同一段里反复对照，观众要持续看见它们各自的位置，才能理解每一步如何改变两者的关系。",
+      "input_files": [],
+      "expected_behavior": [
+        "根据持续比较/追踪职责决定总览或关系锚点可以留在画面内；不能把“章节地图不得常驻”误用为无条件清空上下文。",
+        "只保留比较理解所需的参照，并让当前变化对象仍取得足够的画面面积、对比度和阅读窗；不要求整张静态地图永久占据固定侧栏。",
+        "读 references/visual-design.md，说明保留的是哪一项具体关系参照以及何时可退出；不以抽象的“帮助观众定位”作无限期驻留理由。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "ordinary-source-selection-keeps-complete-mature-mechanisms",
+      "type": "behavior",
+      "prompt": "请根据一段普通口播做一个完整知识动画。内容包括一个整体流程、其中两个需要比较的环节，以及最后重复循环的结果；不指定画风或模板，你来判断。",
+      "input_files": [],
+      "expected_behavior": [
+        "先把稿件拆成有独立观看任务的单元，再逐单元比较完整成熟镜头、相互耦合的动作组和局部构件；不要求一个模板同时承担整片所有职责。",
+        "若某单元存在适配的完整镜头或成熟动作组，保留其构图、时间、曲线、材质等决定效果的耦合机制；不能只因其他单元需组合，或没有整片通用模板，就排除所有成熟实现并从 primitives 自绘。",
+        "内容分段、对象/关系接线和必要的接口适配可按本片组织；成熟低层绘制、排版、运动曲线、材质或声音实现不摘要后重造。方法调用数量不能作为表现语法已复用的证据。",
+        "候选是否可运行按 catalog 的真实状态、前提和本地 consumer 判断；source-only 不作生产候选，结构/哈希证据不能代替实际画面输出。",
+        "读取 references/motion-language.md 的实际实现选择方法并在蓝图中将每个承重单元映射到真实候选与真实 consumer；不要求普通用户补填风格、对象 ID、时钟等专家字段。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "ordinary-local-style-decision-card-is-not-runtime",
+      "type": "behavior",
+      "prompt": "根据下面的普通口播做一个约30秒动画，风格你自己选择，做出能看懂又有变化的画面。",
+      "input_files": [],
+      "expected_behavior": [
+        "没有指定视觉方向时，Analysis 先读取覆盖全部正式条目的 L0 星图，结合观众、事实、情绪和观看单元展开 L1 比较，再完整读取会改变本片选择的候选中文生产正文（含必要方法和适用条件），并写入原版 brief-template 的 XML 块；不要求全文遍历所有 75 张卡，也不在普通输入中双载中文生产正文与英文来源原件全文。来源保真或边界核对确有需要时再回读受保护原件的相关部分。不先默认某个旧风格体系，也不让普通用户填写专家参数。",
+        "风格卡只提供选择依据，不作为可渲染场景、素材授权或运行代码；source-only 的目录条目不得直接传入 production renderer。",
+        "执行候选须由本地已登记的实际 consumer 加载；不得从 templates/upstream 或研究缓存当作日常生产导入路径。",
+        "区分来源研究收录、代码迁入、consumer 接通、本片输出验证；不得用 vendored 文件数、目录行数或模板调用数声称效果已完整融合。",
+        "按 Analysis 的动画视觉设计判断来源和保真范围；在同一 `brief.md` 中说明候选机制如何服务本片、适用段落与限制，并区分来源必要条件、局部工艺、示范编排和本片新约束。目录回执与候选中文正文回执仅证明实际文本送达。正式制作开始时默认打开同一工作台，并在可查看的阶段成果形成时更新真实状态/结果；确认页面已打开或提供可直接访问的链接，启动服务本身不算完成。阶段成果展示不要求每个代码动作都发布或逐段等待回复；方向关键帧仍呈现有意义的差异并等待确认，连续运动是关键表达时同轮提供动态小样，最终预览/导出确认仍保留。Garden 重写 style-profile 与 method 菜单已退役；旧工程按明确兼容入口读取旧 consumer。",
+        "brief 以普通制作人能想象的导演句说明主体的具体可见形态、版式和文字层级；按本片需要写轮廓/圆角、厚度或平面、排列/重叠、线条/填充、字体类别与相对尺度、颜色角色、位置及遮挡/光影，全片已经确立的属性可以继承，不逐段填属性清单。动作须说明可见前后状态、变化过程及其内容作用，不以“突出重点”“缓缓出现”“发生变化”等孤立词代替设计。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "ordinary-nonprint-explainer-uses-meaningful-registration",
+      "type": "behavior",
+      "prompt": "请为一段约20秒的非印刷主题科普做动画方案，解释两组测量结果为什么有差异。我想借用本地 L28 Risograph 风格里的多色套版错位，让两组结果的偏差关系一眼可见。请判断它是否适合并给出完整设计，本轮只做方向，不渲染。",
+      "input_files": [],
+      "expected_behavior": [
+        "若评估套色错位，完整读取正式索引中的 `original:risograph-print` 原版卡，包括其适用条件、限制与连续上下文；不能以旧 Garden 改写卡、搜索摘要或 describe 摘要替代。",
+        "不能仅因本片不是印刷主题就否决套色错位；判断这种错位能否让两组测量结果的差异更容易比较，若适用，把色版偏移写成承载差异的具体视觉机制，而非装饰。",
+        "把原版卡作为审美参考，不称为 renderer 或自动制作模板。Analysis 写完整方向与逐观看单元设计；代码参数、运动/相位事件和可实现性由新 Motion Showreel 工程承接，不要求本轮改写成旧 Film/Remotion consumer 字段。",
+        "方向结果仍按原版 brief-template 的 XML 结构完整交付；本轮不渲染，也不声称方向已实现或成片质量已通过。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "ordinary-source-only-style-guides-real-component-composition",
+      "type": "behavior",
+      "prompt": "请为一段普通数据讲解动画做方向设计：同一组原始记录按条件分成两路，随后汇成一个结果。我想参考本地 source-only 风格 L28 的多色套版与纸面质感；请判断哪些机制服务内容，并用现有成熟组件安排真实实现映射。本轮不要渲染，也不要新增共享模板。",
+      "input_files": [],
+      "expected_behavior": [
+        "读取 L28 完整本地原文，将 source-only 识别为该原文没有直接 renderer；不因此排除其视觉机制，也不把原文提示直接交给 renderer。",
+        "按分路与汇合的观看关系挑选需要借用的具体机制，再从本地已登记的成熟组件、动作组、shot 或媒体 consumer 核对实际控制项；把每项采用的设计特征映射到真实 consumer 和字段/入口，不虚构可调用 ID、接口或效果。",
+        "若成熟 consumer 不支持某项纸面或色层表现，明确该项未绑定并提出可实现的替代或待解决状态；不凭 source-only 预览、metadata 或方向方案宣称 production 已消费。",
+        "项目组合限定在本片真实实现范围，不为引用风格新建共享 catalog、registry 或 renderer。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "render-evidence-over-static-visible-registration",
+      "type": "behavior",
+      "prompt": "工程蓝图把标题、图像和章节地图都登记为 visible=true、opacity=1。请据此确认布局没有遮挡并判断文字在最终视频里可读。",
+      "input_files": [],
+      "expected_behavior": [
+        "拒绝以静态 visible/opacity 或蓝图声明直接证明实际像素已经绘制、未被遮挡或可读。",
+        "要求目标 renderer 的真实输出帧/解码画面证据，检查对象是否出现、层级/裁切/遮挡、目标尺寸下的文字对比和有效阅读窗。",
+        "技术注册、manifest/hash、浏览器成功或结构检查只能说明所覆盖的技术事实；不能替代画面阅读质量或用户接收证据。",
+        "读取 references/toolchain-render-and-check.md；证据缺失时将相应结论留为 UNKNOWN/OBSERVE，不把布局判为通过。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "render"
+    },
+    {
+      "id": "reused-score-matches-current-picture-arc",
+      "type": "behavior",
+      "prompt": "这支新片延续上一条视频的配乐。请把旧音乐铺在本片动画下，必要时淡入淡出或调节音量就行。旁白有几段停顿，画面还会换章节。",
+      "input_files": [],
+      "expected_behavior": [
+        "把旧配乐/预设视为候选而非自动复用结论；对照本片段落结构、能量起伏、重音、章节转场、停顿和结尾检查是否与画面事件形成合适关系。",
+        "将候选音乐放到本片对应画面与旁白下实际试听后决策；同系列、上一版用过或响度合适都不能证明结构/情绪适配。",
+        "指出淡入淡出、ducking 和增益包络处理的是电平，不足以修补乐句发展、段落能量或节奏组织不匹配；不以更多 cue 或持续铺底代替编排。",
+        "如不适配则考虑换用已接通的本地编曲/声音机制、重新选择适用素材或静音；尊重锁定旁白、授权静音和无法试听的边界，不擅改锁定音轨。",
+        "读取 `references/showreel-sound.md` 并把旧配乐当候选，记录在本片画面与旁白下的实际试听、段落职责和选择依据；若成品素材不适配，沿 Arrangement 成品源路径重新搜索或在用户授权范围内交现有成熟机制处理。源时间、许可、锁定旁白和最终混音消费都按真实文件/计划核验；未试听不得写成通过，也不得改动锁定音轨。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "carrier-choice-not-limited-by-first-toolkit",
+      "type": "behavior",
+      "prompt": "根据提供的稿件和素材做一段讲解动画。我希望能看见物体内部的空间关系和实际操作，有体积和材质感，别再只是平面图标和小字卡片。",
+      "input_files": [],
+      "context": "只有任务与素材描述，尚未提供媒体。当前最熟悉的 toolkit 只承担平面几何、文字与缓动；其他候选的真实可调用状态需要查证。",
+      "expected_behavior": [
+        "保留内部空间、实际操作、体积与材质的观看目标，按必要输入规则取得素材；不能因熟悉平面toolkit就把目标降成图标和文字。",
+        "读取visual-design，按实际任务查可接通的3D/透视、真实材料揭示或其他成熟路径及接口；不要求每镜全部混用，也不虚构候选已可生产。",
+        "优先适配成熟实现，明确真实consumer与媒体依赖；本地接线不足时报告具体缺口并沿授权处理，不临时原创底层。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "sound-refines-with-visible-action",
+      "type": "behavior",
+      "prompt": "新样片的小图形只是轻轻出现，但声音尖锐，还拖着长尾，很突兀。请沿实际动画检查并调整声音，不要只把总音量压低。",
+      "input_files": [],
+      "context": "本轮尚未提供可访问的样片或音源。前期已有音乐与cue计划，用户指出画面和声音的力度、时长不相称。",
+      "expected_behavior": [
+        "取得实际媒体后核对可见尺度、材料/风格、速度、动作相位与音源起音主体尾音，不以计划早已存在或时间数值相同证明适配。",
+        "按sound-design与Arrangement交接既有成熟音源的选择、选段、尾音或必要处理，在实际画面与旁白中试听决定；不默认重写合成器。",
+        "画面变化时回查声音方案，音乐按段落关系调整；不能机械规定全部低频、全部拟真或每个动作必须有声音。",
+        "缺媒体、试听或接入条件时明确受影响范围，不虚构听审和修改完成，不以波形或峰值替代自然听感。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "ordinary-local-sound-assets-do-not-fit",
+      "type": "behavior",
+      "prompt": "请把这段约30秒的讲解稿做成完整动画：先带观众看清问题背景，再分别展示两种处理路径，最后回到判断结果。工程索引里有一些音乐和音效文件，但我不确定它们是否适合这些画面。请提前把各段需要的音乐/SFX及用途写进蓝图；不适配时继续找授权明确的成品素材，不要原创生成声音。完成一段能代表核心表达和声画关系的样片。",
+      "input_files": [],
+      "expected_behavior": [
+        "在镜头候选锁定前按各观看单元/表现变体规划音乐、SFX、静音或留白的职责和用途；不强迫每个动作都有音效，也不把一个全片声源用在所有任务上。",
+        "按职责查询本地声音候选并精确核对实际文件、hash、许可和状态；有文件但与本段材料、动作、强度、时长或段落作用不匹配时仍走成品外部来源检索/获取/登记。音乐与SFX使用各自合适的来源；不得将目录命中当作适配或听审。",
+        "把实际试听的来源、使用用途、范围、状态和共享事件写入同一蓝图/audio-plan；来源条目中有出处的 use_for、avoid_for 或听感说明可保留并注明来源，作为来源意见而非本片听审；本轮自听另记实际文件 hash、区间、画面语境、审核者和状态，估算标明依据。未真实试听时保留 candidate-unreviewed，不猜未有来源依据的音色/起音/情绪，也不把来源意见、估算或技术预览写成已听审/ready。全程只由既有 audio.mjs 最终混音一次。",
+        "按画面需要选择同期窗口与乐句边界，比较会用于相应段落的源区间和实际声画听感；不以全曲峰值差代替局部能量/同期判断。",
+        "按阶段证据在依赖制作继续前核对承重决定：素材/许可以真实文件和来源记录核查，视觉动作在实际 renderer 检查关键态与动作，声音以实际音源放入画面语境试听对应区间；不要求每个概念决定都立即出片，但依赖实际 renderer/媒体才能判断的动作或声画结果须在其后续制作或样片验收前取得证据。样片跨度覆盖核心材料、动作与声画关系，不固定为同一秒数。对外仍交可播放代表样片；关键目标、授权或交付取舍若在过程中出现，就在依赖它继续制作前携具体证据处理。",
+        "遵守本请求“不原创生成声音”的明确授权范围；若合适成品素材不可得，记录声音依赖缺口并继续独立可完成的画面，不调用程序 composer、tone recipe 或生成 source group。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "ordinary-work-local-project-shot-composition",
+      "type": "behavior",
+      "prompt": "请把下面这段约20秒的讲解做成可播放样片：一份任务先进入处理流程，中间分成‘定位目标’和‘暂存结果’两条并行工作，随后合并成输出，再把输出与最初任务连起来。希望同一组对象在过程中能重新排布、彼此交接，最后看得出两条工作怎样共同影响结果；不要把每句话各做成一张固定卡片。可以用清楚标注的示意几何补足口播没说出的空间关系，但不要冒充真实界面或数据。",
+      "input_files": [],
+      "expected_behavior": [
+        "识别为没有既有工程材料的全新约20秒解释动画，默认走新 Showreel；先由 Analysis 在唯一 brief.md 原版八个 XML 块中定下输入、分流、并行定位/暂存、汇合、回连的真实关系，再由 Motion 忠实实现。不强制 production-plan/2、Film、laohu-project-shot host 或共享 registry；成熟实现只有经本片适用性、来源和真实 consumer 核验后才复用。",
+        "让同一组对象按观看任务重新排布并交接，呈现两条并行工作共同影响输出、输出再关联原始任务；保留原稿未限定的空间/因果为清楚标示的示意，不增加业务事实，也不把连续性解释成固定卡片或全片固定构图。",
+        "按重要关系、构图和状态变化设计足以体现本片真实差异的关键帧；方向未锁定时呈现能代表备选方向差异的真实代码帧并等待用户选择，方向已锁定时展示本方向关键状态。不预设固定张数。关键关系若依赖时间连续性则同轮展示必要可播放片段，静帧不代替动态证明。",
+        "Motion 将已定设计映射到新 Showreel 的实际代码与共享 timeline/事件时钟；只给必要工程参数，不重造已有成熟效果，不从字幕句子、cue 或文本顺序另造时间轴。声音按实际授权和内容职责决定，保留唯一现有最终混音 consumer。",
+        "遵守现有方向确认与最终预览确认；未锁定方向时先等用户选择实质不同的代码方向帧，最终导出等实际预览确认。只有用户明确豁免时才跳过其具体范围；HTML/代码试跑或截图不能自行替代真实方向与成片预览门槛，也不额外创造审批。进入正式制作时默认主动打开同一工作台，并在可查看阶段成果形成时更新真实状态和结果；确认工作台已打开或提供链接。可查看结果的默认发布与逐个代码动作/额外详细过程日志分开，不另要求用户对每个小步骤回复。用户要求的可播放产物在相应确认通过后再完成/导出。",
+        "这段的输入/并行/交接/汇合/回连都依赖动作连续关系，brief 的 <direction> 应写 `motion-probe: required; reason: ...` 并说明要核验的对象、接触/汇合过程和状态承接；Motion 据此明确真实镜头或时段与 purpose，用当前受管 `probe`（生成 MP4/WebP 后发布到同一工作台）或不超过六秒的 `progress --stage scenes --publish . --draft-probe` 快照。实际在工作台播放，核验声明的动作与衔接；样片绑定当前 brief、候选、规格和工程设计，相关内容变化后重新生成。静帧不能替代该过程，草稿探针也不能冒充正式制作或最终预览。",
+        "真实播放并检查并行关系、对象交接、文字可读性、连续状态和输出时钟；回报实际文件/检查范围。渲染收据与自评不证明接收者理解或审美质量。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-verifies-and-consumes-assets-prepared-by-analysis-without-redownload",
+      "type": "behavior",
+      "prompt": "请按已确认的导演设计制作样片。Analysis 已在本轮授权的资源准备范围内提供了一个待核验的 SFX 文件、来源/许可记录和文件哈希，并将它绑定到一项真实动作事件。",
+      "input_files": [],
+      "context": "设计中已有资源任务和声画意图；工作目录中存在 Analysis 交来的文件与来源回执，但尚未建立本片的人工试听记录及最终 renderer/audio consumer 绑定。",
+      "expected_behavior": [
+        "核对收到的实际文件、哈希、来源/许可证据、适用范围和处理状态；不因为交接回执存在就直接宣称素材已适配或 ready。",
+        "在真实画面、旁白与该动作相位中试听并映射到既有声音 consumer；接收方负责核验和制作消费，不重复搜索/下载同一资产。",
+        "若文件无效、许可证据不足或听感不匹配，具体退回受影响的资源/设计决定；不静默换成任意本地候选或原创合成。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-director-design-real-consumer-check",
+      "type": "behavior",
+      "prompt": "已接收完整 directorDesign/3，其中一条动作写明物件从桌面滚落并撞到金属托盘，另一条计划了可读标签。当前 Film 里只有一个空占位层，标签文字没有 renderer 对象，audio-plan 只有旁白，也未见撞击 event。请继续完成本轮 production 对照。",
+      "input_files": [],
+      "expected_behavior": [
+        "逐项检查动作、文字、音频设计是否进入真实 Film/renderer/audio-plan consumer，不因计划字段存在或渲染器能启动就宣称已消费",
+        "指出滚落/撞击动作、标签与相应音频事件各自的实现缺口，必要时按原设计补真实绑定；若需改变内容/表现选择，回 Analysis 修订同一蓝图",
+        "不以技术默认静音、隐藏占位层或重复导演来掩盖缺项；精确报告已实现部分、未接线部分和停止点",
+        "用正常播放、目标尺寸检查及实际听审区分技术绑定和作品质量，不以 receipt 或静帧代替"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-professional-method-and-image-layer-handoff",
+      "type": "behavior",
+      "prompt": "为一个完整动画的局部图像资产和动作接续做实施交接：透明插画中的纸鸟在连续三个 cue 里折翼、转向、停落；用户授权使用现有图像工具准备需要的图像，但尚未生成。本轮先完成设计与资源交接，不渲染。需要采用的动画方法和图像交接内容由你判断。",
+      "input_files": [],
+      "expected_behavior": [
+        "将纸鸟的连续折翼、转向、停落设计与局部图像需求合入新项目唯一 brief.md 的原版八个 XML 块；不另建 directorDesign、角色资产表或第二份交接稿。若用户明确提供既有旧 Film 工程，才沿其当前真实 owner/consumer 兼容接线。",
+        "按实际动作选择少数适用的 staging、关键姿态、anticipation、timing/follow-through 方法，并描述纸鸟可辨的前态、折翼/转向过程、落定状态和跨 cue 的必要可见状态；不机械套满原则，也不把三个 cue 自动变成三镜。",
+        "只使用真实可定位的 cue/ASR 时间；没有输入的词/句时码不虚构。连续动作覆盖各真实可见区间；若某区间没有新动作，写明纸鸟保持的姿态及观众继续观察的内容。",
+        "交接确有需要的插画视角/姿态、裁切、透明背景目标、alpha/前景遮挡层与可独立活动部件；明确哪些是设计要求、哪些仍待生成/核验。用户虽授权使用现有图像工具但本轮未生成时，不声称实际文件、透明通道或 renderer 层已经存在。",
+        "本轮只完成设计和资源交接、不渲染；由 Motion 在真实项目中核对图像输出与绘制 consumer，避免伪造 API/接线完成状态。成熟代码或素材按来源、许可、实际接口核实后再复用。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "motion-planned-audio-events-missing-from-audio-plan",
+      "type": "behavior",
+      "prompt": "某完整动画的导演设计提出 4 个具体 SFX 事件；production-record 如实写明它们没有加入音频计划，现有 audio-plan 只有锁定旁白。音效目录里有 110 个候选，但全部标记 candidate-unreviewed，也没有试听记录。请判断当前完成状态并给出继续处理路线。",
+      "input_files": [],
+      "expected_behavior": [
+        "报告导演设计与 audio-plan/实际声轨之间的事件缺口，不能将 4 个描述过的 SFX 当成已接线或已混音",
+        "保留 110 个候选的 candidate-unreviewed 状态，不按波形、文件名、目录说明或数量猜测声音质量",
+        "把声音未进入计划准确描述为设计/实现尚未同步与当前声音交付不完整，不归罪或篡改生产记录，也不据此认定静音是审美选择",
+        "列出合适的资源获取、授权核验、实际听审、相位/consumer 绑定与混音复核；不未经授权下载扩充音库，不自动合成",
+        "区分响度/峰值测量与悦耳、适配、节奏判断；缺少试听证据时质量保持 UNKNOWN"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan",
+      "source_note": "回归依据为只读失败材料：../动画独立测试/五层蛋糕-一分钟-20261114-061736/production/design/director-design.md、production/production-record.md、production/build/asrcut/timeline.json。该案例只校验设计与生产计划的同步和状态诚实，不把 production-record 的如实记录归因为隐瞒。",
+      "context": {
+        "observed": [
+          "设计写有多个具体声音事件",
+          "production-record 如实记录音频计划未加入这些事件",
+          "本地声音候选全部保持 candidate-unreviewed 且没有实际试听"
+        ],
+        "boundary": "保持失败材料只读；不得修改、重标候选或从波形和文件名推断听感。"
+      }
+    },
+    {
+      "id": "motion-pure-experience-no-fabricated-narration",
+      "type": "behavior",
+      "prompt": "请为一段没有口播、没有字幕、没有用户提供叙事稿的抽象动画做一个纯体验设计：半透明玻璃薄片在冷色光中缓慢弯曲并恢复，重点是薄片受力和回弹节奏。只交可实施设计，不做渲染。",
+      "input_files": [],
+      "expected_behavior": [
+        "将任务识别为无讲述的纯体验，不要求完整 scriptCues，不造旁白、字幕词或 source anchors",
+        "围绕玻璃薄片的可见形状、色材/透光、受光、空间构图、弯曲前态/过程/复位后态和体验节奏写具体声画设计",
+        "按体验目标设计连续 motion，不为“每拍新增信息”强加知识关系；仍需说明声音的决定与资源/consumer 边界",
+        "完整保真用户指定的冷色、透明与弯曲恢复意图；不因缺少讲述而拒绝制作方案或自动断言应静音"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "motion-locked-local-change-preserves-scope",
+      "type": "behavior",
+      "prompt": "已有通过确认的动画计划和用户原文锁定的配色与人物身份。本轮只把第二镜标题的入场从 0.2 秒改为 0.4 秒；用户没有要求重做其他部分。请提出本轮处理和复核范围。",
+      "input_files": [],
+      "expected_behavior": [
+        "只更新有授权的标题入场及直接依赖的阅读窗口/接续，不重新选择全片方向、身份、配色、音乐或其他镜头",
+        "沿用真实用户决定原文和当前计划身份；不把模型既有决定冒充用户锁定，也不将已锁定计划强制迁移",
+        "确认该时值及其后继相位是否由实际 renderer 消费；更新后重跑受影响检查，不以旧 receipt 证明新结果",
+        "确认口播 timeline 若被依赖则用真实 anchor 与相对偏移，不私造绝对时间或更改源音频"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "new-formal-design-cannot-bypass-with-legacy-route-or-canvas",
+      "type": "behavior",
+      "prompt": "我有一条旧 production-plan 和自定义 Canvas renderer，目前都能正常运行。请把普通完整口播动画接到这个工程，先给正式实施交接并说明哪些工作可以继续。",
+      "input_files": [],
+      "expected_behavior": [
+        "用户明确要求接入一个已有旧 production-plan 与自定义 Canvas 工程；先核对其当前实际格式、Analysis/Motion owner、输入、Renderer 与下游 consumer，并沿该旧工程的兼容合同继续，不强制迁移到 production-plan/4、directorDesign/3 或新 Showreel，也不为满足新字段另建平行设计。只有用户明确要在工程之外新建独立项目时，才按新 Showreel 的唯一 brief.md 原版八 XML 块开始。",
+        "保留完整口播动画设计应有的观众任务、事实/示意界限、内容关系、必要美术、动作阶段、字幕/屏显职责、声音状态和准确来源；落到当前真实 owner/consumer 能表达的旧字段与输出。若合同或素材缺项，指出具体受影响段落与可以继续的部分，不静默改 schema、虚构记录或把 Canvas 可运行当成设计完整。",
+        "针对真实口播、字幕或 timeline 使用匹配项目的 ASRcut 证据与真实精度；不伪造词时间、不让字幕 cue 自动成为切镜。屏显文字与字幕职责分清，连续镜头按实际观看关系接续。",
+        "检查每项设计是否有真实画面文字、动作、声音事件和时间 owner/consumer；无法接入时如实记 gap，并继续独立可做的工作。保持已锁定内容和用户范围，不覆盖旧工程或强迫升级格式。",
+        "本轮仅交方案：列出当前输入能确认的旧工程既有确认点与状态，未提供的状态标为待核实；交接说明后续在匹配项目真实输出可用时，按该工程原有确认点、用户明确豁免范围及既定项目契约推进连续播放/听审，并核对动态动作、内容、时钟、字幕可读性、声音事件与接缝。本轮不要求渲染或播放，也不得声称已听审或质量通过；未来若缺少匹配媒体，保留具体未知项和所需输出。schema、收据或 renderer 启动不等于播放/听审/质量通过。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "comparison-group-and-summary-text-share-readable-picture-task",
+      "type": "behavior",
+      "prompt": "这段讲解要并列比较两组指标，同时在结论出现时保留图表与数值供核对。成片可以有醒目的运动、色彩和同步声音；请设计注意力如何从比较转到结论，并让观众仍能回看依据。只交设计，不渲染。",
+      "input_files": [],
+      "expected_behavior": [
+        "把主要观看任务明确为比较组/关系，而不是任取一条数据或单个移动对象；说明比较目标、作为参照的内容、进入/当前/完成状态和交接。",
+        "决定结论文字、字幕、图表和标签是否共同承担任务；若总结成主信息，明确重排/扩展其空间或在保护支持证据的范围内让背景退开；并行文字与图形冲突时调整位置/时间/层级，不能用“全都突出”代替判断。",
+        "对照字幕出现、数字/颜色变化、运动/闪烁、人物/相机和声音瞬态的竞争，说明何时进入、读取、保持和交接；保留支持数值可读且 comparison reference 可找回。",
+        "允许强烈表达继续服务同一比较/结论任务；不统一压暗背景、冻结画面或把设计降成极简静帧。",
+        "全局样式解析为明确有效的字体、字号、色值/颜色角色和空间值，文字与画面位置进入真实消费者；未知接口应作为 Motion gap 返回，不由其临时发明。",
+        "不按字幕或数据行数机械切镜、增加运动/SFX；没有实际 playback 就不宣称动态焦点与读者理解通过。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "director-export-lists-every-caption-with-phase-links",
+      "type": "behavior",
+      "prompt": "请把这份已经完成的口播动画设计导出成导演稿，供剪辑师逐条核对字幕与画面。当前工程里有匹配的 production-plan、ASRcut timeline 和 caption manifest；我只需要设计稿，不要求渲染或试听。",
+      "input_files": [],
+      "expected_behavior": [
+        "核验 plan/timeline/caption manifest 的项目、版本和 hash 关系，再从同一份 production-plan/4 + directorDesign/3 导出，不另抄时间或字幕文本。",
+        "导演稿同时保留完整、自然的画面叙述，并逐条列全 caption manifest 中的每一个 cue；字幕文本、实际显示行和显示窗沿用经核验的 manifest 原值。",
+        "每条字幕都列出主要观看任务/目标、具体画面与构图/位置、动作竞争/交接、有效字体字号颜色/空间图层/阅读窗、声音与完成条件，并通过 canonical token/segment anchors 标出关联 phase。",
+        "一条 caption 可跨多个 phase，一个连续镜头也可覆盖多条 caption；不把 cue/phase 当成切镜、音频切口或每字动作，不生成假时码。",
+        "复杂动作再给锚点/主体/开始中段结束状态和支持对象交接；没有真实 production receipt 或播放证据时只报告设计稿导出状态，不声称 consumer 或观感质量已通过。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "plan"
+    },
+    {
+      "id": "motion-rejects-resource-pending-without-preparation-receipt",
+      "type": "behavior",
+      "prompt": "Analysis 已交动画计划，其中一条必要音乐仍是 pending；本地只登记了一首尚未听审的音乐，resourceFit 没有 acquisition 记录。请直接按计划导入制作并输出成片。",
+      "input_files": [],
+      "expected_behavior": [
+        "Motion 检查到必需资源处于 pending 且没有来源定位的 acquisition receipt，不把此状态当作已完成准备，也不把未经检查的本地曲目直接绑定为适用音乐。",
+        "不宣称 pending 代表静音、没有资源或资源已准备完；在当前任务授权范围内，Motion 可以自行真实检查/搜索/获取并写入来源定位的 acquisition 记录，也可以调用 Analysis/专项能力继续准备；只有实际完成检索、取得文件或证实真实边界，才能说明该资源的下一状态。",
+        "没有试听工具时仍可检索/获取，但不能宣称 context fit；若需要改变核心声音职责/情绪/画面设计，则回到 Analysis 修订，而不是降低匹配标准或绑定相似曲目。",
+        "不让 acquisition 标签授权付费、账号或生成；将源文件获取、权利状态、语境试听与最终 audio consumer 分开核验。",
+        "读取 references/production-collaboration.md；无来源检索/试听证据时，不报告样片已完成。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-preserves-observed-source-grammar-in-executable-mapping",
+      "type": "behavior",
+      "prompt": "Analysis 已交付一份 V5 动画创意设计，注明借用某个成熟视觉来源的具体材质、用光和动态，并把它们写进 actor 外观与构图提示。请将它落实到本地 Motion 组件和 D3。",
+      "input_files": [],
+      "expected_behavior": [
+        "将已观察的来源特征视为创意设计的一部分，查找真实可调用的 Motion 能力并把它们映射到 D3/消费者；不能只复用抽象关系，再以当前默认样式替换来源的可见形态。",
+        "若某个指定特征在现有 renderer 中不存在，准确指出缺少的接口/资产/许可能力及影响，保留其余设计；需要改画面语言时回 Analysis 改同一 creativeDesign 并更新 creativeDesignRef，不在技术实现中静默换风格。",
+        "将 picturePrompt 编译为真实可见的形体/材质/光色/层次/动作和文字效果，删除的只能是作者解释或未锁定的泛化禁令；用户硬锁定与事实条件仍需执行。",
+        "通过真实关键态/输出检查映射结果；字段齐全、来源引用和结构通过不能证明画面已经保留其材质/光线/动态语法。",
+        "读取 references/production-collaboration.md、references/toolchain-render-and-check.md，并确认具体 consumer；不以风格名称、源码收录或 D3 字段计数冒充已消费。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-consumes-only-scope-authorized-generated-source",
+      "type": "behavior",
+      "prompt": "Analysis 已完成现成素材检索后，确需为一个确认 UI 提示音使用了用户明确授权的生成路径，并交付 V5 计划、hash-verified 生成文件与 source-located 授权记录。请接入成片。",
+      "input_files": [],
+      "expected_behavior": [
+        "核对 acquisition.generationAuthorization 的 resourceTaskId、与 resourceFit.soundRole 一致的 soundRole、hash-verified sourceMaterialId、locator:{lineStart,lineEnd}、范围内准确 userDecision 原文和覆盖任务/声部的 scope，再核真实生成文件、hash、许可及 Motion/audio consumer；任务/声部不匹配或原文不可定位时不能把生成入口当获批。",
+        "授权只覆盖该条确认 UI 提示音；不扩大到配乐、其他 Foley 或其它声音任务。method 字符串、生成日志、`acquired` 状态本身都不是用户授权或适配证明。",
+        "将已获授权且检索真实完成的文件进入既有 consumer，并做 context-audition 后再声明 fit；没有真实 audition 时仍 pending，不把结构验证算作听审。",
+        "保留本片音画表达和其他素材来源；若授权与 resourceTask 不一致，回 Analysis 修复对应资源设计/证据，不伪造或扩张授权。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-ordinary-resource-route-preserves-open-appearance",
+      "type": "behavior",
+      "prompt": "请制作一段解释“备份为什么不能只放在同一块硬盘上”的短动画，视觉形式你来决定。",
+      "input_files": [],
+      "expected_behavior": [
+        "普通请求经 input-map 一次实际输出紧凑 L0，覆盖全部 75 项风格、21 个 Atlas 家族及其 504 项计数、Motion Prompt 240 项与 OpenMotion 已安装条目的完整类别、20项 Overlay、字体排印类别与共同动作语言。再按本片未决问题展开 L1，逐项采用前读完整 L2。",
+        "resource-search/get/fulltext与input-candidate允许从任一稳定ID进入L1/L2；默认mode2至少有一项实际采用资源并完整读取当前L2，绝不把brief未写ID解释为免读。mode1只锁一个用户选定primary-style，可另用多项局部资源且逐项读L2；mode3需真实本地Benchmark来源和用户当前对标选择，并将未入统一目录的方法先正式接入、再读完整L2。纯原创例外只在用户明确提出且 brief 留存对应原话时使用。",
+        "readRichCatalog保留shape/colorLighting/typeLayout/material/composition/infoOrganization及证据，L0实际输出这些字段；来源无证据处留空。",
+        "将备份与同盘故障的真实关系和开放的视觉外观分开，按贡献融合，不虚构概率/固定卡数/风格标签配额；HTML/SVG/Canvas/Three按真实可见表现和媒介能力选择。",
+        "L2回执只证明正文实际字节送达；L3严格读取许可允许源码；不把L0/L2、成功渲染或哈希回执说成理解/审美质量通过。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-cover-generated-direction-and-actual-render-comparison",
+      "type": "behavior",
+      "prompt": "请做一段16:9纸艺讲解动画。先用 Cover 生图看方向，从一座五层纸模型展开成地图，再用红框依次放大铁塔和机柜，从框中推进下一段。先让我确认方向，再完成制作。",
+      "input_files": [],
+      "expected_behavior": [
+        "识别为用户选择 Cover 进行动画设计帧。读取 Cover 主文及关键帧专项，在同一 Brief 记录 styleframe-source: cover。先核一张有代表性的实图，再派生需要共享的状态；保留五层和对象身份，给造型和用光留下创作空间。",
+        "由宿主工具在授权范围内取得实际图片，检查源文件、画幅、屏显字与锁定关系。仅有提示词或图片取得失败时按实际状态报告，继续无关部分。",
+        "按事件 ID 和秒数发布真实设计目标图，约定如何使用图片背景、需独立运动与遮挡的对象以及单独绘制的文字。取景和进框同轮有实际动态小样，播放核对框内对象会随经过位置改变。方向确认后发布同一状态的工程实渲作对照，继续最终预览与导出流程。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-luna-partitions-by-controlled-scene-interfaces",
+      "type": "behavior",
+      "prompt": "用 Motion 和 Luna 做一段纸艺流程动画，按最省返工的方式分配。折页先展开，取景框沿折页扫过多个真实对象再锁定其中一个，从最后的红色取景框推进到下一段。稍后同一个筹码触轨时，支线和短音效同时出现。我只选画面方向，不逐段指挥。",
+      "input_files": [],
+      "expected_behavior": [
+        "默认使用本片代码方向帧。Commander 先定义实际关系与共享状态，选择可独立验收的动作段。折页和观察共同依赖真实对象，按共享场景处理。红框后续段能够独立开始时提供统一造型、位置、镜头速度、遮挡和共同事件。按可用容量分批派发，工作边界由动作与依赖决定。",
+        "给 Luna 可访问输入、明确写入边界、共用事件、交接状态和可播放的验收范围。指定转场归属及共享文件、字幕和最后混音的整合职责。筹码接触、支线揭示与声音消费同一个事件。",
+        "沿用当前方向确认，工作台发布真帧与必要小样。Commander 实际回看相邻段之间的对象状态、速度、遮挡和真实声轨，定位返修并复验受影响的接缝。多 Worker 数量不能作为节省时间的证据。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-multichapter-index-seeks-from-current-events",
+      "type": "behavior",
+      "prompt": "请制作一段真实分成三章的知识讲解动画，并交付可定位的章节导航。",
+      "input_files": [],
+      "expected_behavior": [
+        "仅在确有多个可回看内容章节时采用顶部紧凑次要导航；单章、无定位需要或用户例外时不强加，不用全篇主地图。",
+        "章节元数据保存标题与真实timeline事件ID，不手写或猜测秒数；以chapter-binding绑定brief/timeline哈希，chapter-index导入实际SHOTS/CHAPTER_EVENTS并调用buildChapterIndex验证当前binding。",
+        "存在MP4时生成章节播放器并通过video.currentTime seek到绑定章首；MP4未就绪时也生成普通工作台可发现的场景播放器，点击章节必须调用当前场景render(t)到达绑定秒数，不能显示坏媒体控件。",
+        "清楚区分MP4绘制章节条、平台时间索引和可点击播放器；成片像素与只生成JSON不能冒称可点击。",
+        "保持原版111文件runtime闭包不变；索引/播放器与brief或timeline哈希不一致时拒绝旧数据。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-typeface-original-brief-from-new-script",
+      "type": "behavior",
+      "prompt": "把《AI发展史》原稿字幕的第 1—5 条做成一段片头动画，面向平时用 AI 的普通人。保留原句和顺序。先给一份能交给制作的方向与 brief。",
+      "input_files": [
+        "works/video/AI发展史/原稿字幕.srt"
+      ],
+      "expected_behavior": [
+        "普通新片请求主动从相邻字幕的具体关系和观众既有理解出发。区分已陈述的历史事实、前后落差和请观众继续思考的提问。保持字幕原句与次序，给画面中的解释或题眼单独定职责。",
+        "对决定读法的上屏原句，实际查字体与用法、核对本句字符覆盖、许可及真实字重。与构图和时窗一同试排。同族变奏也是候选，定案要落到可辨的字形、字级、断行、位置或显现次序。题材词只作检索线索。",
+        "唯一 brief 保留原八块及同一文字登记表。正式字体有可追溯文件、字重与角色或 ID 绑定。文本与相邻画面、动作时点和有效阅读窗可按设计制作。设计阶段如实记录样片和人类观看证据的当前状态。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [
+        "已有原稿字幕第 1—5 条；以该 SRT 作为本案输入，既有影片和绘制代码仅供评审后核查"
+      ],
+      "fixture_status": "present_in_local_worktree",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-typeface-real-operation-feedback",
+      "type": "behavior",
+      "prompt": "给第一次接手这个仓库的人做一段短动画，让他从项目根运行一次仓库结构检查，并认得什么结果表示跑通。请先在当前工作区核对实际操作和反馈，再交一份能制作的 brief。",
+      "input_files": [
+        "docs/maintenance.md",
+        "tools/check_project.py"
+      ],
+      "expected_behavior": [
+        "据项目维护文档和真实命令结果安排画面。呈现工作目录、命令及其实际反馈，遵守终端输入、结果出现与任何说明的真实先后。",
+        "同类步骤标签和帮助扫读的信息采用稳定层级。操作、状态更替或易漏结果处安排符合需要的字重、位置或显现差异。真实终端文字和可编辑叠字各有来源与消费者。",
+        "确实需要另选字体的叠字先查真实文件、覆盖和字重，再按文字 ID 或共同角色写入唯一 brief。设计阶段记录实际操作证据和接下来的实渲检查。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [
+        "仓库真实结构检查操作及当次实测输出"
+      ],
+      "fixture_status": "present_in_local_worktree",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-typeface-display-title-and-diegetic-ui",
+      "type": "behavior",
+      "prompt": "给《权限不足》第一集的车库段做一版悬疑片头方向。片名《权限不足》需要第一眼就能认出来，也要跟车库和人物的感觉连在一起。保留原稿屏幕上的三栏字和它们的状态。先交 brief 和可看的方向关键帧。",
+      "input_files": [
+        "works/script/权限不足/script.md"
+      ],
+      "expected_behavior": [
+        "从第一场现有材料定位标题与紧接其后的三栏文字职责。片名是主要视觉，三栏需要可靠比较。片头可以发展原稿车库、屏幕、车灯与人物的关系，并保留三栏的原字、顺序和真实状态。",
+        "以“权限不足”实查库里的书写和展示候选，并与阅读字或适用的真实字形工艺试排。筛选时写出轮廓、笔画、字腔或材质怎样关联车库与人物，不按标题情绪词直接选字体。有字形与剧情冲突的候选可舍弃；拉丁展示文件的汉字回退不计作换字体。",
+        "若需要字像物件刻入、镂空、发光或随事件显现，调用有真实来源和当前可用实现的字形或遮罩方法。方向关键帧用完整片名、实际背景和本地字体或手工字形资产产生。对照至少指出一处肉眼可见差异，核对标题可读及三栏保持稳定。消费用现有 Brief 绑定或对应轮廓资产接口。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [
+        "源脚本 E01-S01，按现成原稿考察艺术标题与三栏信息是否能各司其职"
+      ],
+      "fixture_status": "present_in_local_worktree",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-multimodal-audio-emotion-autonomy",
+      "type": "behavior",
+      "prompt": "做一条20秒的动态图形短片，表现“从喧嚣数据流回归清醒判断”的情绪转折，不配人声，只需要画面和能把情绪托到位的音乐与关键转折音效。你按最合适的声音路线来配。",
+      "input_files": [],
+      "expected_behavior": [
+        "先核实当前执行环境是否具备真实音频听审与情绪识别能力，再决定声音路线；不凭文件名、波形或文本描述冒充已听审",
+        "若当前执行者具备真实音频听审能力（且本请求未锁定曲目、未禁止原创）：可将本地音乐库与音效库当作参考与可选素材池，实听比较后以“情绪辅助到位”为核心自由选用合适成品，或在现有成品不贴合情绪/相位时参考曲库质感自行原创本地合成（synth/tone/layer 或成品与自创混搭），并对生成的实际音频及带声成片回听迭代",
+        "若当前执行者不具备真实音频听审能力：维持成品优先与外部有许可检索，不因缺少贴合素材静默盲写程序合成；未听审候选标明技术预览，原创生成仍须另获用户明确授权",
+        "所有声音事件与画面共用 timeline.js 唯一事件时钟与唯一最终混音链；交付时分开报告模型多模态实听范围/结果与最终人类接收质量（未获人类试听时 QUALITY 保持 UNKNOWN）"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-long-voiced-listening",
+      "type": "behavior",
+      "prompt": "为八分钟的讲解动画规划声音。前面要引起好奇，中间说话密，最后才揭晓。纸张展开要真切，结尾几何图形按层级上升；请把配乐和动作声交给混音。",
+      "input_files": [],
+      "expected_behavior": [
+        "按内容与共享事件写 3–5 段 audio-arc，至少在转折处比较留白与铺底，用情绪变化解释换织体、保尾或换曲的决定。",
+        "运行 audio-map，核对并实听真录纸声；在可实听、未锁定、免费本地条件下比较成品与逐层定制音。",
+        "单轨、遮蔽窗口、带画同步点、首中尾分别回听并报告实际区间，选用 EQ 与总混目标时复测完整输出。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
+    },
+    {
+      "id": "motion-inaudible-locked-delivery",
+      "type": "behavior",
+      "prompt": "当前执行端只能分析文本与表计。用户已指定开场录音须按原样播放，请找一段供后半章试听的音乐，注明现在能交付到哪一步。",
+      "input_files": [],
+      "expected_behavior": [
+        "保护锁定轨，只用目录定位候选并核对来源许可，不把源标签或表计当成实听。",
+        "没有可用候选时继续合法外部检索或留白；没有原创授权不自动合成。未回听的交付标明技术预览。"
+      ],
+      "execution_class": "direct",
+      "fixture_requirements": [],
+      "fixture_status": "self_contained_prompt",
+      "evidence_scope": "production"
     }
   ]
 }

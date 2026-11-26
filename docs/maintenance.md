@@ -19,7 +19,17 @@ python3 tools/check_project.py --test
 
 正式 Skill 名称以 `laohu` 开始，按连字符分段计层级，最多三级：`laohu` 为一级，`laohu-script` 为二级，`laohu-script-chekhov` 为三级。四段或更多的正式 Skill 名称无效。`parent` 指最近存在的名称前缀。正式内部子级的 `name` 必须以前缀形式承接所属宿主名，并恰好多一个分段；在二级宿主下，它因此处于三级。名称与目录必须一致。
 
-实际部署由 `deployment` 区分：直接部署在 `.agents/skills/<name>/SKILL.md` 的公开入口可以处于一级、二级或三级，均接受入口检查、安装发现和菜单覆盖；嵌套于宿主目录 `skills/<child-name>/SKILL.md` 的内部配置不作为独立公开入口。名称层级与部署身份不能互相推导。每个正式内部配置目录只允许一个 `SKILL.md`，不含自己的 `references/`、Codex 界面配置或评测文件；正式文件有自己的 `name`、`description` frontmatter，名称与其目录一致。
+实际部署由 `deployment` 区分：直接部署在 `.agents/skills/<name>/SKILL.md` 的公开入口可以处于一级、二级或三级，均接受入口检查、安装发现和菜单覆盖；嵌套于宿主目录 `skills/<child-name>/SKILL.md` 的内部配置不作为独立公开入口。名称层级与部署身份不能互相推导。每个正式内部配置的部署文件只允许一个 `SKILL.md`，不含自己的 `references/`、Codex 界面配置或评测文件；正式文件有自己的 `name`、`description` frontmatter，名称与其目录一致。
+
+**内部子级配置契约与宿主知识塔：** 嵌套内部子级分两类——**选择型专项**（仅在用户明确意图选定该范围/风格/用途时触发，未选时宿主须沿通用路径独立完成）与**父级方法模块**（由宿主在主文中定义明确的任务信号、输入、局部操作与返回主线，按需调用并整合）。宿主须在主文维护内部子级清单，写清名称、准确路径、配置类型、触发条件、作用范围与返回消费者；子级不另开完整流程，不递归互调，不争夺宿主全局属性。与内部配置无关的专业方法材料放宿主 `references/`。
+
+**Markdown 链接与 Agent 路径表达式：** 仓库内 **Markdown 相对链接**必须以包含该链接的文件为基准计算相对路径（不得含 `{SKILL_DIR}`、`{PROJECT_ROOT}` 等未展开占位符，也不得写本机绝对路径或 `file:` URI）。**Agent 路径表达式**（如 `{SKILL_DIR}/references/...`、`{PROJECT_ROOT}/docs/...`）仅用于在行内代码或指令文本中指引 Agent 解析真实目录，其中 `{SKILL_DIR}` 解析符号链接后的真实目录，直接公开入口的 `{PROJECT_ROOT}` 为 `{SKILL_DIR}/../../..`；嵌套内部子级不重新推导仓库根，沿用父级上下文。
+
+**单向依赖与三层架构红线：** 顶层 Layer 0（[runtime.md](runtime.md)）与 Layer 1（[AGENTS.md](../AGENTS.md)、本文件、`docs/governance/`）不得通过 Markdown 链接反向依赖具体 Skill 的私有内部 `references/`；全仓共用的元治理、评估与框架规则统一维护在 `docs/governance/`。
+
+**过程文件与本地缓存目录约定：** 本仓库统一使用 `.cache/restore/` 保存修改前恢复副本与来源快照，`.cache/validation/` 保存试跑及盲测验收产物，`.cache/tmp/` 保存可重建的临时文件与测试夹具（受 `.gitignore` 保护）。委派任务时显式传递项目内缓存路径，不默认写入盘根、宿主通用缓存或系统临时目录；仍具恢复用途的唯一恢复副本不随可重建临时文件一并清理。项目外调用时遵循当前业务项目的缓存布局，不回写技能安装仓库。
+
+各 Skill 可在其入口旁保存本机私有的 `benchmark/` 研究库。公共能力定义检查跳过该库及 Motion 的本地 OpenMotion 官方资料包，分别用研究库核验和资料包成员、哈希与离线读取验收。内部配置其余部署文件仍受原有限制。
 
 **公开目录展示顺序：** `docs/skill-display-order.json` 沿用网站导航的 `items`、`children` 树形字段，只列公开目录正式入口；`/laohu` 固定为根，二级入口按其 `children` 次序展示，三级入口放在所属父入口之下。它只控制浏览顺序，不代表执行步骤、推荐优先级或安装操作顺序；资产等宿主目录里的内部子 Skill 不加入公开目录。发现器仍扫描真实的直接部署 Skill，并继续应用私有标记、预留目录和草案的原有过滤规则。已在文件中登记的入口按树顺序排列；尚未登记的新二级入口仍会被发现并稳定追加到末尾，其后代跟在父入口下，不会因清单未更新而消失或变成无效入口。发布维护时把新正式入口追加到顺序文件末尾，并同步五份 README；不能因一次新发布把新入口插到已有入口前面。预留、私有、草案和宿主内部配置不得登记进展示树。
 
@@ -56,10 +66,10 @@ GitHub Actions 在后续 push / pull request 时执行同一离线命令；不�
 
 ## 准备一次新版本
 
-先完成修改和相关行为验收；`tools/check_project.py --test` 通过后，准备一个同盘说明文件，例如 `tmp/release-notes.md`，写实际变化、已知兼容性和迁移步骤，不包含标题行、私密素材或密钥。
+先完成修改和相关行为验收；`tools/check_project.py --test` 通过后，准备一个同盘说明文件，例如 `.cache/tmp/release-notes.md`，写实际变化、已知兼容性和迁移步骤，不包含标题行、私密素材或密钥。
 
 ```bash
-python3 tools/release.py prepare 0.1.1 --notice "修复具体问题，让使用者得到明确改善" --notes-file tmp/release-notes.md
+python3 tools/release.py prepare 0.1.1 --notice "修复具体问题，让使用者得到明确改善" --notes-file .cache/tmp/release-notes.md
 ```
 
 默认只预览；核对版本与内容后，同一命令加 `--write` 同步四个版本文件。工具拒绝降版和重复版本；写前检查，写后复检，普通写入失败尝试恢复本轮自己的文件。多文件写入无法保证断电原子性：进程中断后重新检查，不直接发布残留状态。它不会提交、推送、打标签或发 Release。
@@ -78,12 +88,12 @@ python3 tools/release.py prepare 0.1.1 --notice "修复具体问题，让使用�
 
 首次安装通过 `git clone https://github.com/LaohuAD/laohu-creative-skills.git` 获取完整项目，更新由 `/laohu-update` 获取远端提交、比较后合并。知识库、规则、工具与 Skill 一起进入比较范围，不用仅分发 Skill 的安装命令代替项目更新。
 
-已有本地自进化时，先比较本地与官方变化并在隔离副本形成候选。有文件或规则冲突，给出具体差异、合并建议及影响，再询问用户；拒绝则不改当前分支、暂存区和工作文件。暂存、未暂存、未跟踪及被忽略资产均须保护。操作细节以 [更新操作](../.agents/skills/laohu-update/references/git-update.md) 为准。
+已有本地自进化时，先比较本地与官方变化并在隔离副本形成候选。有文件或规则冲突，给出具体差异、合并建议及影响，再询问用户；拒绝则不改当前分支、暂存区和工作文件。暂存、未暂存、未跟踪及被忽略资产均须保护。操作细节以 `{PROJECT_ROOT}/.agents/skills/laohu-update/references/git-update.md` 为准。
 
 版本公告只提示新版，不证明用户文件与官方相同。相同版本也可能有不同提交或个人修改；只有目标提交已合入、项目检查通过且个人修改按方案保留，才报告更新完成。保留原有版本号不抹除本地自进化，不为个人修改伪造官方版本号。维护者发布准备和使用者更新是两种操作，宿主重新加载方式另按宿主实际支持处理。
 
 ## 安装与跨项目运行维护
 
-安装机制与操作命令的唯一说明在 [入口安装](../.agents/skills/laohu-update/references/installation.md)。`tools/install.py` 管理全局链接，`.laohu-install.json` 是被忽略的本地记录，不是发布资产。运行共同规则维护在 [能力运行约定](runtime.md)，正式 Skill 必须在开始时读取；仓库自身的维护要求仍由 `AGENTS.md` 承接。
+安装机制与操作命令的唯一说明在 `{PROJECT_ROOT}/.agents/skills/laohu-update/references/installation.md`。`tools/install.py` 管理全局链接，`.laohu-install.json` 是被忽略的本地记录，不是发布资产。运行共同规则维护在 [能力运行约定](runtime.md)，正式 Skill 必须在开始时读取；仓库自身的维护要求仍由 `AGENTS.md` 承接。
 
 修改安装工具时，用同盘隔离 Git 仓库与宿主目录验证预览、幂等安装、同名冲突、同步增删和缺失链接、卸载保留、失败撤回。修改归档时验证项目内默认路径、外部未确认拒绝、用户精确路径和同作品复用；不能以文件系统链接存在证明宿主菜单已经刷新。不要把真实用户目录作为失败测试夹具。新宿主与平台只有实际验证后才报告支持效果。

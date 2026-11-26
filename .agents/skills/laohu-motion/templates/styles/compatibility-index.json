@@ -1,0 +1,59 @@
+{
+  "format": "laohu.motion.style-library/1",
+  "source": {
+    "repository": "https://github.com/wqb578/code-animation-341-styles",
+    "commit": "01576924a2b316d1f11ae33f75d3c005e8781451",
+    "sourceAttribution": "来源：来自俯仰观照博主的动画画风整理",
+    "license": "Custom Non-Commercial License; see local license text. L/V/X series retain separate MIT licenses.",
+    "sourceIndexSha256": "5649497294ff60d0ae1a33780ab59ea7e3bad1f5f777b566ecc23c37aaccdd27"
+  },
+  "coverage": {
+    "styleCount": 0,
+    "previewCount": 0,
+    "callableCanvasFunctions": 0,
+    "completePromptRoutes": 0,
+    "nonCallableCodePrompts": 0,
+    "sourcePlaceholders": 0,
+    "categories": {}
+  },
+  "sharedSources": [],
+  "licenses": [
+    {
+      "sourcePath": "LICENSE",
+      "localPath": "licenses/LICENSE",
+      "sha256": "0dcbde7762a94f57968bd41b9b9ca331609ae517748536bb68e278433439a07a"
+    },
+    {
+      "sourcePath": "NOTICE.md",
+      "localPath": "licenses/NOTICE.md",
+      "sha256": "0f7d0180340e54639a3c43323a2fb333af1036fdaebbe6d4ad50745a45ad9c5e"
+    },
+    {
+      "sourcePath": "第三方许可/Lemo-Opuscar_LICENSE.txt",
+      "localPath": "licenses/第三方许可/Lemo-Opuscar_LICENSE.txt",
+      "sha256": "14c9ff6f14bfb2391e74fedb01c256891d2a3bba1c2acf5789901bdf77e54e33"
+    },
+    {
+      "sourcePath": "第三方许可/mg-styles-15_LICENSE.txt",
+      "localPath": "licenses/第三方许可/mg-styles-15_LICENSE.txt",
+      "sha256": "7f03fee9299a401615e13e2c636ead0394f47395da4f816ae60b35ed2d91a932"
+    },
+    {
+      "sourcePath": "第三方许可/code-video_LICENSE.txt",
+      "localPath": "licenses/第三方许可/code-video_LICENSE.txt",
+      "sha256": "9bc61cd5e5b1a64bc9c036d5a944fcf5cfb433104fd4cd507896b6d09ea34c92"
+    },
+    {
+      "sourcePath": "许可与来源.md",
+      "sha256": "0e17d5ef76a1a74f0ff48ffef2c144b5c7a4404af4af6d53603b17b8bca28248",
+      "localPath": "licenses/许可与来源.md"
+    }
+  ],
+  "contentPolicy": {
+    "canonicalCopy": "entries/<ID>.md",
+    "promptBodiesStoredInIndex": false,
+    "searchIsLexicalOnly": true,
+    "resourceSummaries": "Resource summaries use explicitly labeled metadata and bounded verbatim excerpts selected by source phrase/section cues. They do not infer aesthetics; empty facets do not establish absence."
+  },
+  "entries": []
+}

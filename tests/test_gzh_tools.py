@@ -18,7 +18,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT_DIR = ROOT / ".agents/skills/laohu-htmlshow-gzh/scripts"
+SCRIPT_DIR = ROOT / ".agents/skills/laohu-htmlshow/gzh/scripts"
 sys.dont_write_bytecode = True
 
 
@@ -179,7 +179,7 @@ class GzhToolsTests(unittest.TestCase):
         ticket = (refs / "theme-moyu-ticket.md").read_text(encoding="utf-8")
         for theme in (olive, ticket):
             link_targets = re.findall(r"\]\(([^)]+)\)", theme)
-            self.assertIn("../SKILL.md#正文片段静态规则", link_targets)
+            self.assertIn("../../skills/laohu-htmlshow-gzh/SKILL.md#正文片段静态规则", link_targets)
 
         def component_section(document, heading):
             start = document.index(heading)

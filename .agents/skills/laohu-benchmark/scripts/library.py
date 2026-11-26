@@ -31,6 +31,8 @@ SOURCE_ID = re.compile(r"^SRC-[A-F0-9]{16}$")
 ATOM_ID = re.compile(r"^ATM-[A-F0-9]{16}$")
 USAGE_ID = re.compile(r"^USG-[A-F0-9]{16}$")
 CATEGORY = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$")
+SOURCE_LINKS = ".source-links"
+ATOM_LINKS = ".atom-links"
 RESERVED_CATEGORY_NAMES = {"sources"}
 CONSUMER = re.compile(r"^[a-z][a-z0-9-]*(?:/[a-z0-9][a-z0-9-]*)?$")
 SOURCE_STATES = {"candidate", "identity-checked", "unit-located", "context-readable", "limited"}
@@ -73,6 +75,16 @@ def _absolute_root(root: str | os.PathLike[str]) -> Path:
         raise LibraryError("library root must be an absolute path without parent traversal")
     _reject_symlink_components(path, allow_missing=True)
     return path
+
+
+def library_root_for_skill(skill_file: str | os.PathLike[str]) -> Path:
+    path = Path(skill_file).expanduser()
+    if not path.is_absolute() or ".." in path.parts or path.name != "SKILL.md":
+        raise LibraryError("--skill-file requires the exact absolute path to a receiving SKILL.md")
+    actual = path.resolve(strict=True)
+    if actual.name != "SKILL.md" or not actual.is_file():
+        raise LibraryError("--skill-file must resolve to an existing SKILL.md")
+    return _absolute_root(actual.parent / "benchmark")
 
 
 def _reject_symlink_components(path: Path, *, allow_missing: bool) -> None:
@@ -354,6 +366,62 @@ def source_path(root: Path, source_id: str) -> Path:
     return _contained(root, f"sources/{source_id}.json")
 
 
+def _library_collection(root: Path) -> Path:
+    """Find the common root used to store portable links between verified libraries."""
+    for parent in root.parents:
+        if parent.parts[-2:] == (".agents", "skills"):
+            return parent.parent.parent
+    skill_dir = root.parent
+    if root.name == "benchmark" and (skill_dir / "SKILL.md").is_file():
+        while skill_dir.parent.name == "skills" and (skill_dir.parent.parent / "SKILL.md").is_file():
+            skill_dir = skill_dir.parent.parent
+        return skill_dir.parent
+    return root.parent
+
+
+def _link_owner(root: Path, relative: Any) -> Path:
+    if not isinstance(relative, str) or not relative:
+        raise LibraryError("a record link needs a collection-relative owner_library")
+    collection = _library_collection(root)
+    owner = _contained(collection, relative)
+    if (relative != owner.relative_to(collection).as_posix() or owner == root
+            or owner.name != "benchmark" or _library_collection(owner) != collection
+            or (owner != collection / "benchmark" and not (owner.parent / "SKILL.md").is_file())):
+        raise LibraryError(f"record link owner is not another benchmark library in this collection: {relative}")
+    if _pending_entries(owner):
+        raise LibraryError(f"record owner has a pending transaction: {owner}")
+    return owner
+
+
+def _source_link_target(root: Path, link: dict[str, Any], source_id: str) -> Path:
+    if (set(link) != {"schema_version", "source_id", "owner_library"}
+            or type(link.get("schema_version")) is not int or link["schema_version"] != FORMAT_VERSION
+            or link["source_id"] != source_id):
+        raise LibraryError(f"invalid source link for {source_id}")
+    owner = _link_owner(root, link["owner_library"])
+    target = source_path(owner, source_id)
+    if not target.is_file():
+        raise LibraryError(f"linked canonical source is missing: {target}")
+    return target
+
+
+def _resolved_source_path(root: Path, source_id: str) -> Path:
+    local = source_path(root, source_id)
+    link_path = _contained(root, f"{SOURCE_LINKS}/{source_id}.json")
+    if not link_path.exists():
+        return local
+    if local.exists():
+        raise LibraryError(f"source is both canonical and linked in this library: {source_id}")
+    return _source_link_target(root, _load_json(link_path), source_id)
+
+
+def _read_source_record(path: Path, source_id: str) -> dict[str, Any]:
+    source = _validate_source(_load_json(path))
+    if source["source_id"] != source_id:
+        raise LibraryError(f"source filename does not match ID: {path}")
+    return source
+
+
 def atom_path(root: Path, category: str, atom_id: str) -> Path:
     if not _valid_category(category) \
             or not isinstance(atom_id, str) or not ATOM_ID.fullmatch(atom_id):
@@ -361,12 +429,33 @@ def atom_path(root: Path, category: str, atom_id: str) -> Path:
     return _contained(root, f"{category}/atoms/{atom_id}.json")
 
 
+def _atom_link_target(root: Path, link: dict[str, Any], atom_id: str) -> Path:
+    if (set(link) != {"schema_version", "atom_id", "owner_library", "category"}
+            or type(link.get("schema_version")) is not int or link["schema_version"] != FORMAT_VERSION
+            or link["atom_id"] != atom_id):
+        raise LibraryError(f"invalid atom link for {atom_id}")
+    owner = _link_owner(root, link["owner_library"])
+    target = atom_path(owner, link["category"], atom_id)
+    if not target.is_file():
+        raise LibraryError(f"linked canonical atom is missing: {target}")
+    return target
+
+
+def _read_atom_record(path: Path, atom_id: str) -> dict[str, Any]:
+    record = _validate_atom(_load_json(path))
+    if record["atom_id"] != atom_id or record["category"] != path.parent.parent.name:
+        raise LibraryError(f"atom filename/category does not match record: {path}")
+    return record
+
+
 def _record_files(root: Path, folder: str, pattern: str) -> list[Path]:
     directory = root / folder
+    if directory.is_symlink():
+        raise LibraryError(f"record directory is linked: {directory}")
     if not directory.exists():
         return []
-    if directory.is_symlink() or not directory.is_dir():
-        raise LibraryError(f"record directory is linked or not a directory: {directory}")
+    if not directory.is_dir():
+        raise LibraryError(f"record directory is not a directory: {directory}")
     result = []
     for path in sorted(directory.glob(pattern)):
         if path.is_symlink() or not path.is_file():
@@ -377,13 +466,10 @@ def _record_files(root: Path, folder: str, pattern: str) -> list[Path]:
 
 def _all_sources(root: Path) -> dict[str, dict[str, Any]]:
     records: dict[str, dict[str, Any]] = {}
-    for path in _record_files(root, "sources", "SRC-*.json"):
-        record = _validate_source(_load_json(path))
-        if path.name != record["source_id"] + ".json":
-            raise LibraryError(f"source filename does not match ID: {path}")
-        if record["source_id"] in records:
-            raise LibraryError(f"duplicate source ID: {record['source_id']}")
-        records[record["source_id"]] = record
+    for folder in ("sources", SOURCE_LINKS):
+        for path in _record_files(root, folder, "SRC-*.json"):
+            source_id = path.stem
+            records[source_id] = _read_source_record(_resolved_source_path(root, source_id), source_id)
     return records
 
 
@@ -392,7 +478,7 @@ def _all_atoms(root: Path) -> dict[str, dict[str, Any]]:
     if not root.exists():
         return records
     for category_dir in sorted(root.iterdir()):
-        if category_dir.name in {"sources", TRANSACTIONS_DIR, "__pycache__"} or category_dir.name.startswith("."):
+        if category_dir.name in {"sources", "__pycache__"} or category_dir.name.startswith("."):
             continue
         if category_dir.is_symlink():
             raise LibraryError(f"refusing symbolic category path: {category_dir}")
@@ -406,12 +492,16 @@ def _all_atoms(root: Path) -> dict[str, dict[str, Any]]:
         for path in sorted(atom_dir.glob("ATM-*.json")):
             if path.is_symlink() or not path.is_file():
                 raise LibraryError(f"refusing non-file or symbolic link: {path}")
-            record = _validate_atom(_load_json(path))
-            if path.name != record["atom_id"] + ".json" or category_dir.name != record["category"]:
-                raise LibraryError(f"atom filename/category does not match record: {path}")
+            record = _read_atom_record(path, path.stem)
             if record["atom_id"] in records:
                 raise LibraryError(f"duplicate atom ID: {record['atom_id']}")
             records[record["atom_id"]] = record
+    for path in _record_files(root, ATOM_LINKS, "ATM-*.json"):
+        atom_id = path.stem
+        if atom_id in records:
+            raise LibraryError(f"atom is both canonical and linked in this library: {atom_id}")
+        target = _atom_link_target(root, _load_json(path), atom_id)
+        records[atom_id] = _read_atom_record(target, atom_id)
     return records
 
 
@@ -455,7 +545,7 @@ def _read_journal(path: Path, root: Path) -> dict[str, Any]:
             raise LibraryError(f"unsafe transaction journal path: {path} item {index}: {error}") from error
         normalized_target = Path(target).as_posix()
         target_parts = Path(target).parts
-        source_target = (len(target_parts) == 2 and target_parts[0] == "sources"
+        source_target = (len(target_parts) == 2 and target_parts[0] in {"sources", SOURCE_LINKS}
                          and target_parts[1].endswith(".json")
                          and SOURCE_ID.fullmatch(target_parts[1][:-5]) is not None)
         atom_target = (len(target_parts) == 3 and _valid_category(target_parts[0])
@@ -521,9 +611,8 @@ def _recover_unlocked(root: Path) -> list[str]:
 
 class LibraryLock:
     """Cross-platform lock via exclusive mkdir; no system temp files or fcntl."""
-    def __init__(self, root: Path, wait_seconds: float = 10.0):
-        self.root = root
-        self.path = root / LOCK_NAME
+    def __init__(self, root: Path, wait_seconds: float = 10.0, *, lock_name: str = LOCK_NAME):
+        self.path = root / lock_name
         self.token = uuid.uuid4().hex
         self.wait_seconds = wait_seconds
 
@@ -554,7 +643,7 @@ class LibraryLock:
                     except OSError:
                         pass
                 if stale:
-                    quarantine = self.root / (LOCK_NAME + ".stale-" + uuid.uuid4().hex)
+                    quarantine = self.path.with_name(self.path.name + ".stale-" + uuid.uuid4().hex)
                     try:
                         self.path.rename(quarantine)
                         shutil.rmtree(quarantine)
@@ -650,6 +739,7 @@ def _write_category_index(root: Path, category: str,
     category_sources = {source_id: sources[source_id] for source_id in source_ids}
     data_digest = _index_digest(category_sources, category_atoms)
     category_dir = _contained(root, category)
+    _safe_mkdir(category_dir, root)
     if category_dir.is_symlink() or not category_dir.is_dir():
         raise LibraryError(f"category path is linked or not a directory: {category_dir}")
     temp = _contained(root, f"{category}/.{INDEX_NAME}.{uuid.uuid4().hex}.tmp")
@@ -847,7 +937,7 @@ def _catalog_cards(sources: dict[str, dict[str, Any]],
 def _catalog_inventory(root: Path) -> dict[str, tuple[str, int, int, int, int]]:
     inventory: dict[str, tuple[str, int, int, int, int]] = {}
 
-    def add(path: Path, kind: str) -> None:
+    def add(path: Path, kind: str, inventory_key: str | None = None) -> None:
         if path.is_symlink():
             raise LibraryError(f"canonical record is linked: {path}")
         try:
@@ -856,16 +946,21 @@ def _catalog_inventory(root: Path) -> dict[str, tuple[str, int, int, int, int]]:
             raise LibraryError(f"cannot inspect canonical record {path}: {error}") from error
         if not os.path.isfile(path) or not stat.S_ISREG(info.st_mode):
             raise LibraryError(f"canonical record is not a regular file: {path}")
-        inventory[path.relative_to(root).as_posix()] = (kind, info.st_size, info.st_mtime_ns, info.st_dev, info.st_ino)
+        key = inventory_key or path.relative_to(root).as_posix()
+        inventory[key] = (kind, info.st_size, info.st_mtime_ns, info.st_dev, info.st_ino)
 
-    source_dir = root / "sources"
-    if source_dir.exists():
-        if source_dir.is_symlink() or not source_dir.is_dir():
-            raise LibraryError("source record directory is linked or not a directory")
-        for path in sorted(source_dir.glob("SRC-*.json")):
-            add(path, "source")
+    for path in _record_files(root, "sources", "SRC-*.json"):
+        add(path, "source")
+    for path in _record_files(root, SOURCE_LINKS, "SRC-*.json"):
+        add(path, "source-link")
+        target = _resolved_source_path(root, path.stem)
+        add(target, "linked-source", f"{SOURCE_LINKS}/{path.name}/canonical")
+    for path in _record_files(root, ATOM_LINKS, "ATM-*.json"):
+        add(path, "atom-link")
+        target = _resolved_atom_path(root, path.stem, None)
+        add(target, "linked-atom", f"{ATOM_LINKS}/{path.name}/canonical")
     for category_dir in sorted(root.iterdir()):
-        if category_dir.name in {"sources", TRANSACTIONS_DIR, "__pycache__"} or category_dir.name.startswith("."):
+        if category_dir.name in {"sources", "__pycache__"} or category_dir.name.startswith("."):
             continue
         if category_dir.is_symlink():
             raise LibraryError(f"refusing symbolic category path: {category_dir}")
@@ -1177,6 +1272,49 @@ def _rebuild_index_unlocked(root: Path) -> dict[str, Any]:
             "categories": categories, "indexes": indexes, "catalog": catalog}
 
 
+def _prepare_source_links(root: Path, items: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    collection = _library_collection(root)
+    links = {}
+    for item in items:
+        if (set(item) != {"source_id", "owner_root"} or not isinstance(item["owner_root"], str)
+                or not isinstance(item["source_id"], str) or not SOURCE_ID.fullmatch(item["source_id"])):
+            raise LibraryError("each source_links item needs source_id and an absolute owner_root")
+        source_id = item["source_id"]
+        owner = _absolute_root(item["owner_root"])
+        if not owner.is_relative_to(collection):
+            raise LibraryError(f"source owner is outside the benchmark collection: {owner}")
+        link = {"schema_version": FORMAT_VERSION, "source_id": source_id,
+                "owner_library": owner.relative_to(collection).as_posix()}
+        _read_source_record(_source_link_target(root, link, source_id), source_id)
+        if source_id in links and links[source_id] != link:
+            raise LibraryError(f"source has multiple owners in this batch: {source_id}")
+        links[source_id] = link
+    return links
+
+
+def _ensure_unique_source_owners(root: Path, source_ids: Iterable[str], locks: contextlib.ExitStack) -> None:
+    ids = tuple(source_ids)
+    collection = _library_collection(root)
+    skills = collection / ".agents/skills"
+    if not ids or not skills.is_dir():
+        return
+    _reject_symlink_components(skills, allow_missing=False)
+    cache = _contained(collection, ".cache")
+    cache.mkdir(exist_ok=True)
+    locks.enter_context(LibraryLock(cache, lock_name=".benchmark-source-owner.lock"))
+    owners = [collection / "benchmark"]
+    for pattern in ("*/SKILL.md", "*/skills/*/SKILL.md"):
+        owners.extend(skill.parent / "benchmark" for skill in skills.glob(pattern)
+                      if not skill.is_symlink() and not skill.parent.is_symlink() and skill.is_file())
+    for owner in owners:
+        if owner == root:
+            continue
+        for source_id in ids:
+            path = source_path(_absolute_root(owner), source_id)
+            if path.exists():
+                raise LibraryError(f"source {source_id} is already owned by {owner}; refer to it through source_links")
+
+
 def put_bundle(library_root: str | os.PathLike[str], bundle: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(bundle, dict):
         raise LibraryError("put input must be a JSON object")
@@ -1195,10 +1333,17 @@ def put_bundle(library_root: str | os.PathLike[str], bundle: dict[str, Any]) -> 
         atoms_in = bundle["atoms"]
     else:
         atoms_in = []
-    if not isinstance(sources_in, list) or not sources_in or any(not isinstance(x, dict) for x in sources_in):
+    if (not isinstance(sources_in, list) or ("source" not in bundle and "sources" in bundle and not sources_in)
+            or any(not isinstance(x, dict) for x in sources_in)):
         raise LibraryError("put input must contain a source object or a nonempty sources array")
     if not isinstance(atoms_in, list) or any(not isinstance(x, dict) for x in atoms_in):
         raise LibraryError("atom must be an object; atoms must be an array of objects when provided")
+    links_in = bundle.get("source_links", [])
+    if not isinstance(links_in, list) or any(not isinstance(item, dict) for item in links_in):
+        raise LibraryError("source_links must be an array of objects")
+    if not sources_in and not links_in:
+        raise LibraryError("put input must contain a source object, nonempty sources array or source_links")
+    links = _prepare_source_links(root, links_in)
     sources = [_validate_source(item, add_id=True) for item in sources_in]
     for source in sources:
         _validate_new_unit_extensions(source)
@@ -1212,19 +1357,26 @@ def put_bundle(library_root: str | os.PathLike[str], bundle: dict[str, Any]) -> 
             unique_sources[source["source_id"]] = source
         sources = list(unique_sources.values())
         sources_by_id = unique_sources
-    default_source = sources[0]["source_id"] if len(sources) == 1 else None
+    if sources_by_id.keys() & links.keys():
+        raise LibraryError("a source cannot be both canonical and linked in the same batch")
+    incoming_source_ids = [*sources_by_id, *links]
+    default_source = incoming_source_ids[0] if len(incoming_source_ids) == 1 else None
     atoms = [_validate_atom(item, add_id=True, default_source=default_source) for item in atoms_in]
     for atom in atoms:
-        if atom["source_id"] not in sources_by_id and not source_path(root, atom["source_id"]).is_file():
+        if atom["source_id"] not in incoming_source_ids and not _resolved_source_path(root, atom["source_id"]).is_file():
             raise LibraryError(f"atom references a source absent from this batch and library: {atom['source_id']}")
     if len({item["atom_id"] for item in atoms}) != len(atoms):
         raise LibraryError("duplicate atom IDs in batch")
-    _safe_mkdir(root, root.parent)
-    with LibraryLock(root):
+    with contextlib.ExitStack() as locks:
+        _ensure_unique_source_owners(root, sources_by_id, locks)
+        _safe_mkdir(root, root.parent)
+        locks.enter_context(LibraryLock(root))
         _recover_unlocked(root)
         existing_sources = _all_sources(root)
         existing_atoms = _all_atoms(root)
-        source_universe = {**existing_sources, **sources_by_id}
+        linked_sources = {source_id: _read_source_record(_source_link_target(root, link, source_id), source_id)
+                          for source_id, link in links.items()}
+        source_universe = {**existing_sources, **sources_by_id, **linked_sources}
         for atom in atoms:
             source = source_universe.get(atom["source_id"])
             if source is not None:
@@ -1262,6 +1414,12 @@ def put_bundle(library_root: str | os.PathLike[str], bundle: dict[str, Any]) -> 
             if record["source_id"] not in existing_sources:
                 record.setdefault("added_at", _utc_now())
                 to_write.append((f"sources/{record['source_id']}.json", record))
+        for source_id, link in links.items():
+            relative = f"{SOURCE_LINKS}/{source_id}.json"
+            if source_id not in existing_sources:
+                to_write.append((relative, link))
+            elif source_path(root, source_id).exists() or _load_json(_contained(root, relative)) != link:
+                raise LibraryError(f"source {source_id} already has a different owner in this library")
         for atom in deduped_atoms:
             atom.setdefault("created_at", _utc_now())
             to_write.append((f"{atom['category']}/atoms/{atom['atom_id']}.json", atom))
@@ -1280,7 +1438,7 @@ def put_bundle(library_root: str | os.PathLike[str], bundle: dict[str, Any]) -> 
         catalog_result = {"status": "stale-or-unavailable", "error": str(error)}
     return {
         "source_committed": True,
-        "source_ids": [source["source_id"] for source in sources],
+        "source_ids": incoming_source_ids,
         "atom_ids": [atom["atom_id"] for atom in deduped_atoms] + duplicate_ids,
         "files_written": [path.relative_to(root).as_posix() for path in written],
         "idempotent_or_deduplicated_atoms": duplicate_ids,
@@ -1290,11 +1448,20 @@ def put_bundle(library_root: str | os.PathLike[str], bundle: dict[str, Any]) -> 
     }
 
 
-def _load_atom_record(root: Path, atom_id: str, category: str | None) -> dict[str, Any]:
+def _resolved_atom_path(root: Path, atom_id: str, category: str | None) -> Path:
     if not isinstance(atom_id, str) or not ATOM_ID.fullmatch(atom_id):
         raise LibraryError("invalid atom ID")
+    link = _contained(root, f"{ATOM_LINKS}/{atom_id}.json")
     if category:
-        return _validate_atom(_load_json(atom_path(root, category, atom_id)))
+        local = atom_path(root, category, atom_id)
+        if not link.exists():
+            return local
+        if local.exists():
+            raise LibraryError(f"atom is both canonical and linked in this library: {atom_id}")
+        target = _atom_link_target(root, _load_json(link), atom_id)
+        if target.parent.parent.name != category:
+            raise LibraryError("atom not found in requested category")
+        return target
     matches = []
     if root.exists():
         for category_dir in root.iterdir():
@@ -1307,9 +1474,17 @@ def _load_atom_record(root: Path, atom_id: str, category: str | None) -> dict[st
                 if candidate.is_symlink() or not candidate.is_file():
                     raise LibraryError(f"atom path is linked or not a regular file: {candidate}")
                 matches.append(candidate)
+    if link.exists():
+        if matches:
+            raise LibraryError(f"atom is both canonical and linked in this library: {atom_id}")
+        return _atom_link_target(root, _load_json(link), atom_id)
     if len(matches) != 1:
         raise LibraryError("atom not found or ID is ambiguous; provide --category")
-    return _validate_atom(_load_json(matches[0]))
+    return matches[0]
+
+
+def _load_atom_record(root: Path, atom_id: str, category: str | None) -> dict[str, Any]:
+    return _read_atom_record(_resolved_atom_path(root, atom_id, category), atom_id)
 
 
 def _source_basis(source: dict[str, Any]) -> dict[str, Any]:
@@ -1353,7 +1528,8 @@ def _detail_revision(record_revision: str, basis_revision: str, view: str,
 def _atom_detail(record: dict[str, Any], root: Path, *, view: str,
                  consumer: str | None = None, decision: str | None = None,
                  stage: str | None = None) -> dict[str, Any]:
-    source = _validate_source(_load_json(source_path(root, record["source_id"])))
+    source_id = record["source_id"]
+    source = _read_source_record(_resolved_source_path(root, source_id), source_id)
     _validate_atom_source_link(record, source)
     record_revision = _record_revision(record)
     basis_revision = _record_revision(source)
@@ -1480,7 +1656,7 @@ def _source_unit_detail(source: dict[str, Any], unit: dict[str, Any], *, view: s
 def get_source(library_root: str | os.PathLike[str], source_id: str, *,
                unit: str | None = None, view: str | None = None) -> dict[str, Any]:
     root = _absolute_root(library_root)
-    source = _validate_source(_load_json(source_path(root, source_id)))
+    source = _read_source_record(_resolved_source_path(root, source_id), source_id)
     if unit is None:
         if view is not None:
             raise LibraryError("--view requires --unit; omit both to read the full source record")
@@ -1499,6 +1675,15 @@ def get_source(library_root: str | os.PathLike[str], source_id: str, *,
     if len(matches) != 1:
         raise LibraryError(f"source unit key is ambiguous: {unit}")
     return _source_unit_detail(source, matches[0], view=view or "material")
+
+
+def locate_source(library_root: str | os.PathLike[str], source_id: str) -> dict[str, Any]:
+    root = _absolute_root(library_root)
+    path = _resolved_source_path(root, source_id)
+    _read_source_record(path, source_id)
+    return {"source_id": source_id, "library_root": str(root),
+            "owner_root": str(path.parent.parent), "source_path": str(path),
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
 def _search_terms(query: str) -> list[str]:
@@ -1746,8 +1931,13 @@ def _read_usage(root: Path) -> tuple[list[dict[str, Any]], list[str]]:
 def log_usage(library_root: str | os.PathLike[str], record: dict[str, Any]) -> dict[str, Any]:
     root = _absolute_root(library_root)
     if not root.is_dir():
-        raise LibraryError("library root does not exist; use archive to prepare its workspace first")
-    atom = get_atom(root, record.get("atom_id", ""), record.get("category"))
+        raise LibraryError("library root does not exist; usage requires an existing method atom")
+    atom_id = record.get("atom_id", "")
+    atom_file = _resolved_atom_path(root, atom_id, record.get("category"))
+    atom = _read_atom_record(atom_file, atom_id)
+    owner = atom_file.parents[2]
+    route = {"library_root": str(owner)} if owner != root else {}
+    root = owner
     binding = next((item for item in atom["consumer_bindings"]
                     if item["consumer"] == record.get("consumer") and item["decision"] == record.get("decision")
                     and item["stage"] == record.get("stage")), None)
@@ -1787,7 +1977,7 @@ def log_usage(library_root: str | os.PathLike[str], record: dict[str, Any]) -> d
                     same_explicit_time = not provided_recorded_at or previous["recorded_at"] == usage["recorded_at"]
                     if same_content and same_explicit_time:
                         return {"status": "idempotent", "usage_id": usage["usage_id"],
-                                "path": usage_path.relative_to(root).as_posix()}
+                                "path": usage_path.relative_to(root).as_posix(), **route}
                     raise LibraryError("usage ID already belongs to different content")
         _safe_mkdir(target.parent, root)
         payload = "\n".join(existing + [json.dumps(usage, ensure_ascii=False, sort_keys=True)]) + "\n"
@@ -1797,7 +1987,7 @@ def log_usage(library_root: str | os.PathLike[str], record: dict[str, Any]) -> d
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temp, target)
-    return {"status": "logged", "usage_id": usage["usage_id"], "path": relative}
+    return {"status": "logged", "usage_id": usage["usage_id"], "path": relative, **route}
 
 
 def stats(library_root: str | os.PathLike[str]) -> dict[str, Any]:
@@ -1934,10 +2124,12 @@ def _load_bundle(path: str) -> dict[str, Any]:
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--library-root", required=True, help="Exact path returned by laohu-archive; never inferred from the installed Skill")
+    selector = parser.add_mutually_exclusive_group(required=True)
+    selector.add_argument("--skill-file", help="Absolute path to the receiving Skill's SKILL.md; uses its sibling benchmark/")
+    selector.add_argument("--library-root", help="Exact absolute path to an existing or explicitly selected library")
     sub = parser.add_subparsers(dest="command", required=True)
     put = sub.add_parser("put", help="save a source alone or with method atoms")
-    put.add_argument("--input", required=True, help="JSON source bundle with optional atoms, or - for stdin")
+    put.add_argument("--input", required=True, help="JSON bundle with sources or source_links and optional atoms, or - for stdin")
     query = sub.add_parser("search", help="search the legacy category indexes (compatibility API)")
     query.add_argument("query")
     query.add_argument("--consumer")
@@ -1948,7 +2140,7 @@ def _parser() -> argparse.ArgumentParser:
     source_query = sub.add_parser("search-sources", help="search source titles and catalog notes without writing")
     source_query.add_argument("query")
     source_query.add_argument("--limit", type=int, default=10)
-    progressive_info = sub.add_parser("info", help="read progressive catalog freshness and indexed counts")
+    sub.add_parser("info", help="read progressive catalog freshness and indexed counts")
     progressive_query = sub.add_parser("query", help="search bounded material and method cards from the progressive catalog")
     progressive_query.add_argument("query")
     progressive_query.add_argument("--kind", choices=("all", "material", "method"), default="all")
@@ -1971,6 +2163,8 @@ def _parser() -> argparse.ArgumentParser:
     source.add_argument("source_id")
     source.add_argument("--unit", help="exact stable key from provenance.independent_units[].unit")
     source.add_argument("--view", choices=("identity", "material", "analysis"))
+    location = sub.add_parser("locate-source", help="find the canonical source JSON and SHA-256 behind an ID or link")
+    location.add_argument("source_id")
     usage = sub.add_parser("log-usage", help="append an idempotent use outcome")
     usage.add_argument("--input", required=True, help="JSON usage record path, or - for stdin")
     sub.add_parser("stats", help="count library records without changing them")
@@ -1981,7 +2175,7 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def run(args: argparse.Namespace) -> Any:
-    root = args.library_root
+    root = library_root_for_skill(args.skill_file) if args.skill_file is not None else args.library_root
     if args.command == "put":
         return put_bundle(root, _load_bundle(args.input))
     if args.command == "search":
@@ -2001,6 +2195,8 @@ def run(args: argparse.Namespace) -> Any:
                         consumer=args.consumer, decision=args.decision, stage=args.stage)
     if args.command == "get-source":
         return get_source(root, args.source_id, unit=args.unit, view=args.view)
+    if args.command == "locate-source":
+        return locate_source(root, args.source_id)
     if args.command == "log-usage":
         try:
             record = json.load(sys.stdin) if args.input == "-" else json.loads(Path(args.input).read_text(encoding="utf-8"))

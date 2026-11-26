@@ -4,7 +4,7 @@
       "label": "作品方法原子库",
       "path": "benchmark",
       "owner": "laohu-benchmark",
-      "purpose": "Source identity and provenance, observed work units, method atoms, category usage logs and rebuildable category search indexes.",
+      "purpose": "Compatibility container for project-root libraries. New shared research uses the receiving Skill's sibling benchmark/ through laohu-benchmark.",
       "records": {
         "sources": "sources/SRC-<id>.json",
         "atoms": "<category>/atoms/ATM-<id>.json",

@@ -1,6 +1,7 @@
 """Offline regression tests; all fixtures stay on the project filesystem."""
 
 import json
+import hashlib
 import shutil
 import sys
 import tempfile
@@ -27,8 +28,8 @@ class ProjectTests(unittest.TestCase):
                 "| /laohu | Main entry |\n| /laohu-update | Update |\n" + extra)
 
     def setUp(self):
-        (ROOT / "tmp").mkdir(exist_ok=True)
-        temporary = tempfile.TemporaryDirectory(prefix="maintenance fixture-中文 ", dir=ROOT / "tmp")
+        (ROOT / ".cache" / "tmp").mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="maintenance fixture-中文 ", dir=ROOT / ".cache" / "tmp")
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
         for name in ("AGENTS.md", "LICENSE", ".gitignore", "README.md", "README.en.md",
@@ -52,6 +53,24 @@ class ProjectTests(unittest.TestCase):
         for path in (self.root / "UPDATE.json", self.root / checker.PACKAGE):
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(json.dumps(manifest()), encoding="utf-8")
+
+    def test_private_libraries_are_not_skill_definitions(self):
+        host = self.root / checker.SKILLS / "laohu-motion"
+        child = host / "skills/laohu-motion-example"
+        for owner in (host, child):
+            owner.mkdir(parents=True, exist_ok=True)
+            (owner / "SKILL.md").touch()
+        libraries = [host / "benchmark", child / "benchmark",
+                     host / "assets/motion-library/openmotion"]
+        for library in libraries:
+            library.mkdir(parents=True)
+            (library / "SKILL.md").write_text("Third-party study material")
+        tracked = set(checker.project_files(self.root))
+        self.assertTrue(all(library / "SKILL.md" not in tracked for library in libraries))
+        self.assertIn(child / "SKILL.md", tracked)
+        self.assertEqual(checker.child_file_errors(child), [])
+        (child / "extra.md").touch()
+        self.assertTrue(checker.child_file_errors(child))
 
     def entry(self, name):
         path = self.root / checker.SKILLS / name / "SKILL.md"
@@ -327,6 +346,84 @@ class ProjectTests(unittest.TestCase):
             handle.write("[broken](missing.md)\n")
         self.assertTrue(any("broken Markdown" in e for e in checker.check_project(self.root)["errors"]))
 
+    def test_only_exact_hash_pinned_raw_style_entries_report_source_links_separately(self):
+        styles = self.root / checker.STYLE_INDEX.parent
+        entries = styles / "entries"
+        entries.mkdir(parents=True)
+        l1 = "[source demo](DEMO.md)\n"
+        l2 = "[source rubric](rubric.md)\n"
+        (entries / "L1.md").write_text(l1, encoding="utf-8")
+        (entries / "L2.md").write_text(l2, encoding="utf-8")
+        hash_l1 = hashlib.sha256(l1.encode("utf-8")).hexdigest()
+        hash_l2 = hashlib.sha256(l2.encode("utf-8")).hexdigest()
+        index = {
+            "format": "laohu.motion.style-library/1",
+            "source": {
+                "repository": checker.STYLE_SOURCE_REPOSITORY,
+                "commit": checker.STYLE_SOURCE_COMMIT,
+                "sourceIndexSha256": checker.STYLE_SOURCE_INDEX_SHA256,
+            },
+            "entries": [
+                {"id": "L1", "contentPath": "entries/L1.md", "sourceSha256": hash_l1,
+                 "localSha256": hash_l1},
+                {"id": "L2", "contentPath": "entries/L2.md", "sourceSha256": "0" * 64,
+                 "localSha256": hash_l2},
+            ],
+        }
+        index_bytes = (json.dumps(index, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        index_path = styles / "index.json"
+        index_path.write_bytes(index_bytes)
+        with patch.object(checker, "STYLE_INDEX_SHA256", hashlib.sha256(index_bytes).hexdigest()):
+            report = checker.check_project(self.root)
+            self.assertTrue(any("source-carried unresolved Markdown link" in item and "L1" in item
+                                for item in report["sourceLinkWarnings"]), report)
+            self.assertFalse(any("entries/L1.md" in item for item in report["errors"]), report["errors"])
+            self.assertTrue(any("broken Markdown" in item and "entries/L2.md" in item
+                                for item in report["errors"]), report["errors"])
+
+            authored = self.entry("laohu-test")
+            with authored.open("a", encoding="utf-8") as handle:
+                handle.write("[authored missing link](references/missing.md)\n")
+            report = checker.check_project(self.root)
+            self.assertTrue(any("broken Markdown" in item and "laohu-test/SKILL.md" in item
+                                for item in report["errors"]), report["errors"])
+
+            (entries / "L1.md").write_text("[tampered](changed.md)\n", encoding="utf-8")
+            report = checker.check_project(self.root)
+            self.assertFalse(any("L1" in item for item in report["sourceLinkWarnings"]), report)
+            self.assertTrue(any("broken Markdown" in item and "entries/L1.md" in item
+                                for item in report["errors"]), report["errors"])
+
+            (entries / "L1.md").write_text(l1, encoding="utf-8")
+            index_path.write_bytes(index_bytes + b" ")
+            report = checker.check_project(self.root)
+            self.assertEqual(report["sourceLinkWarnings"], [])
+            self.assertTrue(any("broken Markdown" in item and "entries/L1.md" in item
+                                for item in report["errors"]), report)
+
+    def test_checked_in_mixed_style_index_does_not_use_legacy_raw_source_link_exemption(self):
+        index_path = ROOT / checker.STYLE_INDEX
+        raw = index_path.read_bytes()
+        index = json.loads(raw)
+        self.assertNotEqual(hashlib.sha256(raw).hexdigest(), checker.STYLE_INDEX_SHA256,
+                            "the mixed ordinary index is not the legacy byte-preserved source index")
+        self.assertEqual(index.get("source", {}).get("repository"), checker.STYLE_SOURCE_REPOSITORY)
+        self.assertEqual(index.get("source", {}).get("commit"), checker.STYLE_SOURCE_COMMIT)
+        self.assertEqual(index.get("source", {}).get("sourceIndexSha256"), checker.STYLE_SOURCE_INDEX_SHA256)
+        source_set_counts = {}
+        for entry in index.get("entries", []):
+            source_set = entry.get("sourceSet")
+            source_set_counts[source_set] = source_set_counts.get(source_set, 0) + 1
+        self.assertEqual(index.get("coverage", {}).get("sourceSet"), source_set_counts)
+        self.assertEqual(source_set_counts.get("original"), 43)
+        self.assertGreater(source_set_counts.get("new", 0), 0)
+        self.assertEqual(checker.pinned_raw_style_entries(ROOT), {},
+                         "transcribed additions and original references in a mixed index are not the old raw-source index")
+        report = checker.check_project(ROOT)
+        self.assertTrue(report["ok"], report["errors"])
+        self.assertEqual(report["sourceLinkWarnings"], [],
+                         "checked-in style references are checked by normal local Markdown-link rules")
+
     def test_unexpanded_path_placeholder_in_markdown_link_fails(self):
         path = self.entry("laohu-test")
         with path.open("a", encoding="utf-8") as handle:
@@ -486,8 +583,8 @@ class ProjectTests(unittest.TestCase):
 
 class UpdateTests(unittest.TestCase):
     def setUp(self):
-        (ROOT / "tmp").mkdir(exist_ok=True)
-        temporary = tempfile.TemporaryDirectory(prefix="update-check-", dir=ROOT / "tmp")
+        (ROOT / ".cache" / "tmp").mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="update-check-", dir=ROOT / ".cache" / "tmp")
         self.addCleanup(temporary.cleanup)
         self.cache = Path(temporary.name) / "cache"
 

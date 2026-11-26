@@ -1,1 +1,0 @@
-const TALKF=[];const TALKMAP=[];

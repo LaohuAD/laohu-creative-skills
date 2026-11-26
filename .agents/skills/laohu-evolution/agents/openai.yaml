@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-evolution | 老胡能力进化与重构"
-  short_description: "创建或改进 Skill 规则，沉淀已确认的方法并接通实际执行文件。"
-  default_prompt: "使用 $laohu-evolution，把已确认的能力目标与方法写入对应 Skill 或 Reference。"
+  short_description: "先除限再归位后增补写回 Skill，经静检与自适应 A/B/C 对比验证防负进化。"
+  default_prompt: "使用 $laohu-evolution，遵循先除限再归位后增补写回 Skill，并按自适应对比实证验证确有提升后再放行。"

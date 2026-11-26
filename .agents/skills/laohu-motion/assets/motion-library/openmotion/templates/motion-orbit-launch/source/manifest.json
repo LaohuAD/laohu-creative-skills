@@ -1,0 +1,36 @@
+{
+  "schema": "motion-package-v1",
+  "purpose": "style-guidance",
+  "canvas": {
+    "width": 960,
+    "height": 540
+  },
+  "fps": 30,
+  "durationSeconds": 6,
+  "provenance": {
+    "source": "Original repository contribution",
+    "license": "Apache-2.0"
+  },
+  "files": [
+    {
+      "path": "assets/poster.jpg",
+      "bytes": 33122,
+      "sha256": "b2b2e129abb48fb2765ca5b2fa75a2eb96f9ba524d895230b2dc81d5f0d9d14f"
+    },
+    {
+      "path": "assets/preview.webm",
+      "bytes": 49629,
+      "sha256": "15f3c61b5bba8cafb3c6d21cdc06ca1846720f3946e0d01f9dc3f9114cded3a8"
+    },
+    {
+      "path": "motion.md",
+      "bytes": 3448,
+      "sha256": "76781175b22fb189dfbdddb7f65d8f1edb9dc2bdc41c2f5465462c1aa4b54645"
+    },
+    {
+      "path": "preview.html",
+      "bytes": 8014,
+      "sha256": "385755f910a69290d4bf2a7654fe1e48ea0f939152c1fba3a8b6c4abcddf7289"
+    }
+  ]
+}

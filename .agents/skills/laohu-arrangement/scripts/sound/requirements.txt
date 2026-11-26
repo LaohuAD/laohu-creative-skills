@@ -1,0 +1,8 @@
+# Plugin state adapter tested with this Pedalboard release.
+pedalboard==0.9.26
+mido>=1.3,<2
+numpy>=1.26,<3
+scipy>=1.11,<2
+soundfile>=0.12,<1
+pyloudnorm>=0.1.1,<0.2
+matplotlib>=3.8,<4
