@@ -18,8 +18,8 @@ spec.loader.exec_module(api)
 
 class InstallationTests(unittest.TestCase):
     def setUp(self):
-        (ROOT / 'tmp').mkdir(exist_ok=True)
-        temp = tempfile.TemporaryDirectory(dir=ROOT / 'tmp', prefix='install-')
+        (ROOT / '.cache' / 'tmp').mkdir(parents=True, exist_ok=True)
+        temp = tempfile.TemporaryDirectory(dir=ROOT / '.cache' / 'tmp', prefix='install-')
         self.addCleanup(temp.cleanup)
         self.base = Path(temp.name)
         self.root = self.base / 'source repo'

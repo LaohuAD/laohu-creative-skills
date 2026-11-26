@@ -173,8 +173,8 @@
       "prompt": "稿子已经写完，准备贴到订阅号后台，只帮我找适合排版的能力。",
       "input_files": [],
       "expected_behavior": [
-        "发现 laohu-htmlshow 及 laohu-htmlshow-gzh，读取边界后直接推荐公众号子入口",
-        "不先让通用入口生成网页",
+        "发现 laohu-htmlshow 并识别其内部公众号排版专项，推荐通过 laohu-htmlshow 执行公众号排版",
+        "不先让通用入口生成普通浏览器网页",
         "推荐后等待用户选择"
       ]
     },

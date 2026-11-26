@@ -1,104 +1,44 @@
-# ASR 剪后时间轴与语义动画锚点
+# 口播时间轴与 ASRcut 语义动画锚点
 
-本 Reference 只在动画要跟随已经编译的 ASR 剪后时间轴时读取。它把“哪一段内容值得成为画面动作”绑定到唯一的保留词实例或句段边界，并把同一个成片时间事实交给现有画面相位与声音事件消费者。它不做粗剪/精剪、不删改音频、不生成新时间轴，也不把每个关键词自动变成一张动画卡。
+当输入包含已录口播、SRT 字幕、或 `laohu-asrcut` 输出的剪后时间轴与动画交接文件时读取本参考。核心铁律：**全片只有一个时间真源**——真实剪后音频与编译时间轴决定成片秒数，画面事件、字幕与声音全部挂载到同一份 `timeline.js`，绝不凭字数估算假词时码，也不为画面方便私自删改口播原声。
 
-## 输入、职责与时钟
+---
 
-接收 asrcut 的 edit-plan/1 或 edit-plan/2、其唯一编译出的 timeline/1 或 timeline/2、当前 motion scene，以及语义绑定规格。/1 沿用原有 `timeline.clips[].targetRange` 与词/句段边界；/2 的 `timeline.units[]` 是连续的唯一成片时钟，`clips[]` 只是 source-only 视图，含 source 与 presentation 两类单元。每类单元及词/句段的 `targetRange` 都由编译器给出；半开区间使用整数采样点，结束点不包含在范围内，`timeline.clock.sampleRateHz` 是唯一换算采样率。Motion 只能读取这些目标范围，不得从 `sourceRange`、Cap 原始展示时码、字幕长度或片长比例重新推算成片时刻。只有 asrcut 编译器可因删剪、排序或插入展示时段重新分配后续 `targetRange`。
+## 1. 优先消费新版 ASRcut 导演级交接
 
-`bind-speech.mjs` 对当前 edit-plan 调用 asrcut 的 `hashPlan` 与 `compilePlan`，要求 `planSha256`、project 身份和整个 timeline 编译结果一致；仅格式正确或把任意 hash 原样填入 bindings 不算来源验证。对 edit-plan 中有路径且有 SHA-256 的媒体，绑定器流式重算文件 hash，发现改变或文件不可读即停止；计划未登记媒体路径/hash 时，receipt 标 `unavailable`。绑定器还调用 asrcut 的 `verifyPlanEvidence(plan,{baseDir})`，按 plan 声明的 `evidenceHashMode` 复核本地 transcript evidence 的原始文件字节；证据缺失、不可读或 hash 改变时拒绝绑定。receipt 的 `transcriptEvidenceChecks.verified/unlocated` 记录来源 ID、hash 与状态，不复制本机路径；没有 `evidenceRef` 的来源只标为 `unlocated`，不称为已核实。媒体 hash 与 transcript 原始证据分别显示，均不代表识别内容、剪辑决定或口播语义已被人工确认。
+读取与当前录音文件身份（路径/版本/哈希）完全匹配的 ASRcut 输出（详见 [ASRcut 时间轴与动画交接](../../laohu-asrcut/references/timeline-and-handoff.md)）：
+1. **整条剪后人声作唯一时钟底盘**：从编译时间轴（`timeline.units[]`、`clock.sampleRateHz`、`targetRange`）读取成片绝对秒数（`targetSample / sampleRateHz`），不从源录音 `sourceRange` 或字幕字数反推成片时刻。
+2. **直接吃进情绪与导演锚点信号**：当 `animation-handoff.json` 包含 `narrativeBeats[]` 与 `visualCueCandidates[]` 时：
+   - 读取每拍的 **`emotion`（情绪）、`energy`（能量档）与 `pacingNote`（节奏注记）**，直接驱动本片的 A/B-roll 切换密度、画面张力与 `audio-arc` 配乐情绪曲线；
+   - 读取作者标记的 **`visualCueCandidates`（含单锚点 `targetRange` 与整词组 `phraseRange`）** 作为画面显露、强调与音效落点的精准事件源。
+3. **严格区分四档时间精度**：
+   - **`measured` / `aligned` 真实词时码**（或对真实音频人工听标）：允许精确词级触发（如在某个重音词落下的瞬间触发数据跳变或高亮）；
+   - **`segment` 句段 / SRT 精度**：只做句段级起落安排，保持句段边界真实精度，绝不按字数均摊拆出假词秒数；若在 `<screen-text-registry>` 中排入段内节奏预估时刻，须在表内显式标注 `~预算 [待词锚校准]`，不写死无标记 0.1 秒绝对时刻；
+   - **`presentation` 无源展示时段**（ASRcut `/2` 显式插入的画面消化停顿）：属于合法成片时间，供画面继续演透复杂关系或留给眼睛消化，绝不伪称有口播词，也不强行铺新字幕；
+   - **只有文稿、尚未录音**：按阅读和讲解节奏标注暂定语义预算与待对齐状态，绝不宣称语音同步。
 
-对 `/2`，正常绑定会先准备整场 Motion 渲染覆盖：按 `ceil(timeline.durationSamples × scene.fps / timeline.clock.sampleRateHz)` 向上取整 frame count，必要时只延长 scene 的 frame-aligned 渲染边界，并把原始样本时长、时钟与不足一帧的覆盖余量写入绑定回执。词、段落、presentation 边界仍使用 compiler 的原始整数 sample 锚点，不逐段量化。锁定帧数可通过 `bind-speech.mjs --locked-frame-count N` 明确提供；若不足以覆盖 timeline 或现有 scene，绑定拒绝并报告规格冲突，不改音频样本或 timeline。此自动准备只属于 `/2`；`/1` 保持旧契约：输入 scene 必须先通过整帧校验且自身时长已覆盖 timeline；`--locked-frame-count` 只接受 `/2`。
+---
 
-ASR 剪辑和动画绑定是两项不同职责。用户要删除、重排、合并语音内容时转入 `laohu-asrcut`；motion 接收其编译时间轴，再根据语义蓝图选择少量有解释作用的锚点。一个词不是一个动画的触发器：关键词仅在它标志着概念引入、因果转折、对象状态变化、对比起点或结论落点时才成为候选。连续解释通常用一个 span 驱动连续揭示；多个短促相位可共享一个锚点，也可按实际讲解关系分别锚定。
+## 2. 选锚不滥用：按语义关系绑进 `timeline.js`
 
-样片只是从成片中的实际范围做展示，不产生第二条 ASR/成片时钟。若需截取样片，记录完整成片时间窗及其在样片中的本地位置/偏移；Motion 的语音锚点仍指向 compiler 给出的整条全片 timeline。不能通过缩短绑定覆盖、重排冻结 timeline 或手工重设 `targetRange` 来制作样片；`--locked-frame-count` 的 /2 覆盖也不代表区间渲染。只有实际 renderer/独立样片 scene 能消费全片时间窗与样片本地映射并输出可播放媒体时，才可声称 ASR 样片接线成立；接口不支持时报告控制缺口并暂停，不虚构字段或命令。
+- **不要把每个关键词都做成一张动效卡**：只有当某个词或短语真正标志着概念引入、因果转折、对象状态变化、对比起点或结论落点时，才在 `timeline.js` 注册具名事件（`EVENTS` / `SHOTS` / `AUDIO_EVENTS`）。
+- **先给阅读语境，再在重音词触发强调**：标题、对象名或坐标框架可提前入画建立背景语境，等口播读到关键转折词时再触发局部高亮、变化或配套音效，避免画面一直空等到发音才仓促蹦出。
+- **一个连续镜头大胆跨越多句与多条字幕**：句号和字幕切换不是切镜命令；只要观众还在追踪同一个对象或过程，让画面连续演进，只在理解任务或观察视角真正切换时换镜。
+- **区分重复词与重复片段**：同一录音被多次剪入时以 `clipOccurrenceId` 区分实例，同一句内多次出现同一词时以真实 `tokenId` 定位，绝不按文本搜索第一个命中硬绑。
 
-## 锚点选择和精度
+---
 
-每个锚点必须指向一个具体 `clipOccurrenceId`。同一段源声音若因编辑而出现多次，每次播放都有不同的 occurrence，不能只靠 source ID 或相同 token 文本定位。
+## 3. 口播太赶需要加画面消化时间怎么办？
 
-- `point` 用 `{kind:"point", clipOccurrenceId, tokenId, edge:"start"|"end"}` 指向 `words[]` 中的一个真实词实例。它适合词级时间已明确、画面需要在单个术语/转折处动作的情况。
-- `span` 用 `{kind:"span", clipOccurrenceId, firstTokenId, lastTokenId, edge:"start"|"end"}` 指向同一 occurrence 内顺序连续的一段真实词实例。它适合连续句意、短语或一段讲解的起止；解析器拒绝跨 occurrence 或首尾次序不明的范围。
-- `segment` 用 `{kind:"segment", clipOccurrenceId, segmentId, edge:"start"|"end"}` 指向 `transcriptSegments[]` 中的真实句段。SRT 只有句段时间时使用该锚点，不把句段范围伪造成词级时间或精确 point cue。
-- `presentation` 仅用于 timeline/2，采用 `{kind:"presentation", presentationId, edge:"start"|"end"}` 指向真实的无来源展示单元边界。它可驱动无口播展示时段中的局部相位或事件；不携带 `clipOccurrenceId`、token 或 segment，也不能把展示区间冒充 ASR 词锚。该区间由 compiler 唯一确定；若在它前方增删时长，必须重新编译、审核并绑定。
+遇到口播说完一个复杂关系、观众需要额外 1–2 秒把图表或因果看懂的情况，按三步顺序处理：
+1. **先借原录音自带停顿**：先查现有剪后时间线中紧随该句的真实自然气口是否足够阅读；够用就直接利用，不额外加空。
+2. **其次优化同屏信息密度**：删掉多余装饰字、简化同屏任务或让次要元素退场，通常比硬插停顿更自然。
+3. **确需净增无声画面消化时段**：向 `laohu-asrcut` 提出明确的 `presentation` 时段请求（附边界前 `occurrenceId`、画面要完成的观看任务、所需总预算与已有自然停顿时长、以及该段期望的配乐/静默职责），按授权由 ASRcut 重编新时间轴后，再同步更新本片 `timeline.js` 与字幕。**绝不由动画侧私自拉长画面导致音画漂移。**
 
-`measured` 与 `aligned` 按其原精度保留；`utterance` 与 `estimated` 属于低精度。遇到低精度，默认拒绝自动绑定；只有镜头确实可以接受句段级/估算级落点时，绑定项才可显式设置 `allowLowPrecision: true`。输出仍记录原始精度，不得将低精度写成精确同步。缺失、已删除、重复歧义、过期 revision/hash、跨 occurrence、越出时间轴或精度不足的锚点都要拒绝；不能静默改绑相似词、邻近词或源时间。
+---
 
-绑定规格必须把 `project.id`、整数 `project.revision` 和 `planSha256` 与输入 timeline 完全匹配。修改剪辑计划后，即使词文字没有变化，也须读取新编译 timeline 并重新绑定。正式绑定要求 `frozen` timeline；`draft` 只能通过显式 `preview` 选项绑定，receipt 会记录 `preview: true` 和原始 draft/review 状态。`frozen` 表示剪辑时间映射被冻结，不代表用户已审核动画、听审声音或批准成片。review 状态不能由 motion 推断或升级。
+## 4. 录音来源核验与修订重绑
 
-## 相位与声音事件如何接线
-
-绑定规格只给语义锚点、显式偏移/时长和实际要消费的通道。只含 point/span/segment 的旧绑定继续用 speech-bindings/1；包含 presentation 边界时用 speech-bindings/2。例如：
-
-```json
-{
-  "format": "laohu.motion.speech-bindings/1",
-  "project": {
-    "id": "ai-history",
-    "revision": 3,
-    "planSha256": "<timeline.planSha256 的 64 位十六进制值>"
-  },
-  "bindings": [{
-    "id": "transformer-introduction",
-    "objectId": "transformer-illustration",
-    "phases": [{
-      "id": "transformer-reveal",
-      "anchor": { "kind": "point", "clipOccurrenceId": "clip-02", "tokenId": "token-transformer", "edge": "start" },
-      "offset": { "value": 0, "unit": "samples" },
-      "duration": { "value": 12000, "unit": "samples" },
-      "curve": "ease-out-cubic",
-      "channels": {
-        "alpha": { "from": 0, "to": 1, "duration": { "value": 4800, "unit": "samples" }, "curve": "linear" },
-        "scale": { "from": 0.82, "to": 1, "curve": "ease-out-cubic", "anchor": { "x": 480, "y": 270 } }
-      }
-    }],
-    "events": [{
-      "id": "transformer-hit",
-      "phaseId": "transformer-reveal",
-      "anchor": { "kind": "point", "clipOccurrenceId": "clip-02", "tokenId": "token-transformer", "edge": "end" }
-    }]
-  }]
-}
-```
-
-偏移和时长只接受明示单位 `samples` 或 `seconds`；采样点值须为整数。帧不属于 timeline 时钟，缺少明确目标 fps 时不得换算。`bind-speech.mjs` 把锚点的 `targetSample / sampleRateHz` 写为相位 `startSec`，将通道相对偏移与时长转换为现有 `MotionOps.sampleChannels` 实际读取的 `offsetSec` 和 `durationSec`，并把每个相位锚点、样本、精度与版本写入 `scene.motionSpeechBinding`。
-
-绑定输出不扩展 MotionCore schema。phase 进入指定现有 `custom:*` 对象的 `data.phases[]`；命名事件进入 `scene.audioEvents[]`，以 `{id, phaseId, phaseOffsetSec, timeBasis:"film-global"}` 让事件时间通过共享相位得到。事件可拥有自己的 point/span/segment/presentation 边界锚点；resolver 计算它相对所引用 phase 起点的 `phaseOffsetSec`。同一语义动作可以有多个不同作用的声音事件或多个错时通道，但同一个时间事实不允许分别手写进画面秒数和音频秒数。
-
-已有手写 `filmTimeSec` 是独立的片内绝对时刻，不具备跟随剪辑的来源锚点。timeline/2 revision/hash 变化时，绑定器不会替它自动平移：必须在绑定规格里逐个按 event ID 记录 `retain-absolute` 或 `remapped` 和理由；需要重定位的事件须先在新 scene 给出新的真实时刻。移除的旧直接事件可删除并记录移除；未复核当前全部直接事件，或 re-authored 时间与旧回执相同却声称 remapped，绑定会失败。需要随语音移动的新事件应改用 point/span/segment 或 presentation 边界锚点。
-
-若 timeline/2 包含剪后原声，不能按 `clips` 分段重播，也不能把全长 WAV 的 `0..duration` 当作连续 voiceWindows。用最终冻结 plan/timeline 与 exporter receipt 生成音频计划：
-
-```sh
-node .agents/skills/laohu-motion/scripts/audio.mjs prepare-asrcut-plan \
-  --edit-plan /绝对路径/frozen-edit-plan.json \
-  --timeline /绝对路径/frozen-timeline.json \
-  --receipt /绝对路径/voice.wav.artifact.json \
-  --voice-wav /绝对路径/voice.wav \
-  --voice-asset-id asrcut-voice --voice-track-id asrcut-voice \
-  --output /绝对路径/audio-plan.json [--base-plan /绝对路径/base-audio-plan.json]
-```
-
-该入口把导出的整份剪后 WAV 作为从样本 0 开始的一条锁定 voice track，核验计划/时间线/receipt/WAV 哈希及精确样本数，并从 source units 的 targetRange 生成保守 voiceWindows；这些窗口可含录音原有停顿，SRT/低精度 ASR 仍保留其粗精度。presentation 时段单独保留为含视觉与 audio handoff 的窗口，供混音决策读取；`bed-duck`、`quiet` 等职责不代表把麦克风空样本自动变成最终混音全静音。原录音中的自然停顿照样留在全长 WAV，除非 asrcut 明确剪掉它。`--base-plan` 只允许接收 duration 完全一致、尚无 voice track/window 的计划；已有片长和音乐/音效安排不会被自动改写。后续 render 会重新核验冻结哈希、timeline、receipt、voice asset 与 source/presentation windows；修订剪辑后须从新版本重建绑定。未听审的原声仍须显式走 candidate 技术预览，不能由编译或哈希验证升级为 ready。
-
-自定义绘制必须真实调用 `MotionOps.samplePhase` 或 `sampleChannels` 并用结果更新画面属性；仅有 `speechAnchor` 或 receipt metadata 不算画面绑定。音频计划的 `events[].eventId` 指向 `scene.audioEvents[].id`，由 `MotionOps.mapSceneEvents` 和 `scripts/audio.mjs` 实际解析。绑定器不会替作品挑音效资产、生成混音、判断某个音色适合或证明人耳听感；这些仍按 [音乐、音效与静音设计](sound-design.md) 处理。
-
-## 生成、重编与拒绝条件
-
-普通制作流程由主 Skill 先完成语义蓝图和现有 renderer 对象，再运行：
-
-```sh
-node .agents/skills/laohu-motion/scripts/bind-speech.mjs \
-  --scene /绝对路径/base.scene.json \
-  --plan /绝对路径/edit-plan.json \
-  --timeline /绝对路径/timeline.json \
-  --bindings /绝对路径/speech-bindings.json \
-  --out /绝对路径/bound.scene.json
-```
-
-默认不覆盖目标文件；明确选择新输出路径，或确需替换时显式传 `--overwrite`。输出安全检查由 asrcut 的 `writeJsonOutput` 执行原子写入，并比较规范化路径及文件设备/inode；scene、timeline、bindings、edit-plan、计划内媒体和可解析为本地文件的 `transcript.evidenceRef` 都受保护。即使传入的是输入文件的符号链接或硬链接别名，也必须拒绝，`--overwrite` 不能绕过来源保护。`--preview` 是显式接受 draft 的开关。绑定器只复制并扩展 scene，不写回 timeline 或 edit-plan，也不修改输入文件。生成结果可重复绑定：再次处理同一已绑定 scene 时，只清除上一次 `motionSpeechBinding` receipt 明确登记的 phase/event ID，再用当前 timeline 生成，不碰其他手写相位和旧直接时钟事件。
-
-以下情况停止受影响的绑定并报告具体锚点，不补猜时间：缺 project 身份/hash、revision/hash 不匹配、目标 occurrence/token/segment 消失、同 occurrence 标识重复、span 顺序无效、range 的采样率/端点越界、phase/event 落在 timeline 之外、样本单位非整数、帧单位无目标时钟、低精度未获显式接受、scene 时长短于 timeline、或目标不是唯一的现有 custom 对象。需要修改剪辑或恢复被删语音时回到 asrcut 做新决定并重新编译。
-
-最后按 toolchain Reference 渲染输出：在同一 bound scene 上抽查绑定动作的起/中/落帧；再用同一 scene 和 audio plan 验证事件落点，必要时解码混音 WAV 测其样本位置。只显示 receipt 或通过 JSON 验证不能证明画面消费者读取了 phase，也不能证明音频正确、听感合适或观众理解。新锚点的技术评测在 [speech binding eval](../evals/speech-binding.test.mjs) 中分别检查 MotionOps 通道取值、共享声音事件映射及 FFmpeg PCM 落点；合成音仅作技术链路证明。
+- **未剪原录音需要词锚时**：通过 `laohu-asrcut` 按原样导入并核查本地已配置 ASR 提供方（遵守 [输入与 ASR 证据](../../laohu-asrcut/references/input-and-asr.md) 中的上传授权与费用边界），仅取词时码不顺手删改原声。
+- **剪辑修订后必须重算时码**：只要口播被重新剪辑、重排或增删 `presentation`（`revision` 或 `planSha256` 变化），必须按最新编译时间轴重新映射 `timeline.js`、`<production-units>` 与双语字幕，并在起动帧、关键落点与相邻接缝连声复查。
+- 若需在 `timeline.js` 中对口播起止边界与最大时长上限做书签换算（如等词 A 启动、须在词 B 前落定且不超过上限），见 [motion-language.md](motion-language.md#5-用真实口播锚点算准书签时间)；原生旁白录制/TTS 准备与核对见原版 [narration.md](../templates/runtime/laohu-showreel/references/narration.md)。

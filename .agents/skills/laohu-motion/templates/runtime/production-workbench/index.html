@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>制作工作台</title>
+  <link rel="stylesheet" href="/__workbench/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="site"><span class="site-symbol" aria-hidden="true">◫</span><span>制作工作台</span></div>
+    <div class="project"><span id="project-title">正在连接工程</span><span id="project-spec"></span></div>
+    <div class="top-links">
+      <a id="chapters-link" hidden target="_blank" rel="noopener">章节 ↗</a>
+      <a id="final-link" hidden target="_blank" rel="noopener">成片 ↗</a>
+      <a href="/legacy-progress" target="_blank" rel="noopener">旧工作台 ↗</a>
+    </div>
+  </header>
+  <main>
+    <div class="upper">
+      <section class="preview" aria-label="工程实渲预览">
+        <div class="panel-bar">
+          <div><strong>工程实渲</strong><span id="scene-name" class="muted"></span></div>
+          <div class="live" id="live-state"><i></i><span>正在加载代码</span></div>
+        </div>
+        <div class="monitor" id="monitor">
+          <div id="stage-wrap" class="stage-wrap">
+            <iframe id="scene" title="同秒工程 render(t) 实渲" sandbox="allow-scripts allow-same-origin"></iframe>
+          </div>
+          <p id="preview-message" class="preview-message">正在连接工程代码画面</p>
+        </div>
+        <div class="preview-bottom">
+          <div class="current-cue"><small id="cue-label">当前位置字幕</small><span id="cue-text"></span></div>
+          <button type="button" id="covers-btn" hidden>对照 Cover 图</button>
+        </div>
+      </section>
+      <aside class="inspector">
+        <div class="panel-bar"><strong>制作进度</strong><span class="muted" id="refresh-state" role="status"></span></div>
+        <div id="stages" class="stages" aria-label="制作阶段"></div>
+        <section id="selection" aria-label="选定的制作证据" hidden></section>
+      </aside>
+    </div>
+    <section class="timeline" aria-labelledby="timeline-title">
+      <div class="dock-header">
+        <div class="dock-title"><strong id="timeline-title">时间线</strong><span id="timeline-note"></span></div>
+        <div class="transport" aria-label="声画播放">
+          <button type="button" id="previous" aria-label="上一帧" title="上一帧（←）">|‹</button>
+          <button type="button" id="play" class="play" aria-label="播放" title="播放／暂停（空格）">▶</button>
+          <button type="button" id="next" aria-label="下一帧" title="下一帧（→）">›|</button>
+          <output id="timecode" class="timecode">00:00.00</output><span class="muted" id="duration"></span>
+        </div>
+        <div class="dock-options">
+          <button type="button" id="caption-list-btn" title="查看每条可点击字幕">字幕列表</button>
+          <label><span class="sr-only">监听音轨</span><select id="monitor-audio"><option value="voice">听旁白</option><option value="mix">听混音</option><option value="silent">静音</option></select></label>
+          <label><span class="sr-only">时间线缩放</span><select id="zoom"><option value="fit">全片</option><option value="90">90 秒</option><option value="30">30 秒</option><option value="10">10 秒</option></select></label>
+        </div>
+      </div>
+      <div id="dock-scroll" class="dock-scroll">
+        <div id="tracks" class="tracks">
+          <div class="lane ruler-lane"><span class="track-label">时间码</span><div class="track" id="ruler" role="slider" tabindex="0" aria-label="拖动播放位置" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"></div></div>
+          <div class="lane"><span class="track-label"><i class="voice-dot"></i>真实旁白</span><div class="track wave-track" id="voice-track"></div></div>
+          <div class="lane"><span class="track-label"><i class="captions-dot"></i>SRT 字幕</span><div class="track" id="captions-track"></div></div>
+          <div class="lane"><span class="track-label"><i class="frames-dot"></i>工程代码关键帧</span><div class="track frame-track" id="frames-track"></div></div>
+          <div class="lane"><span class="track-label"><i class="motion-dot"></i>动作段</span><div class="track" id="segments-track"></div></div>
+          <div class="lane"><span class="track-label"><i class="seams-dot"></i>接缝</span><div class="track seam-track" id="seams-track"></div></div>
+          <span class="playhead" id="playhead" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+  <audio id="monitor-source" preload="metadata"></audio>
+  <dialog id="covers-dialog" aria-labelledby="covers-title">
+    <div class="panel-bar"><strong id="covers-title">Cover 设计目标</strong><button type="button" data-close>关闭</button></div>
+    <div id="covers-gallery" class="covers-gallery"></div>
+  </dialog>
+  <dialog id="captions-dialog" aria-labelledby="captions-title">
+    <div class="panel-bar"><strong id="captions-title">SRT 字幕列表</strong><button type="button" data-close>关闭</button></div>
+    <div id="caption-list" class="caption-list"></div>
+  </dialog>
+  <script type="module" src="/__workbench/client.js"></script>
+</body>
+</html>

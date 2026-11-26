@@ -1,0 +1,10 @@
+Freesound individual source-page evidence captured 2026-11-22.
+
+Source page: https://freesound.org/people/burning-mir/sounds/155139/
+Title: Action music loop with dark ambient drones
+Creator: burning-mir
+Source page license label: Creative Commons 0 (CC0). Verified canonical deed link present on source page.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Retrieved file: Freesound MP3, 698,500 bytes; measured duration 29.142857 seconds; SHA-256 63d959c9578fd51fc696dce390b5ea9ab86f04dedec972b8290ab788e7b743b9.
+Listening status for this project: UNKNOWN. No human listening review was recorded yet.

@@ -1,120 +1,60 @@
 # 完整项目的 Git 更新操作
 
-执行安装、更新或旧目录迁移时读取。路径变量沿用本 Skill：`{SKILL_DIR}` 是当前加载的 `SKILL.md` 所在真实目录，`{PROJECT_ROOT}` 是它的 `../../..`。命令是操作模板，先解析占位符并正确引用，再执行；不整段盲跑。
+执行首次克隆、Git 仓库更新或无 Git 旧目录迁移时由 `laohu-update` 读取。`{SKILL_DIR}` 为当前真实目录，`{PROJECT_ROOT}` 为 `{SKILL_DIR}/../../..`；所有命令均须先替换真实路径并加引号，按步核对，不盲跑整段。
 
-## 一、定位与获取
+## 1. 首次安装与现状采样
 
-首次安装使用官方仓库，在用户确认的工作盘和父目录下选择不存在的目标：
+- **首次安装**：在已确认的工作盘父目录下克隆到不存在的新目录（不稀疏检出、不只抽 `.agents/skills/`；若有子模块或 LFS 指针需核实获取）：
+  ```bash
+  git clone https://github.com/LaohuAD/laohu-creative-skills.git "{NEW_PROJECT_DIR}"
+  ```
+  完成后跑 `python3 "{NEW_PROJECT_DIR}/tools/check_project.py"`，再按 [入口安装](installation.md) 接入。
+- **已有 Git 项目先采样现状**（文件名解析用 `-z`）：
+  ```bash
+  git -C "{PROJECT_ROOT}" status --porcelain=v1 -z --untracked-files=all
+  git -C "{PROJECT_ROOT}" symbolic-ref --quiet --short HEAD
+  git -C "{PROJECT_ROOT}" rev-parse HEAD
+  git -C "{PROJECT_ROOT}" remote -v
+  git -C "{PROJECT_ROOT}" diff --binary --full-index
+  git -C "{PROJECT_ROOT}" diff --cached --binary --full-index
+  git -C "{PROJECT_ROOT}" ls-files --others --exclude-standard -z
+  git -C "{PROJECT_ROOT}" ls-files --others --ignored --exclude-standard -z
+  ```
+  若存在未结束的 merge/rebase/cherry-pick、未解决冲突或 detached HEAD，先向用户说明状态并确认目标分支，不强行启动合并。
+- **获取并锁定精确目标提交**：沿用官方跟踪分支或默认分支（远端不符或锁定了发行标签时先确认）：
+  ```bash
+  git -C "{PROJECT_ROOT}" fetch --no-tags "{OFFICIAL_REMOTE}" "refs/heads/{TARGET_BRANCH}"
+  git -C "{PROJECT_ROOT}" rev-parse FETCH_HEAD
+  git -C "{PROJECT_ROOT}" merge-base "{ORIGINAL_HEAD}" "{TARGET_COMMIT}"
+  git -C "{PROJECT_ROOT}" diff --name-status --find-renames "{BASE_COMMIT}" "{TARGET_COMMIT}"
+  ```
+  若 `{TARGET_COMMIT}` 已是本地 HEAD 祖先，说明官方提交已在历史中，保护本地文件并回主文核查全局入口同步即可。后续全程锁定精确 `{TARGET_COMMIT}`，不再用浮动的 `FETCH_HEAD` 或再次 `pull`。
 
-```bash
-git clone https://github.com/LaohuAD/laohu-creative-skills.git "{NEW_PROJECT_DIR}"
-```
+## 2. 同盘备份与隔离副本试合并
 
-不使用稀疏检出或仅抽取 `.agents/skills/`。存在子模块或 Git LFS 指针时，检查其声明与所需资源，再获取必要内容；不能把指针文件当成资源齐全。克隆失败保留现场说明原因，不覆盖另一个已有目录重试。克隆成功后核对来源、运行项目检查，再按 [入口安装](installation.md) 接入用户选定的使用方式。
+所有备份、隔离副本与中间文件一律放在 `{PROJECT_ROOT}/.cache/tmp/` 或 `.cache/restore/` 下的新建子目录（确保在项目同一工作盘、受 `.gitignore` 保护，绝不落盘到系统临时目录；若目录名与远端新路径碰撞则改用同盘项目外目录）：
 
-已有项目先记录下列信息；文件名程序解析使用 `-z` 输出，不按空格拆分：
+1. **保存可恢复现场**：保存原 HEAD、分支、索引、暂存/未暂存二进制补丁，以及会被改写/删除/碰撞路径的实际文件内容、权限与符号链接（暂存与工作区不同时分别备份；无关大作品不复制不扫描）。
+2. **排查未跟踪/被忽略资产碰撞**：将远端增删改路径与本地未跟踪、被忽略路径比对（含大小写、文件/目录与重命名碰撞），冲突路径单独备份并备好保留/迁移方案，绝不覆盖用户知识库或纳入本地密钥。
+3. **建隔离副本试合并**（绝不在原工作区试错）：
+   ```bash
+   git clone --no-hardlinks --no-checkout "{PROJECT_ROOT}" "{CANDIDATE_DIR}"
+   ```
+   检出 `{ORIGINAL_HEAD}` 到临时分支，确认 `{TARGET_COMMIT}` 对象齐全，用临时本地测试身份完成三层分步合并：
+   - **已提交历史 `H → M`**：可快进用 `git merge --ff-only "{TARGET_COMMIT}"`；分叉用 `git merge --no-commit --no-ff "{TARGET_COMMIT}"`，逐项处理内容/删除/二进制/重命名/符号链接冲突（不盲用 ours/theirs）。
+   - **暂存状态 `H→I` 合入 `M → I'`，再把工作区差异 `I→W` 合入 `I' → W'`**：普通文本可用 `git merge-file -p` 辅助三方比较；严防三层混并导致未提交实验误进合并提交。
+4. **在副本做语义与结构双检**：检查跨文件规则冲突、入口删改、链接有效性并跑 `check_project.py`。
 
-```bash
-git -C "{PROJECT_ROOT}" status --porcelain=v1 -z --untracked-files=all
-git -C "{PROJECT_ROOT}" symbolic-ref --quiet --short HEAD
-git -C "{PROJECT_ROOT}" rev-parse HEAD
-git -C "{PROJECT_ROOT}" remote -v
-git -C "{PROJECT_ROOT}" diff --binary --full-index
-git -C "{PROJECT_ROOT}" diff --cached --binary --full-index
-git -C "{PROJECT_ROOT}" ls-files --others --exclude-standard -z
-git -C "{PROJECT_ROOT}" ls-files --others --ignored --exclude-standard -z
-```
+## 3. 冲突先征询，无冲突或获批后再应用
 
-同时检查未结束的 merge、rebase、cherry-pick 和未解决索引项。有未结束操作，先说明状态和处理选择，不启动第二次合并。detached HEAD 可以读取和准备候选，但应用前需确定用户要更新的本地分支，不随意选一条分支。
+- 凡涉及文件冲突、语义冲突、路径碰撞或未决取舍，先向用户展示紧凑方案并等待确认（询问前原工作区、索引与分支一字不动）。用户拒绝则停止写入；无冲突无新取舍时原更新请求即可继续应用。
+- **应用前复核现状**：对比当前 HEAD、索引与受影响文件内容与快照；若等待期间用户有新修改，重算差异绝不覆盖。
+- **分步安全写入**：
+  - 无本地未提交改动且可快进：直接 `git merge --ff-only "{TARGET_COMMIT}"`。
+  - 有本地未提交改动：确认恢复材料完整后，仅对已备份的明确受阻/暂存路径清单临时还原至 `H`（`git restore --source="{ORIGINAL_HEAD}" --staged --worktree -- {TRACKED_PATHS}`，严禁对整仓运行），完成 `M` 的快进或显式合并提交（不 rebase、不混入个人实验、不改全局 Git 配置或绕过 Hook），再精确恢复 `I'` 到索引、`W'` 到工作区及原权限/符号链接，碰撞未跟踪文件按获批方案处理。
+- **应用后核验**：核对工作区与候选一致、`git merge-base --is-ancestor "{TARGET_COMMIT}" HEAD` 成立、`check_project.py --test` 通过，不替个人修改擅自升官方版本号。
 
-有明确官方跟踪分支时沿用；没有时查询官方默认分支。当前分支跟踪其他仓库或用户固定了发行标签时，先说明来源差异并确认目标，不自动切到 main。目标明确后：
+## 4. 安全禁令与无 Git 旧目录迁移
 
-```bash
-git -C "{PROJECT_ROOT}" fetch --no-tags "{OFFICIAL_REMOTE}" "refs/heads/{TARGET_BRANCH}"
-git -C "{PROJECT_ROOT}" rev-parse FETCH_HEAD
-git -C "{PROJECT_ROOT}" merge-base "{ORIGINAL_HEAD}" "{TARGET_COMMIT}"
-git -C "{PROJECT_ROOT}" diff --name-status --find-renames "{BASE_COMMIT}" "{TARGET_COMMIT}"
-```
-
-若目标提交已经是本地 HEAD 的祖先，说明该目标已在本地历史中，无须再次合并；仍区分本地版本与个人修改，不覆盖本地文件，并返回主文检查已登记入口的同步状态。
-
-保存本次完整 `{TARGET_COMMIT}`，后续一律用它，不再用变化中的 FETCH_HEAD、分支名或再次 `pull` 替代。获取失败不更改工作文件；没有共同祖先时，按旧目录迁移逐项比较，不执行无关历史的强行合并。浅克隆缺历史时先补齐必要历史再判断。
-
-## 二、保存现场，在副本上试合并
-
-临时目录、备份、Git 对象和检查缓存放在项目同一工作盘；使用新建的 `{PROJECT_ROOT}/tmp/` 子目录，避开任何现有数据。先核实忽略规则与可用空间，不能把快照自动提交或回退到系统临时盘。
-
-1. **保存原始现场**：
-   - 保存原始 HEAD、分支、索引文件、暂存与未暂存二进制补丁。
-   - 对可能被改写、删除、移动的路径保存实际内容、权限和符号链接本体；同一路径在暂存区和工作区不同，要分别保留。
-   - 单存 HEAD 或补丁不能代替所有资产备份。
-2. **识别本地资产碰撞**：
-   - 枚举远端将增删改的路径，与本地未跟踪和被忽略路径比较，包含大小写差异、文件与目录碰撞、重命名目的地。
-   - 冲突路径的实际内容必须保存；无关大作品不复制、不扫描正文、不删除。
-   - 备份目录若也与远端新路径碰撞，改用同盘项目外目录。
-3. **建立并核验隔离副本**：
-   - 用 `git clone --no-hardlinks --no-checkout "{PROJECT_ROOT}" "{CANDIDATE_DIR}"` 建立隔离 Git 副本，检出 `{ORIGINAL_HEAD}` 到临时分支。
-   - 核实 `{TARGET_COMMIT}` 对象存在，缺失时从本次已核验来源获取并再次核对 SHA。
-   - 不要在原工作区试错。
-   - 临时仓库的合并提交使用明确的本地测试身份，不修改用户全局 Git 配置。
-4. **在副本合并本地已提交历史与目标提交**：
-   - **可快进**：可快进用 `git merge --ff-only "{TARGET_COMMIT}"`。
-   - **分叉**：分叉用 `git merge --no-commit --no-ff "{TARGET_COMMIT}"`，读取冲突并构造候选。
-   - 必要的候选编辑只发生在副本中。
-   - 删除、二进制、重命名和符号链接冲突逐项判断，不能统一选择 ours/theirs。
-5. **合并暂存与未暂存状态**：
-   - 已提交历史合并结果记为 M，原 HEAD 为 H，原暂存状态为 I，原工作文件为 W。
-   - 先以 H 为基线，把 I 的个人修改合入 M，形成新暂存状态 I'；再以 I 为基线，把 W 的未暂存修改合入 I'，形成最终工作状态 W'。
-   - 普通文本可在副本用 `git merge-file -p` 做三方比较；新增、删除、改名、类型变化和二进制文件按实际状态处理，不能用逐行合并代替。
-   - 保留两次比较的冲突与解决方案。
-6. **保护未跟踪和被忽略文件**：
-   - 未跟踪和被忽略文件默认保持原位。
-   - 如果官方要占用其路径，准备保留两份、迁移或合并的具体方案，由用户决定。
-   - 不能借“补齐官方知识库”覆盖个人经验，也不能将本地密钥纳入官方新追踪文件。
-
-三份比较不能混成一份：官方变化看共同基线到目标，本地提交看共同基线到 H，未提交变化继续区分 H→I 和 I→W。否则会把已经暂存的内容改成未暂存，或把尚未提交的实验写进合并提交。
-
-只在副本完成冲突解决、项目检查和关键规则的对照。检查合并后的入口、权限、路由和引用是否矛盾，特别留意 Git 没有报告的跨文件冲突。远端测试和脚本先看实际改动；普通更新不授权脚本联网上传材料、付费生成或公开发布。只有用户直接输入 `/laohu-update` 或另行明确要求发布时，才按主 Skill 的发布分支上传已审阅的项目版本；这不扩大到作品、凭据、付费操作或其他对外通信。
-
-## 三、询问发生在方案形成之后
-
-有文件冲突、规则冲突、资产迁移或其他需取舍的变化，按本 Skill 的格式展示具体方案再询问。询问时原工作文件、索引和分支仍未改变。必须说明需要新建的合并提交、暂存状态怎样保留、哪些文件会改名或移走。
-
-用户拒绝则停止写入。用户同意只授权已展示的目标和解决方案；方案变化或出现新冲突，补充说明新的取舍。单纯存在本地修改或分叉不是必须拒绝更新的理由；没有冲突且没有新增取舍时，原更新请求足以授权应用。
-
-## 四、应用已经验证的结果
-
-1. 比较当前 HEAD、分支、索引和相关文件内容与快照。任何变化都使旧候选失效；重新比较相关范围，不覆盖等待期间的新修改。不要只检查 `git status` 文本是否相同，内容改变可能不改变状态码。
-2. 无本地未提交修改且可快进时，直接对固定目标执行 `git merge --ff-only "{TARGET_COMMIT}"`。
-3. **存在本地未提交修改时，先确认恢复材料与候选**：
-   - 先确认 I、W、未跟踪碰撞文件均可恢复，且 I'、W' 已在副本验过。
-   - **应用范围**：所有已有暂存修改的路径，以及会阻挡合并的未暂存路径；先备份并在候选中保留这些路径。
-   - **分叉合并前**：必须移出所有原有暂存修改，否则会阻挡合并或误入合并提交。
-   - **暂时还原**：仅对这份明确路径清单暂时还原到 H；可用带显式路径的 `git restore --source="{ORIGINAL_HEAD}" --staged --worktree -- {TRACKED_PATHS}`，绝不对整个仓库运行，也不接触未备份路径。
-   - 这是应用中间态，不能把它交付为完成结果。
-   - 碰撞的非追踪文件只按用户已接受的迁移方案处理。
-4. **应用已审阅的合并结果**：
-   - 快进或执行 `git merge --no-commit --no-ff "{TARGET_COMMIT}"`，按已审阅结果完成 M。
-   - **分叉时**：只暂存官方合并所需的明确文件并建立合并提交，保留双方历史；不把 I、W 中的个人实验混入提交，不做 rebase。
-   - **提交身份或 Hook 阻止时**：Git 提交身份或本机 Hook 阻止合并时说明原因，不擅自修改全局配置或绕过 Hook。
-5. **恢复暂存和未暂存文件状态**：
-   - 恢复 I' 到这些路径的文件和索引，再将 W' 写回工作文件，保留 I' 与 W' 的差别；删除、权限与符号链接同样恢复。
-   - 仅操作本次明确路径，不执行全仓 `git add`。
-   - 无关的未跟踪、被忽略文件保持原状；原有暂存项按 I' 恢复，不丢掉与官方更新无关的暂存修改。
-6. **核验应用结果**：
-   - 核对实际结果与候选一致，运行项目检查，确认 `git merge-base --is-ancestor "{TARGET_COMMIT}" HEAD` 成功。
-   - 检查本地个性化规则及版本文件；保留个人规则并不代表可以给官方版本号自行加一。
-   - 未提交内容不能被误报为官方发布内容。
-
-**禁止动作与中断处理**
-
-- 禁止 `reset --hard`、`clean`、自动 stash、强制推送或用整目录覆盖作恢复捷径。
-- 操作中断时先辨认已经执行到哪一步，再从快照恢复本次受影响的状态；任何用户新增修改都要先保住。
-- `merge --abort` 只适用于尚未提交且已核实能恢复的合并，不能当作通用撤销。
-- 无法安全恢复时报告当前状态和快照位置，不继续写入扩大问题。
-
-## 五、旧目录没有 Git 历史
-
-先把官方完整项目克隆到新目录，原目录不动。可核实旧版来源提交时建立三方比较；只有版本号时仍需核实对应提交，不能假设同版本内容完全一致。没有基线时逐项比较，并将无法归属的内容作为用户资产保留，说明无法自动判断是个人定制还是旧版官方内容。
-
-候选包含要迁移的 Skill、知识、配置及其依赖。冲突和宿主指向变更说明清楚、得到同意后才切换；保留旧目录的恢复位置，不自动删除。不把一个成功 clone 说成个人改动已经迁移完成。
+- **绝对禁止**：`git reset --hard`、`git clean`、自动 `git stash`、强制推送或整目录粗暴覆盖。中途中断时先核清已走到的步骤，再从快照安全恢复，绝不丢弃用户新改内容。
+- **无 Git 历史的旧复制目录**：保留原目录不动，新克隆官方完整项目至新目录；核实旧基线或逐项比较个人修改，无法自动归属的内容按用户资产保留，方案确认后再切换宿主入口。

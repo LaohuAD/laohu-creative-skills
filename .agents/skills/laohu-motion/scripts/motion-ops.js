@@ -102,20 +102,43 @@
     throw new TypeError("phase.durationSec or phase.endSec is required");
   }
 
-  const LOCAL_EFFECTS_TYPE = "custom:huashu-local-effects";
+  const LOCAL_EFFECTS_TYPE = "custom:laohu-motion-effects";
+  const LOCAL_EFFECTS_TYPES = new Set([LOCAL_EFFECTS_TYPE, "custom:huashu-local-effects"]);
+  const LOCAL_TARGET_TYPES = new Set(["custom:laohu-motion-target", "custom:huashu-local-target"]);
+  const LOCAL_EFFECT_ALIASES = Object.freeze({
+    "huashu-dg-draw-partial": "laohu-motion-dg-draw-partial",
+    "huashu-dg-circumscribe": "laohu-motion-dg-circumscribe",
+    "huashu-dg-brace": "laohu-motion-dg-brace",
+    "huashu-dg-indicate-frame-pulse": "laohu-motion-dg-indicate-frame-pulse",
+    "huashu-mo-staggered-target-reveal": "laohu-motion-mo-staggered-target-reveal",
+  });
   const LOCAL_EFFECT_OWNER_TRANSFORM_FIELDS = new Set([
     "translateX", "translateY", "rotation", "scale", "scaleX", "scaleY",
   ]);
   const LOCAL_EFFECT_OWNER_STRUCTURE_FIELDS = new Set(["layer", "space", "morph"]);
+  const LOCAL_EFFECT_CANONICAL_CONTRACTS = Object.freeze({
+    "laohu-motion-dg-draw-partial": Object.freeze({ geometry: "points", parameters: Object.freeze(["color", "lineWidth"]) }),
+    "laohu-motion-dg-circumscribe": Object.freeze({ geometry: "rect", parameters: Object.freeze(["color", "lineWidth", "timeWidth"]) }),
+    "laohu-motion-dg-brace": Object.freeze({ geometry: "brace", parameters: Object.freeze(["color", "lineWidth", "depth"]) }),
+    "laohu-motion-dg-indicate-frame-pulse": Object.freeze({ geometry: "rect", parameters: Object.freeze(["color", "lineWidth", "timeWidth", "scale"]) }),
+    "laohu-motion-mo-staggered-target-reveal": Object.freeze({ geometry: "rect", parameters: Object.freeze([]), requiredStagger: true }),
+  });
   const LOCAL_EFFECT_CONTRACTS = Object.freeze({
-    "huashu-dg-draw-partial": Object.freeze({ geometry: "points", parameters: Object.freeze(["color", "lineWidth"]) }),
-    "huashu-dg-circumscribe": Object.freeze({ geometry: "rect", parameters: Object.freeze(["color", "lineWidth", "timeWidth"]) }),
-    "huashu-dg-brace": Object.freeze({ geometry: "brace", parameters: Object.freeze(["color", "lineWidth", "depth"]) }),
-    "huashu-dg-indicate-frame-pulse": Object.freeze({ geometry: "rect", parameters: Object.freeze(["color", "lineWidth", "timeWidth", "scale"]) }),
-    "huashu-mo-staggered-target-reveal": Object.freeze({ geometry: "rect", parameters: Object.freeze([]), requiredStagger: true }),
+    ...LOCAL_EFFECT_CANONICAL_CONTRACTS,
+    ...Object.fromEntries(Object.entries(LOCAL_EFFECT_ALIASES).map(([legacyId, canonicalId]) => [legacyId, LOCAL_EFFECT_CANONICAL_CONTRACTS[canonicalId]])),
   });
 
-  function assertLocalEffectTarget(target, label) {
+  function isLocalTargetType(value) { return LOCAL_TARGET_TYPES.has(value); }
+  function canonicalLocalEffectId(value) { return LOCAL_EFFECT_ALIASES[value] || value; }
+
+  function assertLocalEffectTarget(target, label, geometryMode = "static") {
+    if (geometryMode === "followTarget") {
+      if (target.morph) throw new Error(`${label} cannot follow a morphing target`);
+      if (target.type !== "rect" && !isLocalTargetType(target.type)) {
+        throw new Error(`${label} followTarget requires an axis-aligned rectangle target; text, image, path, and other inferred bounds are unsupported`);
+      }
+      return;
+    }
     if (target.layer != null || target.space !== "screen" || target.morph) throw new Error(`${label} must identify a static top-level screen-space target; moving targets need their own frame-aware custom renderer`);
     const identityFields = [["translateX", 0], ["translateY", 0], ["scale", 1], ["scaleX", 1], ["scaleY", 1], ["rotation", 0]];
     for (const [key, expected] of identityFields) if (target[key] != null && target[key] !== expected) throw new Error(`${label} ${key} must be neutral so the local effect remains bound to static screen-space geometry`);
@@ -148,7 +171,7 @@
     if (attributes.type === "path" || attributes.type === "polygon") {
       return { type: attributes.type, points: (attributes.points || []).map((point) => [point.x, point.y]), closed: Boolean(attributes.closed || attributes.type === "polygon"), progress: attributes.progress == null ? 1 : attributes.progress };
     }
-    if (attributes.type === "custom:huashu-local-target") {
+    if (isLocalTargetType(attributes.type)) {
       const data = attributes.data;
       if (!data || data.primitive !== "rect" || !data.geometry || typeof data.geometry !== "object" || Array.isArray(data.geometry)) {
         throw new TypeError(`${label} must have a static custom:huashu-local-target rectangle in data.geometry`);
@@ -156,6 +179,125 @@
       return { type: attributes.type, primitive: data.primitive, ...data.geometry };
     }
     throw new Error(`${label} uses unsupported local-effect target geometry type ${String(attributes.type)}`);
+  }
+
+  function localEffectTargetLayerChain(scene, target, label) {
+    const layersById = new Map((scene.layers || []).map((layer) => [layer.id, layer]));
+    const chain = [];
+    const seen = new Set();
+    let layerId = target.layer;
+    while (layerId != null) {
+      if (seen.has(layerId)) throw new Error(`${label} has a layer parent cycle`);
+      seen.add(layerId);
+      const original = layersById.get(layerId);
+      if (!original) throw new Error(`${label} references missing layer ${layerId}`);
+      chain.unshift(original);
+      layerId = original.parent;
+    }
+    const chainIds = new Set(chain.map((layer) => layer.id));
+    for (const layer of chain) {
+      if (Object.prototype.hasOwnProperty.call(layer, "visible")) {
+        throw new Error(`${label} cannot use layer.visible because MotionCore does not consume it; use the relevant object.visible field or layer.opacity instead (${layer.id})`);
+      }
+    }
+    if ((scene.events || []).some((event) => event && event.target && event.target.kind === "layer"
+      && chainIds.has(event.target.id) && (event.property || "value") === "visible")) {
+      throw new Error(`${label} cannot depend on layer.visible events because MotionCore does not consume them; use the relevant object.visible field or layer.opacity`);
+    }
+    if ((scene.bindings || []).some((binding) => binding && binding.target && binding.target.kind === "layer"
+      && chainIds.has(binding.target.id) && binding.target.property === "visible")) {
+      throw new Error(`${label} cannot depend on layer.visible bindings because MotionCore does not consume them; use the relevant object.visible field or layer.opacity`);
+    }
+    for (const layer of chain) {
+      if (layer.clip != null) throw new Error(`${label} cannot follow a target in clipped ancestor layer ${layer.id}`);
+      if (layer.blendMode != null && layer.blendMode !== "source-over") {
+        throw new Error(`${label} requires source-over target ancestor layers; ${layer.id} uses ${layer.blendMode}`);
+      }
+    }
+    return chain;
+  }
+
+  function localEffectProjectedRect(scene, targetId, evaluatedState) {
+    if (!evaluatedState || !Number.isFinite(evaluatedState.time) || !evaluatedState.objects || !evaluatedState.layers || !evaluatedState.camera) {
+      throw new TypeError(`followTarget ${targetId} requires the same-frame MotionCore evaluatedState`);
+    }
+    const rawTarget = evaluatedState.objects[targetId];
+    if (!rawTarget) throw new Error(`followTarget target disappeared from evaluated scene: ${targetId}`);
+    if (rawTarget.morph) throw new Error(`followTarget target ${targetId} cannot be morphing`);
+    const targetAttributes = localTargetAttributes(scene, targetId, evaluatedState.time, evaluatedState);
+    let projectionState = evaluatedState;
+    if (isLocalTargetType(targetAttributes.type)) {
+      const data = targetAttributes.data;
+      if (!data || data.primitive !== "rect" || !data.geometry || typeof data.geometry !== "object" || Array.isArray(data.geometry)) {
+        throw new Error(`followTarget target ${targetId} must have a rectangular local-target geometry`);
+      }
+      const rect = data.geometry;
+      const anchorX = Number.isFinite(targetAttributes.anchorX) ? targetAttributes.anchorX
+        : (Number.isFinite(targetAttributes.x) && Number.isFinite(targetAttributes.width)
+          ? targetAttributes.x + targetAttributes.width / 2 : (Number.isFinite(targetAttributes.cx) ? targetAttributes.cx : 0));
+      const anchorY = Number.isFinite(targetAttributes.anchorY) ? targetAttributes.anchorY
+        : (Number.isFinite(targetAttributes.y) && Number.isFinite(targetAttributes.height)
+          ? targetAttributes.y + targetAttributes.height / 2 : (Number.isFinite(targetAttributes.cy) ? targetAttributes.cy : 0));
+      projectionState = {
+        ...evaluatedState,
+        objects: {
+          ...evaluatedState.objects,
+          [targetId]: { ...targetAttributes, type: "rect", x: rect.x, y: rect.y, width: rect.width, height: rect.height, anchorX, anchorY },
+        },
+      };
+    } else if (targetAttributes.type !== "rect") {
+      throw new Error(`followTarget target ${targetId} must resolve to a rect, not ${String(targetAttributes.type)}`);
+    }
+
+    const projection = core.projectRectObject(scene, projectionState, targetId);
+    const projectedObject = projection.object;
+    if (![projectedObject.x, projectedObject.y, projectedObject.width, projectedObject.height].every(Number.isFinite)
+      || projectedObject.width <= 0 || projectedObject.height <= 0) {
+      throw new Error(`followTarget target ${targetId} must project from finite positive rectangle dimensions`);
+    }
+    const corners = projection.screenCorners;
+    if (!Array.isArray(corners) || corners.length !== 4 || corners.some((point) => !point || !Number.isFinite(point.x) || !Number.isFinite(point.y))) {
+      throw new Error(`followTarget target ${targetId} projected corners must all be finite`);
+    }
+    const xs = corners.map((point) => point.x);
+    const ys = corners.map((point) => point.y);
+    const left = Math.min(...xs), right = Math.max(...xs), top = Math.min(...ys), bottom = Math.max(...ys);
+    const width = right - left, height = bottom - top;
+    if (![left, right, top, bottom, width, height].every(Number.isFinite) || width <= 0 || height <= 0) {
+      throw new Error(`followTarget target ${targetId} projection must have positive finite area`);
+    }
+    const epsilon = 1e-7 * Math.max(1, width, height);
+    const expectedCorners = [[left, top], [right, top], [right, bottom], [left, bottom]];
+    const unused = new Set(corners.map((_, index) => index));
+    for (const [expectedX, expectedY] of expectedCorners) {
+      const match = [...unused].find((index) => Math.abs(corners[index].x - expectedX) <= epsilon && Math.abs(corners[index].y - expectedY) <= epsilon);
+      if (match == null) throw new Error(`followTarget target ${targetId} must remain axis-aligned after Core projection`);
+      unused.delete(match);
+    }
+    const layerChain = localEffectTargetLayerChain(scene, rawTarget, `followTarget target ${targetId}`);
+    const stateLayers = layerChain.map((layer) => evaluatedState.layers[layer.id] || layer);
+    const targetLayerOpacity = stateLayers.reduce((opacity, layer) => opacity * (Number.isFinite(layer.opacity) ? clamp(layer.opacity, 0, 1) : 1), 1);
+    const targetObjectOpacity = Number.isFinite(projection.object.opacity) ? clamp(projection.object.opacity, 0, 1) : 1;
+    const effectiveOpacity = projection.effectiveOpacity;
+    return {
+      targetId,
+      timeSec: evaluatedState.time,
+      sourceType: targetAttributes.type,
+      sourceAttributes: targetAttributes,
+      projection,
+      screenCorners: corners,
+      screenRect: { x: left, y: top, width, height },
+      effectiveOpacity,
+      targetObjectOpacity,
+      targetLayerOpacity,
+      visible: projection.visible && effectiveOpacity > 0,
+      verticalWorldEdgesStayVertical: Math.abs(corners[0].x - corners[3].x) <= epsilon
+        && Math.abs(corners[1].x - corners[2].x) <= epsilon,
+      verticalWorldEdges: {
+        left: { x: corners[0].x, y0: Math.min(corners[0].y, corners[3].y), y1: Math.max(corners[0].y, corners[3].y) },
+        right: { x: corners[1].x, y0: Math.min(corners[1].y, corners[2].y), y1: Math.max(corners[1].y, corners[2].y) },
+      },
+    };
   }
 
   function localGeometryBinding(property, target) {
@@ -171,7 +313,7 @@
       const leaf = property.slice("styleOverrides.".length);
       return !["opacity", "visible", "fill", "stroke", "color"].includes(leaf);
     }
-    if (target.type === "custom:huashu-local-target" && (property === "data" || property === "data.geometry" || property.startsWith("data.geometry."))) return true;
+    if (isLocalTargetType(target.type) && (property === "data" || property === "data.geometry" || property.startsWith("data.geometry."))) return true;
     return false;
   }
 
@@ -205,7 +347,39 @@
     return samples;
   }
 
-  function localEffectOwnerTransformSamples(scene, owner, label) {
+  function assertLocalEffectOverlayOwner(scene, owner, attributes, label, allowOverlayLayer) {
+    if (attributes.space !== "screen") throw new Error(`${label} must resolve to a screen-space owner`);
+    if (attributes.layer == null) {
+      assertLocalEffectTarget(attributes, label);
+      return;
+    }
+    if (!allowOverlayLayer) throw new Error(`${label} must remain top-level unless geometryMode=followTarget needs a post-world overlay`);
+    const chain = localEffectTargetLayerChain(scene, attributes, label);
+    if (!chain.length || (chain[0].space || "world") !== "screen") throw new Error(`${label} overlay layer chain must be rooted in screen space`);
+    const overlayLayerIds = new Set(chain.map((layer) => layer.id));
+    const overlayTransformProperties = new Set(["transform.x", "transform.y", "transform.rotation", "transform.scale", "transform.scaleX", "transform.scaleY"]);
+    if ((scene.events || []).some((event) => event && event.target && event.target.kind === "layer"
+      && overlayLayerIds.has(event.target.id) && overlayTransformProperties.has(event.property || "value"))) {
+      throw new Error(`${label} screen overlay layer transform cannot be event-controlled`);
+    }
+    if ((scene.bindings || []).some((binding) => binding && binding.target && binding.target.kind === "layer"
+      && overlayLayerIds.has(binding.target.id) && overlayTransformProperties.has(binding.target.property))) {
+      throw new Error(`${label} screen overlay layer transform cannot be binding-controlled`);
+    }
+    for (const layer of chain) {
+      const transform = layer.transform || {};
+      const neutral = (transform.x == null || transform.x === 0) && (transform.y == null || transform.y === 0)
+        && (transform.rotation == null || transform.rotation === 0)
+        && (transform.scale == null || transform.scale === 1)
+        && (transform.scaleX == null || transform.scaleX === 1)
+        && (transform.scaleY == null || transform.scaleY === 1);
+      if (!neutral) throw new Error(`${label} screen overlay layer ${layer.id} must have a neutral transform`);
+    }
+    const identityFields = [["translateX", 0], ["translateY", 0], ["scale", 1], ["scaleX", 1], ["scaleY", 1], ["rotation", 0]];
+    for (const [key, expected] of identityFields) if (attributes[key] != null && attributes[key] !== expected) throw new Error(`${label} ${key} must be neutral so the local effect remains in screen-space`);
+  }
+
+  function localEffectOwnerTransformSamples(scene, owner, label, allowOverlayLayer = false) {
     const transformBindings = (scene.bindings || []).filter((binding) => {
       if (!binding || !binding.target || binding.target.kind !== "object" || binding.target.id !== owner.id) return false;
       const property = binding.target.property;
@@ -247,14 +421,29 @@
 
     const samples = [...times].sort((a, b) => a - b).map((timeSec) => {
       const attributes = localTargetAttributes(scene, owner.id, timeSec);
-      assertLocalEffectTarget(attributes, `${label} resolved at ${timeSec}s`);
+      assertLocalEffectOverlayOwner(scene, owner, attributes, `${label} resolved at ${timeSec}s`, allowOverlayLayer);
       return { timeSec, attributes };
     });
     return samples;
   }
 
-  function localEffectTargetState(scene, targetId, timeSec) {
-    const state = core.evaluateScene(scene, timeSec, true);
+  function localEffectTargetState(scene, targetId, timeSec, evaluatedState, geometryMode = "static") {
+    const state = evaluatedState || core.evaluateScene(scene, timeSec, true);
+    if (state.time !== timeSec) throw new Error(`local-effect target ${targetId} requires its matching evaluatedState time`);
+    if (geometryMode === "followTarget") {
+      const projected = localEffectProjectedRect(scene, targetId, state);
+      return Object.freeze({
+        targetId,
+        timeSec: state.time,
+        visible: projected.visible,
+        targetOpacity: projected.effectiveOpacity,
+        targetObjectOpacity: projected.targetObjectOpacity,
+        targetLayerOpacity: projected.targetLayerOpacity,
+        visibilityValue: projected.projection.object.visible == null ? true : projected.projection.object.visible,
+        attributes: projected.projection.object,
+        projected,
+      });
+    }
     const attributes = localTargetAttributes(scene, targetId, timeSec, state);
     const opacity = Number.isFinite(attributes.opacity) ? clamp(attributes.opacity, 0, 1) : 1;
     return Object.freeze({
@@ -262,6 +451,8 @@
       timeSec: state.time,
       visible: attributes.visible !== false && opacity > 0,
       targetOpacity: opacity,
+      targetObjectOpacity: opacity,
+      targetLayerOpacity: 1,
       visibilityValue: attributes.visible == null ? true : attributes.visible,
       attributes,
     });
@@ -275,27 +466,58 @@
     const groups = new Map();
     const records = [];
     for (const owner of scene.objects) {
-      if (!owner || owner.type !== LOCAL_EFFECTS_TYPE) continue;
+      if (!owner || !LOCAL_EFFECTS_TYPES.has(owner.type)) continue;
       const instances = owner.data && owner.data.motionEffects;
       if (!Array.isArray(instances) || instances.length === 0) throw new TypeError(`${owner.id}.data.motionEffects must be a non-empty array`);
-      if (owner.space !== "screen" || owner.layer != null) throw new TypeError(`${owner.id} must be a top-level space:"screen" object so local target geometry is expressed in stable canvas coordinates`);
-      localEffectOwnerTransformSamples(scene, owner, `${owner.id}.data.motionEffects owner`);
+      const allowOverlayLayer = instances.some((instance) => instance && instance.geometryMode === "followTarget");
+      if (owner.space !== "screen" || (owner.layer != null && !allowOverlayLayer)) throw new TypeError(`${owner.id} must be a top-level screen-space object unless followTarget needs a post-world overlay layer`);
+      localEffectOwnerTransformSamples(scene, owner, `${owner.id}.data.motionEffects owner`, allowOverlayLayer);
       for (const [index, instance] of instances.entries()) {
         const label = `${owner.id}.data.motionEffects[${index}]`;
         if (!instance || typeof instance !== "object" || Array.isArray(instance)) throw new TypeError(`${label} must be an object`);
         const id = stableId(instance.id, `${label}.id`);
         if (seenIds.has(id)) throw new Error(`Duplicate local effect instance ID: ${id}`);
         seenIds.add(id);
-        const effectId = stableId(instance.effectId, `${label}.effectId`);
+        const effectId = canonicalLocalEffectId(stableId(instance.effectId, `${label}.effectId`));
         const contract = LOCAL_EFFECT_CONTRACTS[effectId];
         if (!contract) throw new Error(`${label}.effectId is unsupported: ${effectId}`);
         const targetId = stableId(instance.targetId, `${label}.targetId`);
+        const geometryMode = instance.geometryMode == null ? "static" : instance.geometryMode;
+        if (geometryMode !== "static" && geometryMode !== "followTarget") throw new Error(`${label}.geometryMode must be static or followTarget`);
         const target = objectsById.get(targetId);
         if (!target) throw new Error(`${label}.targetId does not identify a scene object: ${targetId}`);
-        if (target === owner || target.type === LOCAL_EFFECTS_TYPE) throw new Error(`${label}.targetId must identify a non-effect scene object`);
-        assertLocalEffectTarget(target, `${label}.targetId=${targetId}`);
-        const targetSamples = localTargetGeometrySamples(scene, target, `${label}.targetId=${targetId}`);
-        const resolvedTarget = targetSamples[0].attributes;
+        if (target === owner || LOCAL_EFFECTS_TYPES.has(target.type)) throw new Error(`${label}.targetId must identify a non-effect scene object`);
+        let targetSamples;
+        let resolvedTarget;
+        if (geometryMode === "followTarget") {
+          if (![
+            "laohu-motion-dg-circumscribe", "laohu-motion-dg-brace", "laohu-motion-dg-indicate-frame-pulse",
+            "laohu-motion-mo-staggered-target-reveal",
+          ].includes(effectId)) {
+            throw new Error(`${label}.geometryMode=followTarget is not supported by ${effectId}; path tracing remains static`);
+          }
+          assertLocalEffectTarget(target, `${label}.targetId=${targetId}`, geometryMode);
+          if (effectId === "laohu-motion-mo-staggered-target-reveal" && !isLocalTargetType(target.type)) {
+            throw new Error(`${label}.targetId must use the existing local-target renderer for MO.lagged reveal`);
+          }
+          const targetLayerChain = localEffectTargetLayerChain(scene, target, `${label}.targetId=${targetId}`);
+          const targetSpace = targetLayerChain.length ? (targetLayerChain[0].space || "world") : (target.space || "world");
+          if (targetSpace !== "world") throw new Error(`${label}.targetId=${targetId} followTarget requires a world-space target projected through the scene camera`);
+          const initialState = core.evaluateScene(scene, 0, true);
+          const attributes = localTargetAttributes(scene, targetId, 0, initialState);
+          if (attributes.morph) throw new Error(`${label}.targetId=${targetId} cannot follow a morphing target`);
+          const geometry = localTargetGeometry(attributes, label);
+          const projected = localEffectProjectedRect(scene, targetId, initialState);
+          if (effectId === "laohu-motion-dg-brace" && !projected.verticalWorldEdgesStayVertical) {
+            throw new Error(`${label} DG.brace requires projected left/right target edges to remain vertical`);
+          }
+          targetSamples = [{ timeSec: 0, attributes, geometry, projected }];
+          resolvedTarget = attributes;
+        } else {
+          assertLocalEffectTarget(target, `${label}.targetId=${targetId}`);
+          targetSamples = localTargetGeometrySamples(scene, target, `${label}.targetId=${targetId}`);
+          resolvedTarget = targetSamples[0].attributes;
+        }
         const phaseId = stableId(instance.phaseId, `${label}.phaseId`);
         const matches = phases.get(phaseId) || [];
         if (matches.length === 0) throw new Error(`${label}.phaseId references missing shared phase ${phaseId}`);
@@ -311,6 +533,7 @@
         samplePhase(startSec, phase);
         const geometry = instance.geometry;
         if (!geometry || typeof geometry !== "object" || Array.isArray(geometry)) throw new TypeError(`${label}.geometry must contain local canvas coordinates for the identified target`);
+        let braceSide = null;
         if (contract.geometry === "points") {
           const points = geometry.points;
           if (!Array.isArray(points) || points.length < 2) throw new TypeError(`${label}.geometry.points must contain at least two [x,y] points`);
@@ -331,16 +554,17 @@
               || (!sameNumber(geometry.x, resolvedTarget.x) && !sameNumber(geometry.x, resolvedTarget.x + resolvedTarget.width))) {
             throw new Error(`${label}.geometry brace endpoints must bind to the top/bottom and left/right edge of target ${targetId}`);
           }
+          if (geometryMode === "followTarget") braceSide = sameNumber(geometry.x, resolvedTarget.x) ? "left" : "right";
         } else {
           const rect = geometry.rect;
           if (!rect || typeof rect !== "object" || Array.isArray(rect)) throw new TypeError(`${label}.geometry.rect is required for ${effectId}`);
           for (const key of ["x", "y", "width", "height"]) finite(rect[key], `${label}.geometry.rect.${key}`);
           if (rect.width <= 0 || rect.height <= 0) throw new RangeError(`${label}.geometry.rect width and height must be positive`);
           let targetRect = null;
-          if (effectId === "huashu-mo-staggered-target-reveal") {
+          if (effectId === "laohu-motion-mo-staggered-target-reveal") {
             const data = resolvedTarget.data;
-            if (target.type !== "custom:huashu-local-target" || !data || data.primitive !== "rect") {
-              throw new Error(`${label}.targetId must identify a custom:huashu-local-target rectangle for ${effectId}`);
+            if (!isLocalTargetType(target.type) || !data || data.primitive !== "rect") {
+              throw new Error(`${label}.targetId must identify a custom local-target rectangle for ${effectId}`);
             }
             targetRect = data.geometry;
             if (!targetRect || typeof targetRect !== "object" || Array.isArray(targetRect)) throw new TypeError(`${label}.targetId=${targetId}.data.geometry must define a static target rectangle`);
@@ -379,7 +603,7 @@
           group.indexes.add(itemIndex);
           groups.set(groupId, group);
         }
-        records.push({ ownerId: owner.id, id, effectId, targetId, phaseId, phase, startSec, durationSec, geometry, parameters, stagger: stagger || null });
+        records.push({ ownerId: owner.id, id, effectId, targetId, phaseId, phase, startSec, durationSec, geometryMode, braceSide, geometry, parameters, stagger: stagger || null });
       }
     }
     for (const [groupId, group] of groups) {
@@ -1459,6 +1683,7 @@
     diagnoseLayout,
     createTextBitmapCache,
     validateLocalEffects,
+    localEffectAliases: LOCAL_EFFECT_ALIASES,
     localEffectTargetState,
     localEffectContracts: LOCAL_EFFECT_CONTRACTS,
     MOTION_FOLLOW_BOX_ID,

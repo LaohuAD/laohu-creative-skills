@@ -1,4 +1,4 @@
 interface:
   display_name: "laohu-image | 老胡图片创作"
-  short_description: "确认关键视觉方向，承接资产设计并将其转成画面提示词。"
-  default_prompt: "使用 $laohu-image。方向未定时先给我少量可比较方案和推荐；方向已定后把画面设计成效果说明与提示词："
+  short_description: "将意图与参考转化为具体画面设计和可执行生图提示词，支持插画、摄影、多主体与视频首帧。"
+  default_prompt: "使用 $laohu-image 帮我设计这张图，关键方向未定时先给两个差异明确的方向和推荐，定下后给我效果说明和完整生图提示词。"

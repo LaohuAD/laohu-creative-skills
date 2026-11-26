@@ -1,0 +1,636 @@
+{
+  "schemaVersion": 1,
+  "kind": "audio-source-evidence",
+  "sourceRepository": "https://github.com/jeszhou/overlay-studio",
+  "sourceCommit": "e35e1aff9dae3b3addc21f68f3bcd51f95bdc1a8",
+  "sourceAssetDirectory": "motion-playground/public/sfx-default/",
+  "sourceNote": "motion-playground/public/sfx-default/来源与授权.txt",
+  "sourceNoteSha256": "e827f1386af56289fdb88c49b63cba8ae5f120f96dde054535dd66ba473f4b5f",
+  "softwareLicense": "motion-playground/public/LICENSE.txt",
+  "licenseBoundary": "The software license states audio assets have separate rights. This index uses the source-specific audio note for the 15 files, not the Overlay software license as an asset license. No Overlay software/source code is copied.",
+  "sourceNoteFindings": {
+    "all15": "The source-specific note states all 15 bundled audio samples may be redistributed and used commercially without attribution.",
+    "kenney13": "It maps 13 effects to named Kenney Interface Sounds, Impact Sounds, and Digital Audio source files and identifies them as CC0. Official Kenney pack pages also state CC0.",
+    "author2": "It identifies whoosh and whoosh-soft as author-generated pink-noise sweeps with no third-party source; it does not identify an SPDX license. They remain candidate-unreviewed."
+  },
+  "officialKenneyPages": {
+    "Interface Sounds": "https://kenney.nl/assets/interface-sounds",
+    "Impact Sounds": "https://kenney.nl/assets/impact-sounds",
+    "Digital Audio": "https://kenney.nl/assets/digital-audio"
+  },
+  "decodedDedupeMethod": {
+    "format": "FFmpeg decoded mono PCM, 4000 Hz signed 16-bit",
+    "method": "Compare each of 15 source files against all 95 indexed non-music audio assets using max full-duration Pearson waveform correlation at 4-sample offsets; duration ratio is recorded. A full-duration correlation >=0.995 and ratio >=0.85 is reused as an alias; this is duplicate detection only, not suitability/listening review.",
+    "uniqueFilesCopied": 13,
+    "duplicateOutputsNotCopied": {
+      "click": "kenney.interface-click-001",
+      "hit-soft": "kenney.impact-soft-medium-000"
+    }
+  },
+  "assets": [
+    {
+      "sourceName": "pop-light",
+      "sha256": "ad1d6027e8a53aaf0b9941413e70dbfd95dac0275a8aa65aa601168c4d1ca43b",
+      "assetId": "overlay.sfx-default.pop-light",
+      "file": "overlay-sfx-defaults/pop-light.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "pop",
+      "sha256": "3f177a1a9314e8f57a56d4bad810d6bd1d061e65e3a2587e52da6c56e45c3e5e",
+      "assetId": "overlay.sfx-default.pop",
+      "file": "overlay-sfx-defaults/pop.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "pop-cluster",
+      "sha256": "00172162b46aa24e45269738bd4179ff4c06ee138756723c0907349bdb7bf910",
+      "assetId": "overlay.sfx-default.pop-cluster",
+      "file": "overlay-sfx-defaults/pop-cluster.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "chime",
+      "sha256": "c9a00952ee33a0b28a8c99b235f4052fc2e2cde35f7088a489b2976058f836f2",
+      "assetId": "overlay.sfx-default.chime",
+      "file": "overlay-sfx-defaults/chime.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "ding",
+      "sha256": "7cc8aca7ca2a5ba753340a4f6197bd2772b621818c1de71316855e2402a6814c",
+      "assetId": "overlay.sfx-default.ding",
+      "file": "overlay-sfx-defaults/ding.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "glitch",
+      "sha256": "07c9327bdef32a25b72f4c67480126bfbaf773cfc3a647127d6cd1bea7c14ebc",
+      "assetId": "overlay.sfx-default.glitch",
+      "file": "overlay-sfx-defaults/glitch.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "sparkle",
+      "sha256": "a5be6d354afce0e3482010b5a41e0acc15f115f0e6b6dbf8d6b78395a9f5c2ae",
+      "assetId": "overlay.sfx-default.sparkle",
+      "file": "overlay-sfx-defaults/sparkle.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "type",
+      "sha256": "9d9becfb1cab10b20ff51d796a64d2e618b21119e2c1837fa25811dc16398206",
+      "assetId": "overlay.sfx-default.type",
+      "file": "overlay-sfx-defaults/type.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "shutter",
+      "sha256": "27315a9203e37b6d7662dc4a90437b07245d39c35a22841ee821dc1ff79d983b",
+      "assetId": "overlay.sfx-default.shutter",
+      "file": "overlay-sfx-defaults/shutter.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "impact",
+      "sha256": "463e00c600407f540bfaea86be1f7d9b8866922c8784d8b409a1f6a16666a9f9",
+      "assetId": "overlay.sfx-default.impact",
+      "file": "overlay-sfx-defaults/impact.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "rise",
+      "sha256": "64a1ee1ee591489d23ed5ade9c2c5e44feb88438e68f01587ff9873bbd653805",
+      "assetId": "overlay.sfx-default.rise",
+      "file": "overlay-sfx-defaults/rise.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "whoosh-soft",
+      "sha256": "8e5173482731f6c9e50f36531276f8648e95ed5e393ac124f2152ebcf304aa73",
+      "assetId": "overlay.sfx-default.whoosh-soft",
+      "file": "overlay-sfx-defaults/whoosh-soft.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "whoosh",
+      "sha256": "a4c6b1ef9fe21a04ad2b87cefc885da98d7aded8d2aa0a04ea14b2616c6244ad",
+      "assetId": "overlay.sfx-default.whoosh",
+      "file": "overlay-sfx-defaults/whoosh.mp3",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "click",
+      "sha256": "f1768cae81f34971203437691e8f63f64a64095a2b27155965fa6ef38abc8e18",
+      "assetId": "kenney.interface-click-001",
+      "file": "existing index asset; no duplicate MP3 copied",
+      "reviewStatus": "candidate-unreviewed"
+    },
+    {
+      "sourceName": "hit-soft",
+      "sha256": "83afb2045abde00b5d700d8adf95205436e87dc3482d4e321161eca19ee37fdd",
+      "assetId": "kenney.impact-soft-medium-000",
+      "file": "existing index asset; no duplicate MP3 copied",
+      "reviewStatus": "candidate-unreviewed"
+    }
+  ],
+  "decodedComparisons": [
+    {
+      "name": "chime",
+      "sourceSha256": "c9a00952ee33a0b28a8c99b235f4052fc2e2cde35f7088a489b2976058f836f2",
+      "decodedRateHz": 4000,
+      "decodedSamples": 480,
+      "decodedDurationSec": 0.12,
+      "bestMatches": [
+        {
+          "correlation": 0.588733,
+          "durationRatio": 0.858333,
+          "offsetSamples": 44,
+          "assetId": "kenney.footstep-concrete-000",
+          "file": "impact-sounds/footstep_concrete_000.ogg"
+        },
+        {
+          "correlation": 0.48341,
+          "durationRatio": 0.725076,
+          "offsetSamples": 16,
+          "assetId": "wyzowl.impact-light-soft",
+          "file": "wyzowl-sfx-kit/impact-light-soft.wav"
+        },
+        {
+          "correlation": 0.471232,
+          "durationRatio": 0.872917,
+          "offsetSamples": 28,
+          "assetId": "kenney.footstep-concrete-001",
+          "file": "impact-sounds/footstep_concrete_001.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "click",
+      "sourceSha256": "f1768cae81f34971203437691e8f63f64a64095a2b27155965fa6ef38abc8e18",
+      "decodedRateHz": 4000,
+      "decodedSamples": 389,
+      "decodedDurationSec": 0.09725,
+      "bestMatches": [
+        {
+          "correlation": 0.999919,
+          "durationRatio": 1.0,
+          "offsetSamples": 0,
+          "assetId": "kenney.interface-click-001",
+          "file": "interface-sounds/click_001.ogg"
+        },
+        {
+          "correlation": 0.605341,
+          "durationRatio": 0.928401,
+          "offsetSamples": 0,
+          "assetId": "kenney.footstep-concrete-001",
+          "file": "impact-sounds/footstep_concrete_001.ogg"
+        },
+        {
+          "correlation": 0.527748,
+          "durationRatio": 0.944175,
+          "offsetSamples": 0,
+          "assetId": "kenney.footstep-concrete-000",
+          "file": "impact-sounds/footstep_concrete_000.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "alias-existing",
+        "assetId": "kenney.interface-click-001"
+      }
+    },
+    {
+      "name": "ding",
+      "sourceSha256": "7cc8aca7ca2a5ba753340a4f6197bd2772b621818c1de71316855e2402a6814c",
+      "decodedRateHz": 4000,
+      "decodedSamples": 1160,
+      "decodedDurationSec": 0.29,
+      "bestMatches": [
+        {
+          "correlation": 0.281063,
+          "durationRatio": 0.96828,
+          "offsetSamples": 0,
+          "assetId": "wyzowl.impact-heavy-hard",
+          "file": "wyzowl-sfx-kit/impact-heavy-hard.wav"
+        },
+        {
+          "correlation": 0.202083,
+          "durationRatio": 0.768966,
+          "offsetSamples": 212,
+          "assetId": "wyzowl.swish-soft",
+          "file": "wyzowl-sfx-kit/swish-soft.wav"
+        },
+        {
+          "correlation": 0.17779,
+          "durationRatio": 0.780619,
+          "offsetSamples": 320,
+          "assetId": "kenney.footstep-snow-001",
+          "file": "impact-sounds/footstep_snow_001.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "glitch",
+      "sourceSha256": "07c9327bdef32a25b72f4c67480126bfbaf773cfc3a647127d6cd1bea7c14ebc",
+      "decodedRateHz": 4000,
+      "decodedSamples": 69,
+      "decodedDurationSec": 0.01725,
+      "bestMatches": [
+        {
+          "correlation": 0.130134,
+          "durationRatio": 0.985507,
+          "offsetSamples": 0,
+          "assetId": "wyzowl.click-button-medium",
+          "file": "wyzowl-sfx-kit/click-button-medium.wav"
+        },
+        {
+          "correlation": 0.064748,
+          "durationRatio": 0.927536,
+          "offsetSamples": 0,
+          "assetId": "wyzowl.click-button-soft",
+          "file": "wyzowl-sfx-kit/click-button-soft.wav"
+        },
+        {
+          "correlation": 0.055887,
+          "durationRatio": 0.884615,
+          "offsetSamples": 4,
+          "assetId": "wyzowl.click-button-firm",
+          "file": "wyzowl-sfx-kit/click-button-firm.wav"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "hit-soft",
+      "sourceSha256": "83afb2045abde00b5d700d8adf95205436e87dc3482d4e321161eca19ee37fdd",
+      "decodedRateHz": 4000,
+      "decodedSamples": 461,
+      "decodedDurationSec": 0.11525,
+      "bestMatches": [
+        {
+          "correlation": 1.0,
+          "durationRatio": 1.0,
+          "offsetSamples": 0,
+          "assetId": "kenney.impact-soft-medium-000",
+          "file": "impact-sounds/impactSoft_medium_000.ogg"
+        },
+        {
+          "correlation": 0.594664,
+          "durationRatio": 0.71142,
+          "offsetSamples": 100,
+          "assetId": "wyzowl.impact-medium-hard",
+          "file": "wyzowl-sfx-kit/impact-medium-hard.wav"
+        },
+        {
+          "correlation": 0.527223,
+          "durationRatio": 0.908894,
+          "offsetSamples": 12,
+          "assetId": "kenney.footstep-concrete-001",
+          "file": "impact-sounds/footstep_concrete_001.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "alias-existing",
+        "assetId": "kenney.impact-soft-medium-000"
+      }
+    },
+    {
+      "name": "impact",
+      "sourceSha256": "463e00c600407f540bfaea86be1f7d9b8866922c8784d8b409a1f6a16666a9f9",
+      "decodedRateHz": 4000,
+      "decodedSamples": 2596,
+      "decodedDurationSec": 0.649,
+      "bestMatches": [
+        {
+          "correlation": 0.427194,
+          "durationRatio": 0.753082,
+          "offsetSamples": 460,
+          "assetId": "kenney.impact-plate-heavy-000",
+          "file": "impact-sounds/impactPlate_heavy_000.ogg"
+        },
+        {
+          "correlation": 0.355608,
+          "durationRatio": 0.812018,
+          "offsetSamples": 268,
+          "assetId": "kenney.impact-soft-heavy-000",
+          "file": "impact-sounds/impactSoft_heavy_000.ogg"
+        },
+        {
+          "correlation": 0.33736,
+          "durationRatio": 0.83282,
+          "offsetSamples": 280,
+          "assetId": "kenney.impact-glass-medium-000",
+          "file": "impact-sounds/impactGlass_medium_000.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "pop",
+      "sourceSha256": "3f177a1a9314e8f57a56d4bad810d6bd1d061e65e3a2587e52da6c56e45c3e5e",
+      "decodedRateHz": 4000,
+      "decodedSamples": 753,
+      "decodedDurationSec": 0.18825,
+      "bestMatches": [
+        {
+          "correlation": 0.38084,
+          "durationRatio": 0.789308,
+          "offsetSamples": 84,
+          "assetId": "kenney.impact-glass-heavy-000",
+          "file": "impact-sounds/impactGlass_heavy_000.ogg"
+        },
+        {
+          "correlation": 0.376438,
+          "durationRatio": 0.746348,
+          "offsetSamples": 84,
+          "assetId": "kenney.impact-metal-medium-001",
+          "file": "impact-sounds/impactMetal_medium_001.ogg"
+        },
+        {
+          "correlation": 0.230913,
+          "durationRatio": 0.756784,
+          "offsetSamples": 92,
+          "assetId": "kenney.impact-wood-footstep-001",
+          "file": "impact-sounds/footstep_wood_001.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "pop-cluster",
+      "sourceSha256": "00172162b46aa24e45269738bd4179ff4c06ee138756723c0907349bdb7bf910",
+      "decodedRateHz": 4000,
+      "decodedSamples": 1633,
+      "decodedDurationSec": 0.40825,
+      "bestMatches": [
+        {
+          "correlation": 0.206877,
+          "durationRatio": 0.770283,
+          "offsetSamples": 164,
+          "assetId": "wyzowl.notification-success-soft",
+          "file": "wyzowl-sfx-kit/notification-success-soft.wav"
+        },
+        {
+          "correlation": 0.120225,
+          "durationRatio": 0.733619,
+          "offsetSamples": 424,
+          "assetId": "wyzowl.impact-heavy-hard",
+          "file": "wyzowl-sfx-kit/impact-heavy-hard.wav"
+        },
+        {
+          "correlation": 0.113151,
+          "durationRatio": 0.755319,
+          "offsetSamples": 4,
+          "assetId": "kenney.impact-glass-medium-000",
+          "file": "impact-sounds/impactGlass_medium_000.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "pop-light",
+      "sourceSha256": "ad1d6027e8a53aaf0b9941413e70dbfd95dac0275a8aa65aa601168c4d1ca43b",
+      "decodedRateHz": 4000,
+      "decodedSamples": 162,
+      "decodedDurationSec": 0.0405,
+      "bestMatches": [
+        {
+          "correlation": 0.165366,
+          "durationRatio": 0.80198,
+          "offsetSamples": 12,
+          "assetId": "wyzowl.pop-small-out",
+          "file": "wyzowl-sfx-kit/pop-small-out.wav"
+        },
+        {
+          "correlation": 0.13048,
+          "durationRatio": 0.82716,
+          "offsetSamples": 20,
+          "assetId": "wyzowl.click-toggle-on-medium",
+          "file": "wyzowl-sfx-kit/click-toggle-on-medium.wav"
+        },
+        {
+          "correlation": 0.065594,
+          "durationRatio": 0.975309,
+          "offsetSamples": 4,
+          "assetId": "wyzowl.pop-small-in",
+          "file": "wyzowl-sfx-kit/pop-small-in.wav"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "rise",
+      "sourceSha256": "64a1ee1ee591489d23ed5ade9c2c5e44feb88438e68f01587ff9873bbd653805",
+      "decodedRateHz": 4000,
+      "decodedSamples": 2177,
+      "decodedDurationSec": 0.54425,
+      "bestMatches": [
+        {
+          "correlation": 0.140296,
+          "durationRatio": 0.807533,
+          "offsetSamples": 180,
+          "assetId": "wyzowl.foley-fabric-slide",
+          "file": "wyzowl-sfx-kit/foley-fabric-slide.wav"
+        },
+        {
+          "correlation": 0.08762,
+          "durationRatio": 0.762977,
+          "offsetSamples": 52,
+          "assetId": "kenney.rpg-cloth-2",
+          "file": "rpg-audio/cloth2.ogg"
+        },
+        {
+          "correlation": 0.08692,
+          "durationRatio": 0.838769,
+          "offsetSamples": 272,
+          "assetId": "kenney.casino-card-place-2",
+          "file": "casino-audio/card-place-2.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "shutter",
+      "sourceSha256": "27315a9203e37b6d7662dc4a90437b07245d39c35a22841ee821dc1ff79d983b",
+      "decodedRateHz": 4000,
+      "decodedSamples": 2713,
+      "decodedDurationSec": 0.67825,
+      "bestMatches": [
+        {
+          "correlation": 0.130217,
+          "durationRatio": 0.885735,
+          "offsetSamples": 92,
+          "assetId": "kenney.casino-card-slide-1",
+          "file": "casino-audio/card-slide-1.ogg"
+        },
+        {
+          "correlation": 0.124373,
+          "durationRatio": 0.720604,
+          "offsetSamples": 716,
+          "assetId": "kenney.impact-plate-heavy-000",
+          "file": "impact-sounds/impactPlate_heavy_000.ogg"
+        },
+        {
+          "correlation": 0.116229,
+          "durationRatio": 0.796904,
+          "offsetSamples": 544,
+          "assetId": "kenney.impact-glass-medium-000",
+          "file": "impact-sounds/impactGlass_medium_000.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "sparkle",
+      "sourceSha256": "a5be6d354afce0e3482010b5a41e0acc15f115f0e6b6dbf8d6b78395a9f5c2ae",
+      "decodedRateHz": 4000,
+      "decodedSamples": 1102,
+      "decodedDurationSec": 0.2755,
+      "bestMatches": [
+        {
+          "correlation": 0.181543,
+          "durationRatio": 0.887994,
+          "offsetSamples": 12,
+          "assetId": "kenney.impact-wood-heavy-000",
+          "file": "impact-sounds/impactWood_heavy_000.ogg"
+        },
+        {
+          "correlation": 0.167574,
+          "durationRatio": 0.835481,
+          "offsetSamples": 4,
+          "assetId": "kenney.impact-wood-medium-000",
+          "file": "impact-sounds/impactWood_medium_000.ogg"
+        },
+        {
+          "correlation": 0.167374,
+          "durationRatio": 0.835481,
+          "offsetSamples": 4,
+          "assetId": "kenney.impact-wood-medium-001",
+          "file": "impact-sounds/impactWood_medium_001.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "type",
+      "sourceSha256": "9d9becfb1cab10b20ff51d796a64d2e618b21119e2c1837fa25811dc16398206",
+      "decodedRateHz": 4000,
+      "decodedSamples": 1300,
+      "decodedDurationSec": 0.325,
+      "bestMatches": [
+        {
+          "correlation": 0.167555,
+          "durationRatio": 0.711939,
+          "offsetSamples": 440,
+          "assetId": "kenney.casino-card-place-2",
+          "file": "casino-audio/card-place-2.ogg"
+        },
+        {
+          "correlation": 0.110077,
+          "durationRatio": 0.871314,
+          "offsetSamples": 88,
+          "assetId": "kenney.impact-metal-light-000",
+          "file": "impact-sounds/impactMetal_light_000.ogg"
+        },
+        {
+          "correlation": 0.108059,
+          "durationRatio": 0.754936,
+          "offsetSamples": 272,
+          "assetId": "kenney.rpg-book-flip-2",
+          "file": "rpg-audio/bookFlip2.ogg"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "whoosh",
+      "sourceSha256": "a4c6b1ef9fe21a04ad2b87cefc885da98d7aded8d2aa0a04ea14b2616c6244ad",
+      "decodedRateHz": 4000,
+      "decodedSamples": 2800,
+      "decodedDurationSec": 0.7,
+      "bestMatches": [
+        {
+          "correlation": 0.086292,
+          "durationRatio": 0.775,
+          "offsetSamples": 296,
+          "assetId": "wyzowl.whoosh-medium-soft",
+          "file": "wyzowl-sfx-kit/whoosh-medium-soft.wav"
+        },
+        {
+          "correlation": 0.0829,
+          "durationRatio": 0.771429,
+          "offsetSamples": 60,
+          "assetId": "wyzowl.props-page-turn",
+          "file": "wyzowl-sfx-kit/props-page-turn.wav"
+        },
+        {
+          "correlation": 0.0813,
+          "durationRatio": 0.702143,
+          "offsetSamples": 676,
+          "assetId": "wyzowl.foley-paper-slide",
+          "file": "wyzowl-sfx-kit/foley-paper-slide.wav"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    },
+    {
+      "name": "whoosh-soft",
+      "sourceSha256": "8e5173482731f6c9e50f36531276f8648e95ed5e393ac124f2152ebcf304aa73",
+      "decodedRateHz": 4000,
+      "decodedSamples": 2000,
+      "decodedDurationSec": 0.5,
+      "bestMatches": [
+        {
+          "correlation": 0.089927,
+          "durationRatio": 0.854701,
+          "offsetSamples": 252,
+          "assetId": "wyzowl.foley-wood-slide",
+          "file": "wyzowl-sfx-kit/foley-wood-slide.wav"
+        },
+        {
+          "correlation": 0.077606,
+          "durationRatio": 0.746,
+          "offsetSamples": 492,
+          "assetId": "kenney.impact-metal-light-000",
+          "file": "impact-sounds/impactMetal_light_000.ogg"
+        },
+        {
+          "correlation": 0.073715,
+          "durationRatio": 0.968054,
+          "offsetSamples": 20,
+          "assetId": "wyzowl.whoosh-medium-medium",
+          "file": "wyzowl-sfx-kit/whoosh-medium-medium.wav"
+        }
+      ],
+      "dedupeDecision": {
+        "kind": "distinct-source-file"
+      }
+    }
+  ]
+}

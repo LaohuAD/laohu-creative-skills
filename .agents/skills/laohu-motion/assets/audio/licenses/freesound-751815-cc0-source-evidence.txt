@@ -1,0 +1,10 @@
+Freesound individual source-page evidence captured 2026-11-22.
+
+Source page: https://freesound.org/people/AudioPapkin/sounds/751815/
+Title: Riser Hit sfx 089
+Creator: AudioPapkin
+Source page license label: Creative Commons 0 (CC0). Verified canonical deed link present on source page.
+Exact canonical license: https://creativecommons.org/publicdomain/zero/1.0/
+
+Retrieved file: Freesound MP3, 222,816 bytes; measured duration 9.866667 seconds; SHA-256 8dcd538d6d56a2fe3f52312ca5ee9d59c6e1629e2f4e907bf58e8ad524e07a72.
+Listening status for this project: UNKNOWN. No human listening review was recorded yet.

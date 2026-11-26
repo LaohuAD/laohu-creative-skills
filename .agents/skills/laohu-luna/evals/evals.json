@@ -4,8 +4,8 @@
     "must": [
       "Treat Commander as the actual model in the current chat session; never claim the Skill changed it to Astra or another named model",
       "Delegate every bounded execution to Luna Worker, including simple tasks; allow Commander to read returned results, in-scope diffs, and evidence for acceptance",
-      "Prefer the loaded laohu_luna_worker role; absent custom roles must not block initial configured generic native Luna execution",
-      "For initial native route selection when the user has not required a registered role, use an available laohu_luna_worker or otherwise announce and directly use the configured generic native Luna route without asking again; honor explicit role requirements and do not automatically fall back after an actual selected-route failure; the direct generic-agent route reads model/effort and developer instructions from the Skill source and passes them in a self-contained task message, using fork_turns=none with explicit model override where the host requires it",
+      "Prefer the loaded laohu_luna_worker role; a missing role or a host role that still advertises the previous model or effort must not block initial configured generic native Luna execution",
+      "For initial native route selection when the user has not required a registered role, use an available laohu_luna_worker with the current configuration or otherwise announce and directly use the configured generic native Luna route without asking again; honor explicit role requirements and do not automatically fall back after an actual selected-route failure; the direct generic-agent route reads model/effort and developer instructions from the Skill source and passes them in a self-contained task message, using fork_turns=none with explicit model override where the host requires it",
       "Keep local-worker CLI model and effort aligned with the repository role configuration unless an explicit supported override is set",
       "Use an external API only when explicitly selected, identify its configured provider and model, and describe it as text-only without a local tool loop",
       "Keep the packet bounded, self-contained, hash-bound, and limited to its stated file scope",
@@ -161,10 +161,10 @@
       "type": "normal",
       "prompt": "Use laohu-luna with the default configuration. I do not want a setup questionnaire. If a genuine execution error requires changing the model or provider, explain the options and let me decide.",
       "expected_behavior": [
-        "Use the current chat Commander and configured Luna/max with available native dispatch without redundant setup questions",
+        "Use the current chat Commander and configured Luna/high with available native dispatch without redundant setup questions",
         "Inspect and perform necessary authorized safe onboarding from repository source; preserve other personal configuration",
         "On a real error diagnose and explain concrete options, cost and capability effects; do not silently change model, effort, transport or overwrite conflicting settings",
-        "When the user asks to customize, offer a concrete source-config update and verify its effect on the actual Worker"
+        "When the user asks to customize, offer a concrete source-config update and verify its effect on the actual Worker. If the current host still advertises the previous setting, select the configured native generic agent for the first dispatch unless a registered role is required"
       ],
       "execution_mode": "decision",
       "evaluation_scope": "Checks normal defaults and real-error decision boundaries; a UI settings page is not assumed to exist."
@@ -211,6 +211,23 @@
       ],
       "execution_mode": "decision",
       "evaluation_scope": "Checks non-creative routing and acceptance of the actual product behavior, not a code-style-only review or publication authorization."
+    },
+    {
+      "id": "maintenance-cache-follows-explicit-target-not-cwd-14",
+      "type": "normal",
+  "prompt": "Use laohu-luna to prepare a bounded execution packet for a technical maintenance change to the skills repository. The repository I have open in the terminal is <work-root>/manuscripts/current-article, but the expressly selected maintenance target is <skills-root>. The packet should put validation work in <skills-root>/.cache/validation/task-42/. Treat <skills-root> as this task's maintenance work root; identify <work-root>/manuscripts/current-article only as a separate other business project and current working directory, then state which paths belong in the packet. This is a path/planning decision only: do not edit files or perform validation, installation, publication, or media generation.",
+  "context": "The authorized maintenance target is <skills-root>; the current working directory <work-root>/manuscripts/current-article is a separate other business project and is not a write target. The authorized validation container is exactly <skills-root>/.cache/validation/task-42/. Its parent <skills-root>/.cache/validation/ exists, but task-42 does not. Creating that exact container is authorized if a later execution requires it. Do not create any additional directory tree or put work products in the other business project. This decision case only specifies correct paths and status; it does not create the container.",
+      "input_files": [],
+      "expected_behavior": [
+    "Treat the explicit <skills-root> as this task's maintenance work root; identify <work-root>/manuscripts/current-article only as the other business project and current working directory, not as the maintenance target or write scope",
+        "Put the selected skills-repository files under <skills-root> and the validation destination at the exact authorized container <skills-root>/.cache/validation/task-42/; do not substitute the manuscript project's cache or an unrelated repository cache",
+        "Recognize that the task-42 container does not currently exist but its exact creation is already authorized if execution later needs it; do not ask for the same authorization again and do not infer that directory-creation prohibitions override this named task leaf",
+        "Do not add extra subdirectories, fixtures, or a parallel directory hierarchy beyond the named container; distinguish a planned creation from an existing or actually created path",
+        "Keep this decision-only task to path ownership and a bounded packet; do not write files, run checks, install, publish, generate creative media, or claim execution or quality success"
+      ],
+      "execution_mode": "decision",
+  "evaluation_scope": "Checks that Luna separates this task's explicit maintenance work root, the other business project's current directory, and the authorized validation container, while preserving decision-only and no-extra-directory boundaries; does not execute file operations or validate a product.",
+      "source_note": "Synthetic technical regression derived from a path-selection error observed in this maintenance run: validation work was placed under the current manuscript project instead of the expressly selected skills repository. This is not a verbatim transcript, real audience evidence, or an executed holdout."
     }
   ]
 }

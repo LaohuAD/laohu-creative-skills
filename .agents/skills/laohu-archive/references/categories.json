@@ -1,6 +1,6 @@
 {
   "music": {"label": "音乐", "standalone_result": "歌曲、歌词或编曲作品", "usual_skills": ["laohu-lyrics", "laohu-arrangement"]},
-  "writing": {"label": "文章", "standalone_result": "文章、口播文稿及其排版产物", "usual_skills": ["laohu-writing", "laohu-htmlshow-gzh"]},
+  "writing": {"label": "文章", "standalone_result": "文章、口播文稿及其排版产物", "usual_skills": ["laohu-writing", "laohu-htmlshow"]},
   "script": {"label": "剧本", "standalone_result": "独立剧本或分镜项目", "usual_skills": ["laohu-script"]},
   "cover": {"label": "封面", "standalone_result": "不附属于已有作品的独立封面项目", "usual_skills": ["laohu-cover"]},
   "image": {"label": "图片", "standalone_result": "独立图片或图像系列", "usual_skills": ["laohu-image"]},
