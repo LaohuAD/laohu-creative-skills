@@ -10,7 +10,7 @@ python3 "{SKILL_DIR}/scripts/member-update.py" status
 
 - `state=active` 且 `target.channel=member`。仅查询时报告对应版本，用户已明确更新时，直接进入第 3 节。
 - `state=unbound`。公开版可以照常更新。如果有 `reminder`，先说明公开版状态，然后给已购会员的绑定动作与 `detailsUrl`。身份尚未核实时，称设备尚未绑定。用户明确要求绑定，或明确选择抢先版时，再生成配对指令。
-- `state=expired`。显示月卡到期和本机版本保留。用户仍可安装比本机版本更新的公开版。
+- `state=expired`。显示当前未查到有效权益以及本机版本保留。只有确认权益结束原因或用户询问续费时，再给相应说明。用户仍可安装比本机版本更新的公开版。
 - `state=unavailable`。告诉用户会员更新暂未核实，本机可继续使用。按公开渠道单独检查时，只有公开目标比本机版本新才可更新。
 - `target=null`。保留现有版本。对本机已经装好的会员版不降级。`target.channel=public` 时，按[公开 Git 更新](git-update.md)核对公开目标。
 - `reminder=null` 时保持安静。主动绑定设备和检查已授权的版本仍可使用。只提同一会员功能版一次，例如 2.1.1 与 2.1 分享提醒记录。
