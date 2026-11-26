@@ -102,6 +102,16 @@ class MemberUpdateTests(unittest.TestCase):
             self.assertEqual(self.db.stat().st_mode & 0o777, 0o600)
             self.assertEqual(self.db.parent.stat().st_mode & 0o777, 0o700)
 
+    def test_membership_api_identifies_the_updater(self):
+        with patch.object(member, "build_opener") as build:
+            build.return_value.open.return_value = io.BytesIO(b'{"state":"active"}')
+            self.assertEqual(member.api("status", {}, TOKEN), {"state": "active"})
+            request = build.return_value.open.call_args.args[0]
+            self.assertEqual(request.full_url, member.API + "status")
+            self.assertEqual(request.get_method(), "POST")
+            self.assertEqual(request.get_header("User-agent"), member.USER_AGENT)
+            self.assertEqual(request.get_header("Authorization"), "Bearer " + TOKEN)
+
     def test_asset_hook_checks_redirect_and_never_sends_bearer(self):
         for unsafe in ("http://objects.githubusercontent.com/x", "https://api.github.com/private",
                        "https://objects.githubusercontent.com.evil.invalid/x",
@@ -118,6 +128,7 @@ class MemberUpdateTests(unittest.TestCase):
             member.fetch_asset(ASSET, self.location / "good", hashlib.sha256(payload).hexdigest(), len(payload))
             sent_request = build.return_value.open.call_args.args[0]
             self.assertNotIn("Authorization", sent_request.headers)
+            self.assertEqual(sent_request.get_header("User-agent"), member.USER_AGENT)
             build.return_value.open.return_value = io.BytesIO(payload)
             with self.assertRaises(member.MemberError):
                 member.fetch_asset(ASSET, self.location / "bad-hash", "0" * 64, len(payload))

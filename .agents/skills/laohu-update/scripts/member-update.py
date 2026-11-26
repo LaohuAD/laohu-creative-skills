@@ -19,6 +19,7 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 
 API = "https://members.lao-hu.com/api/membership/skills/"
+USER_AGENT = "laohu-member-skills/1.0"
 DETAILS_URL = "https://lao-hu.com/learn/laohu-creative-skills/"
 BOT_URL = "https://applink.feishu.cn/client/bot/open?appId=cli_aa62b5288778dc04"
 ASSET_HOSTS = {"release-assets.githubusercontent.com", "objects.githubusercontent.com"}
@@ -119,7 +120,8 @@ class LocalState:
 
 
 def api(action, body, token=None):
-    headers = {"Content-Type": "application/json", "Accept": "application/json"}
+    headers = {"Content-Type": "application/json", "Accept": "application/json",
+               "User-Agent": USER_AGENT}
     if token:
         headers["Authorization"] = "Bearer " + secret(token)
     request = Request(API + action, json.dumps(body).encode(), headers=headers, method="POST")
@@ -232,7 +234,8 @@ def fetch_asset(url, path, digest, size):
     remaining = size
     try:
         # Separate from the membership client. No bearer header is sent here.
-        with opener.open(Request(asset_url(url)), timeout=30) as response, path.open("xb") as file:
+        request = Request(asset_url(url), headers={"User-Agent": USER_AGENT})
+        with opener.open(request, timeout=30) as response, path.open("xb") as file:
             while remaining:
                 block = response.read(min(remaining, 1024 * 1024))
                 require(block, "下载中断，请重新获取会员发布文件。")
