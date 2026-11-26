@@ -51,6 +51,9 @@ class MemberUpdateTests(unittest.TestCase):
             self.assertIsNone(member.status(self.state, "2.0.1", COPY)["reminder"])
             self.api_data["version"] = "2.1.1"
             self.assertIsNone(member.status(self.state, "2.0.1", COPY)["reminder"])
+            self.api_data["publicVersion"] = "2.1.0"
+            fresh = member.LocalState(self.location / "fresh/state.sqlite3", self.repo)
+            self.assertIsNone(member.status(fresh, "2.1.0", COPY)["reminder"])
             self.api_data.update(version="2.2.0", feature="2.2")
             self.assertEqual(member.status(self.state, "2.0.2", COPY)["reminder"], COPY["unbound"])
 
@@ -157,12 +160,16 @@ class MemberUpdateTests(unittest.TestCase):
             path.write_bytes(payload)
 
         with patch.object(member, "api", return_value=response) as api:
-            with patch.object(member, "fetch_asset", side_effect=save_asset):
+            with patch.object(member, "fetch_asset", side_effect=save_asset) as transfer:
                 result = member.fetch_release(self.state, self.repo, "2.0.2", "2.1.0")
                 self.assertEqual(result["commit"], commit)
+                self.assertEqual(git(self.repo, "rev-parse", result["ref"]), commit)
+                self.assertEqual(result["ref"], "refs/laohu/member/2.1.0")
                 api.assert_called_once_with("download", {}, TOKEN)
+                self.assertEqual(member.fetch_release(self.state, self.repo, "2.0.2", "2.1.0"), result)
+                self.assertEqual(transfer.call_count, 1)
                 response["commit"] = "0" * 40
-                with self.assertRaises(member.MemberError):
+                with self.assertRaisesRegex(member.MemberError, "同一会员发布版本"):
                     member.fetch_release(self.state, self.repo, "2.0.2", "2.1.0")
         self.assertEqual(git(self.repo, "status", "--porcelain"), before)
         self.assertEqual(git(self.repo, "rev-parse", "HEAD"), base)
