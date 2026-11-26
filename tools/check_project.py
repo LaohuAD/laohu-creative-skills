@@ -465,6 +465,7 @@ def main():
     if args.test and result["ok"]:
         suites = [SKILLS / "laohu/evals/test_discovery.py", Path("tests/test_maintenance.py"),
                   Path("tests/test_gzh_tools.py"), Path("tests/test_install.py"),
+                  Path("tests/test_member_update.py"),
                   SKILLS / "laohu-archive/evals/test_workspace.py",
                   SKILLS / "laohu-benchmark/evals/test_library.py",
                   SKILLS / "laohu-arrangement/evals/test_controlled_lyrics.py",
