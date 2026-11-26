@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
-  "notice": "整套创作技能重构，公众号排版改由 HTML 展示入口承接。",
+  "version": "2.0.1",
+  "notice": "公开 2.0.1 版本移除了《万能造梦框架》原文，审查、分析与维护入口继续沿用公开协作规范。",
   "details_url": "https://github.com/LaohuAD/laohu-creative-skills/blob/main/CHANGELOG.md"
 }
