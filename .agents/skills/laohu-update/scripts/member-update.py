@@ -170,7 +170,8 @@ def status(state, local_version, copy):
         result["target"] = None
     if account == "expired":
         result["message"] = copy["expired"]
-    if (account == "unbound" and member_parts and member_parts > max(public_parts, local_parts)
+    if (account == "unbound" and member_parts
+            and member_parts[:2] > max(public_parts[:2], local_parts[:2])
             and state.claim_reminder(feature)):
         result["reminder"] = copy["unbound"]
     return result
@@ -251,6 +252,11 @@ def git(root, *args):
     return check.stdout.strip()
 
 
+def pinned_commit(root, ref):
+    rows = git(root, "for-each-ref", "--format=%(refname) %(objectname)", ref).splitlines()
+    return next((row.split(" ", 1)[1] for row in rows if row.startswith(ref + " ")), "")
+
+
 def fetch_release(state, root, local_version, version):
     require(version_parts(version) > version_parts(local_version), "本机版本无需降级或重复安装。")
     token = state.get("token")
@@ -263,20 +269,29 @@ def fetch_release(state, root, local_version, version):
             "未能核实会员版的提交、基线或附件。")
     require(git(root, "rev-parse", "--show-toplevel") == str(root), "请在完整技能仓库中执行更新。")
     git(root, "cat-file", "-e", base + "^{commit}")
-    temp_root = root / ".cache/tmp"
-    require(temp_root.resolve().is_relative_to(root), "下载暂存路径必须位于技能仓库内。")
-    temp_root.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="member-update-", dir=temp_root) as directory:
-        bundle = Path(directory) / "release.bundle"
-        fetch_asset(data.get("url"), bundle, digest, size)
-        require(git(root, "bundle", "list-heads", str(bundle)) == f"{commit} {MEMBER_REF}",
-                "会员发布文件包含其他提交入口。")
-        git(root, "bundle", "verify", str(bundle))
-        git(root, "fetch", "--no-tags", "--no-write-fetch-head", str(bundle), MEMBER_REF)
-        git(root, "merge-base", "--is-ancestor", base, commit)
-        require(git(root, "show", commit + ":VERSION") == version, "会员发布文件内的版本不一致。")
+    ref = "refs/laohu/member/" + version
+    pinned = pinned_commit(root, ref)
+    require(not pinned or pinned == commit, "同一会员发布版本出现不同提交，请联系维护者。")
+    if not pinned:
+        temp_root = root / ".cache/tmp"
+        require(temp_root.resolve().is_relative_to(root), "下载暂存路径必须位于技能仓库内。")
+        temp_root.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="member-update-", dir=temp_root) as directory:
+            bundle = Path(directory) / "release.bundle"
+            fetch_asset(data.get("url"), bundle, digest, size)
+            require(git(root, "bundle", "list-heads", str(bundle)) == f"{commit} {MEMBER_REF}",
+                    "会员发布文件包含其他提交入口。")
+            git(root, "bundle", "verify", str(bundle))
+            git(root, "fetch", "--no-tags", "--no-write-fetch-head", str(bundle), MEMBER_REF)
+    git(root, "merge-base", "--is-ancestor", base, commit)
+    require(git(root, "show", commit + ":VERSION") == version, "会员发布文件内的版本不一致。")
+    if not pinned:
+        try:
+            git(root, "update-ref", ref, commit, "0" * 40)
+        except MemberError:
+            require(pinned_commit(root, ref) == commit, "无法锁定会员发布提交。")
     return {"state": "verified", "channel": "member", "version": version, "commit": commit,
-            "base": base}
+            "base": base, "ref": ref}
 
 
 def main():

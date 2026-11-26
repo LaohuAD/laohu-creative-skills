@@ -33,5 +33,5 @@ python3 "{SKILL_DIR}/scripts/member-update.py" fetch --version "{TARGET_VERSION}
 ```
 
 - 若完整仓库较旧，先按[公开 Git 更新](git-update.md)从核验过的官方远端获取公开基线，再试一次。下载返回的版本必须匹配当前选择。
-- `fetch` 检验文件长度、SHA-256、Git 提交与完整仓库基线，将已核验对象导入当前仓库，不切分支或覆盖工作文件。以 `state=verified` 的 `commit` 做 `{TARGET_COMMIT}`，按 [Git 更新操作](git-update.md) 完成同盘试合并和真实落盘。隔离副本需要对象时，可从来源工作区取得已经验证的目标提交对象。会员发布内容留在本机，不随公开推送。
+- `fetch` 检验文件长度、SHA-256、Git 提交与完整仓库基线，将已核验对象导入当前仓库，并通过 `refs/laohu/member/<version>` 保留已核验提交。此操作不切分支或覆盖工作文件。以 `state=verified` 的 `commit` 做 `{TARGET_COMMIT}`，按 [Git 更新操作](git-update.md) 完成同盘试合并和真实落盘。隔离副本需要对象时，可从来源工作区取得已经验证的目标提交对象。会员发布内容留在本机，不随公开推送。
 - 若中断、合并冲突或未通过检查，说明当前状态与用户可选动作。完成合并、结构检查和已登记入口同步后，报告实际安装的会员版本。界面文案见 [会员更新文案](member-update-copy.json)。
