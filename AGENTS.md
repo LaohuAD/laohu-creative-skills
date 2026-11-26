@@ -6,7 +6,7 @@
 
 ## 第一性造梦观与核心目标
 
-让创作者掌握方向与关键取舍，让前沿模型在清晰边界内自由交付经受时间与真实数据验证的殿堂级作品。目录数量、规则字数、内部流程或僵硬完成字面任务都不是成果——**在不束缚强模型原生能力的前提下，稳定做出真正最好的成品**，才是唯一成果。全仓所有能力与协作环节共通四条北极星准则（完整原理与排障细则沉于 [万能造梦框架](docs/governance/universal-dream-framework.md)）：
+让创作者掌握方向与关键取舍，让前沿模型在清晰边界内自由交付经受时间与真实数据验证的殿堂级作品。目录数量、规则字数、内部流程或僵硬完成字面任务都不是成果——**在不束缚强模型原生能力的前提下，稳定做出真正最好的成品**，才是唯一成果。全仓所有能力与协作环节共通四条北极星准则。
 
 1. **只对标人类殿堂级标杆**：每个领域先立清经时间与真实数据验证的殿堂级作品核心特征——其底层凝结着人类不变的人性代码、情绪共鸣与生理舒适共识，沿着它走永远不会走偏。
 2. **穿透表层需求，三态辩证裁决**：不机械停在用户字面要求上递钉子，而是穿透表层挖出不变的核心情绪与底层人性诉求——用户同向且给出不违背规律的明确好方向时完全尊重并做透；表达模糊宽泛时守住基本方向主动向殿堂级补齐升维；字面明显偏离甚至违背殿堂级本质特征时，守住不变的核心情绪、真实事实底线与合法逐字锁定项，果断换血带回正道。
@@ -22,7 +22,7 @@
 | 层级与位置 | 唯一职责 | 何时加载 |
 |---|---|---|
 | **Layer 0 运行时层**<br>[docs/runtime.md](docs/runtime.md) | 跨项目路径隔离、授权与落盘门禁、多轮协作与沟通底线、可复制/原生媒介交付、跨入口与子级按需边界 | 所有公开 Skill 启动必读（极薄低负载） |
-| **Layer 1 维护与元治理层**<br>[docs/maintenance.md](docs/maintenance.md)<br>`docs/governance/` | 仓库检查、Skill 命名/部署/路径规范、发版与更新流程；以及元治理三件套：<br>- [万能造梦框架](docs/governance/universal-dream-framework.md)：**全仓所有 Skill 的底层构造原理**（灵魂/筋骨/血肉/表皮 × 目标/判断/行动/结果）<br>- [三技能协作协议](docs/governance/triad-handoff.md)：`audit / analysis / evolution` 职责与 `AUDIT-ID` 追溯<br>- [评估与验证协议](docs/governance/evaluation-protocol.md)：证据分级、隔离盲测与防污染规则 | **仅维护仓库、新建/重构/深度审查/自进化 Skill 或正式评测时按需读取；日常创作不加载** |
+| **Layer 1 维护与元治理层**<br>[docs/maintenance.md](docs/maintenance.md)<br>`docs/governance/` | 仓库检查、Skill 命名/部署/路径规范、发版与更新流程；以及仓库的共用协议<br>- [三技能协作协议](docs/governance/triad-handoff.md)：`audit / analysis / evolution` 职责与 `AUDIT-ID` 追溯<br>- [评估与验证协议](docs/governance/evaluation-protocol.md)：证据分级、隔离盲测与防污染规则 | **仅维护仓库、新建/重构/深度审查/自进化 Skill 或正式评测时按需读取；日常创作不加载** |
 | **Layer 2 领域 Skill 自治层**<br>`.agents/skills/` | 公开 Skill 真源（各 Skill 自包含自己的 `references/`、内部子级 `skills/`、`scripts/`、来源台账 `SOURCES.md`、`evals/` 及私有 `benchmark/`） | 按任务意图加载对应 Skill |
 | **个人资产层**<br>`knowledge/` | 老胡个人跨技能可复用偏好、事实、案例与已验证经验 | 按任务需要选读，不默认全量注入 |
 | **产物与本地缓存层**<br>`works/` · `benchmark/` · `.cache/` | `works/` 保存本仓作品；根目录 `benchmark/` 保留旧研究 ID 兼容入口；`.cache/` 统一存放恢复副本（`restore/`）、验证产物（`validation/`）与临时文件（`tmp/`），均受 `.gitignore` 保护 | 按授权写入 |
@@ -31,7 +31,7 @@
 
 ## 仓库维护、验证与交付要求
 
-1. **构造与进化必用造梦框架**：新建、整体重构或深度审查本仓库 Skill 时，以 [万能造梦框架](docs/governance/universal-dream-framework.md) 作为底层构造原理做全向透视，并将核心规律内化到对应 Skill 自身，避免在日常运行时强加额外上下文负担。
+1. **按范围检查构造与进化**。新建、整体重构或深度审查本仓库 Skill 时，按 [三技能协作协议](docs/governance/triad-handoff.md#3-三技能的检查范围) 检查目标、判断、行动与结果，并把必要方法落实到对应 Skill。
 2. **维护前读检查规范，交付前跑离线校验**：维护 Skill、规则、工具、配置或版本时，必读 [docs/maintenance.md](docs/maintenance.md)，交付前在仓库根目录运行 `python3 tools/check_project.py`（动到工具、发现或版本逻辑时加 `--test`）。普通 `works/` 作品创作不触发全仓结构检查。
 3. **证据口径统一**：任何维护或质量结论按 [评估与验证协议](docs/governance/evaluation-protocol.md) 分清四类维度（`STRUCTURE` / `ROUTE` / `BEHAVIOR` / `QUALITY`）与四种状态（`PASS` / `OBSERVE` / `FAIL` / `UNKNOWN`）。静态检查只证明 `STRUCTURE`，同一修改者自评最高记 `OBSERVE`，已观察到差距必记 `FAIL`。
 4. **维护红线**：

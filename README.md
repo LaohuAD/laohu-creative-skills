@@ -21,7 +21,7 @@
 - 深度拆解优秀标杆作品，给已有稿件或提示词找茬排障，并把同一部作品的全部素材持续归档。
 - 把每一次真实创作踩过的坑沉淀成可复用的经验与个人偏好，让下一次出手更快进入状态。
 
-仓库采用三层单向架构：日常创作仅加载极薄的 [docs/runtime.md](docs/runtime.md) 与对应领域 Skill，不拿厚重条框束缚强模型发挥；仓库维护与技能进化则以 [万能造梦框架](docs/governance/universal-dream-framework.md)（灵魂/筋骨/血肉/表皮 × 目标/判断/行动/结果）作为底层构造原理，由 `laohu-audit`、`laohu-analysis`、`laohu-evolution` 协同完成审查、设计与验证。规则改造不等于实际作品质量自动通过，具体变化与边界见 [更新记录](CHANGELOG.md)。
+仓库采用三层单向架构：日常创作仅加载极薄的 [docs/runtime.md](docs/runtime.md) 与对应领域 Skill，不拿厚重条框束缚强模型发挥；仓库维护与技能进化由 `laohu-audit`、`laohu-analysis`、`laohu-evolution` 按[三技能协作协议](docs/governance/triad-handoff.md)完成审查、设计与验证。规则改造不等于实际作品质量自动通过，具体变化与边界见 [更新记录](CHANGELOG.md)。
 
 ## 安装：项目内使用或全局使用
 

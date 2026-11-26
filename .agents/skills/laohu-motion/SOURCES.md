@@ -396,7 +396,7 @@ These source scopes support conditional local questions and production mapping o
 
 ## 2026-11-23 万能造梦框架 4×4 增补与运行态判断层理论对齐
 
-- 依据全仓 `docs/governance/universal-dream-framework.md` 的四维四层闭环、规则反污染、两阶段爆点解耦与放飞—修疤分离规律，将此前已核或经典视听方法论中的核心裁决标尺精炼显式化至运行态判断层（对外输出仍全解压为自然导演语言），同时保留出处与边界在此冷台账：
+- 依据全仓 当时的万能造梦框架 的四维四层闭环、规则反污染、两阶段爆点解耦与放飞—修疤分离规律，将此前已核或经典视听方法论中的核心裁决标尺精炼显式化至运行态判断层（对外输出仍全解压为自然导演语言），同时保留出处与边界在此冷台账：
   - **Richard E. Mayer，《Multimedia Learning》**（冗余原则 Redundancy Principle、双通道与认知负荷原理，接续上文 2026-11-14 条目）：支撑屏显文字与口播/画面分工互补、信息密集处主动留白，避免逐句复读造成双通道冲突；仅作讲解与信息表达的认知裁决，不禁止纯动态排版作品。
   - **格式塔知觉组织原理（Gestalt Principles：图形与背景、连续性、接近性）与动态注意捕获研究（Mital et al., 2011，接续上文 2026-10-27 条目）**：支撑同屏唯一主焦点、核心母体跨镜空间连续与清除无信息伪 HUD 装饰元素；属感知与构图判断参考，非固定版式公式。
   - **Walter Murch，《In the Blink of an Eye》剪辑六法则（Rule of Six：情绪 51% > 故事 23% > 节奏 10% > 视线追踪 7% > 二维平面 > 三维空间）**：支撑真人 A-roll 与代码 B-roll 的进退调度优先级，防止在情绪建立或关键眼神时刻机械切走真人或为炫转场打断视线；属行业经典剪辑经验框架，非绝对量化公式。
@@ -416,7 +416,7 @@ These source scopes support conditional local questions and production mapping o
 
 ## 2026-11-25 顶层四维构造理论增补（加工流畅度、概念隐喻与排印克制原则）
 
-- 为彻底根治“跳过灵魂/筋骨/血肉直接在表皮（熏黑皮肤、炫技字形或局部光效）打补丁”的结构性盲区，按全仓 `docs/governance/universal-dream-framework.md` 重构 `laohu-motion` 为完整自上而下 4×4 判断架构，并补充以下四项经典基础理论来源记录（均用于条件化设计判断，不构成具体成片质量实证）：
+- 为彻底根治“跳过灵魂/筋骨/血肉直接在表皮（熏黑皮肤、炫技字形或局部光效）打补丁”的结构性盲区，按全仓 当时的万能造梦框架 重构 `laohu-motion` 为完整自上而下 4×4 判断架构，并补充以下四项经典基础理论来源记录（均用于条件化设计判断，不构成具体成片质量实证）：
   - **Rolf Reber、Norbert Schwarz 与 Piotr Winkielman，“Processing Fluency and Aesthetic Pleasure: Is Beauty in the Perceiver’s Processing Experience?”（*Personality and Social Psychology Review*, 2004）及后续顿悟美学（Aesthetic Aha!）研究**：指出审美愉悦深植于大脑加工刺激的流畅体验，以及从短暂抽象费解骤然跃入清晰顿悟时的流畅度飙升。**本地改写：** 支撑 `laohu-motion` 灵魂层五层需求穿透的公共底层心情（豁然开朗的认知爽感 × 清透无压迫的感官流畅度），并反对一切破坏清晰度与流畅度的油腻炫技。
   - **George Lakoff 与 Mark Johnson，《Metaphors We Live By》（概念隐喻理论 Conceptual Metaphor Theory）**：阐明人类借具象物理域（重量、上下承重、流动、容器、透光度）理解抽象概念域的认知机制。**本地改写：** 支撑血肉层为抽象稿件发明具备物理重量梯度与生活直觉的核心视觉母体（如由重到轻的实体建筑剖面），替代空壳抽象卡片与刻板科技线条。
   - **Robert Bringhurst，《The Elements of Typographic Style》**：开篇提出核心哲学“Typography exists to honor content”，并指出字体必须先恰如其分地吸引注意力，再退隐透明让内容说话（statuesque transparency），依赖比例与克制。**本地改写：** 支撑表皮层字体的「引而不抢、有度」硬标准——同时禁止“过粗狂野炫技抢戏”与“过细暗淡隐身抓不住注意力”两个极端。
